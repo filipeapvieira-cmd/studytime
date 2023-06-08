@@ -14,7 +14,7 @@ const Header: FC<HeaderProps> = ({}) => {
           <Icons.logo size={50} />
         </Link>
         <nav>
-          <Navlink href="/">Dashboard</Navlink>
+          <Navlink href="/dashboard">Dashboard</Navlink>
         </nav>
       </div>
       <nav>

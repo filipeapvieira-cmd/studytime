@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -19,6 +19,41 @@ const Chrono: FC<ChronoProps> = ({}) => {
   const [isActive, setIsActive] = useState(false);
   const btnRef = useRef<HTMLButtonElement>(null);
 
+  useEffect(() => {
+    let interval: NodeJS.Timer;
+    if (isActive) {
+      interval = setInterval(() => {
+        setSeconds((seconds) => {
+          if (seconds === 0) {
+            showDesktopNotification();
+            setIsActive(false);
+            return 0;
+          }
+          return seconds - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isActive]);
+
+  const startHandler = (minutes: number) => {
+    if (minutes > 0) {
+      const seconds = minutes * 60;
+      setSeconds(seconds);
+      setIsActive(true);
+    } else {
+      setSeconds(0);
+      setIsActive(false);
+    }
+  };
+
+  // TODO: Needs improvement
+  const showDesktopNotification = () => {
+    new Notification("Hello World");
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -30,7 +65,11 @@ const Chrono: FC<ChronoProps> = ({}) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
-        <ChronoMenu isActive={isActive} closeBtnRef={btnRef} />
+        <ChronoMenu
+          isActive={isActive}
+          closeBtnRef={btnRef}
+          start={startHandler}
+        />
       </PopoverContent>
     </Popover>
   );

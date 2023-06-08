@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useRef, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -6,11 +7,26 @@ import { Button } from "@/components/ui/button";
 interface ChronoMenuProps {
   isActive: boolean;
   closeBtnRef: React.RefObject<HTMLButtonElement>;
+  start: (minutes: number) => void;
 }
 
-const ChronoMenu: FC<ChronoMenuProps> = ({ isActive, closeBtnRef }) => {
-  const closePopover = () => {
-    closeBtnRef?.current?.click();
+const ChronoMenu: FC<ChronoMenuProps> = ({ isActive, closeBtnRef, start }) => {
+  const minutesInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!("Notification" in window)) {
+      //TODO: This option should be disabled if browser does not support
+      // We should send a toast to the user
+      console.log("Browser does not support desktop notification");
+    } else {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  const startCounterHandler = () => {
+    const minutes = Number(minutesInputRef.current?.value);
+    start(minutes);
+    closeBtnRef.current?.click();
   };
 
   return (
@@ -27,11 +43,12 @@ const ChronoMenu: FC<ChronoMenuProps> = ({ isActive, closeBtnRef }) => {
           <Input
             type="number"
             id="minutes"
-            defaultValue="0"
+            placeholder="0"
             className="col-span-2 h-8"
+            ref={minutesInputRef}
           />
         </div>
-        <Button variant="default" onClick={closePopover}>
+        <Button variant="default" onClick={startCounterHandler}>
           Start
         </Button>
       </div>
