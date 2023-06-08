@@ -1,8 +1,11 @@
-import Image from "next/image";
-import { Card } from "../../components/ui/card";
+import Counter from "@/components/Control";
+import Editor from "@/components/Editor";
 
 export default function Home() {
   return (
-    <div className="flex items-center justify-center min-h-screen">Test</div>
+    <div className="">
+      <Counter />
+      <Editor />
+    </div>
   );
 }
