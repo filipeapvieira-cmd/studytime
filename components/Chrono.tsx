@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,35 +8,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
+import { ChronoContext } from "@/src/ctx/chrono-provider";
 import { Icons } from "@/components/icons";
 import ChronoMenu from "./Chrono-menu";
 
 interface ChronoProps {}
 
 const Chrono: FC<ChronoProps> = ({}) => {
-  const [seconds, setSeconds] = useState(0);
-  const [isActive, setIsActive] = useState(false);
+  const { seconds, setSeconds, isActive, setIsActive } =
+    useContext(ChronoContext);
   const btnRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    let interval: NodeJS.Timer;
-    if (isActive) {
-      interval = setInterval(() => {
-        setSeconds((seconds) => {
-          if (seconds === 0) {
-            showDesktopNotification();
-            setIsActive(false);
-            return 0;
-          }
-          return seconds - 1;
-        });
-      }, 1000);
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [isActive]);
 
   const startHandler = (minutes: number) => {
     if (minutes > 0) {
@@ -47,11 +28,6 @@ const Chrono: FC<ChronoProps> = ({}) => {
       setSeconds(0);
       setIsActive(false);
     }
-  };
-
-  // TODO: Needs improvement
-  const showDesktopNotification = () => {
-    new Notification("Hello World");
   };
 
   return (

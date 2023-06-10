@@ -1,6 +1,7 @@
 "use client";
 
 import TimerProvider from "@/src/ctx/time-provider";
+import ChronoProvider from "@/src/ctx/chrono-provider";
 
 import { FC } from "react";
 
@@ -9,7 +10,11 @@ interface ProvidersProps {
 }
 
 const Providers: FC<ProvidersProps> = ({ children }) => {
-  return <TimerProvider>{children}</TimerProvider>;
+  return (
+    <TimerProvider>
+      <ChronoProvider>{children}</ChronoProvider>
+    </TimerProvider>
+  );
 };
 
 export default Providers;
