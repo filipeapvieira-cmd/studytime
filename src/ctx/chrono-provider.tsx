@@ -3,28 +3,33 @@
 import { createContext, useState, useEffect } from "react";
 
 interface ChronoContext {
-  seconds: number;
-  setSeconds: (seconds: number) => void;
-  isActive: boolean;
-  setIsActive: (isActive: boolean) => void;
+  sessionChrono: {
+    seconds: number;
+    isActive: boolean;
+  };
+  setSessionChrono: (sessionChrono: ChronoContext["sessionChrono"]) => void;
 }
 
-const chronoContextValue: ChronoContext = {
-  seconds: 0,
-  setSeconds: () => {},
-  isActive: false,
-  setIsActive: () => {},
+export const chronoCtxDefaultValues: ChronoContext = {
+  sessionChrono: {
+    seconds: 0,
+    isActive: false,
+  },
+  setSessionChrono: () => {},
 };
 
-export const ChronoContext = createContext<ChronoContext>(chronoContextValue);
+export const ChronoContext = createContext<ChronoContext>(
+  chronoCtxDefaultValues
+);
 
 export default function ChronoProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [seconds, setSeconds] = useState(chronoContextValue.seconds);
-  const [isActive, setIsActive] = useState(chronoContextValue.isActive);
+  const [sessionChrono, setSessionChrono] = useState(
+    chronoCtxDefaultValues.sessionChrono
+  );
 
   // TODO: Needs improvement
   const showDesktopNotification = () => {
@@ -33,27 +38,27 @@ export default function ChronoProvider({
 
   useEffect(() => {
     let interval: NodeJS.Timer;
-    if (isActive) {
+    if (sessionChrono.isActive) {
       interval = setInterval(() => {
-        setSeconds((seconds) => {
-          if (seconds === 0) {
+        setSessionChrono((prevSessionChrono) => {
+          if (prevSessionChrono.seconds === 0) {
             showDesktopNotification();
-            setIsActive(false);
-            return 0;
+            return chronoCtxDefaultValues.sessionChrono;
           }
-          return seconds - 1;
+          return {
+            ...prevSessionChrono,
+            seconds: prevSessionChrono.seconds - 1,
+          };
         });
       }, 1000);
     }
     return () => {
       clearInterval(interval);
     };
-  }, [isActive]);
+  }, [sessionChrono.isActive]);
 
   return (
-    <ChronoContext.Provider
-      value={{ seconds, setSeconds, isActive, setIsActive }}
-    >
+    <ChronoContext.Provider value={{ sessionChrono, setSessionChrono }}>
       {children}
     </ChronoContext.Provider>
   );

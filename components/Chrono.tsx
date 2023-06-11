@@ -8,25 +8,25 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChronoContext } from "@/src/ctx/chrono-provider";
+import {
+  ChronoContext,
+  chronoCtxDefaultValues,
+} from "@/src/ctx/chrono-provider";
 import { Icons } from "@/components/icons";
 import ChronoMenu from "./Chrono-menu";
 
 interface ChronoProps {}
 
 const Chrono: FC<ChronoProps> = ({}) => {
-  const { seconds, setSeconds, isActive, setIsActive } =
-    useContext(ChronoContext);
+  const { sessionChrono, setSessionChrono } = useContext(ChronoContext);
   const btnRef = useRef<HTMLButtonElement>(null);
 
   const startHandler = (minutes: number) => {
     if (minutes > 0) {
       const seconds = minutes * 60;
-      setSeconds(seconds);
-      setIsActive(true);
+      setSessionChrono({ seconds, isActive: true });
     } else {
-      setSeconds(0);
-      setIsActive(false);
+      setSessionChrono(chronoCtxDefaultValues.sessionChrono);
     }
   };
 
@@ -36,16 +36,12 @@ const Chrono: FC<ChronoProps> = ({}) => {
         <Button variant="ghost" className="" ref={btnRef}>
           <Icons.chrono />
           <p className="text-lg w-[82px]">
-            {new Date(seconds * 1000).toISOString().slice(11, 19)}
+            {new Date(sessionChrono.seconds * 1000).toISOString().slice(11, 19)}
           </p>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
-        <ChronoMenu
-          isActive={isActive}
-          closeBtnRef={btnRef}
-          start={startHandler}
-        />
+        <ChronoMenu closeBtnRef={btnRef} start={startHandler} />
       </PopoverContent>
     </Popover>
   );

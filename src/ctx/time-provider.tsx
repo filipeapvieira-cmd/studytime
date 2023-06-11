@@ -11,7 +11,7 @@ interface TimeContextProps {
   setSessionTimer: (sessionTimer: TimeContextProps["sessionTimer"]) => void;
 }
 
-const timeContextValue: TimeContextProps = {
+export const timeCtxDefaultValues: TimeContextProps = {
   sessionTimer: {
     currentTimeOfStudy: 0,
     status: "initial",
@@ -20,7 +20,7 @@ const timeContextValue: TimeContextProps = {
   setSessionTimer: () => {}, // provide a default function
 };
 
-export const TimeContext = createContext(timeContextValue);
+export const TimeContext = createContext(timeCtxDefaultValues);
 
 export default function TimerProvider({
   children,
@@ -28,7 +28,7 @@ export default function TimerProvider({
   children: React.ReactNode;
 }) {
   const [sessionTimer, setSessionTimer] = useState(
-    timeContextValue.sessionTimer
+    timeCtxDefaultValues.sessionTimer
   );
 
   return (

@@ -2,6 +2,7 @@
 
 import TimerProvider from "@/src/ctx/time-provider";
 import ChronoProvider from "@/src/ctx/chrono-provider";
+import SessionTextProvider from "@/src/ctx/session-text-provider";
 
 import { FC } from "react";
 
@@ -12,7 +13,9 @@ interface ProvidersProps {
 const Providers: FC<ProvidersProps> = ({ children }) => {
   return (
     <TimerProvider>
-      <ChronoProvider>{children}</ChronoProvider>
+      <ChronoProvider>
+        <SessionTextProvider>{children}</SessionTextProvider>
+      </ChronoProvider>
     </TimerProvider>
   );
 };

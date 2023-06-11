@@ -5,12 +5,11 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 interface ChronoMenuProps {
-  isActive: boolean;
   closeBtnRef: React.RefObject<HTMLButtonElement>;
   start: (minutes: number) => void;
 }
 
-const ChronoMenu: FC<ChronoMenuProps> = ({ isActive, closeBtnRef, start }) => {
+const ChronoMenu: FC<ChronoMenuProps> = ({ closeBtnRef, start }) => {
   const minutesInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

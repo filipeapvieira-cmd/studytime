@@ -3,24 +3,25 @@
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
-import { useState } from "react";
-
-interface EditorProps {}
+import { useState, useContext } from "react";
+import { SessionTextContext } from "@/src/ctx/session-text-provider";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
   loading: () => <p>Loading...</p>,
 });
 
-const Editor: FC<EditorProps> = ({}) => {
-  const [value, setValue] = useState<string>("**Hello world!!!**");
+const Editor = ({}) => {
+  const { sessionText, setSessionText } = useContext(SessionTextContext);
+  //const [value, setValue] = useState<string>(sessionText);
   return (
     <div>
       <MDEditor
         className="container"
-        value={value}
+        height={500}
+        value={sessionText}
         onChange={(value) => {
-          setValue(value || "");
+          setSessionText(value || "");
         }}
       />
     </div>
