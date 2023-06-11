@@ -13,7 +13,6 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
 
 const Editor = ({}) => {
   const { sessionText, setSessionText } = useContext(SessionTextContext);
-  //const [value, setValue] = useState<string>(sessionText);
   return (
     <div>
       <MDEditor

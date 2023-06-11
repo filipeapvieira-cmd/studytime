@@ -16,7 +16,7 @@ interface AlertProps {
   children: React.ReactNode;
   title: string;
   description: string;
-  action?: ButtonHTMLAttributes<HTMLButtonElement>["onClick"];
+  action?: () => void;
 }
 
 const Alert: FC<AlertProps> = ({ children, title, description, action }) => {
@@ -30,7 +30,7 @@ const Alert: FC<AlertProps> = ({ children, title, description, action }) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={action}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

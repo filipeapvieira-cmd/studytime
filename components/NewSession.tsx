@@ -22,6 +22,7 @@ const NewSession: FC<NewSessionProps> = ({}) => {
   const { setSessionTimer } = useContext(TimeContext);
   const { setSessionChrono } = useContext(ChronoContext);
 
+  // set default values
   const newSession = () => {
     setSessionText(sessionTextCtxDefaultValues.sessionText);
     setSessionTimer(timeCtxDefaultValues.sessionTimer);
@@ -33,8 +34,8 @@ const NewSession: FC<NewSessionProps> = ({}) => {
   const description = restartSessionAlert.description;
 
   return (
-    <Alert title={title} description={description}>
-      <Button variant="ghost" onClick={newSession}>
+    <Alert title={title} description={description} action={newSession}>
+      <Button variant="ghost">
         <Icons.newSession />
       </Button>
     </Alert>

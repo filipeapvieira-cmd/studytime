@@ -1,17 +1,9 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import { TimeContextType } from "@/types";
 
-interface TimeContextProps {
-  sessionTimer: {
-    currentTimeOfStudy: number;
-    status: "play" | "pause" | "stop" | "initial";
-    lastUpdate: number;
-  };
-  setSessionTimer: (sessionTimer: TimeContextProps["sessionTimer"]) => void;
-}
-
-export const timeCtxDefaultValues: TimeContextProps = {
+export const timeCtxDefaultValues: TimeContextType = {
   sessionTimer: {
     currentTimeOfStudy: 0,
     status: "initial",
@@ -27,9 +19,32 @@ export default function TimerProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [sessionTimer, setSessionTimer] = useState(
-    timeCtxDefaultValues.sessionTimer
-  );
+  const [sessionTimer, setSessionTimer] = useState<
+    TimeContextType["sessionTimer"]
+  >(timeCtxDefaultValues.sessionTimer);
+
+  useEffect(() => {
+    let interval: NodeJS.Timer;
+
+    if (
+      sessionTimer.status === "initial" ||
+      sessionTimer.status === "pause" ||
+      sessionTimer.status === "stop"
+    ) {
+      return;
+    }
+
+    interval = setInterval(() => {
+      setSessionTimer((prevSessionTimer) => ({
+        ...prevSessionTimer,
+        currentTimeOfStudy: prevSessionTimer.currentTimeOfStudy + 1,
+      }));
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [sessionTimer.status]);
 
   return (
     <TimeContext.Provider value={{ sessionTimer, setSessionTimer }}>
