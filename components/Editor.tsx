@@ -17,6 +17,7 @@ const Editor: FC<EditorProps> = ({}) => {
   return (
     <div>
       <MDEditor
+        className="container"
         value={value}
         onChange={(value) => {
           setValue(value || "");

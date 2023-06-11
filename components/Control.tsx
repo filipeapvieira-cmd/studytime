@@ -2,13 +2,14 @@ import { FC } from "react";
 import Timer from "./ui/Timer";
 import { Icons } from "@/components/icons";
 import Chrono from "./Chrono";
+import NewSession from "./NewSession";
 
 interface CounterProps {}
 
 const Counter: FC<CounterProps> = ({}) => {
   return (
     <div
-      className="flex items-center justify-between border-border border-2
+      className="container flex items-center justify-between border-border border-2
     p-6 rounded-lg"
     >
       <div className="space-x-2 flex">
@@ -16,7 +17,7 @@ const Counter: FC<CounterProps> = ({}) => {
         <Chrono />
       </div>
       <div className="flex">
-        <Icons.newSession />
+        <NewSession />
         <Icons.stop />
         <Icons.save />
       </div>

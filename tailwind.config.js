@@ -8,7 +8,7 @@ module.exports = {
   ],
   theme: {
     container: {
-      center: true,
+      center: true, //centers the container horizontally on the page
       padding: "2rem",
       screens: {
         "2xl": "1400px",
