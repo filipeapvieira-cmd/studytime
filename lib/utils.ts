@@ -19,3 +19,14 @@ export const calcSessionTimes = (sessionTimes: SessionTimer) => {
       const totalPauseTime = totalElapsedTime - currentTimeOfStudy * 1000;
       return {sessionEndTime, totalPauseTime};
 } 
+
+export const getFileSize = (fileSize: number) => {
+  const bytesInAKilobyte = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+  const index = Math.floor(Math.log(fileSize) / Math.log(bytesInAKilobyte));
+  return (
+    parseFloat((fileSize / Math.pow(bytesInAKilobyte, index)).toFixed(2)) +
+    " " +
+    sizes[index]
+  );
+};

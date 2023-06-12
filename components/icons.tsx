@@ -7,6 +7,8 @@ import {
   RotateCcw,
   Save,
   StopCircle,
+  XCircle,
+  Clipboard,
   type Icon as LucideIcon,
 } from "lucide-react";
 
@@ -20,4 +22,6 @@ export const Icons = {
   newSession: RotateCcw,
   save: Save,
   stop: StopCircle,
+  close: XCircle,
+  copy: Clipboard,
 };
