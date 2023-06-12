@@ -1,16 +1,9 @@
 "use client";
 
 import { createContext, useState, useEffect } from "react";
+import { ChronoContextType } from "@/types";
 
-interface ChronoContext {
-  sessionChrono: {
-    seconds: number;
-    isActive: boolean;
-  };
-  setSessionChrono: (sessionChrono: ChronoContext["sessionChrono"]) => void;
-}
-
-export const chronoCtxDefaultValues: ChronoContext = {
+export const chronoCtxDefaultValues: ChronoContextType = {
   sessionChrono: {
     seconds: 0,
     isActive: false,
@@ -18,7 +11,7 @@ export const chronoCtxDefaultValues: ChronoContext = {
   setSessionChrono: () => {},
 };
 
-export const ChronoContext = createContext<ChronoContext>(
+export const ChronoContext = createContext<ChronoContextType>(
   chronoCtxDefaultValues
 );
 

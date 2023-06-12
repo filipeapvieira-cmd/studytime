@@ -19,6 +19,7 @@ import { retrieveText } from "@/lib/utils";
 interface NewSessionProps {}
 
 const NewSession: FC<NewSessionProps> = ({}) => {
+  //console.count("NewSession");
   const { setSessionText } = useContext(SessionTextContext);
   const { setSessionTimer } = useContext(TimeContext);
   const { setSessionChrono } = useContext(ChronoContext);
