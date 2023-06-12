@@ -79,3 +79,14 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+/* MDEditor */
+.w-md-editor-text-pre > code,
+.w-md-editor-text-input {
+  font-size: 21px !important;
+  line-height: 24px !important;
+}
+.wmde-markdown {
+  font-size: 21px !important;
+  line-height: 24px !important;
+}
