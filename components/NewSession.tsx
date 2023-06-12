@@ -4,7 +4,7 @@ import { FC, useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import Alert from "@/components/Alert";
-import alerts from "@/text/alerts.json";
+
 import {
   SessionTextContext,
   sessionTextCtxDefaultValues,
@@ -14,6 +14,7 @@ import {
   ChronoContext,
   chronoCtxDefaultValues,
 } from "@/src/ctx/chrono-provider";
+import { retrieveText } from "@/lib/utils";
 
 interface NewSessionProps {}
 
@@ -22,16 +23,14 @@ const NewSession: FC<NewSessionProps> = ({}) => {
   const { setSessionTimer } = useContext(TimeContext);
   const { setSessionChrono } = useContext(ChronoContext);
 
+  const { title, description } = retrieveText("restartSession");
+
   // set default values
   const reStartSessionHandler = () => {
     setSessionText(sessionTextCtxDefaultValues.sessionText);
     setSessionTimer(timeCtxDefaultValues.sessionTimer);
     setSessionChrono(chronoCtxDefaultValues.sessionChrono);
   };
-
-  const restartSessionAlert = alerts.restartSession;
-  const title = restartSessionAlert.title;
-  const description = restartSessionAlert.description;
 
   return (
     <Alert

@@ -4,6 +4,7 @@ import { Icons } from "@/components/icons";
 import Chrono from "./Chrono";
 import NewSession from "./NewSession";
 import StopSession from "./StopSession";
+import SaveSession from "./SaveSession";
 
 interface CounterProps {}
 
@@ -20,7 +21,7 @@ const Counter: FC<CounterProps> = ({}) => {
       <div className="flex">
         <NewSession />
         <StopSession />
-        <Icons.save />
+        <SaveSession />
       </div>
     </div>
   );

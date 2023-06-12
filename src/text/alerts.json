@@ -6,5 +6,13 @@
     "stopSession": {
       "title": "Stop Study Session",
       "description": "Please note that by stopping the session, you won't be able to continue the study session time counter."
-    }  
+    },
+    "saveSession": {
+      "title": "Save Study Session",
+      "description": ""
+    },
+    "test": {
+      "title": "",
+      "description": ""
+    }    
   }

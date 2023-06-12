@@ -6,7 +6,7 @@ import { TimeContext } from "@/src/ctx/time-provider";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import Alert from "@/components/Alert";
-import alerts from "@/text/alerts.json";
+import { retrieveText } from "@/lib/utils";
 
 interface StopSessionProps {}
 
@@ -16,16 +16,14 @@ const StopSession: FC<StopSessionProps> = ({}) => {
     setSessionTimer,
   } = useContext(TimeContext);
 
+  const { title, description } = retrieveText("stopSession");
+
   const stopSessionHandler = () => {
     setSessionTimer((prevState) => ({
       ...prevState,
       status: "stop",
     }));
   };
-
-  const restartSessionAlert = alerts.stopSession;
-  const title = restartSessionAlert.title;
-  const description = restartSessionAlert.description;
 
   return (
     <Alert title={title} description={description} action={stopSessionHandler}>
