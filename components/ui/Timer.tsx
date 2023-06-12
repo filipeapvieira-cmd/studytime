@@ -4,7 +4,6 @@ import { FC, useContext, useEffect, useState, useRef } from "react";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { TimeContext } from "@/src/ctx/time-provider";
-import { TimeContextType } from "@/types";
 
 const Timer = () => {
   const { sessionTimer, setSessionTimer } = useContext(TimeContext);
@@ -22,7 +21,11 @@ const Timer = () => {
 
   return (
     <>
-      <Button variant="ghost" onClick={handleState} className="">
+      <Button
+        variant="ghost"
+        onClick={handleState}
+        disabled={status === "stop"}
+      >
         {showIconForState(status)}
         <p className="text-lg w-[82px]">
           {new Date(currentTimeOfStudy * 1000).toISOString().slice(11, 19)}

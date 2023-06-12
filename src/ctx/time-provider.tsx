@@ -7,7 +7,6 @@ export const timeCtxDefaultValues: TimeContextType = {
   sessionTimer: {
     currentTimeOfStudy: 0,
     status: "initial",
-    lastUpdate: 0,
   },
   setSessionTimer: () => {}, // provide a default function
 };

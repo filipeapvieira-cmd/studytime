@@ -3,6 +3,7 @@ import Timer from "./ui/Timer";
 import { Icons } from "@/components/icons";
 import Chrono from "./Chrono";
 import NewSession from "./NewSession";
+import StopSession from "./StopSession";
 
 interface CounterProps {}
 
@@ -18,7 +19,7 @@ const Counter: FC<CounterProps> = ({}) => {
       </div>
       <div className="flex">
         <NewSession />
-        <Icons.stop />
+        <StopSession />
         <Icons.save />
       </div>
     </div>

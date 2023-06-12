@@ -3,8 +3,8 @@
       "title": "Restart Study Session",
       "description": "Please note that by restarting the session, all unsaved progress and entered data will be lost. All fields will be re-initialized to their default values."
     },
-    "deleteAccount": {
-      "title": "test",
-      "description": "test"
-    }
+    "stopSession": {
+      "title": "Stop Study Session",
+      "description": "Please note that by stopping the session, you won't be able to continue the study session time counter."
+    }  
   }

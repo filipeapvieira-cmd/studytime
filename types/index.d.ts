@@ -1,7 +1,6 @@
 type SessionTimer = {
     currentTimeOfStudy: number;
     status: 'initial' | 'play' | 'pause' | 'stop';
-    lastUpdate: number;
 };
 
 export type TimeContextType = {
