@@ -48,17 +48,34 @@ export const FileOptions = ({
   setValidFile,
   fileName,
 }: FileOptionsProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isCopyLoading, setIsCopyLoading] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
   const copyToClipboard = async (text: string) => {
     try {
-      setIsLoading(true);
+      setIsCopyLoading(true);
       await navigator.clipboard.writeText(text);
-      setIsLoading(false);
       console.log("Text copied to clipboard");
     } catch (err) {
       console.error("Failed to copy text: ", err);
-      setIsLoading(false);
+    } finally {
+      setIsCopyLoading(false);
+    }
+  };
+
+  const deleteImage = async (imgDeleteUrl: string) => {
+    try {
+      setIsDeleteLoading(true);
+      const response = await fetch("/api/delete-img", {
+        method: "POST",
+        body: JSON.stringify({ imgDeleteUrl }),
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (err) {
+      console.log("err");
+    } finally {
+      setIsDeleteLoading(false);
     }
   };
 
@@ -66,7 +83,8 @@ export const FileOptions = ({
     await copyToClipboard(imgUrls.imgUrl);
   };
 
-  const onDeleteHandler = () => {
+  const onDeleteHandler = async () => {
+    await deleteImage(imgUrls.deleteUrl);
     setValidFile((prev) => {
       return prev.filter((file) => file.name !== fileName);
     });
@@ -76,32 +94,27 @@ export const FileOptions = ({
     <div className="flex justify-center items-center space-x-2">
       <Button
         variant="ghost"
-        disabled={imgUrls.imgUrl === ""}
+        disabled={imgUrls.imgUrl === "" || isCopyLoading}
         onClick={onCopyToClipboardHandler}
         className="p-0 w-7 h-7"
       >
-        {isLoading ? (
+        {isCopyLoading ? (
           <Icons.loading className="animate-spin" />
         ) : (
           <Icons.copy />
         )}
       </Button>
 
-      <Button variant="ghost" asChild className="p-0">
-        {imgUrls.deleteUrl !== "" ? (
-          <Link
-            target="_blank"
-            href={imgUrls.deleteUrl}
-            onClick={onDeleteHandler}
-          >
-            <Icons.close />
-          </Link>
+      <Button
+        variant="ghost"
+        className="p-0"
+        disabled={imgUrls.deleteUrl === "" || isDeleteLoading}
+        onClick={onDeleteHandler}
+      >
+        {isDeleteLoading ? (
+          <Icons.loading className="animate-spin" />
         ) : (
-          <Icons.close
-            width={24}
-            height={24}
-            className="stroke-muted-foreground"
-          />
+          <Icons.close />
         )}
       </Button>
     </div>
