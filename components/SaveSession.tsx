@@ -34,7 +34,7 @@ const SaveSession = ({}) => {
 
   return (
     <Alert title={title} description={description} action={saveSessionHandler}>
-      <Button variant="ghost" disabled={status !== "stop"}>
+      <Button variant="default" disabled={status !== "stop"}>
         <Icons.save />
       </Button>
     </Alert>

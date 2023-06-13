@@ -34,7 +34,7 @@ const StopSession: FC<StopSessionProps> = ({}) => {
   return (
     <Alert title={title} description={description} action={stopSessionHandler}>
       <Button
-        variant="ghost"
+        variant="default"
         disabled={status === "initial" || status === "stop"}
       >
         <Icons.stop />

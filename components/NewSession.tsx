@@ -39,7 +39,7 @@ const NewSession: FC<NewSessionProps> = ({}) => {
       description={description}
       action={reStartSessionHandler}
     >
-      <Button variant="ghost">
+      <Button variant="default">
         <Icons.newSession />
       </Button>
     </Alert>

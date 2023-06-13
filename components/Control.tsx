@@ -11,14 +11,14 @@ interface CounterProps {}
 const Counter: FC<CounterProps> = ({}) => {
   return (
     <div
-      className="container flex items-center justify-between border-border border-2
-    p-6 rounded-lg"
+      className="container flex items-center justify-between p-0
+    py-6 rounded-lg"
     >
       <div className="space-x-2 flex">
         <Timer />
         <Chrono />
       </div>
-      <div className="flex">
+      <div className="flex space-x-2">
         <NewSession />
         <StopSession />
         <SaveSession />

@@ -22,7 +22,7 @@ const Timer = () => {
   return (
     <>
       <Button
-        variant="ghost"
+        variant="default"
         onClick={handleState}
         disabled={status === "stop"}
       >

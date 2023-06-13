@@ -38,7 +38,7 @@ const Chrono: FC<ChronoProps> = ({}) => {
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant="ghost"
+          variant="default"
           className=""
           ref={btnRef}
           disabled={status === "stop"}

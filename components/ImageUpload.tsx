@@ -3,6 +3,8 @@
 import { FC, useEffect, useState } from "react";
 import React from "react";
 import ImageUploadItem from "./ImageUploadItem";
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "./ui/button";
 
 interface ImageUploadProps {}
 
@@ -33,6 +35,7 @@ const ImageUpload: FC<ImageUploadProps> = ({}) => {
 
   const onFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setIsHovered(false);
     onFileHandler(e.dataTransfer.files);
   };
 
@@ -67,8 +70,20 @@ const ImageUpload: FC<ImageUploadProps> = ({}) => {
     return true;
   };
 
+  const duplicateNameValidation = (fileName: String) => {
+    const isDuplicate = validFile.find((file) => file.name === fileName);
+    if (isDuplicate) {
+      setErrorMessage("Duplicate file name");
+      return false;
+    }
+    return true;
+  };
+
   const fileValidation = (file: File) => {
-    const isValid = extensionValidation(file) && sizeValidation(file.size);
+    const isValid =
+      extensionValidation(file) &&
+      sizeValidation(file.size) &&
+      duplicateNameValidation(file.name);
     return isValid;
   };
 
@@ -86,8 +101,8 @@ const ImageUpload: FC<ImageUploadProps> = ({}) => {
   return (
     <>
       <div
-        className={`container w-full border-2 border-border border-dashed mt-10 flex flex-col justify-center items-center p-6 rounded-lg hover:cursor-pointer ${
-          isHovered && "border-secondary-foreground"
+        className={`container w-full border-2 border-secondary-foreground border-dashed mt-5 flex flex-col justify-center items-center p-6 rounded-lg hover:cursor-pointer ${
+          isHovered && "border-4"
         }`}
         onClick={onClickHandler}
         onDragOver={onDragOver}
@@ -104,15 +119,22 @@ const ImageUpload: FC<ImageUploadProps> = ({}) => {
         </p>
         <input type="file" multiple className="hidden" ref={inputFileRef} />
       </div>
-      <div>
+      <ul className="container flex flex-wrap justify-center mt-4">
         {validFile.length > 0 &&
           validFile.map(
             (file) => (
+              console.log("validFile.map: "),
               console.log(file),
-              (<ImageUploadItem key={file.name} file={file} />)
+              (
+                <ImageUploadItem
+                  key={file.name}
+                  file={file}
+                  setValidFile={setValidFile}
+                />
+              )
             )
           )}
-      </div>
+      </ul>
     </>
   );
 };

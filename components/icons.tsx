@@ -9,6 +9,7 @@ import {
   StopCircle,
   XCircle,
   Clipboard,
+  Loader2,
   type Icon as LucideIcon,
 } from "lucide-react";
 
@@ -24,4 +25,5 @@ export const Icons = {
   stop: StopCircle,
   close: XCircle,
   copy: Clipboard,
+  loading: Loader2,
 };
