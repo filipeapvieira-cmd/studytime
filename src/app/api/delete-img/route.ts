@@ -36,7 +36,6 @@ export async function POST(req:Request) {
         browser = await puppeteer.connect({
             browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BLESS_TOKEN}`,
           })
-        const page = await browser.newPage();
 
         await deleteImage(browser, imgDeleteUrl);
 
