@@ -20,7 +20,7 @@ const Editor: FC<EditorProps> = ({ className }) => {
     <div data-color-mode="dark">
       <MDEditor
         className={`container p-0 ${className || ""}`}
-        height={500}
+        height={650}
         value={sessionText}
         onChange={(value) => {
           setSessionText(value || "");

@@ -81,12 +81,14 @@
 }
 
 /* MDEditor */
+/* Edit */
 .w-md-editor-text-pre > code,
 .w-md-editor-text-input {
-  font-size: 21px !important;
+  font-size: 18px !important;
   line-height: 24px !important;
 }
+/* Preview */
 .wmde-markdown {
-  font-size: 21px !important;
+  font-size: 18px !important;
   line-height: 24px !important;
 }

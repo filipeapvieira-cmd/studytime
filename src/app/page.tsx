@@ -5,7 +5,7 @@ import ImageUploadItem from "@/components/ImageUploadItem";
 
 export default function Home() {
   return (
-    <div className="container bg-secondary rounded-lg shadow-lg">
+    <div className="container bg-secondary/90 rounded-lg shadow-lg">
       <Counter />
       <Editor />
       <ImageUpload />

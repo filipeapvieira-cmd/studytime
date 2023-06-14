@@ -10,10 +10,18 @@ interface ImageUploadProps {}
 
 const ImageUpload: FC<ImageUploadProps> = ({}) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [validFile, setValidFile] = useState<File[]>([]);
+  const { toast } = useToast();
 
   const inputFileRef = React.createRef<HTMLInputElement>();
+
+  const showToast = (description: string) => {
+    toast({
+      variant: "destructive",
+      title: `Uh oh! Something went wrong`,
+      description,
+    });
+  };
 
   const onClickHandler = () => {
     inputFileRef.current?.click();
@@ -52,7 +60,7 @@ const ImageUpload: FC<ImageUploadProps> = ({}) => {
     ];
 
     if (!(file.type && validTypes.includes(file.type))) {
-      setErrorMessage("File type not permitted");
+      showToast("Invalid file type!");
       return false;
     }
     return true;
@@ -60,7 +68,7 @@ const ImageUpload: FC<ImageUploadProps> = ({}) => {
 
   const sizeValidation = (fileSize: number) => {
     if (fileSize === 0 || fileSize > 30000000) {
-      setErrorMessage(
+      showToast(
         `${
           fileSize === 0 ? "File size is 0" : "File size is greater than 30MB"
         }`
@@ -73,7 +81,7 @@ const ImageUpload: FC<ImageUploadProps> = ({}) => {
   const duplicateNameValidation = (fileName: String) => {
     const isDuplicate = validFile.find((file) => file.name === fileName);
     if (isDuplicate) {
-      setErrorMessage("Duplicate file name");
+      showToast("Duplicate file name!");
       return false;
     }
     return true;
@@ -101,7 +109,7 @@ const ImageUpload: FC<ImageUploadProps> = ({}) => {
   return (
     <>
       <div
-        className={`container w-full border-2 border-secondary-foreground border-dashed mt-5 flex flex-col justify-center items-center p-6 rounded-lg hover:cursor-pointer ${
+        className={`container mt-6 w-full border-2 border-secondary-foreground border-dashed flex flex-col justify-center items-center p-6 rounded-lg hover:cursor-pointer ${
           isHovered && "border-4"
         }`}
         onClick={onClickHandler}
@@ -119,7 +127,7 @@ const ImageUpload: FC<ImageUploadProps> = ({}) => {
         </p>
         <input type="file" multiple className="hidden" ref={inputFileRef} />
       </div>
-      <ul className="container flex flex-wrap justify-center mt-4">
+      <ul className="container flex flex-wrap justify-center mt-2 p-4">
         {validFile.length > 0 &&
           validFile.map(
             (file) => (
