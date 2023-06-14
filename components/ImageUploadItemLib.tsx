@@ -49,7 +49,6 @@ export const FileOptions = ({
   fileName,
 }: FileOptionsProps) => {
   const [isCopyLoading, setIsCopyLoading] = useState(false);
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -63,7 +62,8 @@ export const FileOptions = ({
     }
   };
 
-  const deleteImage = async (imgDeleteUrl: string) => {
+  // Code used for the deletion with puppeteer
+  /*   const deleteImage = async (imgDeleteUrl: string) => {
     try {
       setIsDeleteLoading(true);
       const response = await fetch("/api/delete-img", {
@@ -77,14 +77,14 @@ export const FileOptions = ({
     } finally {
       setIsDeleteLoading(false);
     }
-  };
+  }; */
 
   const onCopyToClipboardHandler = async () => {
     await copyToClipboard(imgUrls.imgUrl);
   };
 
   const onDeleteHandler = async () => {
-    await deleteImage(imgUrls.deleteUrl);
+    window.open(imgUrls.deleteUrl, "_blank", "noopener,noreferrer");
     setValidFile((prev) => {
       return prev.filter((file) => file.name !== fileName);
     });
@@ -108,14 +108,10 @@ export const FileOptions = ({
       <Button
         variant="ghost"
         className="p-0"
-        disabled={imgUrls.deleteUrl === "" || isDeleteLoading}
+        disabled={imgUrls.deleteUrl === ""}
         onClick={onDeleteHandler}
       >
-        {isDeleteLoading ? (
-          <Icons.loading className="animate-spin" />
-        ) : (
-          <Icons.close />
-        )}
+        <Icons.close />
       </Button>
     </div>
   );
