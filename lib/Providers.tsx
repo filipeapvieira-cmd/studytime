@@ -3,6 +3,7 @@
 import TimerProvider from "@/src/ctx/time-provider";
 import ChronoProvider from "@/src/ctx/chrono-provider";
 import SessionTextProvider from "@/src/ctx/session-text-provider";
+import UploadImagesProvider from "@/src/ctx/upload-images-provider";
 
 import { FC } from "react";
 
@@ -14,7 +15,9 @@ const Providers: FC<ProvidersProps> = ({ children }) => {
   return (
     <TimerProvider>
       <ChronoProvider>
-        <SessionTextProvider>{children}</SessionTextProvider>
+        <SessionTextProvider>
+          <UploadImagesProvider>{children}</UploadImagesProvider>
+        </SessionTextProvider>
       </ChronoProvider>
     </TimerProvider>
   );

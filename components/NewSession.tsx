@@ -14,6 +14,10 @@ import {
   ChronoContext,
   chronoCtxDefaultValues,
 } from "@/src/ctx/chrono-provider";
+import {
+  UploadImagesContext,
+  uploadImagesCtxDefaultValues,
+} from "@/src/ctx/upload-images-provider";
 import { retrieveText } from "@/lib/utils";
 
 interface NewSessionProps {}
@@ -23,6 +27,7 @@ const NewSession: FC<NewSessionProps> = ({}) => {
   const { setSessionText } = useContext(SessionTextContext);
   const { setSessionTimer } = useContext(TimeContext);
   const { setSessionChrono } = useContext(ChronoContext);
+  const { setValidFile } = useContext(UploadImagesContext);
 
   const { title, description } = retrieveText("restartSession");
 
@@ -31,6 +36,7 @@ const NewSession: FC<NewSessionProps> = ({}) => {
     setSessionText(sessionTextCtxDefaultValues.sessionText);
     setSessionTimer(timeCtxDefaultValues.sessionTimer);
     setSessionChrono(chronoCtxDefaultValues.sessionChrono);
+    setValidFile(uploadImagesCtxDefaultValues.validFile);
   };
 
   return (

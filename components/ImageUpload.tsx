@@ -1,16 +1,16 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import React from "react";
 import ImageUploadItem from "./ImageUploadItem";
 import { useToast } from "@/components/ui/use-toast";
-import { Button } from "./ui/button";
+import { UploadImagesContext } from "@/src/ctx/upload-images-provider";
 
 interface ImageUploadProps {}
 
 const ImageUpload: FC<ImageUploadProps> = ({}) => {
+  const { validFile, setValidFile } = useContext(UploadImagesContext);
   const [isHovered, setIsHovered] = useState(false);
-  const [validFile, setValidFile] = useState<File[]>([]);
   const { toast } = useToast();
 
   const inputFileRef = React.createRef<HTMLInputElement>();
@@ -129,19 +129,13 @@ const ImageUpload: FC<ImageUploadProps> = ({}) => {
       </div>
       <ul className="container flex flex-wrap justify-center mt-2 p-4">
         {validFile.length > 0 &&
-          validFile.map(
-            (file) => (
-              console.log("validFile.map: "),
-              console.log(file),
-              (
-                <ImageUploadItem
-                  key={file.name}
-                  file={file}
-                  setValidFile={setValidFile}
-                />
-              )
-            )
-          )}
+          validFile.map((file) => (
+            <ImageUploadItem
+              key={file.name}
+              file={file}
+              setValidFile={setValidFile}
+            />
+          ))}
       </ul>
     </>
   );
