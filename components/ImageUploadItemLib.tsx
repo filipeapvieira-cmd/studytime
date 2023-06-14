@@ -23,7 +23,7 @@ interface FileOptionsProps {
 
 export const FileExtension = ({ fileType }: FileExtensionProps) => {
   return (
-    <div className="w-16 h-12 bg-primary rounded-lg text-primary-foreground flex items-center justify-center p-1">
+    <div className="w-16 flex-shrink-0 h-12 bg-primary rounded-lg text-primary-foreground flex items-center justify-center p-1">
       {fileType.split("/")[1].toUpperCase()}
     </div>
   );
@@ -31,7 +31,7 @@ export const FileExtension = ({ fileType }: FileExtensionProps) => {
 
 export const FileInfo = ({ fileName, fileSize, progress }: FileInfoProps) => {
   return (
-    <div className="flex-1 flex flex-col justify-between">
+    <div className="flex flex-col justify-between w-[420px]">
       <div className="flex justify-between">
         <p className="whitespace-nowrap overflow-hidden overflow-ellipsis w-1/2">
           {fileName}
