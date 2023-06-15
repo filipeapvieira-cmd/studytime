@@ -5,42 +5,24 @@ import React from "react";
 import ImageUploadItem from "./ImageUploadItem";
 import { useToast } from "@/components/ui/use-toast";
 import { UploadImagesContext } from "@/src/ctx/upload-images-provider";
-import { useValidation } from "@/lib/imgUploadUtils";
+import { useValidation } from "@/lib/imgUploadValidation";
+import { useDragAndDrop } from "@/lib/imgUploadDragAnDrop";
 
 interface ImageUploadProps {}
 
 const ImageUpload: FC<ImageUploadProps> = ({}) => {
   const { validFile, setValidFile } = useContext(UploadImagesContext);
-  const [isHovered, setIsHovered] = useState(false);
   const { isValid } = useValidation(validFile);
+  const { isHovered, handleDragIn, handleDragOut, handleDrop } =
+    useDragAndDrop();
 
   const inputFileRef = React.createRef<HTMLInputElement>();
 
-  const onClickHandler = () => {
+  const handleClick = () => {
     inputFileRef.current?.click();
   };
 
-  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsHovered(true);
-  };
-
-  const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
-
-  const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsHovered(false);
-  };
-
-  const onFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsHovered(false);
-    onFileHandler(e.dataTransfer.files);
-  };
-
-  const onFileHandler = (files: FileList | null = null) => {
+  const handleFile = (files: FileList | null = null) => {
     if (!files) {
       return;
     }
@@ -57,12 +39,12 @@ const ImageUpload: FC<ImageUploadProps> = ({}) => {
         className={`container mt-6 w-full border-2 border-secondary-foreground border-dashed flex flex-col justify-center items-center p-6 rounded-lg hover:cursor-pointer ${
           isHovered && "border-4"
         }`}
-        onClick={onClickHandler}
-        onDragOver={onDragOver}
-        onDragEnter={onDragEnter}
-        onDragLeave={onDragLeave}
-        onDrop={onFileDrop}
-        onChange={() => onFileHandler(inputFileRef.current?.files)}
+        onClick={handleClick}
+        onDragOver={handleDragIn}
+        onDragEnter={handleDragIn}
+        onDragLeave={handleDragOut}
+        onDrop={(e) => handleDrop(e, handleFile)}
+        onChange={() => handleFile(inputFileRef.current?.files)}
       >
         <h2 className="text-xl font-bold text-secondary-foreground">
           Upload Images
