@@ -86,9 +86,31 @@
 .w-md-editor-text-input {
   font-size: 18px !important;
   line-height: 24px !important;
+  color: red !important;
 }
 /* Preview */
 .wmde-markdown {
   font-size: 18px !important;
   line-height: 24px !important;
+}
+
+/* Edit and Preview Background + Preview Text Color */
+.w-md-editor-content {
+  background: hsl(var(--background)); 
+  color: hsl(var(--foreground));
+}
+
+/* Toolbar */
+.w-md-editor-toolbar {
+  background: hsl(var(--primary)) !important;
+  height: 35px !important;
+}
+
+.w-md-editor-toolbar > ul > li > button{
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+.w-md-editor-toolbar > ul > li > button > svg{
+  width: 16px !important;
+  height: 16px !important;
 }

@@ -1,9 +1,8 @@
 "use client";
 
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext } from "react";
 import React from "react";
 import ImageUploadItem from "./ImageUploadItem";
-import { useToast } from "@/components/ui/use-toast";
 import { UploadImagesContext } from "@/src/ctx/upload-images-provider";
 import { useValidation } from "@/lib/imgUploadValidation";
 import { useDragAndDrop } from "@/lib/imgUploadDragAnDrop";

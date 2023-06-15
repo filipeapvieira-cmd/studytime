@@ -28,7 +28,6 @@ const SaveSession = ({}) => {
     console.log(sessionStartTime);
     console.log(sessionEndTime);
     console.log(totalPauseTime);
-
     console.log(sessionText);
   };
 

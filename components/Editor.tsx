@@ -17,16 +17,14 @@ interface EditorProps extends React.HTMLProps<HTMLDivElement> {}
 const Editor: FC<EditorProps> = ({ className }) => {
   const { sessionText, setSessionText } = useContext(SessionTextContext);
   return (
-    <div data-color-mode="dark">
-      <MDEditor
-        className={`container p-0 ${className || ""}`}
-        height={650}
-        value={sessionText}
-        onChange={(value) => {
-          setSessionText(value || "");
-        }}
-      />
-    </div>
+    <MDEditor
+      className={`container p-0 ${className || ""}`}
+      height={650}
+      value={sessionText}
+      onChange={(value) => {
+        setSessionText(value || "");
+      }}
+    />
   );
 };
 
