@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  //directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  //shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  name         String
+  email        String         @unique
+  password     String
+  createdAt    DateTime       @default(now()) @map(name: "created_at")
+  updatedAt    DateTime       @default(now()) @map(name: "updated_at")
+  StudySession StudySession[]
+
+  @@map(name: "users")
+}
+
+model StudySession {
+  id            Int      @id @default(autoincrement())
+  startTime     DateTime
+  endTime       DateTime
+  userId        Int
+  pauseDuration Int
+  createdAt     DateTime @default(now()) @map(name: "created_at")
+  updatedAt     DateTime @default(now()) @map(name: "updated_at")
+
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content Content[]
+  feeling Feeling?
+
+  @@map(name: "sessions")
+}
+
+model Content {
+  id                 Int      @id @default(autoincrement())
+  sessionId          Int
+  contentDescription String
+  topic              String
+  subtopic           String?
+  createdAt          DateTime @default(now()) @map(name: "created_at")
+  updatedAt          DateTime @default(now()) @map(name: "updated_at")
+
+  studySession StudySession @relation(fields: [sessionId], references: [id])
+
+  @@map(name: "contents")
+}
+
+model Feeling {
+  id                 Int      @id @default(autoincrement())
+  sessionId          Int      @unique
+  feelingDescription String
+  createdAt          DateTime @default(now()) @map(name: "created_at")
+  updatedAt          DateTime @default(now()) @map(name: "updated_at")
+
+  studySession StudySession @relation(fields: [sessionId], references: [id])
+
+  @@map(name: "feelings")
+}
