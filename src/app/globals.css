@@ -80,13 +80,12 @@
   }
 }
 
-/* MDEditor */
+/* ------ MDEditor ------ */
 /* Edit */
 .w-md-editor-text-pre > code,
 .w-md-editor-text-input {
   font-size: 18px !important;
   line-height: 24px !important;
-  color: red !important;
 }
 /* Preview */
 .wmde-markdown {
@@ -113,4 +112,29 @@
 .w-md-editor-toolbar > ul > li > button > svg{
   width: 16px !important;
   height: 16px !important;
+}
+
+.w-md-editor-toolbar li > button {
+  height: 29px !important;
+}
+
+/* Edit Text */
+/*###, -----, -  */
+.w-md-editor-text-pre .punctuation {
+  color:  hsl(var(--muted-foreground)) !important;
+}
+
+/*[link](http:\\sfdfsd)*/
+.w-md-editor-text-pre  .token.url, .token.content {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* After the ### */
+.w-md-editor-text-pre .token.title.important {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Other text */
+.w-md-editor-text-input, .w-md-editor-text-pre>code {
+  color: hsl(var(--foreground)) !important;
 }
