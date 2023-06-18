@@ -8,7 +8,7 @@ interface HeaderProps {}
 
 const Header: FC<HeaderProps> = ({}) => {
   return (
-    <div className="container flex justify-between items-center py-4">
+    <div className="container flex justify-between items-center py-4 h-header">
       <div className="flex items-center gap-6">
         <Link href="/">
           <Icons.logo size={50} />

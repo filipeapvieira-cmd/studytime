@@ -8,7 +8,7 @@ interface BtnlinkProps {
 
 const Btnlink: FC<BtnlinkProps> = ({ children }) => {
   return (
-    <Link href="/" className={buttonVariants({ variant: "default" })}>
+    <Link href="/login" className={buttonVariants({ variant: "default" })}>
       {children}
     </Link>
   );

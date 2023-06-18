@@ -15,6 +15,12 @@ module.exports = {
       },
     },
     extend: {
+      spacing: {
+        header: "var(--header-height)",
+      },
+      minHeight: {
+        "screen-minus-header": "calc(100vh - var(--header-height))",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
