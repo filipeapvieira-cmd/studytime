@@ -9,7 +9,6 @@ interface FormFieldProps {
   type?: string;
   error?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const FormField: FC<FormFieldProps> = ({
@@ -19,7 +18,6 @@ const FormField: FC<FormFieldProps> = ({
   type = "text",
   error,
   onChange,
-  onBlur,
 }) => {
   return (
     <div>
@@ -30,7 +28,6 @@ const FormField: FC<FormFieldProps> = ({
         name={name}
         value={value}
         onChange={onChange}
-        onBlur={onBlur}
       />
       {error && <p className="text-red-500">{error}</p>}
     </div>

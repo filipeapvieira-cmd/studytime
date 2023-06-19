@@ -1,87 +1,75 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Icons } from "@/components/icons";
 import FormField from "./FormField";
-import { EmailSchema, PasswordSchema } from "@/lib/validations/login";
-import { z } from "zod";
+import { useForm } from "@/src/hooks/useForm";
+import { Button } from "./ui/button";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 
 interface LoginProps {
   type: "login" | "register";
 }
 
-type LoginForm = {
-  email: string;
-  password: string;
-};
+const Login: FC<LoginProps> = ({ type }) => {
+  const { form, errors, handleChange, validateForm } = useForm();
 
-type LoginFormError = {
-  email?: string[] | undefined;
-  password?: string[] | undefined;
-};
-
-const Login: FC<LoginProps> = ({}) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<LoginFormError>({
-    email: undefined,
-    password: undefined,
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    switch (name) {
-      case "email":
-        setEmail(value);
-        break;
-      case "password":
-        setPassword(value);
-        break;
-    }
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    validateForm();
+    console.log(form.email, form.password);
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    //let error: z.infer<typeof EmailSchema>;
-    switch (name) {
-      case "email":
-        const error = EmailSchema.safeParse(value);
-        if (!error.success) {
-          setErrors((prevState) => {
-            return {
-              ...prevState,
-              [name]: [...(prevState.email || []), error.error.message],
-            };
-          });
-        }
-        break;
-    }
-  };
+  const btnMarginTop = type === "login" ? "mt-11" : "mt-6";
+
   return (
     <div className="flex flex-col items-center justify-center rounded-md shadow-md overflow-hidden w-[300px] h-[500px]">
       <div className="flex flex-col items-center justify-center bg-primary text-primary-foreground w-full flex-1">
         <Icons.logo size={70} />
         <p className="text-3xl">Study Time</p>
       </div>
-      <form className="flex-1">
+      <form
+        className="flex-[2.5] flex flex-col items-center justify-center"
+        onSubmit={handleSubmit}
+      >
         <FormField
           label="Email"
           type="email"
           name="email"
-          value={email}
+          value={form.email}
           onChange={handleChange}
-          onBlur={handleBlur}
           error={errors.email}
         />
         <FormField
           label="Password"
           type="password"
           name="password"
-          value={password}
+          value={form.password}
           onChange={handleChange}
-          onBlur={handleBlur}
           error={errors.password}
         />
+        {type === "register" && (
+          <FormField
+            label="Confirm password"
+            type="password"
+            name="confirmPassword"
+            value={form.confirmPassword}
+            onChange={handleChange}
+            error={errors.confirmPassword}
+          />
+        )}
+        <Button className={`${btnMarginTop} w-full`} type="submit">
+          {type === "login" ? "Login" : "Register"}
+        </Button>
+        {type === "login" && (
+          <Link
+            href="/register"
+            className={`${buttonVariants({ variant: "link" })} mt-3`}
+          >
+            Create an account
+          </Link>
+        )}
       </form>
     </div>
   );
