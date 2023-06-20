@@ -21,7 +21,9 @@ const FormField: FC<FormFieldProps> = ({
 }) => {
   return (
     <div>
-      <Label htmlFor={name}>{label}</Label>
+      <Label htmlFor={name} className={`${error && "text-destructive"}`}>
+        {label}
+      </Label>
       <Input
         type={type}
         id={name}
@@ -29,7 +31,7 @@ const FormField: FC<FormFieldProps> = ({
         value={value}
         onChange={onChange}
       />
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-destructive text-sm">{error}</p>}
     </div>
   );
 };

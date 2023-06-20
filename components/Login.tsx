@@ -1,67 +1,27 @@
 "use client";
 
-import { FC, useEffect } from "react";
+import { FC, useState } from "react";
 import { Icons } from "@/components/icons";
 import FormField from "./FormField";
 import { useForm } from "@/src/hooks/useForm";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
-import { useFetch } from "@/src/hooks/useFecth";
-import { useToast } from "@/components/ui/use-toast";
+import { useCustomToast } from "@/src/hooks/useCustomToast";
+
 import { useRouter } from "next/navigation";
-import {
-  loginFormRules,
-  loginFormFields,
-  registerFormFields,
-  registerFormRules,
-} from "@/lib/validations/login-register/rules";
+import { formFieldsAndRules } from "@/lib/validations/login-register/rules";
 
 interface LoginProps {
   type: "login" | "register";
 }
 
 const Login: FC<LoginProps> = ({ type }) => {
-  const useFormParameters =
-    type === "login"
-      ? { initialFormState: loginFormFields, validationRules: loginFormRules }
-      : {
-          initialFormState: registerFormFields,
-          validationRules: registerFormRules,
-        };
-
+  const [isLoading, setIsLoading] = useState(false);
   const { form, errors, handleChange, validateForm, isFormValid, hasErrors } =
-    useForm(useFormParameters);
-  const {
-    updatedResponse: response,
-    updatedError: error,
-    isLoading,
-    fetchData,
-  } = useFetch();
-  const { toast } = useToast();
+    useForm(formFieldsAndRules(type));
+  const { showToast } = useCustomToast();
   const router = useRouter();
-
-  const handleFecthResponse = (response: any, error: unknown) => {
-    let toastContent = {};
-
-    const showToast = () => {
-      if (response) {
-        toastContent = {
-          variant: "default",
-          title: `Registration Successful`,
-          description: `Being redirected to Login page...`,
-        };
-      }
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: `Uh oh! Something went wrong`,
-          description: `${error.message}`,
-        });
-      }
-    };
-    showToast();
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,32 +37,54 @@ const Login: FC<LoginProps> = ({ type }) => {
       password: form.password,
     };
 
-    await fetchData("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify(userDetails),
-    });
+    try {
+      setIsLoading(true);
 
-    console.log(response);
-    console.log(error);
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify(userDetails),
+      });
+      const responseBody = await response.json();
 
-    handleFecthResponse(response, error);
+      if (!response.ok) {
+        throw new Error(
+          responseBody.message || "Unable to connect, please try again later"
+        );
+      }
 
-    if (response) {
+      showToast(responseBody);
       router.push("/login");
+    } catch (error) {
+      let message = "Unable to connect, please try again later";
+
+      if (error instanceof Error) {
+        message = error.message;
+      }
+
+      showToast({
+        status: "error",
+        message,
+        data: null,
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const componentHeight = type === "login" ? "h-[500px]" : "h-[600px]";
   const btnMarginTop = type === "login" ? "mt-11" : "mt-6";
   const btnText = type === "login" ? "Login" : "Register";
 
   return (
-    <div className="flex flex-col items-center justify-center rounded-md shadow-md overflow-hidden w-[300px] h-[500px]">
+    <div
+      className={`flex flex-col items-center justify-center rounded-md shadow-md border-border bg-secondary/90 overflow-hidden w-[300px] ${componentHeight}`}
+    >
       <div className="flex flex-col items-center justify-center bg-primary text-primary-foreground w-full flex-1">
         <Icons.logo size={70} />
         <p className="text-3xl">Study Time</p>
       </div>
       <form
-        className="flex-[2.5] flex flex-col items-center justify-center"
+        className="flex-[3] flex flex-col items-center justify-center space-y-3"
         onSubmit={handleSubmit}
       >
         {type === "register" && (

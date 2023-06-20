@@ -6,24 +6,24 @@ import {
   validateUsername,
 } from "@/lib/validations/login-register/validators";
 
-export const loginFormRules: ValidationRules = {
+const loginFormRules: ValidationRules = {
     email: validateEmail,
     password: validatePassword,
   };
 
-export const registerFormRules: ValidationRules = {
+const registerFormRules: ValidationRules = {
     name: validateUsername,
     email: validateEmail,
     password: validatePassword,
     confirmPassword: validatePasswordEquality,
   };
 
-export const loginFormFields = {
+const loginFormFields = {
     email: "",
     password: "",
   };
 
-export const registerFormFields = {
+const registerFormFields = {
     name: "",
     email: "",
     password: "",
@@ -35,4 +35,13 @@ export const defaultErrorState = {
     email: undefined,
     password: undefined,
     confirmPassword: undefined,
+}
+
+export const formFieldsAndRules = (type: "login" | "register") => {
+  return type === "login"
+      ? { initialFormState: loginFormFields, validationRules: loginFormRules }
+      : {
+          initialFormState: registerFormFields,
+          validationRules: registerFormRules,
+        };
 }
