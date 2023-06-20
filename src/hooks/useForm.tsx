@@ -18,8 +18,8 @@ export const useForm = ({
   useEffect(() => {
     /* 
     We don't want to show error messages to the user until they have tried to submit the form.
+    Also, we can only validate the form after it has been updated from the async setter call.
     */
-
     if (!hasTriedSubmission) return;
     validateForm();
   }, [form, hasTriedSubmission]);

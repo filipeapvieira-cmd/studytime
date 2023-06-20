@@ -8,7 +8,6 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { useCustomToast } from "@/src/hooks/useCustomToast";
-
 import { useRouter } from "next/navigation";
 import { formFieldsAndRules } from "@/lib/validations/login-register/rules";
 
@@ -18,8 +17,15 @@ interface LoginProps {
 
 const Login: FC<LoginProps> = ({ type }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { form, errors, handleChange, validateForm, isFormValid, hasErrors } =
-    useForm(formFieldsAndRules(type));
+  const {
+    form,
+    errors,
+    handleChange,
+    validateForm,
+    isFormValid,
+    hasErrors,
+    resetForm,
+  } = useForm(formFieldsAndRules(type));
   const { showToast } = useCustomToast();
   const router = useRouter();
 
@@ -53,6 +59,7 @@ const Login: FC<LoginProps> = ({ type }) => {
       }
 
       showToast(responseBody);
+      resetForm();
       router.push("/login");
     } catch (error) {
       let message = "Unable to connect, please try again later";
