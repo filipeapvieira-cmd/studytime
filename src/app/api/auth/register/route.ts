@@ -27,7 +27,7 @@ export async function POST(req: Request) {
           });
           return NextResponse.json({
             status: 'success',
-            message: "User successfully created",
+            message: "User successfully created. Redirecting...",
             data: user,
         }, { status: 200 });    
     }

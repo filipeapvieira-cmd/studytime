@@ -43,3 +43,9 @@ export type ErrorState = {
     password: string | undefined;
     confirmPassword: string | undefined;
   };
+
+export type UserDetails = {
+    name?: string,
+    email: string,
+    password: string,
+  };

@@ -10,6 +10,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { useCustomToast } from "@/src/hooks/useCustomToast";
 import { useRouter } from "next/navigation";
 import { formFieldsAndRules } from "@/lib/validations/login-register/rules";
+import { formLogic } from "@/lib/login-register/utils";
 
 interface LoginProps {
   type: "login" | "register";
@@ -37,30 +38,14 @@ const Login: FC<LoginProps> = ({ type }) => {
     const errorObj = validateForm();
     if (hasErrors(errorObj)) return;
 
-    const userDetails = {
-      name: form.name,
-      email: form.email,
-      password: form.password,
-    };
-
     try {
       setIsLoading(true);
 
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify(userDetails),
-      });
-      const responseBody = await response.json();
+      const response = await formLogic(type, form);
 
-      if (!response.ok) {
-        throw new Error(
-          responseBody.message || "Unable to connect, please try again later"
-        );
-      }
-
-      showToast(responseBody);
+      showToast(response);
       resetForm();
-      router.push("/login");
+      router.push(response.redirectUrl);
     } catch (error) {
       let message = "Unable to connect, please try again later";
 
@@ -79,7 +64,7 @@ const Login: FC<LoginProps> = ({ type }) => {
   };
 
   const componentHeight = type === "login" ? "h-[500px]" : "h-[600px]";
-  const btnMarginTop = type === "login" ? "mt-11" : "mt-6";
+  const btnMarginTop = type === "login" ? "mt-12" : "mt-6";
   const btnText = type === "login" ? "Login" : "Register";
 
   return (
@@ -91,45 +76,47 @@ const Login: FC<LoginProps> = ({ type }) => {
         <p className="text-3xl">Study Time</p>
       </div>
       <form
-        className="flex-[3] flex flex-col items-center justify-center space-y-3"
+        className="flex-[3] flex flex-col items-center justify-center"
         onSubmit={handleSubmit}
       >
-        {type === "register" && (
+        <div className="space-y-3">
+          {type === "register" && (
+            <FormField
+              label="Name"
+              type="text"
+              name="name"
+              value={form.name || ""}
+              onChange={handleChange}
+              error={errors.name}
+            />
+          )}
           <FormField
-            label="Name"
-            type="text"
-            name="name"
-            value={form.name || ""}
+            label="Email"
+            type="email"
+            name="email"
+            value={form.email}
             onChange={handleChange}
-            error={errors.name}
+            error={errors.email}
           />
-        )}
-        <FormField
-          label="Email"
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          error={errors.email}
-        />
-        <FormField
-          label="Password"
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          error={errors.password}
-        />
-        {type === "register" && (
           <FormField
-            label="Confirm password"
+            label="Password"
             type="password"
-            name="confirmPassword"
-            value={form.confirmPassword || ""}
+            name="password"
+            value={form.password}
             onChange={handleChange}
-            error={errors.confirmPassword}
+            error={errors.password}
           />
-        )}
+          {type === "register" && (
+            <FormField
+              label="Confirm password"
+              type="password"
+              name="confirmPassword"
+              value={form.confirmPassword || ""}
+              onChange={handleChange}
+              error={errors.confirmPassword}
+            />
+          )}
+        </div>
         <Button
           className={`${btnMarginTop} w-full disabled:cursor-not-allowed`}
           type="submit"
