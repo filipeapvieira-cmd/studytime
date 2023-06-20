@@ -45,6 +45,7 @@ const Login: FC<LoginProps> = ({ type }) => {
 
       showToast(response);
       resetForm();
+      router.refresh(); //necessary for the rights update to be immediately reflected
       router.push(response.redirectUrl);
     } catch (error) {
       let message = "Unable to connect, please try again later";
