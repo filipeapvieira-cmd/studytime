@@ -1,86 +1,80 @@
-import { useState } from "react";
-import validator from "validator";
+import { useEffect, useState } from "react";
+import { defaultErrorState } from "@/lib/validations/login-register/rules";
+import { FormState, ErrorState, ValidationRules } from "@/types";
 
-type LoginFormError = {
-  email?: string | undefined;
-  password?: string | undefined;
-  confirmPassword?: string | undefined;
-};
+interface useFormProps {
+  initialFormState: FormState;
+  validationRules: ValidationRules;
+}
 
-export const useForm = () => {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [errors, setErrors] = useState<LoginFormError>({});
-  const [isFormDirty, setIsFormDirty] = useState(false);
+export const useForm = ({
+  initialFormState,
+  validationRules,
+}: useFormProps) => {
+  const [form, setForm] = useState(initialFormState);
+  const [errors, setErrors] = useState<ErrorState>(defaultErrorState);
+  const [hasTriedSubmission, setHasTriedSubmission] = useState(false);
+
+  useEffect(() => {
+    /* 
+    We don't want to show error messages to the user until they have tried to submit the form.
+    */
+
+    if (!hasTriedSubmission) return;
+    validateForm();
+  }, [form, hasTriedSubmission]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-
-    if (!isFormDirty) return;
-
-    switch (name) {
-      case "email":
-        handleValidationErrors(name, validateEmail(value));
-        break;
-      case "password":
-        handleValidationErrors(name, validatePassword(value));
-        break;
-      case "confirmPassword":
-        handleValidationErrors(
-          name,
-          validatePasswordEquality(value, form.password)
-        );
-        break;
-    }
+    setForm((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const validateEmail = (value: string) => {
-    const isValid = validator.isEmail(value);
-    if (!isValid) return "Invalid email";
-    return undefined;
-  };
-
-  const validatePassword = (value: string) => {
-    const isValid = value.length > 6;
-    if (!isValid) return "Invalid password";
-    return undefined;
-  };
-
-  const validatePasswordEquality = (value: string, password: string) => {
-    const isValid = validator.equals(value, password);
-    if (!isValid) return "Passwords do not match";
-    return undefined;
-  };
-
-  const handleValidationErrors = (
-    name: string,
-    message: string | undefined
-  ) => {
-    if (message) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: message,
-      }));
+  const handleValidationErrors = (errorObj: ErrorState) => {
+    if (hasErrors(errorObj)) {
+      setErrors(errorObj);
     } else {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: undefined,
-      }));
+      setErrors(defaultErrorState);
     }
   };
 
-  const validateForm = () => {
-    handleValidationErrors("email", validateEmail(form.email));
-    handleValidationErrors("password", validatePassword(form.password));
-    handleValidationErrors(
-      "confirmPassword",
-      validatePasswordEquality(form.confirmPassword, form.password)
-    );
-    setIsFormDirty(true);
+  const validateForm = (): ErrorState => {
+    const errorObj: ErrorState = { ...defaultErrorState };
+
+    for (const field in form) {
+      const validationMethod = validationRules[field];
+
+      const errorObjKey = field as keyof ErrorState;
+      const formObjKey = field as keyof FormState;
+
+      if (field === "confirmPassword") {
+        errorObj[errorObjKey] = validationMethod(
+          form[formObjKey] || "",
+          form.password || ""
+        );
+      } else {
+        errorObj[errorObjKey] = validationMethod(form[formObjKey] || "");
+      }
+    }
+
+    handleValidationErrors(errorObj);
+    setHasTriedSubmission(true);
+    return errorObj;
+  };
+
+  const hasErrors = (errorObj: ErrorState) => {
+    // check if any value in the errors object is truthy.
+    // some(), tests whether at least one element in the array satisfies the provided callback function.
+    return Object.values(errorObj).some((error) => error);
+  };
+
+  const isFormValid = () => {
+    return !hasErrors(errors);
+  };
+
+  const resetForm = () => {
+    setForm(initialFormState);
+    setErrors(defaultErrorState);
+    setHasTriedSubmission(false);
   };
 
   return {
@@ -88,5 +82,8 @@ export const useForm = () => {
     errors,
     handleChange,
     validateForm,
+    isFormValid,
+    hasErrors,
+    resetForm,
   };
 };

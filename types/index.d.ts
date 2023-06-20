@@ -25,3 +25,21 @@ export type ChronoContextType = {
 export type ControlText = {
     action: "restartSession" | "stopSession" | "saveSession";
 }
+
+export type ValidationRules = {
+    [key: string]: (value: string, password?: string) => string | undefined;
+};
+
+export type FormState = {
+    name?: string | undefined;
+    email: string;
+    password: string;
+    confirmPassword?: string | undefined;
+};
+
+export type ErrorState = {
+    name: string | undefined;
+    email: string | undefined;
+    password: string | undefined;
+    confirmPassword: string | undefined;
+  };
