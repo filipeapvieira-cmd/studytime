@@ -1,3 +1,5 @@
+/* CONTROL PANEL */
+
 export type SessionTimer = {
     currentTimeOfStudy: number;
     status: 'initial' | 'play' | 'pause' | 'stop';
@@ -30,6 +32,8 @@ export type ValidationRules = {
     [key: string]: (value: string, password?: string) => string | undefined;
 };
 
+/* AUTH */
+
 export type FormState = {
     name?: string | undefined;
     email: string;
@@ -42,10 +46,18 @@ export type ErrorState = {
     email: string | undefined;
     password: string | undefined;
     confirmPassword: string | undefined;
-  };
+};
 
 export type UserDetails = {
     name?: string,
     email: string,
     password: string,
-  };
+};
+
+/* PERSIST SESSION LOG */
+
+export type SessionLogContent = {
+    topic: string;
+    subtopic: string | undefined;
+    content: string;
+};

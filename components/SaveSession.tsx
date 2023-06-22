@@ -24,6 +24,8 @@ const SaveSession = ({}) => {
   const { title, description } = retrieveText("saveSession");
 
   const saveSessionHandler = () => {
+    // Validation
+    // Persistence
     console.log(currentTimeOfStudy);
     console.log(sessionStartTime);
     console.log(sessionEndTime);
