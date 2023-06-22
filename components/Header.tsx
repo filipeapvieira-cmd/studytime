@@ -20,9 +20,10 @@ const Header: FC<HeaderProps> = ({}) => {
         <Link href="/">
           <Icons.logo size={50} />
         </Link>
+        {status == "authenticated" &&
         <nav>
           <Navlink href="/dashboard">Dashboard</Navlink>
-        </nav>
+        </nav>}
       </div>
       <nav>
         <Btnlink>
