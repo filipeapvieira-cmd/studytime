@@ -2,22 +2,18 @@ import { SessionLogContent } from "@/types";
 
 export const getLogContent = (content: string) => {  
   let lines = content.split("#### @[").slice(1); // The first element is the text before the first '@[', so we skip it
-  lines = removeFeelingsFromLog(lines);
-  return parseLogContent(lines);    
+  removeLinesAfterContent(lines);
+  console.log(parseLogContent(lines));
+  return parseLogContent(lines); 
 }
 
-const removeFeelingsFromLog = (lines: string[]): string[] => {
-    const lastLineIndex = lines.length - 1;
-    const feelingsFlag = "### **Feelings**";
-    
-    if (lines[lastLineIndex].includes(feelingsFlag)) {
-      lines[lastLineIndex] = lines[lastLineIndex].split(feelingsFlag)[0];
-    }
-  
-    return lines;
-  }
+const removeLinesAfterContent = (lines: string[]): void => {
+    const lastIndex = lines.length - 1;
+    lines[lastIndex] = lines[lastIndex].split("----------")[0]; // Remove "----------" and everything after it
+}
 
 const parseLogContent = (lines: string[]): SessionLogContent[] => {
+    console.log(lines);
   /*
   will match any string that starts with "@[", 
   then has any number of any characters (the topic), 
@@ -31,7 +27,7 @@ const parseLogContent = (lines: string[]): SessionLogContent[] => {
         while ((match = pattern.exec("@[" + lines[i])) !== null) {
           let topic = match[1].trim();
           let subtopic = match[2] ? match[2].trim() : undefined;
-          let content = lines[i].split("\n").slice(1).join("\n").trim();
+          let content = lines[i].split("\n").slice(1, -1).join("\n").trim(); // Remove the first and last line of each line
           topicContents.push({ topic, subtopic, content });
         }
       }
