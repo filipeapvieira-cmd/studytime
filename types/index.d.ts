@@ -75,9 +75,9 @@ export type SessionLogTopicContentFeelings = {
 }
 
 export type SessionTimeAndDate = {
-    date: Date;
-    startTime: Date;
-    endTime: Date;
+    date: string;
+    startTime: string;
+    endTime: string;
     pausedTime: number;
 }
 

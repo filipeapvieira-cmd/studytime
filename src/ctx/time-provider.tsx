@@ -38,26 +38,28 @@ export default function TimerProvider({
       return;
     }
 
+    if (status === "pause") {
+      if (sessionTimer.sessionPauseStartTime === 0) {
+        setSessionTimer({
+          ...sessionTimer,
+          sessionPauseStartTime: Date.now(),
+        });
+      }
+      return;
+    } 
+
     // set study session end time and pause time
     if (status === "stop") {
-      const { sessionEndTime, totalPauseTime } = calcSessionTimes(sessionTimer);
-      setSessionTimer((prevSessionTimer) => ({
-        ...prevSessionTimer,
-        sessionEndTime,
-        totalPauseTime,
-      }));
+      setSessionTimer((prevSessionTimer) => {
+        console.log(prevSessionTimer.effectiveTimeOfStudy);
+        console.log(Date.now() - (prevSessionTimer.sessionStartTime + prevSessionTimer.totalPauseTime));
+        return {
+          ...prevSessionTimer,
+          sessionEndTime: Date.now(),
+        }        
+      });
       return;
     }
-
-    if (status === "pause" && sessionStartTime === 0) {
-      setSessionTimer((prevSessionTimer) => ({
-        ...prevSessionTimer,
-        sessionPauseStartTime: Date.now(),
-      }));
-    }
-    // if pause and startpausetime === 0
-    // set startpausetime: date.now
-    
 
     // set study session start time
     if (sessionStartTime === 0) {
@@ -67,20 +69,19 @@ export default function TimerProvider({
       }));
     }
 
-    // increment study session time
-    interval = setInterval(() => {
-      // if pausestarttime !== 0
-      // set pauseendtime: date.now
-      // set totalpause time = end - start
-      // set end and start to 0
-
-      setSessionTimer((prevSessionTimer) => ({
-          ...prevSessionTimer,
-      }));
-
+    // set study session pause time
+    if (status==="play" && sessionTimer.sessionPauseStartTime !== 0) {
       setSessionTimer((prevSessionTimer) => ({
         ...prevSessionTimer,
-        //effectiveTimeOfStudy: prevSessionTimer.effectiveTimeOfStudy + 1,
+        totalPauseTime: prevSessionTimer.totalPauseTime + (Date.now() - prevSessionTimer.sessionPauseStartTime),
+        sessionPauseStartTime: 0,
+      }));
+    }
+
+    // increment study session time
+    interval = setInterval(() => {
+      setSessionTimer((prevSessionTimer) => ({
+        ...prevSessionTimer,
         effectiveTimeOfStudy: Date.now() - (prevSessionTimer.sessionStartTime + prevSessionTimer.totalPauseTime),
       }));
     }, 1000);

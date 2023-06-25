@@ -73,12 +73,16 @@ const removeLinesAfterContent = (lines: string[]): string[] => {
 }
 
 const getSessionTimeAndDate = (sessionStartTime:number, sessionEndTime:number, totalPauseTime:number): SessionTimeAndDate => {
-    const options:Intl.DateTimeFormatOptions = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    //startTime: new Date(sessionStartTime).toLocaleTimeString([], options),
+    const timeFormatOptions :Intl.DateTimeFormatOptions = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    const dateFormatOptions :Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    };
     return {
-        date: new Date(),
-        startTime: new Date(sessionStartTime),
-        endTime: new Date(sessionEndTime),
+        date: new Date().toLocaleDateString('en-GB', dateFormatOptions).replace(/\//g, '-'),
+        startTime: new Date(sessionStartTime).toLocaleTimeString([], timeFormatOptions ),
+        endTime: new Date(sessionEndTime).toLocaleTimeString([], timeFormatOptions ),
         pausedTime: totalPauseTime,
     }
 }
