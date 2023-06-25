@@ -7,11 +7,12 @@ import Alert from "@/components/Alert";
 import { retrieveText } from "@/lib/utils";
 import { TimeContext } from "@/src/ctx/time-provider";
 import { SessionTextContext } from "@/src/ctx/session-text-provider";
+import { getSessionLog } from "@/lib/session-log/utils";
 
 const SaveSession = ({}) => {
   const {
     sessionTimer: {
-      currentTimeOfStudy,
+      effectiveTimeOfStudy,
       sessionStartTime,
       sessionEndTime,
       totalPauseTime,
@@ -24,13 +25,7 @@ const SaveSession = ({}) => {
   const { title, description } = retrieveText("saveSession");
 
   const saveSessionHandler = () => {
-    // Validation
-    // Persistence
-    console.log(currentTimeOfStudy);
-    console.log(sessionStartTime);
-    console.log(sessionEndTime);
-    console.log(totalPauseTime);
-    console.log(sessionText);
+    console.log(getSessionLog(sessionText, sessionStartTime, sessionEndTime, totalPauseTime));
   };
 
   return (
