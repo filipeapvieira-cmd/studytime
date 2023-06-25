@@ -7,7 +7,7 @@ import { TimeContext } from "@/src/ctx/time-provider";
 
 const Timer = () => {
   const { sessionTimer, setSessionTimer } = useContext(TimeContext);
-  const { currentTimeOfStudy, status } = sessionTimer;
+  const { effectiveTimeOfStudy, status } = sessionTimer;
 
   const handleState = () => {
     if (status === "initial") {
@@ -28,7 +28,8 @@ const Timer = () => {
       >
         {showIconForState(status)}
         <p className="text-lg w-[82px]">
-          {new Date(currentTimeOfStudy * 1000).toISOString().slice(11, 19)}
+          {/* {new Date(effectiveTimeOfStudy * 1000).toISOString().slice(11, 19)} */}
+          {new Date(effectiveTimeOfStudy).toISOString().slice(11, 19)}
         </p>
       </Button>
     </>

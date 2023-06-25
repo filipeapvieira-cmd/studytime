@@ -1,10 +1,12 @@
 /* CONTROL PANEL */
 
 export type SessionTimer = {
-    currentTimeOfStudy: number;
+    effectiveTimeOfStudy: number;
     status: 'initial' | 'play' | 'pause' | 'stop';
     sessionStartTime: number;
     sessionEndTime: number;
+    sessionPauseStartTime: number;
+    sessionPauseEndTime: number;
     totalPauseTime: number;
 };
 
@@ -56,8 +58,30 @@ export type UserDetails = {
 
 /* PERSIST SESSION LOG */
 
-export type SessionLogContent = {
+export type SessionLogTopics = {
+    topic: string;
+    subtopic: string | undefined;
+};
+
+export type SessionLogTopicContent = {
     topic: string;
     subtopic: string | undefined;
     content: string;
-};
+}
+
+export type SessionLogTopicContentFeelings = {
+    topics: SessionLogTopicContent[];
+    feelings: string;
+}
+
+export type SessionTimeAndDate = {
+    date: Date;
+    startTime: Date;
+    endTime: Date;
+    pausedTime: number;
+}
+
+export type SessionLog = {
+    description: SessionLogTopicContentFeelings,
+    timeAndDate: SessionTimeAndDate
+}

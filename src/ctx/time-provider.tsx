@@ -6,10 +6,12 @@ import { calcSessionTimes } from "@/lib/utils";
 
 export const timeCtxDefaultValues: TimeContextType = {
   sessionTimer: {
-    currentTimeOfStudy: 0,
+    effectiveTimeOfStudy: 0,
     status: "initial",
     sessionStartTime: 0,
     sessionEndTime: 0,
+    sessionPauseStartTime: 0,
+    sessionPauseEndTime:0,
     totalPauseTime: 0,
   },
   setSessionTimer: () => {}, // provide a default function
@@ -25,12 +27,14 @@ export default function TimerProvider({
   const [sessionTimer, setSessionTimer] = useState<SessionTimer>(
     timeCtxDefaultValues.sessionTimer
   );
-  const { currentTimeOfStudy, status, sessionStartTime } = sessionTimer;
+
+  console.log(sessionTimer);
+  const { effectiveTimeOfStudy, status, sessionStartTime } = sessionTimer;
 
   useEffect(() => {
     let interval: NodeJS.Timer;
 
-    if (status === "initial" || status === "pause") {
+    if (status === "initial") {
       return;
     }
 
@@ -45,6 +49,16 @@ export default function TimerProvider({
       return;
     }
 
+    if (status === "pause" && sessionStartTime === 0) {
+      setSessionTimer((prevSessionTimer) => ({
+        ...prevSessionTimer,
+        sessionPauseStartTime: Date.now(),
+      }));
+    }
+    // if pause and startpausetime === 0
+    // set startpausetime: date.now
+    
+
     // set study session start time
     if (sessionStartTime === 0) {
       setSessionTimer((prevSessionTimer) => ({
@@ -55,9 +69,19 @@ export default function TimerProvider({
 
     // increment study session time
     interval = setInterval(() => {
+      // if pausestarttime !== 0
+      // set pauseendtime: date.now
+      // set totalpause time = end - start
+      // set end and start to 0
+
+      setSessionTimer((prevSessionTimer) => ({
+          ...prevSessionTimer,
+      }));
+
       setSessionTimer((prevSessionTimer) => ({
         ...prevSessionTimer,
-        currentTimeOfStudy: prevSessionTimer.currentTimeOfStudy + 1,
+        //effectiveTimeOfStudy: prevSessionTimer.effectiveTimeOfStudy + 1,
+        effectiveTimeOfStudy: Date.now() - (prevSessionTimer.sessionStartTime + prevSessionTimer.totalPauseTime),
       }));
     }, 1000);
 
