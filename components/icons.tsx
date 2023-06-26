@@ -10,6 +10,9 @@ import {
   XCircle,
   Clipboard,
   Loader2,
+  User,
+  Sun,
+  Moon,
   type Icon as LucideIcon,
 } from "lucide-react";
 
@@ -26,4 +29,7 @@ export const Icons = {
   close: XCircle,
   copy: Clipboard,
   loading: Loader2,
+  user: User,
+  sun: Sun,
+  moon: Moon,
 };

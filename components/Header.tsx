@@ -6,12 +6,13 @@ import { Icons } from "@/components/icons";
 import Navlink from "./ui/Navlink";
 import Btnlink from "./ui/Btnlink";
 import { useSession } from "next-auth/react";
+import UserNav from "@/components/User-Nav";
 
 interface HeaderProps {}
 
 const Header: FC<HeaderProps> = ({}) => {
   const { data: session, status } = useSession();
-  console.log(session);
+  //console.log(session);
   console.log(status);
 
   return (
@@ -26,9 +27,12 @@ const Header: FC<HeaderProps> = ({}) => {
         </nav>}
       </div>
       <nav>
+        {status == "authenticated" && <UserNav />}
+        {status != "authenticated" &&
         <Btnlink>
-          <Icons.login />
+          <Icons.login/>
         </Btnlink>
+        }
       </nav>
     </div>
   );

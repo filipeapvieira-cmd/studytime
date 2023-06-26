@@ -27,7 +27,7 @@ export default function TimerProvider({
     timeCtxDefaultValues.sessionTimer
   );
 
-  console.log(sessionTimer);
+  //console.log(sessionTimer);
   const { effectiveTimeOfStudy, status, sessionStartTime } = sessionTimer;
 
   useEffect(() => {
@@ -50,8 +50,8 @@ export default function TimerProvider({
     // set study session end time and pause time
     if (status === "stop") {
       setSessionTimer((prevSessionTimer) => {
-        console.log(prevSessionTimer.effectiveTimeOfStudy);
-        console.log(Date.now() - (prevSessionTimer.sessionStartTime + prevSessionTimer.totalPauseTime));
+        //console.log(prevSessionTimer.effectiveTimeOfStudy);
+        //console.log(Date.now() - (prevSessionTimer.sessionStartTime + prevSessionTimer.totalPauseTime));
         return {
           ...prevSessionTimer,
           sessionEndTime: Date.now(),

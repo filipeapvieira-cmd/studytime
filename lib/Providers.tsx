@@ -15,7 +15,11 @@ interface ProvidersProps {
 const Providers: FC<ProvidersProps> = ({ children }) => {
   return (
     <ThemeProvider attribute="class" enableSystem defaultTheme="system">
-      <SessionProvider session={null}>
+      {/*
+      // Re-fetch session every 5 minutes
+      refetchInterval={5 * 60}
+       */}
+      <SessionProvider>
         <TimerProvider>
           <ChronoProvider>
             <SessionTextProvider>

@@ -1,6 +1,4 @@
 import { SessionLogTopics, SessionLogTopicContentFeelings, SessionLogTopicContent, SessionTimeAndDate, SessionLog } from "@/types";
-import { get } from "http";
-import { start } from "repl";
 
 export const getSessionLog = (sessionText: string, sessionStartTime:number, sessionEndTime:number, totalPauseTime:number): SessionLog => {
     return {
