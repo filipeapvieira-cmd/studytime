@@ -50,7 +50,7 @@ const SaveSession = ({}) => {
   return (
     <Alert title={title} description={description} action={saveSessionHandler}>
       <Button variant="default" disabled={status !== "stop"}>        
-        {isLoading && <Icons.loading className="mr-2 h-4 w-4 animate-spin" />}
+        {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}
         {!isLoading && <Icons.save />}
       </Button>
     </Alert>
