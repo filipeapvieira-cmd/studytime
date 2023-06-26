@@ -1,13 +1,15 @@
 "use client";
 
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import Alert from "@/components/Alert";
-import { retrieveText } from "@/lib/utils";
+import { retrieveTextFromJson } from "@/lib/utils";
 import { TimeContext } from "@/src/ctx/time-provider";
 import { SessionTextContext } from "@/src/ctx/session-text-provider";
-import { getSessionLog } from "@/lib/session-log/utils";
+import { getSessionLog, persistSession } from "@/lib/session-log/utils";
+import {SessionLog} from "@/types";
+import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
 
 const SaveSession = ({}) => {
   const {
@@ -21,17 +23,32 @@ const SaveSession = ({}) => {
     setSessionTimer,
   } = useContext(TimeContext);
   const { sessionText } = useContext(SessionTextContext);
+  const {showToastError, showToastSuccess} = useFetchStatusToastHandling();
+  const [isLoading, setIsLoading] = useState(false);
+  const { title, description } = retrieveTextFromJson("saveSession");
 
-  const { title, description } = retrieveText("saveSession");
+  const saveSessionHandler = async () => {
+    const sessionLog: SessionLog = getSessionLog(sessionText, sessionStartTime, sessionEndTime, totalPauseTime);
 
-  const saveSessionHandler = () => {
+    try {
+      setIsLoading(true);
+      const response = await persistSession(sessionLog);
+      showToastSuccess(response);
+    } catch (error) {
+      showToastError(error);
+    } finally {
+      setIsLoading(false);
+    }
+
     console.log(getSessionLog(sessionText, sessionStartTime, sessionEndTime, totalPauseTime));
+
   };
 
   return (
     <Alert title={title} description={description} action={saveSessionHandler}>
-      <Button variant="default" disabled={status !== "stop"}>
-        <Icons.save />
+      <Button variant="default" disabled={status !== "stop"}>        
+        {isLoading && <Icons.loading className="mr-2 h-4 w-4 animate-spin" />}
+        {!isLoading && <Icons.save />}
       </Button>
     </Alert>
   );

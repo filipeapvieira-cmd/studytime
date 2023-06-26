@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const retrieveText = (keyName: ControlText["action"]): { title: string, description: string } => {
+export const retrieveTextFromJson = (keyName: ControlText["action"]): { title: string, description: string } => {
   const text = alerts[keyName];
   return { title: text.title, description: text.description };
 }

@@ -2,7 +2,6 @@
 
 import { createContext, useState, useEffect } from "react";
 import { SessionTimer, TimeContextType } from "@/types";
-import { calcSessionTimes } from "@/lib/utils";
 
 export const timeCtxDefaultValues: TimeContextType = {
   sessionTimer: {

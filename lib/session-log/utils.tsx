@@ -1,5 +1,6 @@
 import { SessionLogTopics, SessionLogTopicContentFeelings, SessionLogTopicContent, SessionTimeAndDate, SessionLog } from "@/types";
 import { get } from "http";
+import { start } from "repl";
 
 export const getSessionLog = (sessionText: string, sessionStartTime:number, sessionEndTime:number, totalPauseTime:number): SessionLog => {
     return {
@@ -73,6 +74,9 @@ const removeLinesAfterContent = (lines: string[]): string[] => {
 }
 
 const getSessionTimeAndDate = (sessionStartTime:number, sessionEndTime:number, totalPauseTime:number): SessionTimeAndDate => {
+
+    /*     
+    RETURN DATE AS STRING
     const timeFormatOptions :Intl.DateTimeFormatOptions = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
     const dateFormatOptions :Intl.DateTimeFormatOptions = {
         day: '2-digit',
@@ -84,7 +88,14 @@ const getSessionTimeAndDate = (sessionStartTime:number, sessionEndTime:number, t
         startTime: new Date(sessionStartTime).toLocaleTimeString([], timeFormatOptions ),
         endTime: new Date(sessionEndTime).toLocaleTimeString([], timeFormatOptions ),
         pausedTime: totalPauseTime,
-    }
+    } 
+    */
+   return {
+    date: new Date(),
+    startTime: new Date(sessionStartTime),
+    endTime: new Date(sessionEndTime),
+    pausedTime: totalPauseTime,
+   }
 }
 
 const getDescription = (sessionText: string): SessionLogTopicContentFeelings => {
@@ -93,3 +104,20 @@ const getDescription = (sessionText: string): SessionLogTopicContentFeelings => 
     const feelings = getLogFeelings(sessionText);
     return joinFeelingsToTopicsAndContent(feelings, topicsAndContent);
 };
+
+export const persistSession = async (sessionLog: SessionLog): Promise<void> => {
+    const response = await fetch("/api/session/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sessionLog)
+      });
+  
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+
+      const data = await response.json();
+      return data;
+}

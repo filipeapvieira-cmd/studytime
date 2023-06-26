@@ -18,7 +18,7 @@ import {
   UploadImagesContext,
   uploadImagesCtxDefaultValues,
 } from "@/src/ctx/upload-images-provider";
-import { retrieveText } from "@/lib/utils";
+import { retrieveTextFromJson } from "@/lib/utils";
 
 interface NewSessionProps {}
 
@@ -29,7 +29,7 @@ const NewSession: FC<NewSessionProps> = ({}) => {
   const { setSessionChrono } = useContext(ChronoContext);
   const { setValidFile } = useContext(UploadImagesContext);
 
-  const { title, description } = retrieveText("restartSession");
+  const { title, description } = retrieveTextFromJson("restartSession");
 
   // set default values
   const reStartSessionHandler = () => {
