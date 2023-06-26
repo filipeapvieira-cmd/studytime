@@ -1,5 +1,3 @@
-"use client";
-
 import Counter from "@/components/Control";
 import Editor from "@/components/Editor";
 import ImageUpload from "@/components/ImageUpload";

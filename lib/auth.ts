@@ -61,8 +61,8 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.uid = user.id;
       }
-      console.log("jwt");
-      console.log({ token, account, user });
+      //console.log("jwt");
+      //console.log({ token, account, user });
       return token;
     },
 
@@ -85,8 +85,8 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
-      console.log("session");
-      console.log({ session, token });
+      //console.log("session");
+      //console.log({ session, token });
       return session
     }
   }
