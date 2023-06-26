@@ -1,9 +1,22 @@
 import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { SessionTimeAndDate, SessionLogTopicContentFeelings } from "@/types"
+import { SessionTimeAndDate, SessionLogTopicContentFeelings } from "@/types";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth/next";
+
 
 export async function POST(req: Request) {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+        return NextResponse.json({
+            status: 'error',
+            message: "Unauthorized access. Please log in.",
+            data: null,
+        }, { status: 401 });
+    }
+
     const { description, timeAndDate }: { description: SessionLogTopicContentFeelings, timeAndDate: SessionTimeAndDate } = await req.json();
     // Prisma's transaction API to create related data in one go
     try {
@@ -12,7 +25,7 @@ export async function POST(req: Request) {
             endTime: timeAndDate.endTime,
             user: {
                 connect: {
-                    id: 1,
+                    id: +session.user.id,
                 }
             },
             pauseDuration: timeAndDate.pausedTime,

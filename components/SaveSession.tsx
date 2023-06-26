@@ -10,8 +10,12 @@ import { SessionTextContext } from "@/src/ctx/session-text-provider";
 import { getSessionLog, persistSession } from "@/lib/session-log/utils";
 import {SessionLog} from "@/types";
 import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
+import { useStudySession } from "@/src/hooks/useStudySession";
+import { useSession } from "next-auth/react";
 
 const SaveSession = ({}) => {
+  const { data: session, status: sessionStatus } = useSession();
+
   const {
     sessionTimer: {
       effectiveTimeOfStudy,
@@ -25,23 +29,22 @@ const SaveSession = ({}) => {
   const { sessionText } = useContext(SessionTextContext);
   const {showToastError, showToastSuccess} = useFetchStatusToastHandling();
   const [isLoading, setIsLoading] = useState(false);
+  const { resetStudySession } = useStudySession();
   const { title, description } = retrieveTextFromJson("saveSession");
 
   const saveSessionHandler = async () => {
     const sessionLog: SessionLog = getSessionLog(sessionText, sessionStartTime, sessionEndTime, totalPauseTime);
-
     try {
       setIsLoading(true);
       const response = await persistSession(sessionLog);
       showToastSuccess(response);
+      resetStudySession();
     } catch (error) {
       showToastError(error);
     } finally {
       setIsLoading(false);
     }
-
-    console.log(getSessionLog(sessionText, sessionStartTime, sessionEndTime, totalPauseTime));
-
+    //console.log(getSessionLog(sessionText, sessionStartTime, sessionEndTime, totalPauseTime));
   };
 
   return (
