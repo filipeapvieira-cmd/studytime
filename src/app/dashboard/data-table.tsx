@@ -62,6 +62,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [globalFilter, setGlobalFilter] = useState("");
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
@@ -74,30 +75,37 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onGlobalFilterChange: setGlobalFilter,
+    onRowSelectionChange: setRowSelection,
     globalFilterFn: globalFilterFn,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       globalFilter,
+      rowSelection,
     },
   });
 
   const range = {
-    startDate: new Date("2023/04/01"),
-    endDate: new Date("2023/06/01"),
+    startDate: new Date("2023/06/01"),
+    endDate: new Date("2023/06/10"),
   };
 
   return (
     <div>
-      {/* Filter content */}
+      {/* Filter per date-range */}
       <CalendarDateRangePicker />
-      <button onClick={() => table.getColumn("date")?.setFilterValue(range)}>
-        TEST
+      <button
+        onClick={() => {
+          table.getColumn("date")?.setFilterValue(range);
+        }}
+      >
+        TEST Filter by date-range
       </button>
 
       {/* Filter per column */}
-      {/*       <div className="flex items-center py-4">
+      {/*       
+      <div className="flex items-center py-4">
         <Input
           placeholder="Filter content..."
           value={(table.getColumn("content")?.getFilterValue() as string) ?? ""}
@@ -106,10 +114,10 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-      </div> */}
+      </div> 
+      */}
 
       {/* Filter global */}
-
       <Input
         placeholder="Filter..."
         value={globalFilter ?? ""}
@@ -117,7 +125,7 @@ export function DataTable<TData, TValue>({
         className="max-w-sm"
       />
 
-      {/* Column visibility */}
+      {/* Hide - Show columns */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="ml-auto">
@@ -196,26 +204,6 @@ export function DataTable<TData, TValue>({
       </div>
 
       <DataTablePagination table={table} />
-
-      {/* Pagination  */}
-      {/*       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div> */}
     </div>
   );
 }

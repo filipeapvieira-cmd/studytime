@@ -12,19 +12,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
 
 /*
 Columns are where you define the core of what your table will look like. 
 They define the data that will be displayed, how it will be formatted, sorted and filtered
 */
-
-/* export type StudySession = {
-  id: number;
-  topic: string[];
-  subTopic: string[];
-  sessionDuration: Date;
-  date: Date;
-}; */
 
 export type StudySession = {
   id: number;
@@ -45,12 +38,34 @@ export const dateFilterFn: FilterFn<StudySession> = (row, id, filterValue) => {
 //${     subTopic[index] ? `- ${subTopic[index]}` : ""   }`}
 export const columns: ColumnDef<StudySession>[] = [
   {
+    id: "select",
+    header: ({ table }) => {
+      return (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      );
+    },
+    cell: ({ row }) => {
+      return (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      );
+    },
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
     accessorKey: "content",
     header: "Content",
     cell: ({ row }) => {
       const rawContent: [{ topic: string; subTopic: string; text: string }] =
         row.getValue("content");
-      console.log(rawContent);
       const topicAndSubTopic = rawContent.map((content, index) => (
         <Badge key={index}>{`${content.topic}`}</Badge>
       ));
@@ -74,7 +89,7 @@ export const columns: ColumnDef<StudySession>[] = [
         </Button>
       );
     },
-    /* filterFn: dateFilterFn, */
+    filterFn: dateFilterFn,
     /*     cell: ({ row }) => {
       const date: Date = row.getValue("date");
       const options: Intl.DateTimeFormatOptions = {
@@ -88,23 +103,17 @@ export const columns: ColumnDef<StudySession>[] = [
   },
   {
     accessorKey: "effectiveTime",
-    header: "Session Duration",
-    /*
-    cell: ({ row }) => {
-      /*
-      row.getValue() function from react-table returns the value at 
-      the accessor key for the row being rendered.
-
-      This method retrieves the processed value for a given column from the row.
-      
-      const duration: Date = row.getValue("sessionDuration");
-      const hours = duration.getHours().toString().padStart(2, "0");
-      const minutes = duration.getMinutes().toString().padStart(2, "0");
-      const seconds = duration.getSeconds().toString().padStart(2, "0");
-      const formattedDuration = `${hours}:${minutes}:${seconds}`;
-      return <div className="text-center font-medium">{formattedDuration}</div>;
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Session Duration
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
     },
-    */
   },
   {
     id: "actions",
