@@ -40,7 +40,7 @@ export async function GET() {
         return NextResponse.json({
             status: 'success',
             message: "Study sessions retrieved successfully.",
-            data: studySessions,
+            data: mapStudySession(studySessions),
         }, { status: 200 });
     } catch (error) {
         let message = "Something went wrong. Unable to retrieve sessions...";
@@ -57,4 +57,34 @@ export async function GET() {
         await db.$disconnect();
     }
 
+}
+
+const toDateISOString = (date: Date) => new Date(date).toISOString();
+const toTimeISOString = (date: Date) => toDateISOString(date).slice(11, 19);
+const toDateOnlyISOString = (date: Date) => toDateISOString(date).slice(0, 10);
+
+const mapContent = (content: any) => ({
+    text: content.contentDescription,
+    topic: content.topic,
+    subtopic: content.subtopic,
+});
+
+const mapStudySession = (studySessions: any) => {
+    const { StudySession: sessions } = studySessions ?? {};
+                
+    const studySessionDto = sessions?.map((session: any) => {
+        const effectiveTime = session.endTime.getTime() - (session.startTime.getTime() + session.pauseDuration);
+        return {
+            id: session.id,
+            date: toDateOnlyISOString(session.startTime),
+            startTime: toTimeISOString(session.startTime),
+            endTime: toTimeISOString(session.endTime),
+            pauseDuration: toTimeISOString(new Date(session.pauseDuration)),
+            effectiveTime: toTimeISOString(new Date(effectiveTime)),
+            content: session.content.map((content: any)=> mapContent(content)),
+            feeling: session.feeling?.feelingDescription,
+        }
+    });
+
+    return studySessionDto;
 }
