@@ -34,13 +34,14 @@ export type StudySession = {
   feelings: string;
 };
 
-/* export const dateFilterFn: FilterFn<SessionLog> = (row, id, filterValue) => {
+export const dateFilterFn: FilterFn<StudySession> = (row, id, filterValue) => {
   // Parse the date from the row
   const rowDate = new Date(row.getValue("date"));
 
   // Check if the date is within the range
   return rowDate >= filterValue.startDate && rowDate <= filterValue.endDate;
-}; */
+};
+
 //${     subTopic[index] ? `- ${subTopic[index]}` : ""   }`}
 export const columns: ColumnDef<StudySession>[] = [
   {
@@ -62,7 +63,17 @@ export const columns: ColumnDef<StudySession>[] = [
   },
   {
     accessorKey: "date",
-    header: "Date",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     /* filterFn: dateFilterFn, */
     /*     cell: ({ row }) => {
       const date: Date = row.getValue("date");

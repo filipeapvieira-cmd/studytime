@@ -11,7 +11,10 @@ import {
   SortingState,
   getSortedRowModel,
   VisibilityState,
+  FilterFn,
 } from "@tanstack/react-table";
+
+import { rankItem } from "@tanstack/match-sorter-utils";
 
 import {
   Table,
@@ -31,11 +34,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { CalendarDateRangePicker } from "@/components/Date-range-picker";
+import { DataTablePagination } from "@/components/table/data-table-pagination";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
+
+const globalFilterFn: FilterFn<any> = (row, columnId, value, addMeta) => {
+  // Rank the item
+  const itemRank = rankItem(row.getValue(columnId), value);
+
+  // Store the itemRank info
+  addMeta({
+    itemRank,
+  });
+
+  // Return if the item should be filtered in/out
+  return itemRank.passed;
+};
 
 export function DataTable<TData, TValue>({
   columns,
@@ -44,6 +61,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [globalFilter, setGlobalFilter] = useState("");
 
   const table = useReactTable({
     data,
@@ -55,10 +73,13 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: globalFilterFn,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      globalFilter,
     },
   });
 
@@ -75,8 +96,8 @@ export function DataTable<TData, TValue>({
         TEST
       </button>
 
-      {/* Filter content */}
-      <div className="flex items-center py-4">
+      {/* Filter per column */}
+      {/*       <div className="flex items-center py-4">
         <Input
           placeholder="Filter content..."
           value={(table.getColumn("content")?.getFilterValue() as string) ?? ""}
@@ -85,7 +106,16 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-      </div>
+      </div> */}
+
+      {/* Filter global */}
+
+      <Input
+        placeholder="Filter..."
+        value={globalFilter ?? ""}
+        onChange={(event) => setGlobalFilter(event.target.value)}
+        className="max-w-sm"
+      />
 
       {/* Column visibility */}
       <DropdownMenu>
@@ -164,7 +194,11 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+
+      <DataTablePagination table={table} />
+
+      {/* Pagination  */}
+      {/*       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
           size="sm"
@@ -181,7 +215,7 @@ export function DataTable<TData, TValue>({
         >
           Next
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }
