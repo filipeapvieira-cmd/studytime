@@ -18,55 +18,53 @@ Columns are where you define the core of what your table will look like.
 They define the data that will be displayed, how it will be formatted, sorted and filtered
 */
 
-export type StudySession = {
+/* export type StudySession = {
   id: number;
   topic: string[];
-  subTopic: string;
+  subTopic: string[];
   sessionDuration: Date;
   date: Date;
+}; */
+
+export type StudySession = {
+  id: number;
+  date: string;
+  effectiveTime: string;
+  content: [{ topic: string; subTopic: string; text: string }];
+  feelings: string;
 };
 
-export const dateFilterFn: FilterFn<StudySession> = (row, id, filterValue) => {
+/* export const dateFilterFn: FilterFn<SessionLog> = (row, id, filterValue) => {
   // Parse the date from the row
   const rowDate = new Date(row.getValue("date"));
 
   // Check if the date is within the range
   return rowDate >= filterValue.startDate && rowDate <= filterValue.endDate;
-};
-
+}; */
+//${     subTopic[index] ? `- ${subTopic[index]}` : ""   }`}
 export const columns: ColumnDef<StudySession>[] = [
   {
-    accessorKey: "topic",
-    header: "Topic",
+    accessorKey: "content",
+    header: "Content",
     cell: ({ row }) => {
-      const topic: string[] = row.getValue("topic");
-      const badgeTopic = topic.map((topic, index) => (
-        <Badge key={index}>{topic}</Badge>
+      const rawContent: [{ topic: string; subTopic: string; text: string }] =
+        row.getValue("content");
+      console.log(rawContent);
+      const topicAndSubTopic = rawContent.map((content, index) => (
+        <Badge key={index}>{`${content.topic}`}</Badge>
       ));
       return (
-        <div className="text-left font-medium space-x-2">{badgeTopic}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "subTopic",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Sub-Topic
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="text-left font-medium space-x-2">
+          {topicAndSubTopic}
+        </div>
       );
     },
   },
   {
     accessorKey: "date",
     header: "Date",
-    filterFn: dateFilterFn,
-    cell: ({ row }) => {
+    /* filterFn: dateFilterFn, */
+    /*     cell: ({ row }) => {
       const date: Date = row.getValue("date");
       const options: Intl.DateTimeFormatOptions = {
         year: "numeric",
@@ -75,18 +73,19 @@ export const columns: ColumnDef<StudySession>[] = [
       };
       const formattedDate = date.toLocaleDateString(undefined, options);
       return <div className="text-left font-medium">{formattedDate}</div>;
-    },
+    }, */
   },
   {
-    accessorKey: "sessionDuration",
+    accessorKey: "effectiveTime",
     header: "Session Duration",
+    /*
     cell: ({ row }) => {
       /*
       row.getValue() function from react-table returns the value at 
       the accessor key for the row being rendered.
 
       This method retrieves the processed value for a given column from the row.
-      */
+      
       const duration: Date = row.getValue("sessionDuration");
       const hours = duration.getHours().toString().padStart(2, "0");
       const minutes = duration.getMinutes().toString().padStart(2, "0");
@@ -94,6 +93,7 @@ export const columns: ColumnDef<StudySession>[] = [
       const formattedDuration = `${hours}:${minutes}:${seconds}`;
       return <div className="text-center font-medium">{formattedDuration}</div>;
     },
+    */
   },
   {
     id: "actions",
