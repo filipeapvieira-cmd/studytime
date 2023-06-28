@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
+import SessionTopic from "@/components/SessionTopic";
 
 /*
 Columns are where you define the core of what your table will look like. 
@@ -64,16 +65,16 @@ export const columns: ColumnDef<StudySession>[] = [
     accessorKey: "content",
     header: "Content",
     cell: ({ row }) => {
-      const rawContent: [{ topic: string; subTopic: string; text: string }] =
+      const rawContent: [{ topic: string; subtopic: string; text: string }] =
         row.getValue("content");
       const topicAndSubTopic = rawContent.map((content, index) => (
-        <Badge key={index}>{`${content.topic}`}</Badge>
+        <SessionTopic
+          key={index}
+          topic={content.topic}
+          subTopic={content.subtopic}
+        />
       ));
-      return (
-        <div className="text-left font-medium space-x-2">
-          {topicAndSubTopic}
-        </div>
-      );
+      return <>{topicAndSubTopic}</>;
     },
   },
   {

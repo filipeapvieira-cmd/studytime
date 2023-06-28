@@ -42,6 +42,10 @@ interface DataTableProps<TData, TValue> {
 }
 
 const globalFilterFn: FilterFn<any> = (row, columnId, value, addMeta) => {
+  console.log(columnId);
+  console.log(value);
+  console.log(row);
+  console.log(addMeta);
   // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value);
 
@@ -202,8 +206,9 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-
-      <DataTablePagination table={table} />
+      <div className="mt-4">
+        <DataTablePagination table={table} />
+      </div>
     </div>
   );
 }
