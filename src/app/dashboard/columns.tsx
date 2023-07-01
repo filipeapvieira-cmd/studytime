@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import SessionTopic from "@/components/SessionTopic";
+//import { rankItem } from "@tanstack/match-sorter-utils";
 
 /*
 Columns are where you define the core of what your table will look like. 
@@ -28,15 +29,67 @@ export type StudySession = {
   feelings: string;
 };
 
+export const contentFilterFn: FilterFn<StudySession> = (
+  row,
+  id,
+  filterValue
+) => {
+  const rawContent: [{ topic: string; subtopic: string; text: string }] =
+    row.getValue("content");
+  return rawContent.some(
+    (content) =>
+      content.topic.toLowerCase().includes(filterValue.toLowerCase()) ||
+      content.subtopic.toLowerCase().includes(filterValue.toLowerCase())
+  );
+};
+
 export const dateFilterFn: FilterFn<StudySession> = (row, id, filterValue) => {
   // Parse the date from the row
   const rowDate = new Date(row.getValue("date"));
-
-  // Check if the date is within the range
   return rowDate >= filterValue.startDate && rowDate <= filterValue.endDate;
 };
 
-//${     subTopic[index] ? `- ${subTopic[index]}` : ""   }`}
+function rankItem(itemValue: any, filterValue: any) {
+  let itemRank = { passed: false };
+  if (itemValue && filterValue) {
+    // Convert both itemValue and filterValue to lowercase for case insensitive comparison
+    itemValue = itemValue.toLowerCase();
+    filterValue = filterValue.toLowerCase();
+
+    // Check if itemValue contains filterValue as a substring
+    itemRank.passed = itemValue.includes(filterValue);
+  }
+  return itemRank;
+}
+
+export const globalFilterFn: FilterFn<any> = (
+  row,
+  columnId,
+  value,
+  addMeta
+) => {
+  let itemRank;
+
+  if (columnId === "content") {
+    // The 'content' column is an array of objects.
+    // Search both 'topic' and 'subtopic' fields.
+    const rawContent: [{ topic: string; subtopic: string; text: string }] =
+      row.getValue(columnId);
+    itemRank = rankItem(
+      `${rawContent.map((content) => content.topic).join(" ")} ${rawContent
+        .map((content) => content.subtopic)
+        .join(" ")}`,
+      value
+    );
+  } else {
+    // For all other columns, use the existing rankItem function.
+    itemRank = rankItem(row.getValue(columnId), value);
+  }
+
+  addMeta({ itemRank });
+  return itemRank.passed;
+};
+
 export const columns: ColumnDef<StudySession>[] = [
   {
     id: "select",
@@ -65,21 +118,30 @@ export const columns: ColumnDef<StudySession>[] = [
     accessorKey: "content",
     header: "Content",
     cell: ({ row }) => {
+      console.log("Content row being processed");
+      //TODO write the logic to highlight the words that are being searched for
+      // Add a new property to SessionTopic that will receive the state of the search input box
+      //Based on this, it will highlight any words that are being searched for
+      //
       const rawContent: [{ topic: string; subtopic: string; text: string }] =
         row.getValue("content");
       const topicAndSubTopic = rawContent.map((content, index) => (
-        <SessionTopic
-          key={index}
-          topic={content.topic}
-          subTopic={content.subtopic}
-        />
+        <div key={index}>
+          <SessionTopic
+            key={index}
+            topic={content.topic}
+            subTopic={content.subtopic}
+          />
+        </div>
       ));
       return <>{topicAndSubTopic}</>;
     },
+    filterFn: contentFilterFn,
   },
   {
     accessorKey: "date",
     header: ({ column }) => {
+      console.log("Date row being processed");
       return (
         <Button
           variant="ghost"
@@ -91,16 +153,6 @@ export const columns: ColumnDef<StudySession>[] = [
       );
     },
     filterFn: dateFilterFn,
-    /*     cell: ({ row }) => {
-      const date: Date = row.getValue("date");
-      const options: Intl.DateTimeFormatOptions = {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      };
-      const formattedDate = date.toLocaleDateString(undefined, options);
-      return <div className="text-left font-medium">{formattedDate}</div>;
-    }, */
   },
   {
     accessorKey: "effectiveTime",
@@ -114,6 +166,9 @@ export const columns: ColumnDef<StudySession>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
+    },
+    cell: ({ row }) => {
+      return row.getValue("effectiveTime");
     },
   },
   {

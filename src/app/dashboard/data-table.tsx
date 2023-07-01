@@ -14,8 +14,6 @@ import {
   FilterFn,
 } from "@tanstack/react-table";
 
-import { rankItem } from "@tanstack/match-sorter-utils";
-
 import {
   Table,
   TableBody,
@@ -35,28 +33,12 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { CalendarDateRangePicker } from "@/components/Date-range-picker";
 import { DataTablePagination } from "@/components/table/data-table-pagination";
+import { globalFilterFn } from "@/src/app/dashboard/columns";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
-
-const globalFilterFn: FilterFn<any> = (row, columnId, value, addMeta) => {
-  console.log(columnId);
-  console.log(value);
-  console.log(row);
-  console.log(addMeta);
-  // Rank the item
-  const itemRank = rankItem(row.getValue(columnId), value);
-
-  // Store the itemRank info
-  addMeta({
-    itemRank,
-  });
-
-  // Return if the item should be filtered in/out
-  return itemRank.passed;
-};
 
 export function DataTable<TData, TValue>({
   columns,
@@ -81,6 +63,7 @@ export function DataTable<TData, TValue>({
     onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: setRowSelection,
     globalFilterFn: globalFilterFn,
+    getColumnCanGlobalFilter: () => true,
     state: {
       sorting,
       columnFilters,
@@ -108,8 +91,8 @@ export function DataTable<TData, TValue>({
       </button>
 
       {/* Filter per column */}
-      {/*       
-      <div className="flex items-center py-4">
+
+      {/*       <div className="flex items-center py-4">
         <Input
           placeholder="Filter content..."
           value={(table.getColumn("content")?.getFilterValue() as string) ?? ""}
@@ -118,8 +101,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-      </div> 
-      */}
+      </div> */}
 
       {/* Filter global */}
       <Input
