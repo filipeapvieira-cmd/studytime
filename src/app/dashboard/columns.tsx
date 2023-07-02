@@ -1,6 +1,6 @@
 "use client";
 
-import { ColumnDef, FilterFn } from "@tanstack/react-table";
+import { ColumnDef, FilterFn, FilterMeta } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import SessionTopic from "@/components/SessionTopic";
-//import { rankItem } from "@tanstack/match-sorter-utils";
+import { RankAndValue } from "@/types/tanstack-table";
 
 /*
 Columns are where you define the core of what your table will look like. 
@@ -49,18 +49,17 @@ export const dateFilterFn: FilterFn<StudySession> = (row, id, filterValue) => {
   return rowDate >= filterValue.startDate && rowDate <= filterValue.endDate;
 };
 
-function rankItem(itemValue: any, filterValue: any) {
+const rankItem = (itemValue: any, filterValue: any) => {
   let itemRank = { passed: false };
   if (itemValue && filterValue) {
     // Convert both itemValue and filterValue to lowercase for case insensitive comparison
     itemValue = itemValue.toLowerCase();
     filterValue = filterValue.toLowerCase();
-
     // Check if itemValue contains filterValue as a substring
     itemRank.passed = itemValue.includes(filterValue);
   }
   return itemRank;
-}
+};
 
 export const globalFilterFn: FilterFn<any> = (
   row,
@@ -82,11 +81,10 @@ export const globalFilterFn: FilterFn<any> = (
       value
     );
   } else {
-    // For all other columns, use the existing rankItem function.
     itemRank = rankItem(row.getValue(columnId), value);
   }
 
-  addMeta({ itemRank });
+  addMeta({ itemRank, value } as RankAndValue);
   return itemRank.passed;
 };
 
@@ -117,31 +115,31 @@ export const columns: ColumnDef<StudySession>[] = [
   {
     accessorKey: "content",
     header: "Content",
+
     cell: ({ row }) => {
-      console.log("Content row being processed");
-      //TODO write the logic to highlight the words that are being searched for
-      // Add a new property to SessionTopic that will receive the state of the search input box
-      //Based on this, it will highlight any words that are being searched for
-      //
       const rawContent: [{ topic: string; subtopic: string; text: string }] =
         row.getValue("content");
+
       const topicAndSubTopic = rawContent.map((content, index) => (
         <div key={index}>
           <SessionTopic
             key={index}
             topic={content.topic}
             subTopic={content.subtopic}
+            searchInput={
+              (row.columnFiltersMeta.content as RankAndValue)?.value || ""
+            }
           />
         </div>
       ));
       return <>{topicAndSubTopic}</>;
     },
-    filterFn: contentFilterFn,
+
+    //filterFn: contentFilterFn,
   },
   {
     accessorKey: "date",
     header: ({ column }) => {
-      console.log("Date row being processed");
       return (
         <Button
           variant="ghost"
@@ -152,7 +150,7 @@ export const columns: ColumnDef<StudySession>[] = [
         </Button>
       );
     },
-    filterFn: dateFilterFn,
+    //filterFn: dateFilterFn,
   },
   {
     accessorKey: "effectiveTime",
