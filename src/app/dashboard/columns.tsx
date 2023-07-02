@@ -26,7 +26,7 @@ export type StudySession = {
   date: string;
   effectiveTime: string;
   content: [{ topic: string; subTopic: string; text: string }];
-  feelings: string;
+  feeling: string;
 };
 
 export const contentFilterFn: FilterFn<StudySession> = (
@@ -77,7 +77,7 @@ export const globalFilterFn: FilterFn<any> = (
     itemRank = rankItem(
       `${rawContent.map((content) => content.topic).join(" ")} ${rawContent
         .map((content) => content.subtopic)
-        .join(" ")}`,
+        .join(" ")} ${rawContent.map((content) => content.text).join(" ")}`,
       value
     );
   } else {
@@ -115,7 +115,6 @@ export const columns: ColumnDef<StudySession>[] = [
   {
     accessorKey: "content",
     header: "Content",
-
     cell: ({ row }) => {
       const rawContent: [{ topic: string; subtopic: string; text: string }] =
         row.getValue("content");
@@ -130,12 +129,29 @@ export const columns: ColumnDef<StudySession>[] = [
               (row.columnFiltersMeta.content as RankAndValue)?.value || ""
             }
           />
+          <p>{content.text}</p>
         </div>
       ));
       return <>{topicAndSubTopic}</>;
     },
-
-    //filterFn: contentFilterFn,
+  },
+  {
+    accessorKey: "feeling",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Feelings
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return row.getValue("feeling");
+    },
+    //filterFn: dateFilterFn,
   },
   {
     accessorKey: "date",
@@ -150,7 +166,7 @@ export const columns: ColumnDef<StudySession>[] = [
         </Button>
       );
     },
-    //filterFn: dateFilterFn,
+    filterFn: dateFilterFn,
   },
   {
     accessorKey: "effectiveTime",
