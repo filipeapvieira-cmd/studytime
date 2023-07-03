@@ -48,7 +48,6 @@ const TableFilters: FC<TableFiltersProps> = ({
     table.getColumn("date")?.setFilterValue(endOfDayRange);
   };
 
-  console.log(columnFilters);
   return (
     <div className="flex items-center justify-between mb-4">
       <div className="flex items-center justify-start space-x-2">

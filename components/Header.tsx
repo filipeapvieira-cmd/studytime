@@ -21,18 +21,19 @@ const Header: FC<HeaderProps> = ({}) => {
         <Link href="/">
           <Icons.logo size={50} />
         </Link>
-        {status == "authenticated" &&
-        <nav>
-          <Navlink href="/dashboard">Dashboard</Navlink>
-        </nav>}
+        {status == "authenticated" && (
+          <nav>
+            <Navlink href="/dashboard">Dashboard</Navlink>
+          </nav>
+        )}
       </div>
       <nav>
         {status == "authenticated" && <UserNav />}
-        {status != "authenticated" &&
-        <Btnlink>
-          <Icons.login/>
-        </Btnlink>
-        }
+        {status != "authenticated" && (
+          <Btnlink>
+            <Icons.login />
+          </Btnlink>
+        )}
       </nav>
     </div>
   );

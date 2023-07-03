@@ -128,6 +128,10 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  className="hover:cursor-pointer"
+                  onClick={() => {
+                    console.log(row.original);
+                  }}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

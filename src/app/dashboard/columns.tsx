@@ -149,9 +149,9 @@ export const columns: ColumnDef<StudySession>[] = [
       const searchInput =
         (row.columnFiltersMeta.feeling as RankAndValue)?.value || "";
       return (
-        <p className="truncate w-96 flex-grow-0">
+        <div className="w-96 flex-grow-0">
           <Highlight searchInput={searchInput} text={text} />
-        </p>
+        </div>
       );
     },
   },
@@ -173,9 +173,9 @@ export const columns: ColumnDef<StudySession>[] = [
       const searchInput =
         (row.columnFiltersMeta.date as RankAndValue)?.value || "";
       return (
-        <p className="truncate max-w-md">
+        <div className="max-w-md">
           <Highlight searchInput={searchInput} text={text} />
-        </p>
+        </div>
       );
     },
     filterFn: dateFilterFn,
@@ -198,9 +198,9 @@ export const columns: ColumnDef<StudySession>[] = [
       const searchInput =
         (row.columnFiltersMeta.effectiveTime as RankAndValue)?.value || "";
       return (
-        <p className="truncate max-w-md text-center">
+        <div className="max-w-md text-center">
           <Highlight searchInput={searchInput} text={text} />
-        </p>
+        </div>
       );
     },
   },
