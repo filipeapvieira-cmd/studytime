@@ -1,6 +1,6 @@
 "use client";
 
-import { ColumnDef, FilterFn, FilterMeta } from "@tanstack/react-table";
+import { ColumnDef, FilterFn, FilterMeta, Row } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,19 +15,13 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import SessionTopic from "@/components/SessionTopic";
 import { RankAndValue } from "@/types/tanstack-table";
+import Highlight from "@/components/Highlight";
+import { StudySession } from "@/types/tanstack-table";
 
 /*
 Columns are where you define the core of what your table will look like. 
 They define the data that will be displayed, how it will be formatted, sorted and filtered
 */
-
-export type StudySession = {
-  id: number;
-  date: string;
-  effectiveTime: string;
-  content: [{ topic: string; subTopic: string; text: string }];
-  feeling: string;
-};
 
 export const contentFilterFn: FilterFn<StudySession> = (
   row,
@@ -67,6 +61,12 @@ export const globalFilterFn: FilterFn<any> = (
   value,
   addMeta
 ) => {
+  /*   // Ignore filtering if the column is not visible
+  const columnIsVisible = columnVisibility[columnId];
+  if (columnIsVisible === false) {
+    return false;
+  } */
+
   let itemRank;
 
   if (columnId === "content") {
@@ -118,21 +118,17 @@ export const columns: ColumnDef<StudySession>[] = [
     cell: ({ row }) => {
       const rawContent: [{ topic: string; subtopic: string; text: string }] =
         row.getValue("content");
-
       const topicAndSubTopic = rawContent.map((content, index) => (
-        <div key={index}>
-          <SessionTopic
-            key={index}
-            topic={content.topic}
-            subTopic={content.subtopic}
-            searchInput={
-              (row.columnFiltersMeta.content as RankAndValue)?.value || ""
-            }
-          />
-          <p>{content.text}</p>
-        </div>
+        <SessionTopic
+          key={index}
+          topic={content.topic}
+          subTopic={content.text}
+          searchInput={
+            (row.columnFiltersMeta.content as RankAndValue)?.value || ""
+          }
+        />
       ));
-      return <>{topicAndSubTopic}</>;
+      return <div className="space-y-2">{topicAndSubTopic}</div>;
     },
   },
   {
@@ -149,9 +145,15 @@ export const columns: ColumnDef<StudySession>[] = [
       );
     },
     cell: ({ row }) => {
-      return row.getValue("feeling");
+      const text: string = row.getValue("feeling");
+      const searchInput =
+        (row.columnFiltersMeta.feeling as RankAndValue)?.value || "";
+      return (
+        <p className="truncate max-w-md">
+          <Highlight searchInput={searchInput} text={text} />
+        </p>
+      );
     },
-    //filterFn: dateFilterFn,
   },
   {
     accessorKey: "date",
@@ -166,11 +168,22 @@ export const columns: ColumnDef<StudySession>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const text: string = row.getValue("date");
+      const searchInput =
+        (row.columnFiltersMeta.date as RankAndValue)?.value || "";
+      return (
+        <p className="truncate max-w-md">
+          <Highlight searchInput={searchInput} text={text} />
+        </p>
+      );
+    },
     filterFn: dateFilterFn,
   },
   {
     accessorKey: "effectiveTime",
     header: ({ column }) => {
+      console.log(column.getIsVisible());
       return (
         <Button
           variant="ghost"
@@ -182,7 +195,14 @@ export const columns: ColumnDef<StudySession>[] = [
       );
     },
     cell: ({ row }) => {
-      return row.getValue("effectiveTime");
+      const text: string = row.getValue("effectiveTime");
+      const searchInput =
+        (row.columnFiltersMeta.effectiveTime as RankAndValue)?.value || "";
+      return (
+        <p className="truncate max-w-md text-center">
+          <Highlight searchInput={searchInput} text={text} />
+        </p>
+      );
     },
   },
   {

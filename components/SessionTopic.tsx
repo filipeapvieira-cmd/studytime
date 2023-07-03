@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Badge } from "./ui/badge";
 import Highlight from "./Highlight";
+import { sub } from "date-fns";
 
 interface SessionTopicProps {
   topic: string;
@@ -14,13 +15,11 @@ const SessionTopic: FC<SessionTopicProps> = ({
   searchInput,
 }) => {
   return (
-    <div className="rounded-md border-border p-2 flex items-center justify-start gap-3">
+    <div className="flex items-center justify-start gap-1 max-w-md">
       <Badge variant="default" className="rounded-md">
         <Highlight text={topic} searchInput={searchInput} />
       </Badge>
-      <p className="text-sm">
-        <Highlight text={subTopic} searchInput={searchInput} />
-      </p>
+      <Highlight text={subTopic} searchInput={searchInput} />
     </div>
   );
 };

@@ -12,6 +12,7 @@ import {
   getSortedRowModel,
   VisibilityState,
   FilterFn,
+  Row,
 } from "@tanstack/react-table";
 
 import {
@@ -30,10 +31,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { CalendarDateRangePicker } from "@/components/Date-range-picker";
 import { DataTablePagination } from "@/components/table/data-table-pagination";
 import { globalFilterFn } from "@/src/app/dashboard/columns";
+import { Icons } from "@/components/icons";
+import { StudySession } from "@/types/tanstack-table";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -50,6 +53,29 @@ export function DataTable<TData, TValue>({
   const [globalFilter, setGlobalFilter] = useState("");
   const [rowSelection, setRowSelection] = useState({});
 
+  // Only filter if column is visible
+  const filterFn = useCallback(
+    (row: Row<TData>, columnId: string, value: string, addMeta: any) => {
+      // Create a closure that captures columnVisibility
+      const globalFilterFnWithVisibility = (
+        row: Row<TData>,
+        columnId: string,
+        value: string,
+        addMeta: any
+      ) => {
+        // Check if the column is visible before applying the filter
+        if (columnVisibility[columnId] !== false) {
+          return globalFilterFn(row, columnId, value, addMeta);
+        } else {
+          return false; // for hidden columns
+        }
+      };
+
+      return globalFilterFnWithVisibility(row, columnId, value, addMeta);
+    },
+    [columnVisibility] // Recreate the function whenever columnVisibility changes
+  );
+
   const table = useReactTable({
     data,
     columns,
@@ -62,7 +88,7 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: setRowSelection,
-    globalFilterFn: globalFilterFn,
+    globalFilterFn: filterFn,
     getColumnCanGlobalFilter: () => true,
     state: {
       sorting,
@@ -80,15 +106,31 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      {/* Filter per date-range */}
-      <CalendarDateRangePicker />
-      <button
-        onClick={() => {
-          table.getColumn("date")?.setFilterValue(range);
-        }}
-      >
-        TEST Filter by date-range
-      </button>
+      <div className="flex items-center justify-between">
+        {/* Filter global */}
+        <Input
+          placeholder="Filter..."
+          value={globalFilter ?? ""}
+          onChange={(event) => setGlobalFilter(event.target.value)}
+          className="max-w-sm"
+        />
+        <div className="flex items-center justify-end space-x-1">
+          {/* Filter per date-range */}
+          <CalendarDateRangePicker />
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => {
+              table.getColumn("date")?.setFilterValue(range);
+            }}
+          >
+            <Icons.filter />
+          </Button>
+          <Button size="sm" variant="ghost">
+            <Icons.download />
+          </Button>
+        </div>
+      </div>
 
       {/* Filter per column */}
 
@@ -102,14 +144,6 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
       </div> */}
-
-      {/* Filter global */}
-      <Input
-        placeholder="Filter..."
-        value={globalFilter ?? ""}
-        onChange={(event) => setGlobalFilter(event.target.value)}
-        className="max-w-sm"
-      />
 
       {/* Hide - Show columns */}
       <DropdownMenu>

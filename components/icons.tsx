@@ -13,6 +13,8 @@ import {
   User,
   Sun,
   Moon,
+  Filter,
+  Download,
   type Icon as LucideIcon,
 } from "lucide-react";
 
@@ -32,4 +34,6 @@ export const Icons = {
   user: User,
   sun: Sun,
   moon: Moon,
+  filter: Filter,
+  download: Download,
 };

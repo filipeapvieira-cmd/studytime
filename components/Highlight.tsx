@@ -7,7 +7,7 @@ interface HighlightProps {
 
 const Highlight: FC<HighlightProps> = ({ text, searchInput }) => {
   if (!searchInput) {
-    return text;
+    return <p className="truncate">{text}</p>;
   }
 
   // Split the text into parts around the searchInput string
@@ -15,14 +15,19 @@ const Highlight: FC<HighlightProps> = ({ text, searchInput }) => {
   const parts = text.split(new RegExp(`(${searchInput})`, "gi"));
 
   // Join the parts back together, adding a span around the searchInput string
-  return parts.map((part, i) =>
-    part.toLowerCase() === searchInput.toLowerCase() ? (
-      <span key={i} className="bg-primary-foreground text-primary">
-        {part}
-      </span>
-    ) : (
-      part
-    )
+  return (
+    <p className="truncate">
+      {parts.map((part, i) =>
+        part.toLowerCase() === searchInput.toLowerCase() ? (
+          /*className="bg-primary-foreground text-primary" */
+          <span key={i} className="bg-yellow-200 text-black">
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      )}
+    </p>
   );
 };
 
