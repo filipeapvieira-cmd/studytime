@@ -183,7 +183,6 @@ export const columns: ColumnDef<StudySession>[] = [
   {
     accessorKey: "effectiveTime",
     header: ({ column }) => {
-      console.log(column.getIsVisible());
       return (
         <Button
           variant="ghost"

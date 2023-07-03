@@ -14,6 +14,7 @@ import {
   Sun,
   Moon,
   Filter,
+  SlidersHorizontal,
   Download,
   type Icon as LucideIcon,
 } from "lucide-react";
@@ -35,5 +36,6 @@ export const Icons = {
   sun: Sun,
   moon: Moon,
   filter: Filter,
+  filter2: SlidersHorizontal,
   download: Download,
 };

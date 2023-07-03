@@ -3,7 +3,6 @@
 import { FC, useEffect, useState } from "react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import SessionTopic from "@/components/SessionTopic";
 
 interface DashboardPageProps {}
 

@@ -11,7 +11,6 @@ import {
   SortingState,
   getSortedRowModel,
   VisibilityState,
-  FilterFn,
   Row,
 } from "@tanstack/react-table";
 
@@ -23,12 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useCallback } from "react";
@@ -36,7 +30,7 @@ import { CalendarDateRangePicker } from "@/components/Date-range-picker";
 import { DataTablePagination } from "@/components/table/data-table-pagination";
 import { globalFilterFn } from "@/src/app/dashboard/columns";
 import { Icons } from "@/components/icons";
-import { StudySession } from "@/types/tanstack-table";
+import TableFilters from "@/components/Table-filters";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -99,39 +93,13 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  const range = {
-    startDate: new Date("2023/06/01"),
-    endDate: new Date("2023/06/10"),
-  };
-
   return (
     <div>
-      <div className="flex items-center justify-between">
-        {/* Filter global */}
-        <Input
-          placeholder="Filter..."
-          value={globalFilter ?? ""}
-          onChange={(event) => setGlobalFilter(event.target.value)}
-          className="max-w-sm"
-        />
-        <div className="flex items-center justify-end space-x-1">
-          {/* Filter per date-range */}
-          <CalendarDateRangePicker />
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => {
-              table.getColumn("date")?.setFilterValue(range);
-            }}
-          >
-            <Icons.filter />
-          </Button>
-          <Button size="sm" variant="ghost">
-            <Icons.download />
-          </Button>
-        </div>
-      </div>
-
+      <TableFilters
+        globalFilter={globalFilter}
+        table={table}
+        setGlobalFilter={setGlobalFilter}
+      />
       {/* Filter per column */}
 
       {/*       <div className="flex items-center py-4">
@@ -144,32 +112,6 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
       </div> */}
-
-      {/* Hide - Show columns */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="ml-auto">
-            Columns
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          {table
-            .getAllColumns()
-            .filter((column) => column.getCanHide())
-            .map((column) => {
-              return (
-                <DropdownMenuCheckboxItem
-                  key={column.id}
-                  className="capitalize"
-                  checked={column.getIsVisible()}
-                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                >
-                  {column.id}
-                </DropdownMenuCheckboxItem>
-              );
-            })}
-        </DropdownMenuContent>
-      </DropdownMenu>
 
       {/* Table */}
       <div className="rounded-md border">
