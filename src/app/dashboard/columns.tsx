@@ -40,7 +40,9 @@ export const contentFilterFn: FilterFn<StudySession> = (
 export const dateFilterFn: FilterFn<StudySession> = (row, id, filterValue) => {
   // Parse the date from the row
   const rowDate = new Date(row.getValue("date"));
-  return rowDate >= filterValue.startDate && rowDate <= filterValue.endDate;
+  console.log(rowDate);
+  console.log(filterValue);
+  return rowDate >= filterValue.from && rowDate <= filterValue.to;
 };
 
 const rankItem = (itemValue: any, filterValue: any) => {

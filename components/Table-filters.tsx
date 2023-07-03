@@ -1,9 +1,12 @@
-import { FC } from "react";
+"use client";
+
+import { FC, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Icons } from "@/components/icons";
 import { CalendarDateRangePicker } from "@/components/Date-range-picker";
 import ColumnVisibility from "./Column-visibility";
+import { DateRange } from "react-day-picker";
 
 interface TableFiltersProps {
   globalFilter?: string;
@@ -11,15 +14,35 @@ interface TableFiltersProps {
   table: any;
 }
 
+const endOfDay = (date: Date) => {
+  let end = new Date(date);
+  end.setHours(23, 59, 59, 999);
+  return end;
+};
+
 const TableFilters: FC<TableFiltersProps> = ({
   globalFilter,
   setGlobalFilter,
   table,
 }) => {
-  const range = {
-    startDate: new Date("2023/06/01"),
-    endDate: new Date("2023/06/10"),
+  const [range, setRange] = useState<DateRange | undefined>({
+    from: new Date(Date.now()),
+    to: new Date(Date.now()),
+  });
+
+  const filterByDateRangeHandler = (range: DateRange | undefined) => {
+    if (!range) {
+      return;
+    }
+
+    const endOfDayRange =
+      range.from && range.to
+        ? { ...range, to: endOfDay(range.to) }
+        : { ...range, to: range.from && endOfDay(range.from) };
+
+    table.getColumn("date")?.setFilterValue(endOfDayRange);
   };
+
   return (
     <div className="flex items-center justify-between mb-4">
       <div className="flex items-center justify-start space-x-1">
@@ -34,13 +57,11 @@ const TableFilters: FC<TableFiltersProps> = ({
       </div>
       <div className="flex items-center justify-end space-x-1">
         {/* Filter per date-range */}
-        <CalendarDateRangePicker />
+        <CalendarDateRangePicker date={range} setDate={setRange} />
         <Button
           size="sm"
           variant="ghost"
-          onClick={() => {
-            table.getColumn("date")?.setFilterValue(range);
-          }}
+          onClick={() => filterByDateRangeHandler(range)}
         >
           <Icons.filter />
         </Button>
