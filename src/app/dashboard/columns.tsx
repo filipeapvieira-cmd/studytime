@@ -40,8 +40,6 @@ export const contentFilterFn: FilterFn<StudySession> = (
 export const dateFilterFn: FilterFn<StudySession> = (row, id, filterValue) => {
   // Parse the date from the row
   const rowDate = new Date(row.getValue("date"));
-  console.log(rowDate);
-  console.log(filterValue);
   return rowDate >= filterValue.from && rowDate <= filterValue.to;
 };
 
@@ -151,7 +149,7 @@ export const columns: ColumnDef<StudySession>[] = [
       const searchInput =
         (row.columnFiltersMeta.feeling as RankAndValue)?.value || "";
       return (
-        <p className="truncate max-w-md">
+        <p className="truncate w-96 flex-grow-0">
           <Highlight searchInput={searchInput} text={text} />
         </p>
       );

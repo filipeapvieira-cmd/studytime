@@ -18,15 +18,13 @@ const fetchData = async () => {
 const DashboardPage: FC<DashboardPageProps> = ({}) => {
   const [data, setData] = useState([]);
 
-  console.log(data);
-
   useEffect(() => {
     const fetchAndSetData = async () => {
       const studySessions = await fetchData();
       setData(studySessions);
     };
     fetchAndSetData();
-    console.log("Fetch data from useEffect");
+    //console.log("Fetch data from useEffect");
   }, []);
 
   return (

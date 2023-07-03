@@ -30,7 +30,7 @@ import { CalendarDateRangePicker } from "@/components/Date-range-picker";
 import { DataTablePagination } from "@/components/table/data-table-pagination";
 import { globalFilterFn } from "@/src/app/dashboard/columns";
 import { Icons } from "@/components/icons";
-import TableFilters from "@/components/Table-filters";
+import TableFilters from "@/components/table/Table-filters";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -96,22 +96,12 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <TableFilters
+        columnFilters={columnFilters}
         globalFilter={globalFilter}
         table={table}
         setGlobalFilter={setGlobalFilter}
+        setColumnFilters={setColumnFilters}
       />
-      {/* Filter per column */}
-
-      {/*       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter content..."
-          value={(table.getColumn("content")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("content")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-      </div> */}
 
       {/* Table */}
       <div className="rounded-md border">

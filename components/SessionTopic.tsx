@@ -15,7 +15,7 @@ const SessionTopic: FC<SessionTopicProps> = ({
   searchInput,
 }) => {
   return (
-    <div className="flex items-center justify-start gap-1 max-w-md">
+    <div className="flex items-center justify-start gap-1 w-96 flex-grow-0">
       <Badge variant="default" className="rounded-md">
         <Highlight text={topic} searchInput={searchInput} />
       </Badge>
