@@ -1,35 +1,44 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
+import useSWR from "swr";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
+import { useToast } from "@/components/ui/use-toast";
 
 interface DashboardPageProps {}
 
-const fetchData = async () => {
-  const response = await fetch("/api/session/get/sessions", {
-    method: "GET",
-  });
-  const { data } = await response.json();
-
+const fetcher = async (url: string) => {
+  const response = await fetch(url);
+  const data = await response.json();
   return data;
 };
 
 const DashboardPage: FC<DashboardPageProps> = ({}) => {
-  const [data, setData] = useState([]);
+  const { data, error } = useSWR("/api/session/get/sessions", fetcher);
+  const { toast } = useToast();
 
   useEffect(() => {
-    const fetchAndSetData = async () => {
-      const studySessions = await fetchData();
-      setData(studySessions);
-    };
-    fetchAndSetData();
-    //console.log("Fetch data from useEffect");
-  }, []);
+    if (!error) return;
+    toast({
+      variant: "destructive",
+      title: `Uh oh! Something went wrong`,
+      description: `Unable to fetch data. Please try again later`,
+    });
+  }, [error]);
+
+  if (error) {
+    console.log(error.message);
+  }
+
+  if (!data || error) return <TableSkeleton />;
+
+  const { data: extractedData } = data;
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={extractedData} />
     </div>
   );
 };
