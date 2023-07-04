@@ -5,6 +5,7 @@ import TimerProvider from "@/src/ctx/time-provider";
 import ChronoProvider from "@/src/ctx/chrono-provider";
 import SessionTextProvider from "@/src/ctx/session-text-provider";
 import UploadImagesProvider from "@/src/ctx/upload-images-provider";
+import EditSessionProvider from "@/src/ctx/edit-sessions-provider";
 import { ThemeProvider } from "next-themes";
 import { FC } from "react";
 
@@ -20,13 +21,15 @@ const Providers: FC<ProvidersProps> = ({ children }) => {
       refetchInterval={5 * 60}
        */}
       <SessionProvider>
-        <TimerProvider>
-          <ChronoProvider>
-            <SessionTextProvider>
-              <UploadImagesProvider>{children}</UploadImagesProvider>
-            </SessionTextProvider>
-          </ChronoProvider>
-        </TimerProvider>
+        <EditSessionProvider>
+          <TimerProvider>
+            <ChronoProvider>
+              <SessionTextProvider>
+                <UploadImagesProvider>{children}</UploadImagesProvider>
+              </SessionTextProvider>
+            </ChronoProvider>
+          </TimerProvider>
+        </EditSessionProvider>
       </SessionProvider>
     </ThemeProvider>
   );
