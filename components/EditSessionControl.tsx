@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import FormField from "@/components/FormField";
 import BtnClose from "./ui/BtnClose";
 
@@ -8,6 +8,14 @@ interface EditSessionControlProps {
   endTime: string;
   effectiveTime: string;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSessionTiming: React.Dispatch<
+    React.SetStateAction<{
+      startTime: string | undefined;
+      pauseDuration: string | undefined;
+      endTime: string | undefined;
+      effectiveTime: string;
+    }>
+  >;
 }
 
 const EditSessionControl: FC<EditSessionControlProps> = ({
@@ -15,8 +23,18 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   pauseDuration,
   endTime,
   effectiveTime,
-  setIsModalOpen,
+  setSessionTiming,
 }: EditSessionControlProps) => {
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSessionTiming((preValue) => {
+      return {
+        ...preValue,
+        [name]: value,
+      };
+    });
+  };
+
   return (
     <div className="flex justify-between items-center py-4">
       <div className="flex space-x-2">
@@ -25,6 +43,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           label="Start Time"
           type="time"
           value={startTime}
+          onChange={(e) => handleOnChange(e)}
         />
         <FormField
           className="max-w-[148px]"
@@ -32,12 +51,14 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           label="Pause Time"
           type="text"
           value={pauseDuration}
+          onChange={(e) => handleOnChange(e)}
         />
         <FormField
           name="endTime"
           label="End Time"
           type="time"
           value={endTime}
+          onChange={(e) => handleOnChange(e)}
         />
         <FormField
           className="max-w-[148px]"
@@ -45,10 +66,12 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           label="Effective Time"
           type="text"
           value={effectiveTime}
+          onChange={(e) => handleOnChange(e)}
         />
       </div>
-      <div>
-        <BtnClose visible={true} onClick={() => setIsModalOpen(false)} />
+      <div className="flex space-x-2">
+        Save
+        <BtnClose visible={true} onClick={() => {}} />
       </div>
     </div>
   );

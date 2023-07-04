@@ -45,13 +45,31 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const defaultStudySession: StudySession = {
+    id: 0,
+    date: "",
+    effectiveTime: "",
+    content: [
+      {
+        topic: "",
+        subTopic: "",
+        text: "",
+      },
+    ],
+    feeling: "",
+    endTime: "",
+    startTime: "",
+    pauseDuration: "",
+  };
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [globalFilter, setGlobalFilter] = useState("");
   const [rowSelection, setRowSelection] = useState({});
   const [isEditSessionOpen, setIsEditSessionOpen] = useState(false);
-  const [EditSessionData, setEditSessionData] = useState<StudySession>();
+  const [editSessionData, setEditSessionData] =
+    useState<StudySession>(defaultStudySession);
 
   // Only filter if column is visible
   const filterFn = useCallback(
@@ -112,7 +130,7 @@ export function DataTable<TData, TValue>({
       <EditSession
         open={isEditSessionOpen}
         close={setIsEditSessionOpen}
-        data={EditSessionData}
+        data={editSessionData}
       />
       <TableFilters
         columnFilters={columnFilters}

@@ -8,10 +8,11 @@ import { retrieveTextFromJson } from "@/lib/utils";
 import { TimeContext } from "@/src/ctx/time-provider";
 import { SessionTextContext } from "@/src/ctx/session-text-provider";
 import { getSessionLog, persistSession } from "@/lib/session-log/utils";
-import {SessionLog} from "@/types";
+import { SessionLog } from "@/types";
 import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
 import { useStudySession } from "@/src/hooks/useStudySession";
 import { useSession } from "next-auth/react";
+import { SAVE_SESSION_ENDPOINT, HTTP_METHOD } from "@/constants/config";
 
 const SaveSession = ({}) => {
   const { data: session, status: sessionStatus } = useSession();
@@ -27,16 +28,25 @@ const SaveSession = ({}) => {
     setSessionTimer,
   } = useContext(TimeContext);
   const { sessionText } = useContext(SessionTextContext);
-  const {showToastError, showToastSuccess} = useFetchStatusToastHandling();
+  const { showToastError, showToastSuccess } = useFetchStatusToastHandling();
   const [isLoading, setIsLoading] = useState(false);
   const { resetStudySession } = useStudySession();
   const { title, description } = retrieveTextFromJson("saveSession");
 
   const saveSessionHandler = async () => {
-    const sessionLog: SessionLog = getSessionLog(sessionText, sessionStartTime, sessionEndTime, totalPauseTime);
+    const sessionLog: SessionLog = getSessionLog(
+      sessionText,
+      sessionStartTime,
+      sessionEndTime,
+      totalPauseTime
+    );
     try {
       setIsLoading(true);
-      const response = await persistSession(sessionLog);
+      const response = await persistSession(
+        sessionLog,
+        SAVE_SESSION_ENDPOINT,
+        HTTP_METHOD.POST
+      );
       showToastSuccess(response);
       resetStudySession();
     } catch (error) {
@@ -49,7 +59,7 @@ const SaveSession = ({}) => {
 
   return (
     <Alert title={title} description={description} action={saveSessionHandler}>
-      <Button variant="default" disabled={status !== "stop"}>        
+      <Button variant="default" disabled={status !== "stop"}>
         {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}
         {!isLoading && <Icons.save />}
       </Button>

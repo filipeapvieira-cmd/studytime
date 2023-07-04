@@ -85,3 +85,7 @@ export type SessionLog = {
     description: SessionLogTopicContentFeelings,
     timeAndDate: SessionTimeAndDate
 }
+
+export type SessionLogUpdate = SessionLog & {
+    id: number;
+}

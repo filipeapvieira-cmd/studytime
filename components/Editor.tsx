@@ -3,55 +3,64 @@
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
-import { FC, useState, useContext } from "react";
+import { FC, useState, useContext, useEffect } from "react";
 import { SessionTextContext } from "@/src/ctx/session-text-provider";
 import EditorSkeleton from "@/components/skeletons/EditorSkeleton";
+import { StudySession } from "@/types/tanstack-table";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
   loading: () => <EditorSkeleton />,
 });
 
-interface EditorProps extends React.HTMLProps<HTMLDivElement> {}
+interface EditorProps extends React.HTMLProps<HTMLDivElement> {
+  action?: "update";
+  sessionData?: StudySession;
+}
 
-const Editor: FC<EditorProps> = ({ className }) => {
-  const { sessionText, setSessionText } = useContext(SessionTextContext);
+const Editor: FC<EditorProps> = ({ className, action, sessionData }) => {
+  //const { sessionText, setSessionText } = useContext(SessionTextContext);
+  const ctx = useContext(SessionTextContext);
 
-/*   const fecthSession = async () => {
-    const sessionNumber = 7;
-    const response = await fetch(`api/session/get/${sessionNumber}`);
-    const data = await response.json();
-    console.log(data);
+  const { text, setText } =
+    action && sessionData
+      ? { text: ctx.sessionTextUpdate, setText: ctx.setSessionTextUpdate }
+      : { text: ctx.sessionText, setText: ctx.setSessionText };
 
-    const { content, feelings } = data;
+  useEffect(() => {
+    if (action && sessionData) {
+      const { content, feeling } = sessionData;
+      let contentStr = "----------\n### **Content**\n";
+      content.forEach(
+        (element: { topic: string; subTopic: string; text: string }) => {
+          contentStr += `#### @[${element.topic}${
+            element.subTopic ? ` - ${element.subTopic}` : ""
+          }]\n${element.text}\n`;
+        }
+      );
 
-    let contentStr = "----------\n### **Content**\n";
-    content.forEach((element: any) => {
-      contentStr += `#### @[${element.topic}${
-        element.subtopic ? ` - ${element.subtopic}` : ""
-      }]\n${element.contentDescription}\n`;
-    });
+      let feelingsStr = "----------\n### **Feelings**\n";
+      feelingsStr += `${feeling}`;
 
-    let feelingsStr = "----------\n### **Feelings**\n";
-    feelingsStr += `${feelings.feelingDescription}`;
-
-    setSessionText(`${contentStr}${feelingsStr}`);
-  } */
+      setText?.(`${contentStr}${feelingsStr}`);
+    }
+  }, []);
 
   return (
     <>
-    <MDEditor
-      className={`container p-0 ${className || ""}`}
-      height={650}
-      value={sessionText}
-      onChange={(value) => {
-        setSessionText(value || "");
-      }}
-    />
-    {/* <button onClick={fecthSession}>Fetch Session</button> */}
+      <MDEditor
+        className={`container p-0 ${className || ""}`}
+        height={650}
+        //value={sessionText}
+        value={text}
+        onChange={(value) => {
+          //setSessionText(value || "");
+          setText?.(value || "");
+        }}
+      />
+      {/* <button onClick={fecthSession}>Fetch Session</button> */}
     </>
   );
-  
 };
 
 export default Editor;
