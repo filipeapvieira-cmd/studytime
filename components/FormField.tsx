@@ -8,7 +8,8 @@ interface FormFieldProps {
   value: string;
   type?: string;
   error?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
 }
 
 const FormField: FC<FormFieldProps> = ({
@@ -18,9 +19,10 @@ const FormField: FC<FormFieldProps> = ({
   type = "text",
   error,
   onChange,
+  className,
 }) => {
   return (
-    <div>
+    <div className={className}>
       <Label htmlFor={name} className={`${error && "text-destructive"}`}>
         {label}
       </Label>

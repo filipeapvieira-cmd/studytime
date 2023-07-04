@@ -7,7 +7,7 @@ import { Icons } from "@/components/icons";
 import { CalendarDateRangePicker } from "@/components/Date-range-picker";
 import ColumnVisibility from "@/components/table/Column-visibility";
 import { DateRange } from "react-day-picker";
-import CleanFilters from "./Clean-filters";
+import BtnClose from "@/components/ui/BtnClose";
 
 interface TableFiltersProps {
   globalFilter: string;
@@ -59,13 +59,13 @@ const TableFilters: FC<TableFiltersProps> = ({
           onChange={(event) => setGlobalFilter(event.target.value)}
           className="max-w-sm"
         />
-        <CleanFilters
+        <BtnClose
           visible={globalFilter}
           onClick={() => table.setGlobalFilter("")}
         />
       </div>
       <div className="flex items-center justify-end space-x-2">
-        <CleanFilters
+        <BtnClose
           visible={columnFilters.length > 0}
           onClick={() => table.setColumnFilters([])}
         />

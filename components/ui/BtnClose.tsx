@@ -1,16 +1,13 @@
 import { FC } from "react";
-import { Button } from "../ui/button";
+import { Button } from "./button";
 import { Icons } from "../icons";
 
-interface CleanFiltersProps {
+interface BtnCloseProps {
   visible: any;
   onClick: () => void;
 }
 
-const CleanFilters: FC<CleanFiltersProps> = ({
-  visible,
-  onClick,
-}: CleanFiltersProps) => {
+const BtnClose: FC<BtnCloseProps> = ({ visible, onClick }: BtnCloseProps) => {
   return visible ? (
     <Button size="sm" variant="destructive" onClick={onClick}>
       <Icons.close />
@@ -18,4 +15,4 @@ const CleanFilters: FC<CleanFiltersProps> = ({
   ) : null;
 };
 
-export default CleanFilters;
+export default BtnClose;

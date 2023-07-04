@@ -10,4 +10,7 @@ export type StudySession = {
   effectiveTime: string;
   content: [{ topic: string; subTopic: string; text: string }];
   feeling: string;
+  endTime?: string;
+  startTime?: string;
+  pauseDuration?: string;
 };

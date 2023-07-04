@@ -12,6 +12,7 @@ import {
   getSortedRowModel,
   VisibilityState,
   Row,
+  Cell,
 } from "@tanstack/react-table";
 
 import {
@@ -31,6 +32,9 @@ import { DataTablePagination } from "@/components/table/data-table-pagination";
 import { globalFilterFn } from "@/src/app/dashboard/columns";
 import { Icons } from "@/components/icons";
 import TableFilters from "@/components/table/Table-filters";
+import EditSession from "@/components/EditSession";
+import { StudySession } from "@/types/tanstack-table";
+import { set } from "date-fns";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -46,6 +50,8 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [globalFilter, setGlobalFilter] = useState("");
   const [rowSelection, setRowSelection] = useState({});
+  const [isEditSessionOpen, setIsEditSessionOpen] = useState(false);
+  const [EditSessionData, setEditSessionData] = useState<StudySession>();
 
   // Only filter if column is visible
   const filterFn = useCallback(
@@ -93,8 +99,21 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const handleCellClick = (cell: Cell<TData, unknown>) => {
+    if (cell.column.id !== "select") {
+      const sessionData: StudySession = cell.row.original as StudySession;
+      setEditSessionData(sessionData);
+      setIsEditSessionOpen(true);
+    }
+  };
+
   return (
     <div>
+      <EditSession
+        open={isEditSessionOpen}
+        close={setIsEditSessionOpen}
+        data={EditSessionData}
+      />
       <TableFilters
         columnFilters={columnFilters}
         globalFilter={globalFilter}
@@ -136,7 +155,11 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      onClick={() => handleCellClick(cell)}
+                    >
+                      <>{}</>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
