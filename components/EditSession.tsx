@@ -39,6 +39,7 @@ const EditSession: FC<EditSessionProps> = ({
     pauseDuration: data.pauseDuration,
     endTime: data.endTime,
     effectiveTime: data.effectiveTime,
+    date: data.date,
   });
 
   useEffect(() => {
@@ -48,35 +49,39 @@ const EditSession: FC<EditSessionProps> = ({
       pauseDuration: data.pauseDuration,
       endTime: data.endTime,
       effectiveTime: data.effectiveTime,
+      date: data.date,
     });
   }, [data]);
 
-  function timeStringToMillis(timeString: string | undefined): number {
-    if (!timeString) return 0;
+  const timeStringToDate = (
+    sessionTime: string,
+    sessionDate: string
+  ): number => {
+    const [year, month, day] = sessionDate.split("-").map(Number);
+    const [hours, minutes, seconds] = sessionTime.split(":").map(Number);
+    // Months in JavaScript are zero-based (0 - 11), so subtract 1 from the month value
+    const date = new Date(year, month - 1, day, hours, minutes, seconds);
 
-    // Use today's date
-    const date = new Date();
-
-    // Extract hours, minutes, and seconds from the string
-    const [hours, minutes, seconds] = timeString.split(":").map(Number);
-
-    // Set the time on the date
-    date.setHours(hours, minutes, seconds);
-
-    // Return the date as milliseconds since Jan 1, 1970
     return date.getTime();
-  }
+  };
 
-  const { startTime, pauseDuration, endTime, effectiveTime, id } =
+  const timeStringToMillis = (pauseDuration: string): any => {
+    const [hours, minutes, seconds] = pauseDuration.split(":").map(Number);
+    const totalMilliseconds =
+      hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000;
+    return totalMilliseconds;
+  };
+
+  const { startTime, pauseDuration, endTime, effectiveTime, id, date } =
     sessionTiming;
   const { sessionTextUpdate } = useContext(SessionTextContext);
 
   const sessionLog: SessionLogUpdate = {
     ...getSessionLog(
       sessionTextUpdate,
-      timeStringToMillis(startTime),
-      timeStringToMillis(pauseDuration),
-      timeStringToMillis(endTime)
+      timeStringToDate(startTime, date),
+      timeStringToDate(endTime, date),
+      timeStringToMillis(pauseDuration)
     ),
     id,
   };
@@ -84,7 +89,7 @@ const EditSession: FC<EditSessionProps> = ({
   const handleSave = async () => {
     await persistSession(
       sessionLog,
-      `${UPDATE_SESSION_ENDPOINT}id`,
+      `${UPDATE_SESSION_ENDPOINT}${id}`,
       HTTP_METHOD.PUT
     );
   };
