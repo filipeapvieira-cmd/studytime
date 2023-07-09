@@ -1,8 +1,9 @@
 /* CONTROL PANEL */
 
+export type SessionStatus = "initial" | "play" | "pause" | "stop";
 export type SessionTimer = {
   effectiveTimeOfStudy: number;
-  status: "initial" | "play" | "pause" | "stop";
+  status: SessionStatus;
   sessionStartTime: number;
   sessionEndTime: number;
   sessionPauseStartTime: number;
