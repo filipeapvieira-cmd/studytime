@@ -37,7 +37,7 @@ export async function GET() {
         {
           status: "error",
           message: "No study sessions found for this user.",
-          data: null,
+          data: [],
         },
         { status: 404 }
       );
