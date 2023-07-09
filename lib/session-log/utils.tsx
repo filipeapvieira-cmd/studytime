@@ -119,8 +119,8 @@ const getSessionTimeAndDate = (
     */
   return {
     date: new Date(),
-    startTime: new Date(sessionStartTime),
-    endTime: new Date(sessionEndTime),
+    startTime: adaptTimeZone(sessionStartTime),
+    endTime: adaptTimeZone(sessionEndTime),
     pausedTime: totalPauseTime,
   };
 };
@@ -157,4 +157,11 @@ export const persistSession = async (
 
   const data = await response.json();
   return data;
+};
+
+const adaptTimeZone = (time: number) => {
+  const date = new Date(time);
+  const localTime = date.getTime() - date.getTimezoneOffset() * 60000;
+  const localDate = new Date(localTime);
+  return localDate;
 };
