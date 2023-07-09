@@ -6,6 +6,7 @@ import { columns } from "./columns";
 import useSWR from "swr";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { useToast } from "@/components/ui/use-toast";
+import { GET_ALL_SESSIONS_ENDPOINT } from "@/constants/config";
 
 interface DashboardPageProps {}
 
@@ -16,7 +17,7 @@ const fetcher = async (url: string) => {
 };
 
 const DashboardPage: FC<DashboardPageProps> = ({}) => {
-  const { data, error } = useSWR("/api/session/get/sessions", fetcher);
+  const { data, error } = useSWR(GET_ALL_SESSIONS_ENDPOINT, fetcher);
   const { toast } = useToast();
 
   useEffect(() => {
