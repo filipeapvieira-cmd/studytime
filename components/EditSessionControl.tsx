@@ -10,10 +10,12 @@ interface EditSessionControlProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setSessionTiming: React.Dispatch<
     React.SetStateAction<{
-      startTime: string | undefined;
-      pauseDuration: string | undefined;
-      endTime: string | undefined;
+      id: number;
+      startTime: string;
+      pauseDuration: string;
+      endTime: string;
       effectiveTime: string;
+      date: string;
     }>
   >;
 }

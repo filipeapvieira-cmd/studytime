@@ -8,7 +8,7 @@ export type StudySession = {
   id: number;
   date: string;
   effectiveTime: string;
-  content: [{ topic: string; subTopic: string; text: string; id: number }];
+  content: [{ topic: string; subTopic: string; text: string }];
   feeling: string;
   endTime: string;
   startTime: string;
