@@ -2,21 +2,24 @@
 
 import { FC, useContext, useState, useEffect } from "react";
 import FormField from "@/components/FormField";
-import BtnClose from "./ui/BtnClose";
 import { Button } from "./ui/button";
 import { Icons } from "@/components/icons";
 import UserActionConfirmation from "./UserActionConfirmation";
-import { retrieveTextFromJson } from "@/lib/utils";
 import { SessionTextContext } from "@/src/ctx/session-text-provider";
-import { getSessionLog, persistSession } from "@/lib/session-log/utils";
+import { getSessionLog } from "@/lib/session-log/utils";
 import { SessionLog, SessionLogUpdate } from "@/types";
-import { UPDATE_SESSION_ENDPOINT, HTTP_METHOD } from "@/constants/config";
+import {
+  UPDATE_SESSION_ENDPOINT,
+  HTTP_METHOD,
+  DELETE_SESSION_ENDPOINT,
+} from "@/constants/config";
 import { usePersistSession } from "@/src/hooks/usePersistSession";
 import { StudySession } from "@/types/tanstack-table";
 import {
   timeStringToDate,
   timeStringToMillis,
 } from "@/lib/session-log/update-utils";
+import { useRouter } from "next/navigation";
 
 interface EditSessionControlProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,6 +29,7 @@ interface EditSessionControlProps {
 const EditSessionControl: FC<EditSessionControlProps> = ({
   data,
 }: EditSessionControlProps) => {
+  const router = useRouter();
   const [sessionTiming, setSessionTiming] = useState({
     id: data.id,
     startTime: data.startTime,
@@ -60,10 +64,21 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
     id,
   };
 
-  const { isLoading, saveSessionHandler } = usePersistSession({
-    sessionLog,
-    url: `${UPDATE_SESSION_ENDPOINT}${id}`,
-    method: HTTP_METHOD.PUT,
+  const { isLoading: isLoadingUpdate, httpRequestHandler: saveSessionHandler } =
+    usePersistSession({
+      body: sessionLog,
+      url: `${UPDATE_SESSION_ENDPOINT}${id}`,
+      method: HTTP_METHOD.PUT,
+    });
+
+  const {
+    isLoading: isLoadingDelete,
+    httpRequestHandler: deleteSessionHandler,
+  } = usePersistSession({
+    url: `${DELETE_SESSION_ENDPOINT}${id}`,
+    method: HTTP_METHOD.DELETE,
+    //TODO: handle onSuccess
+    onSuccess: router.refresh,
   });
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,15 +130,23 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           type="updateSession"
           onConfirm={saveSessionHandler}
         >
-          <Button disabled={isLoading}>
-            {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}
-            {!isLoading && <Icons.save />}
+          <Button disabled={isLoadingUpdate}>
+            {isLoadingUpdate && (
+              <Icons.loading className="h-6 w-6 animate-spin" />
+            )}
+            {!isLoadingUpdate && <Icons.save />}
           </Button>
         </UserActionConfirmation>
 
-        <UserActionConfirmation type="deleteSession" onConfirm={() => {}}>
-          <Button variant="destructive">
-            <Icons.close />
+        <UserActionConfirmation
+          type="deleteSession"
+          onConfirm={deleteSessionHandler}
+        >
+          <Button variant="destructive" disabled={isLoadingDelete}>
+            {isLoadingDelete && (
+              <Icons.loading className="h-6 w-6 animate-spin" />
+            )}
+            {!isLoadingDelete && <Icons.close />}
           </Button>
         </UserActionConfirmation>
       </div>

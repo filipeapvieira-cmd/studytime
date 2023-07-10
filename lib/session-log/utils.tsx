@@ -159,6 +159,24 @@ export const persistSession = async (
   return data;
 };
 
+export const deleteSession = async (url: string, method: string) => {
+  console.log(method);
+  const response = await fetch(url, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    console.log(response);
+    throw new Error("Something went wrong");
+  }
+
+  const data = await response.json();
+  return data;
+};
+
 const adaptTimeZone = (time: number) => {
   const date = new Date(time);
   const localTime = date.getTime() - date.getTimezoneOffset() * 60000;
