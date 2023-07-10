@@ -18,6 +18,7 @@ import {
   Download,
   CalendarClock,
   X,
+  Check,
   type Icon as LucideIcon,
 } from "lucide-react";
 
@@ -42,4 +43,5 @@ export const Icons = {
   filter2: SlidersHorizontal,
   download: Download,
   calendar: CalendarClock,
+  check: Check,
 };
