@@ -13,6 +13,7 @@ import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHand
 import { useStudySession } from "@/src/hooks/useStudySession";
 import { useSession } from "next-auth/react";
 import { SAVE_SESSION_ENDPOINT, HTTP_METHOD } from "@/constants/config";
+import { usePersistSession } from "@/src/hooks/usePersistSession";
 
 const SaveSession = ({}) => {
   const { data: session, status: sessionStatus } = useSession();
@@ -28,34 +29,22 @@ const SaveSession = ({}) => {
     setSessionTimer,
   } = useContext(TimeContext);
   const { sessionText } = useContext(SessionTextContext);
-  const { showToastError, showToastSuccess } = useFetchStatusToastHandling();
-  const [isLoading, setIsLoading] = useState(false);
   const { resetStudySession } = useStudySession();
   const { title, description } = retrieveTextFromJson("saveSession");
 
-  const saveSessionHandler = async () => {
-    const sessionLog: SessionLog = getSessionLog(
-      sessionText,
-      sessionStartTime,
-      sessionEndTime,
-      totalPauseTime
-    );
-    try {
-      setIsLoading(true);
-      const response = await persistSession(
-        sessionLog,
-        SAVE_SESSION_ENDPOINT,
-        HTTP_METHOD.POST
-      );
-      showToastSuccess(response);
-      resetStudySession();
-    } catch (error) {
-      showToastError(error);
-    } finally {
-      setIsLoading(false);
-    }
-    //console.log(getSessionLog(sessionText, sessionStartTime, sessionEndTime, totalPauseTime));
-  };
+  const sessionLog: SessionLog = getSessionLog(
+    sessionText,
+    sessionStartTime,
+    sessionEndTime,
+    totalPauseTime
+  );
+
+  const { isLoading, saveSessionHandler } = usePersistSession({
+    sessionLog,
+    url: SAVE_SESSION_ENDPOINT,
+    method: HTTP_METHOD.POST,
+    onSuccess: resetStudySession,
+  });
 
   return (
     <Alert title={title} description={description} action={saveSessionHandler}>

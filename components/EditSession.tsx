@@ -93,14 +93,6 @@ const EditSession: FC<EditSessionProps> = ({
     method: HTTP_METHOD.PUT,
   });
 
-  /*   const handleSave = async () => {
-    await persistSession(
-      sessionLog,
-      `${UPDATE_SESSION_ENDPOINT}${id}`,
-      HTTP_METHOD.PUT
-    );
-  }; */
-
   return (
     <AlertDialog open={open}>
       {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}

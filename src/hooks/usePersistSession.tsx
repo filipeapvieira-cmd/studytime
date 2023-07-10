@@ -18,22 +18,27 @@ interface PersistSessionProps {
   sessionLog: SessionLog | SessionLogUpdate;
   url: string;
   method: string;
+  onSuccess?: () => void;
 }
 
 export const usePersistSession = ({
   sessionLog,
   url,
   method,
+  onSuccess,
 }: PersistSessionProps) => {
   const { showToastError, showToastSuccess } = useFetchStatusToastHandling();
+  const { resetStudySession } = useStudySession();
   const [isLoading, setIsLoading] = useState(false);
-  const { title, description } = retrieveTextFromJson("saveSession");
 
   const saveSessionHandler = async () => {
     try {
       setIsLoading(true);
       const response = await persistSession(sessionLog, url, method);
       showToastSuccess(response);
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error) {
       showToastError(error);
     } finally {
