@@ -11,7 +11,7 @@ export async function GET() {
       {
         status: "error",
         message: "Unauthorized access. Please log in.",
-        data: null,
+        data: [],
       },
       { status: 401 }
     );
@@ -57,11 +57,12 @@ export async function GET() {
     if (error instanceof Error) {
       message = error.message;
     }
+
     return NextResponse.json(
       {
         status: "error",
         message,
-        data: null,
+        data: [],
       },
       { status: 500 }
     );
