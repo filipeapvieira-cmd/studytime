@@ -40,7 +40,7 @@ const DashboardPage: FC<DashboardPageProps> = ({}) => {
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={extractedData} />
+      <DataTable columns={columns} data={extractedData || []} />
     </div>
   );
 };

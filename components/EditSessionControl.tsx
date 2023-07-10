@@ -12,6 +12,7 @@ import {
   UPDATE_SESSION_ENDPOINT,
   HTTP_METHOD,
   DELETE_SESSION_ENDPOINT,
+  GET_ALL_SESSIONS_ENDPOINT,
 } from "@/constants/config";
 import { usePersistSession } from "@/src/hooks/usePersistSession";
 import { StudySession } from "@/types/tanstack-table";
@@ -20,6 +21,7 @@ import {
   timeStringToMillis,
 } from "@/lib/session-log/update-utils";
 import { useRouter } from "next/navigation";
+import { mutate } from "swr";
 
 interface EditSessionControlProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,6 +30,7 @@ interface EditSessionControlProps {
 
 const EditSessionControl: FC<EditSessionControlProps> = ({
   data,
+  setIsModalOpen,
 }: EditSessionControlProps) => {
   const router = useRouter();
   const [sessionTiming, setSessionTiming] = useState({
@@ -64,11 +67,17 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
     id,
   };
 
+  const onSuccess = () => {
+    setIsModalOpen(false);
+    mutate(GET_ALL_SESSIONS_ENDPOINT);
+  };
+
   const { isLoading: isLoadingUpdate, httpRequestHandler: saveSessionHandler } =
     usePersistSession({
       body: sessionLog,
       url: `${UPDATE_SESSION_ENDPOINT}${id}`,
       method: HTTP_METHOD.PUT,
+      onSuccess,
     });
 
   const {
@@ -77,8 +86,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   } = usePersistSession({
     url: `${DELETE_SESSION_ENDPOINT}${id}`,
     method: HTTP_METHOD.DELETE,
-    //TODO: handle onSuccess
-    onSuccess: router.refresh,
+    onSuccess,
   });
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,7 +138,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           type="updateSession"
           onConfirm={saveSessionHandler}
         >
-          <Button disabled={isLoadingUpdate}>
+          <Button disabled={isLoadingUpdate || isLoadingDelete}>
             {isLoadingUpdate && (
               <Icons.loading className="h-6 w-6 animate-spin" />
             )}
@@ -142,7 +150,10 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           type="deleteSession"
           onConfirm={deleteSessionHandler}
         >
-          <Button variant="destructive" disabled={isLoadingDelete}>
+          <Button
+            variant="destructive"
+            disabled={isLoadingUpdate || isLoadingDelete}
+          >
             {isLoadingDelete && (
               <Icons.loading className="h-6 w-6 animate-spin" />
             )}
