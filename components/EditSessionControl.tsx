@@ -1,42 +1,71 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useContext, useState, useEffect } from "react";
 import FormField from "@/components/FormField";
 import BtnClose from "./ui/BtnClose";
 import { Button } from "./ui/button";
 import { Icons } from "@/components/icons";
 import UserActionConfirmation from "./UserActionConfirmation";
 import { retrieveTextFromJson } from "@/lib/utils";
+import { SessionTextContext } from "@/src/ctx/session-text-provider";
+import { getSessionLog, persistSession } from "@/lib/session-log/utils";
+import { SessionLog, SessionLogUpdate } from "@/types";
+import { UPDATE_SESSION_ENDPOINT, HTTP_METHOD } from "@/constants/config";
+import { usePersistSession } from "@/src/hooks/usePersistSession";
+import { StudySession } from "@/types/tanstack-table";
+import {
+  timeStringToDate,
+  timeStringToMillis,
+} from "@/lib/session-log/update-utils";
 
 interface EditSessionControlProps {
-  startTime: string;
-  pauseDuration: string;
-  endTime: string;
-  effectiveTime: string;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setSessionTiming: React.Dispatch<
-    React.SetStateAction<{
-      id: number;
-      startTime: string;
-      pauseDuration: string;
-      endTime: string;
-      effectiveTime: string;
-      date: string;
-    }>
-  >;
-  saveSession: () => Promise<void>;
-  isLoading: boolean;
+  data: StudySession;
 }
 
 const EditSessionControl: FC<EditSessionControlProps> = ({
-  startTime,
-  pauseDuration,
-  endTime,
-  effectiveTime,
-  setSessionTiming,
-  saveSession,
-  isLoading,
+  data,
 }: EditSessionControlProps) => {
+  const [sessionTiming, setSessionTiming] = useState({
+    id: data.id,
+    startTime: data.startTime,
+    pauseDuration: data.pauseDuration,
+    endTime: data.endTime,
+    effectiveTime: data.effectiveTime,
+    date: data.date,
+  });
+
+  useEffect(() => {
+    setSessionTiming({
+      id: data.id,
+      startTime: data.startTime,
+      pauseDuration: data.pauseDuration,
+      endTime: data.endTime,
+      effectiveTime: data.effectiveTime,
+      date: data.date,
+    });
+  }, [data]);
+
+  const { sessionTextUpdate } = useContext(SessionTextContext);
+  const { startTime, pauseDuration, endTime, effectiveTime, id, date } =
+    sessionTiming;
+
+  const sessionLog: SessionLogUpdate = {
+    ...getSessionLog(
+      sessionTextUpdate,
+      timeStringToDate(startTime, date),
+      timeStringToDate(endTime, date),
+      timeStringToMillis(pauseDuration)
+    ),
+    id,
+  };
+
+  const { isLoading, saveSessionHandler } = usePersistSession({
+    sessionLog,
+    url: `${UPDATE_SESSION_ENDPOINT}${id}`,
+    method: HTTP_METHOD.PUT,
+  });
+
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSessionTiming((preValue) => {
@@ -82,14 +111,17 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
         />
       </div>
       <div className="flex space-x-2">
-        <UserActionConfirmation type="updateSession" onConfirm={saveSession}>
+        <UserActionConfirmation
+          type="updateSession"
+          onConfirm={saveSessionHandler}
+        >
           <Button disabled={isLoading}>
             {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}
             {!isLoading && <Icons.save />}
           </Button>
         </UserActionConfirmation>
 
-        <UserActionConfirmation type="deleteSession" onConfirm={saveSession}>
+        <UserActionConfirmation type="deleteSession" onConfirm={() => {}}>
           <Button variant="destructive">
             <Icons.close />
           </Button>
