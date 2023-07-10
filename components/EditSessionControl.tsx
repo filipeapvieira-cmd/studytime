@@ -1,6 +1,12 @@
+"use client";
+
 import { FC, useState } from "react";
 import FormField from "@/components/FormField";
 import BtnClose from "./ui/BtnClose";
+import { Button } from "./ui/button";
+import { Icons } from "@/components/icons";
+import UserActionConfirmation from "./UserActionConfirmation";
+import { retrieveTextFromJson } from "@/lib/utils";
 
 interface EditSessionControlProps {
   startTime: string;
@@ -18,6 +24,8 @@ interface EditSessionControlProps {
       date: string;
     }>
   >;
+  saveSession: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const EditSessionControl: FC<EditSessionControlProps> = ({
@@ -26,6 +34,8 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   endTime,
   effectiveTime,
   setSessionTiming,
+  saveSession,
+  isLoading,
 }: EditSessionControlProps) => {
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -72,8 +82,18 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
         />
       </div>
       <div className="flex space-x-2">
-        Save
-        <BtnClose visible={true} onClick={() => {}} />
+        <UserActionConfirmation type="updateSession" onConfirm={saveSession}>
+          <Button disabled={isLoading}>
+            {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}
+            {!isLoading && <Icons.save />}
+          </Button>
+        </UserActionConfirmation>
+
+        <UserActionConfirmation type="deleteSession" onConfirm={saveSession}>
+          <Button variant="destructive">
+            <Icons.close />
+          </Button>
+        </UserActionConfirmation>
       </div>
     </div>
   );

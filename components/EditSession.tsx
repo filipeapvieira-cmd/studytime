@@ -21,6 +21,7 @@ import { SessionTextContext } from "@/src/ctx/session-text-provider";
 import { getSessionLog, persistSession } from "@/lib/session-log/utils";
 import { SessionLog, SessionLogUpdate } from "@/types";
 import { UPDATE_SESSION_ENDPOINT, HTTP_METHOD } from "@/constants/config";
+import { usePersistSession } from "@/src/hooks/usePersistSession";
 
 interface EditSessionProps {
   open: boolean;
@@ -86,13 +87,19 @@ const EditSession: FC<EditSessionProps> = ({
     id,
   };
 
-  const handleSave = async () => {
+  const { isLoading, saveSessionHandler } = usePersistSession({
+    sessionLog,
+    url: `${UPDATE_SESSION_ENDPOINT}${id}`,
+    method: HTTP_METHOD.PUT,
+  });
+
+  /*   const handleSave = async () => {
     await persistSession(
       sessionLog,
       `${UPDATE_SESSION_ENDPOINT}${id}`,
       HTTP_METHOD.PUT
     );
-  };
+  }; */
 
   return (
     <AlertDialog open={open}>
@@ -102,7 +109,7 @@ const EditSession: FC<EditSessionProps> = ({
           <AlertDialogTitle asChild>
             <>
               <div className="flex justify-between">
-                <div>
+                <div className="flex space-x-2">
                   <Icons.calendar />
                   <p className="text-lg font-bold">{data?.date}</p>
                 </div>
@@ -118,6 +125,8 @@ const EditSession: FC<EditSessionProps> = ({
                 effectiveTime={effectiveTime}
                 setIsModalOpen={close}
                 setSessionTiming={setSessionTiming}
+                saveSession={saveSessionHandler}
+                isLoading={isLoading}
               />
             </>
           </AlertDialogTitle>
@@ -128,12 +137,6 @@ const EditSession: FC<EditSessionProps> = ({
             </>
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          {/*           <AlertDialogCancel onClick={() => close(false)}>
-            Cancel
-          </AlertDialogCancel> */}
-          <AlertDialogAction onClick={handleSave}>Continue</AlertDialogAction>
-        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
