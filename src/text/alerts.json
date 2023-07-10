@@ -14,5 +14,13 @@
     "test": {
       "title": "",
       "description": ""
-    }    
+    },
+    "updateSession": {
+      "title": "Update Session",
+      "description": "Are you sure that you want to proceed ?"
+    },
+    "deleteSession": {
+      "title": "DELETE Session",
+      "description": "This process is irreversible!"
+    }
   }

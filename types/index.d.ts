@@ -31,7 +31,12 @@ export type ChronoContextType = {
 };
 
 export type ControlText = {
-  action: "restartSession" | "stopSession" | "saveSession";
+  action:
+    | "restartSession"
+    | "stopSession"
+    | "saveSession"
+    | "updateSession"
+    | "deleteSession";
 };
 
 export type ValidationRules = {
