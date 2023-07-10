@@ -17,6 +17,7 @@ import {
   SlidersHorizontal,
   Download,
   CalendarClock,
+  X,
   type Icon as LucideIcon,
 } from "lucide-react";
 
@@ -31,6 +32,7 @@ export const Icons = {
   save: Save,
   stop: StopCircle,
   close: XCircle,
+  closeCross: X,
   copy: Clipboard,
   loading: Loader2,
   user: User,

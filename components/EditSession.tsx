@@ -101,9 +101,15 @@ const EditSession: FC<EditSessionProps> = ({
         <AlertDialogHeader>
           <AlertDialogTitle asChild>
             <>
-              <div className="flex space-x-2">
-                <Icons.calendar />
-                <p className="text-lg font-bold">{data?.date}</p>
+              <div className="flex justify-between">
+                <div>
+                  <Icons.calendar />
+                  <p className="text-lg font-bold">{data?.date}</p>
+                </div>
+                <Icons.closeCross
+                  onClick={() => close(false)}
+                  className="hover:cursor-pointer hover:bg-border/50"
+                />
               </div>
               <EditSessionControl
                 startTime={startTime || ""}
@@ -123,9 +129,9 @@ const EditSession: FC<EditSessionProps> = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => close(false)}>
+          {/*           <AlertDialogCancel onClick={() => close(false)}>
             Cancel
-          </AlertDialogCancel>
+          </AlertDialogCancel> */}
           <AlertDialogAction onClick={handleSave}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

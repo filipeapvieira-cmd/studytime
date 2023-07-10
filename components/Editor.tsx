@@ -19,7 +19,6 @@ interface EditorProps extends React.HTMLProps<HTMLDivElement> {
 }
 
 const Editor: FC<EditorProps> = ({ className, action, sessionData }) => {
-  //const { sessionText, setSessionText } = useContext(SessionTextContext);
   const ctx = useContext(SessionTextContext);
 
   const { text, setText } =

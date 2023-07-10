@@ -27,6 +27,7 @@ const DashboardPage: FC<DashboardPageProps> = ({}) => {
       title: `Uh oh! Something went wrong`,
       description: `Unable to fetch data. Please try again later`,
     });
+    // If we continue having the error due to the server functions being unavailable, we can try to useRouter and reload the page on Error
   }, [error]);
 
   if (error) {
