@@ -22,6 +22,7 @@ export const timeCtxDefaultValues: TimeContextType = {
   },
   setSessionTimer: () => {},
   getLastSessionTimer: () => timeCtxDefaultValues.sessionTimer,
+  status: "initial",
 };
 
 export const TimeContext = createContext(timeCtxDefaultValues);
@@ -41,11 +42,7 @@ export default function TimerProvider({
   const [sessionTimer, setSessionTimer] = useState<SessionTimer>(
     timeCtxDefaultValues.sessionTimer
   );
-  const [lastSessionTimer, setLastSessionTimer] = useState<SessionTimer>(
-    timeCtxDefaultValues.sessionTimer
-  );
-
-  const { effectiveTimeOfStudy, status, sessionStartTime } = sessionTimer;
+  const { status } = sessionTimer;
 
   useEffect(() => {
     let interval: NodeJS.Timer;
@@ -70,6 +67,7 @@ export default function TimerProvider({
   return (
     <TimeContext.Provider
       value={{
+        status,
         sessionTimer,
         setSessionTimer,
         getLastSessionTimer,

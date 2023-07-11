@@ -16,7 +16,7 @@ import { SAVE_SESSION_ENDPOINT, HTTP_METHOD } from "@/constants/config";
 import { usePersistSession } from "@/src/hooks/usePersistSession";
 
 const SaveSession = ({}) => {
-  const { getLastSessionTimer } = useContext(TimeContext);
+  const { getLastSessionTimer, status } = useContext(TimeContext);
   const { sessionText } = useContext(SessionTextContext);
   const { resetStudySession } = useStudySession();
   const { title, description } = retrieveTextFromJson("saveSession");
@@ -53,8 +53,7 @@ const SaveSession = ({}) => {
 
   return (
     <Alert title={title} description={description} action={onClickHandler}>
-      {/* disabled={status !== "stop"} */}
-      <Button variant="default">
+      <Button variant="default" disabled={status !== "stop"}>
         {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}
         {!isLoading && <Icons.save />}
       </Button>
