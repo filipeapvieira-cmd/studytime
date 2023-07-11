@@ -23,6 +23,12 @@ const endOfDay = (date: Date) => {
   return end;
 };
 
+const startOfDay = (date: Date) => {
+  let start = new Date(date);
+  start.setHours(0, 0, 0, 0);
+  return start;
+};
+
 const TableFilters: FC<TableFiltersProps> = ({
   globalFilter,
   columnFilters,
@@ -36,14 +42,13 @@ const TableFilters: FC<TableFiltersProps> = ({
   });
 
   const filterByDateRangeHandler = (range: DateRange | undefined) => {
-    if (!range) {
+    if (!range || !range.from) {
       return;
     }
 
-    const endOfDayRange =
-      range.from && range.to
-        ? { ...range, to: endOfDay(range.to) }
-        : { ...range, to: range.from && endOfDay(range.from) };
+    const endOfDayRange = range.to
+      ? { from: startOfDay(range.from), to: endOfDay(range.to) }
+      : { from: startOfDay(range.from), to: endOfDay(range.from) };
 
     table.getColumn("date")?.setFilterValue(endOfDayRange);
   };
