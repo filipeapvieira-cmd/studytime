@@ -31,9 +31,9 @@ const Editor: FC<EditorProps> = ({ className, action, sessionData }) => {
       const { content, feeling } = sessionData;
       let contentStr = "----------\n### **Content**\n";
       content.forEach(
-        (element: { topic: string; subTopic: string; text: string }) => {
+        (element: { topic: string; subtopic: string; text: string }) => {
           contentStr += `#### @[${element.topic}${
-            element.subTopic ? ` - ${element.subTopic}` : ""
+            element.subtopic ? ` - ${element.subtopic}` : ""
           }]\n${element.text}\n`;
         }
       );

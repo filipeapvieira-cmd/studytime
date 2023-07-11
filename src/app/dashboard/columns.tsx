@@ -122,7 +122,7 @@ export const columns: ColumnDef<StudySession>[] = [
         <SessionTopic
           key={index}
           topic={content.topic}
-          subTopic={content.text}
+          subtopic={content.text}
           searchInput={
             (row.columnFiltersMeta.content as RankAndValue)?.value || ""
           }

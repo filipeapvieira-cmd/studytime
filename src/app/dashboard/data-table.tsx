@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({
     content: [
       {
         topic: "",
-        subTopic: "",
+        subtopic: "",
         text: "",
       },
     ],

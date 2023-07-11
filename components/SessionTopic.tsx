@@ -5,13 +5,13 @@ import { sub } from "date-fns";
 
 interface SessionTopicProps {
   topic: string;
-  subTopic: string;
+  subtopic: string;
   searchInput: string;
 }
 
 const SessionTopic: FC<SessionTopicProps> = ({
   topic,
-  subTopic,
+  subtopic,
   searchInput,
 }) => {
   return (
@@ -19,7 +19,7 @@ const SessionTopic: FC<SessionTopicProps> = ({
       <Badge variant="default" className="rounded-md">
         <Highlight text={topic} searchInput={searchInput} />
       </Badge>
-      <Highlight text={subTopic} searchInput={searchInput} />
+      <Highlight text={subtopic} searchInput={searchInput} />
     </div>
   );
 };
