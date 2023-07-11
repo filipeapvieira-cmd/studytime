@@ -32,7 +32,6 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   data,
   setIsModalOpen,
 }: EditSessionControlProps) => {
-  const router = useRouter();
   const [sessionTiming, setSessionTiming] = useState({
     id: data.id,
     startTime: data.startTime,
@@ -72,22 +71,27 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
     mutate(GET_ALL_SESSIONS_ENDPOINT);
   };
 
-  const { isLoading: isLoadingUpdate, httpRequestHandler: saveSessionHandler } =
-    usePersistSession({
+  const { isLoading, httpRequestHandler } = usePersistSession();
+
+  const handleControl = (action: "update" | "delete") => {
+    const updateParameters = {
       body: sessionLog,
       url: `${UPDATE_SESSION_ENDPOINT}${id}`,
       method: HTTP_METHOD.PUT,
       onSuccess,
-    });
+    };
+    const deleteParameters = {
+      url: `${DELETE_SESSION_ENDPOINT}${id}`,
+      method: HTTP_METHOD.DELETE,
+      onSuccess,
+    };
 
-  const {
-    isLoading: isLoadingDelete,
-    httpRequestHandler: deleteSessionHandler,
-  } = usePersistSession({
-    url: `${DELETE_SESSION_ENDPOINT}${id}`,
-    method: HTTP_METHOD.DELETE,
-    onSuccess,
-  });
+    if (action === "update") {
+      httpRequestHandler(updateParameters);
+    } else {
+      httpRequestHandler(deleteParameters);
+    }
+  };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -136,28 +140,21 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
       <div className="flex space-x-2">
         <UserActionConfirmation
           type="updateSession"
-          onConfirm={saveSessionHandler}
+          onConfirm={() => handleControl("update")}
         >
-          <Button disabled={isLoadingUpdate || isLoadingDelete}>
-            {isLoadingUpdate && (
-              <Icons.loading className="h-6 w-6 animate-spin" />
-            )}
-            {!isLoadingUpdate && <Icons.save />}
+          <Button disabled={isLoading}>
+            {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}
+            {!isLoading && <Icons.save />}
           </Button>
         </UserActionConfirmation>
 
         <UserActionConfirmation
           type="deleteSession"
-          onConfirm={deleteSessionHandler}
+          onConfirm={() => handleControl("delete")}
         >
-          <Button
-            variant="destructive"
-            disabled={isLoadingUpdate || isLoadingDelete}
-          >
-            {isLoadingDelete && (
-              <Icons.loading className="h-6 w-6 animate-spin" />
-            )}
-            {!isLoadingDelete && <Icons.close />}
+          <Button variant="destructive" disabled={isLoading}>
+            {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}
+            {!isLoading && <Icons.close />}
           </Button>
         </UserActionConfirmation>
       </div>

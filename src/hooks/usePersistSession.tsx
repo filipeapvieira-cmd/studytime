@@ -5,23 +5,23 @@ import { SessionLog, SessionLogUpdate } from "@/types";
 import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
 import { getRequestHandler } from "@/lib/session-log/delete-utils";
 
-interface PersistSessionProps {
+interface PersistSession {
   body?: SessionLog | SessionLogUpdate;
   url: string;
   method: string;
   onSuccess?: () => void;
 }
 
-export const usePersistSession = ({
-  body,
-  url,
-  method,
-  onSuccess,
-}: PersistSessionProps) => {
+export const usePersistSession = () => {
   const { showToastError, showToastSuccess } = useFetchStatusToastHandling();
   const [isLoading, setIsLoading] = useState(false);
 
-  const httpRequestHandler = async () => {
+  const httpRequestHandler = async ({
+    body,
+    url,
+    method,
+    onSuccess,
+  }: PersistSession) => {
     const requestHandler = getRequestHandler(body, url, method);
 
     try {
