@@ -16,6 +16,7 @@ export type TimeContextType = {
   setSessionTimer: (
     sessionTimer: SessionTimer | ((prevState: SessionTimer) => SessionTimer)
   ) => void;
+  getLastSessionTimer: () => SessionTimer;
 };
 
 type SessionChrono = {

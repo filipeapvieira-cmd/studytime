@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import Alert from "@/components/Alert";
@@ -16,40 +16,45 @@ import { SAVE_SESSION_ENDPOINT, HTTP_METHOD } from "@/constants/config";
 import { usePersistSession } from "@/src/hooks/usePersistSession";
 
 const SaveSession = ({}) => {
-  const { data: session, status: sessionStatus } = useSession();
-
-  const {
-    sessionTimer: {
-      effectiveTimeOfStudy,
-      sessionStartTime,
-      sessionEndTime,
-      totalPauseTime,
-      status,
-    },
-    setSessionTimer,
-  } = useContext(TimeContext);
+  const { getLastSessionTimer } = useContext(TimeContext);
   const { sessionText } = useContext(SessionTextContext);
   const { resetStudySession } = useStudySession();
   const { title, description } = retrieveTextFromJson("saveSession");
 
-  const sessionLog: SessionLog = getSessionLog(
-    sessionText,
-    sessionStartTime,
-    sessionEndTime,
-    totalPauseTime
-  );
+  let sessionLog: SessionLog | undefined = undefined;
 
   const { isLoading, httpRequestHandler: saveSessionHandler } =
-    usePersistSession({
+    usePersistSession();
+
+  const onClickHandler = () => {
+    const { sessionStartTime, sessionEndTime, totalPauseTime } =
+      getLastSessionTimer();
+    //getLastSessionText();
+    console.log(sessionText);
+    try {
+      sessionLog = getSessionLog(
+        sessionText,
+        sessionStartTime,
+        sessionEndTime,
+        totalPauseTime
+      );
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+
+    saveSessionHandler({
       body: sessionLog,
       url: SAVE_SESSION_ENDPOINT,
       method: HTTP_METHOD.POST,
       onSuccess: resetStudySession,
     });
+  };
 
   return (
-    <Alert title={title} description={description} action={saveSessionHandler}>
-      <Button variant="default" disabled={status !== "stop"}>
+    <Alert title={title} description={description} action={onClickHandler}>
+      {/* disabled={status !== "stop"} */}
+      <Button variant="default">
         {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}
         {!isLoading && <Icons.save />}
       </Button>
