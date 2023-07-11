@@ -39,12 +39,13 @@ const SaveSession = ({}) => {
     totalPauseTime
   );
 
-  const { isLoading, saveSessionHandler } = usePersistSession({
-    sessionLog,
-    url: SAVE_SESSION_ENDPOINT,
-    method: HTTP_METHOD.POST,
-    onSuccess: resetStudySession,
-  });
+  const { isLoading, httpRequestHandler: saveSessionHandler } =
+    usePersistSession({
+      body: sessionLog,
+      url: SAVE_SESSION_ENDPOINT,
+      method: HTTP_METHOD.POST,
+      onSuccess: resetStudySession,
+    });
 
   return (
     <Alert title={title} description={description} action={saveSessionHandler}>
