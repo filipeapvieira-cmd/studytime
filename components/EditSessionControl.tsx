@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useContext, useState, useEffect } from "react";
+import { FC, useContext, useState, useEffect, useRef } from "react";
 import FormField from "@/components/FormField";
 import { Button } from "./ui/button";
 import { Icons } from "@/components/icons";
@@ -17,6 +17,8 @@ import {
 import { usePersistSession } from "@/src/hooks/usePersistSession";
 import { StudySession } from "@/types/tanstack-table";
 import {
+  getSaveBtnIcon,
+  getDeleteBtnIcon,
   timeStringToDate,
   timeStringToMillis,
 } from "@/lib/session-log/update-utils";
@@ -55,7 +57,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   const { sessionTextUpdate } = useContext(SessionTextContext);
   const { startTime, pauseDuration, endTime, effectiveTime, id, date } =
     sessionTiming;
-
+  const actionType = useRef("");
   const sessionLog: SessionLogUpdate = {
     ...getSessionLog(
       sessionTextUpdate,
@@ -74,6 +76,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   const { isLoading, httpRequestHandler } = usePersistSession();
 
   const handleControl = (action: "update" | "delete") => {
+    actionType.current = "";
     const updateParameters = {
       body: sessionLog,
       url: `${UPDATE_SESSION_ENDPOINT}${id}`,
@@ -87,8 +90,10 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
     };
 
     if (action === "update") {
+      actionType.current = "update";
       httpRequestHandler(updateParameters);
     } else {
+      actionType.current = "delete";
       httpRequestHandler(deleteParameters);
     }
   };
@@ -143,8 +148,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           onConfirm={() => handleControl("update")}
         >
           <Button disabled={isLoading}>
-            {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}
-            {!isLoading && <Icons.save />}
+            {getSaveBtnIcon(isLoading, actionType)}
           </Button>
         </UserActionConfirmation>
 
@@ -153,8 +157,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           onConfirm={() => handleControl("delete")}
         >
           <Button variant="destructive" disabled={isLoading}>
-            {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}
-            {!isLoading && <Icons.close />}
+            {getDeleteBtnIcon(isLoading, actionType)}
           </Button>
         </UserActionConfirmation>
       </div>

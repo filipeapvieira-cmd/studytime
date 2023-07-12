@@ -1,3 +1,6 @@
+import { MutableRefObject } from "react";
+import { Icons } from "@/components/icons";
+
 export const timeStringToDate = (
   sessionTime: string,
   sessionDate: string
@@ -15,4 +18,24 @@ export const timeStringToMillis = (pauseDuration: string): any => {
   const totalMilliseconds =
     hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000;
   return totalMilliseconds;
+};
+
+export const getSaveBtnIcon = (
+  isLoading: boolean,
+  actionType: MutableRefObject<string>
+) => {
+  if (isLoading && actionType.current === "update") {
+    return <Icons.loading className="h-6 w-6 animate-spin" />;
+  }
+  return <Icons.save />;
+};
+
+export const getDeleteBtnIcon = (
+  isLoading: boolean,
+  actionType: MutableRefObject<string>
+) => {
+  if (isLoading && actionType.current === "delete") {
+    return <Icons.loading className="h-6 w-6 animate-spin" />;
+  }
+  return <Icons.close />;
 };
