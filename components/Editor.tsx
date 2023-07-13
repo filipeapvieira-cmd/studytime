@@ -41,7 +41,7 @@ const Editor: FC<EditorProps> = ({ className, action, sessionData }) => {
       let feelingsStr = "----------\n### **Feelings**\n";
       feelingsStr += `${feeling}`;
 
-      setText?.(`${contentStr}${feelingsStr}`);
+      setText?.(`${contentStr}${sessionData.feeling ? feelingsStr : ""}`);
     }
   }, []);
 
