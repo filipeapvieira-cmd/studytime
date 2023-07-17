@@ -3,18 +3,18 @@ generator client {
 }
 
 // ### LOCAL ###
-//datasource db {
-//  provider = "postgresql"
-//  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
-//}
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
+}
 
 // ### PROD ###
-datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-  // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // commented to solve this issue: https://github.com/prisma/prisma/issues/19234
-}
+//datasource db {
+//  provider  = "postgresql"
+//  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+//  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+//  // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // commented to solve this issue: https://github.com/prisma/prisma/issues/19234
+//}
 
 model User {
   id           Int            @id @default(autoincrement())
