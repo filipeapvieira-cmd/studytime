@@ -6,6 +6,7 @@ import {
   SessionLog,
   SessionLogUpdate,
 } from "@/types";
+import { validateTopics } from "@/lib/validations/session-log/validators";
 
 export const getSessionLog = (
   sessionText: string,
@@ -61,6 +62,7 @@ const getLogTopics = (sessionText: string): SessionLogTopics[] => {
       topics.push({ topic, subtopic });
     }
   });
+  validateTopics(topics);
   return topics;
 };
 
@@ -177,7 +179,7 @@ export const deleteSession = async (url: string, method: string) => {
   return data;
 };
 
-const adaptTimeZone = (time: number) => {
+export const adaptTimeZone = (time: number) => {
   const date = new Date(time);
   const localTime = date.getTime() - date.getTimezoneOffset() * 60000;
   const localDate = new Date(localTime);
