@@ -68,6 +68,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [globalFilter, setGlobalFilter] = useState("");
+  const [inputGlobalFilter, setInputGlobalFilter] = useState("");
   const [rowSelection, setRowSelection] = useState({});
   const [isEditSessionOpen, setIsEditSessionOpen] = useState(false);
   const [editSessionData, setEditSessionData] =
@@ -140,6 +141,8 @@ export function DataTable<TData, TValue>({
         table={table}
         setGlobalFilter={setGlobalFilter}
         setColumnFilters={setColumnFilters}
+        inputGlobalFilter={inputGlobalFilter}
+        setInputGlobalFilter={setInputGlobalFilter}
       />
 
       {/* Table */}

@@ -8,10 +8,13 @@ import { CalendarDateRangePicker } from "@/components/Date-range-picker";
 import ColumnVisibility from "@/components/table/Column-visibility";
 import { DateRange } from "react-day-picker";
 import BtnClose from "@/components/ui/BtnClose";
+import { useTransition } from "react";
 
 interface TableFiltersProps {
+  inputGlobalFilter: string;
   globalFilter: string;
   columnFilters: any[];
+  setInputGlobalFilter: (value: string) => void;
   setGlobalFilter: (value: string) => void;
   setColumnFilters: (value: any[]) => void;
   table: any;
@@ -30,12 +33,15 @@ const startOfDay = (date: Date) => {
 };
 
 const TableFilters: FC<TableFiltersProps> = ({
+  inputGlobalFilter,
   globalFilter,
   columnFilters,
+  setInputGlobalFilter,
   setGlobalFilter,
   setColumnFilters,
   table,
 }) => {
+  const [isPending, startTransition] = useTransition();
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(Date.now()),
     to: new Date(Date.now()),
@@ -60,8 +66,11 @@ const TableFilters: FC<TableFiltersProps> = ({
         {/* Filter global */}
         <Input
           placeholder="Filter..."
-          value={globalFilter ?? ""}
-          onChange={(event) => setGlobalFilter(event.target.value)}
+          value={inputGlobalFilter}
+          onChange={(event) => {
+            setInputGlobalFilter(event.target.value);
+            startTransition(() => setGlobalFilter(event.target.value));
+          }}
           className="max-w-sm"
         />
         <BtnClose

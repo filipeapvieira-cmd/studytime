@@ -47,10 +47,10 @@ const createData = async () => {
     });
   }
 };
-createData();
+//createData();
 
 /* Sessions */
-async function createDummyData() {
+export async function createDummyData() {
   function randomDate() {
     const start = new Date();
     start.setDate(start.getDate() - 30);
@@ -129,7 +129,7 @@ async function createDummyData() {
       endTime: timeAndDate.endTime,
       user: {
         connect: {
-          id: 12,
+          id: 1,
         },
       },
       pauseDuration: timeAndDate.pausedTime,
@@ -150,7 +150,9 @@ async function createDummyData() {
     await db.studySession.create({ data: sessionData });
   }
 }
-createDummyData();
+
+//createDummyData();
+
 createDummyData()
   .catch((e) => {
     console.error(e);

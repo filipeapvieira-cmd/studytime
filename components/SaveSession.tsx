@@ -29,8 +29,6 @@ const SaveSession = ({}) => {
   const onClickHandler = () => {
     const { sessionStartTime, sessionEndTime, totalPauseTime } =
       getLastSessionTimer();
-    //getLastSessionText();
-    console.log(sessionText);
     try {
       sessionLog = getSessionLog(
         sessionText,
