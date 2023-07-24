@@ -8,7 +8,9 @@ import {
   handleStop,
   handlePlay,
   handleInterval,
+  statusToHandler,
 } from "@/lib/time-provider/utils";
+import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
 
 export const timeCtxDefaultValues: TimeContextType = {
   sessionTimer: {
@@ -27,13 +29,6 @@ export const timeCtxDefaultValues: TimeContextType = {
 
 export const TimeContext = createContext(timeCtxDefaultValues);
 
-const statusToHandler = {
-  initial: handleInitial,
-  pause: handlePause,
-  stop: handleStop,
-  play: handlePlay,
-};
-
 export default function TimerProvider({
   children,
 }: {
@@ -44,21 +39,7 @@ export default function TimerProvider({
   );
   const { status } = sessionTimer;
 
-  useEffect(() => {
-    let interval: NodeJS.Timer;
-
-    const handler = statusToHandler[status];
-    handler(sessionTimer, setSessionTimer);
-
-    // increment study session time
-    interval = setInterval(() => {
-      handleInterval(sessionTimer, setSessionTimer);
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [status]);
+  useEffectStatusHandling(status, sessionTimer, setSessionTimer);
 
   const getLastSessionTimer = () => {
     return sessionTimer;

@@ -83,3 +83,23 @@ const handleIfStartOfSession = (
     }));
   }
 };
+
+export const handleState = (
+  status: SessionStatus,
+  setter: Dispatch<SetStateAction<SessionTimer>>
+) => {
+  if (status === "initial") {
+    setter((prevState) => ({ ...prevState, status: "play" }));
+  } else if (status === "play") {
+    setter((prevState) => ({ ...prevState, status: "pause" }));
+  } else if (status === "pause") {
+    setter((prevState) => ({ ...prevState, status: "play" }));
+  }
+};
+
+export const statusToHandler = {
+  initial: handleInitial,
+  pause: handlePause,
+  stop: handleStop,
+  play: handlePlay,
+};

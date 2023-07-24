@@ -9,9 +9,13 @@ export const createNewSession = (): SessionReport => ({
   topic: "",
   hashtags: [""],
   description: "",
-  startTime: 0,
-  endTime: 0,
-  feelings: "",
+  effectiveTimeOfStudy: 0,
+  status: "initial",
+  sessionStartTime: 0,
+  sessionEndTime: 0,
+  sessionPauseStartTime: 0,
+  sessionPauseEndTime: 0,
+  totalPauseTime: 0,
 });
 
 export const newSessionCtxDefaultValues: Session = {

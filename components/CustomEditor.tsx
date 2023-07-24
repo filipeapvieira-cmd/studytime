@@ -15,7 +15,7 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
   const { sessions } = useContext(SaveSessionContext);
   console.log(sessions);
   return (
-    <Accordion type="multiple" defaultValue={[String(0)]}>
+    <Accordion type="multiple" defaultValue={[String(0)]} className="w-1/2">
       {sessions.map((session, index) => (
         <AccordionItem value={String(index)} key={session.id} data-state="open">
           <CustomEditorItem position={index} session={session} />

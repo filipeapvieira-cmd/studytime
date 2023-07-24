@@ -103,14 +103,11 @@ export type SessionLogUpdate = SessionLog & {
 
 /* SAVE SESSION FORM */
 
-export type SessionReport = {
+export type SessionReport = SessionTimer & {
   id: string;
   topic: string;
   hashtags: string[];
   description: string;
-  startTime: 0;
-  endTime: 0;
-  feelings: string;
 };
 
 type SetSessionReport = Dispatch<SetStateAction<SessionReport[]>>;
