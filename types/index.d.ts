@@ -100,3 +100,22 @@ export type SessionLog = {
 export type SessionLogUpdate = SessionLog & {
   id: number;
 };
+
+/* SAVE SESSION FORM */
+
+export type SessionReport = {
+  id: string;
+  topic: string;
+  hashtags: string[];
+  description: string;
+  startTime: 0;
+  endTime: 0;
+  feelings: string;
+};
+
+type SetSessionReport = Dispatch<SetStateAction<SessionReport[]>>;
+
+export type Session = {
+  sessions: SessionReport[];
+  setSessions: SetSessionReport;
+};

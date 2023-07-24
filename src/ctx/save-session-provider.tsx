@@ -1,0 +1,40 @@
+"use client";
+
+import { createContext, useState, Dispatch, SetStateAction } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { SessionReport, Session } from "@/types";
+
+export const createNewSession = (): SessionReport => ({
+  id: uuidv4(),
+  topic: "",
+  hashtags: [""],
+  description: "",
+  startTime: 0,
+  endTime: 0,
+  feelings: "",
+});
+
+export const newSessionCtxDefaultValues: Session = {
+  sessions: [createNewSession()],
+  setSessions: () => [],
+};
+
+export const SaveSessionContext = createContext(newSessionCtxDefaultValues);
+
+interface SaveSessionProvider {
+  children: React.ReactNode;
+}
+
+export default function SaveSessionProvider({ children }: SaveSessionProvider) {
+  const [sessionsReport, setSessionsReport] = useState<SessionReport[]>(
+    newSessionCtxDefaultValues.sessions
+  );
+
+  return (
+    <SaveSessionContext.Provider
+      value={{ sessions: sessionsReport, setSessions: setSessionsReport }}
+    >
+      {children}
+    </SaveSessionContext.Provider>
+  );
+}

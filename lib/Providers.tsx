@@ -6,6 +6,7 @@ import ChronoProvider from "@/src/ctx/chrono-provider";
 import SessionTextProvider from "@/src/ctx/session-text-provider";
 import UploadImagesProvider from "@/src/ctx/upload-images-provider";
 import EditSessionProvider from "@/src/ctx/edit-sessions-provider";
+import SaveSessionProvider from "@/ctx/save-session-provider";
 import { ThemeProvider } from "next-themes";
 import { FC } from "react";
 
@@ -16,20 +17,18 @@ interface ProvidersProps {
 const Providers: FC<ProvidersProps> = ({ children }) => {
   return (
     <ThemeProvider attribute="class" enableSystem defaultTheme="system">
-      {/*
-      // Re-fetch session every 5 minutes
-      refetchInterval={5 * 60}
-       */}
       <SessionProvider>
-        <EditSessionProvider>
-          <TimerProvider>
-            <ChronoProvider>
-              <SessionTextProvider>
-                <UploadImagesProvider>{children}</UploadImagesProvider>
-              </SessionTextProvider>
-            </ChronoProvider>
-          </TimerProvider>
-        </EditSessionProvider>
+        <SaveSessionProvider>
+          <EditSessionProvider>
+            <TimerProvider>
+              <ChronoProvider>
+                <SessionTextProvider>
+                  <UploadImagesProvider>{children}</UploadImagesProvider>
+                </SessionTextProvider>
+              </ChronoProvider>
+            </TimerProvider>
+          </EditSessionProvider>
+        </SaveSessionProvider>
       </SessionProvider>
     </ThemeProvider>
   );

@@ -1,5 +1,5 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -7,30 +7,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import CustomEditorItem from "./CustomEditor-Item";
+import { SaveSessionContext } from "@/ctx/save-session-provider";
 
 interface CustomEditorProps {}
 
 const CustomEditor: FC<CustomEditorProps> = ({}) => {
-  const [items, setItems] = useState([
-    {
-      topic: "",
-      hashtags: "",
-      content: "",
-      startTime: 0,
-      endTime: 0,
-    },
-    {
-      topic: "",
-      hashtags: "",
-      content: "",
-    },
-  ]);
-
+  const { sessions } = useContext(SaveSessionContext);
+  console.log(sessions);
   return (
     <Accordion type="multiple" defaultValue={[String(0)]}>
-      {items.map((item, index) => (
-        <AccordionItem value={String(index)} key={index} data-state="open">
-          <CustomEditorItem position={index} />
+      {sessions.map((session, index) => (
+        <AccordionItem value={String(index)} key={session.id} data-state="open">
+          <CustomEditorItem position={index} session={session} />
         </AccordionItem>
       ))}
     </Accordion>
