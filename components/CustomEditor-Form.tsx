@@ -17,11 +17,15 @@ import {
   handleState,
   statusToHandler,
   handleInterval,
+  handlePause,
+  handleStop,
+  coerceComponentState,
 } from "@/lib/time-provider/utils";
 import { TimeContext } from "@/src/ctx/time-provider";
 import BtnTimer from "./ui/BtnTimer";
 import { SessionTimer } from "@/types";
 import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
+import useSessionStatus from "@/src/hooks/useSessionStatus";
 
 interface CustomEditorFormProps {
   session: SessionReport;
@@ -36,9 +40,7 @@ interface CurrentTopic {
 const CustomEditorForm: FC<CustomEditorFormProps> = ({
   session,
 }: CustomEditorFormProps) => {
-  //console.count(session.topic);
-  //const { sessionTimer, setSessionTimer } = useContext(TimeContext);
-  //const status = useMemo(() => sessionTimer.status, [sessionTimer.status]);
+  const sessionStatus = useSessionStatus();
   const { setSessions } = useContext(SaveSessionContext);
   const { topic, hashtags, description } = session;
   const {
@@ -67,6 +69,14 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   console.log(componentTimeState);
 
   useEffect(() => {
+    coerceComponentState(
+      sessionStatus,
+      componentTimeState.status,
+      setComponentTimeState
+    );
+  }, [sessionStatus]);
+
+  useEffect(() => {
     const delay = setTimeout(() => {
       setSessions((prevValue: SessionReport[]) =>
         handleReplaceTopic(prevValue, currentTopic)
@@ -76,7 +86,9 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   }, [currentTopic, setSessions]);
 
   useEffect(() => {
-    setSessions((prevValue: SessionReport[]) => handleUnmount(prevValue));
+    setSessions((prevValue: SessionReport[]) =>
+      handleTimerChange(prevValue, componentTimeState)
+    );
   }, [componentTimeState]);
 
   const handleReplaceTopic = (
@@ -101,7 +113,10 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     });
   };
 
-  const handleUnmount = (allTopics: SessionReport[]) => {
+  const handleTimerChange = (
+    allTopics: SessionReport[],
+    componentTimeState: SessionTimer
+  ) => {
     const topicToUpdate: SessionReport = allTopics.find(
       (topic) => topic.id === session.id
     ) as SessionReport;
@@ -197,6 +212,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
       <Button onClick={handleNewTopic}>New Topic</Button>
       <Button onClick={handleDeleteTopic}>Delete</Button>
       <BtnTimer
+        disabled={status === "stop" || sessionStatus !== "play"}
         status={componentTimeState.status}
         effectiveTimeOfStudy={componentTimeState.effectiveTimeOfStudy}
         onClick={() =>

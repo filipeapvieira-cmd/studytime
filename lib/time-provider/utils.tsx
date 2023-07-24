@@ -103,3 +103,15 @@ export const statusToHandler = {
   stop: handleStop,
   play: handlePlay,
 };
+
+export const coerceComponentState = (
+  parentState: SessionStatus,
+  childState: SessionStatus,
+  setter: Dispatch<SetStateAction<SessionTimer>>
+) => {
+  if (parentState === "pause" && childState === "play") {
+    handleState("play", setter);
+  } else if (parentState === "stop") {
+    setter((prevValue) => ({ ...prevValue, status: "stop" }));
+  }
+};

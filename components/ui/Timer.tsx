@@ -15,6 +15,7 @@ const Timer = () => {
         onClick={() => handleState(status, setSessionTimer)}
         status={status}
         effectiveTimeOfStudy={effectiveTimeOfStudy}
+        disabled={status === "stop"}
       />
     </>
   );
