@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import CustomEditorForm from "./CustomEditor-Form";
+import CustomEditorForm from "@/components/CustomEditor-Topic-Form";
 import { SessionReport, Session } from "@/types";
 
 interface CustomEditorItemProps {

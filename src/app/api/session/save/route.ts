@@ -1,7 +1,6 @@
 import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { SessionTimeAndDate, SessionLogTopicContentFeelings } from "@/types";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
 import { getSessionData } from "@/lib/api/utils";
@@ -21,14 +20,10 @@ export async function POST(req: Request) {
   }
 
   const userId: number = +session.user.id;
-  const {
-    description,
-    timeAndDate,
-  }: {
-    description: SessionLogTopicContentFeelings;
-    timeAndDate: SessionTimeAndDate;
-  } = await req.json();
-  const sessionData = getSessionData(description, timeAndDate, userId);
+
+  const sessionLog = await req.json();
+
+  const sessionData = getSessionData(sessionLog, userId);
 
   try {
     await db.studySession.create({ data: sessionData });

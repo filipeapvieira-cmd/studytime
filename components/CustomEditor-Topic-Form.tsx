@@ -33,7 +33,7 @@ interface CustomEditorFormProps {
 
 interface CurrentTopic {
   topic: string;
-  hashtags: string[];
+  hashtags: string;
   description: string;
 }
 
@@ -166,14 +166,9 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
   ) => {
-    const value =
-      e.target.name !== "hashtags"
-        ? e.target.value
-        : [...e.target.value.split(" ")];
-
     setCurrentTopic((prevValue) => ({
       ...prevValue,
-      [e.target.name]: value,
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -195,7 +190,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
           />
           <Input
             placeholder="Hashtags"
-            value={currentTopic.hashtags.join(" ")}
+            value={currentTopic.hashtags}
             name="hashtags"
             onChange={(e) => handleInputChange(e)}
           />

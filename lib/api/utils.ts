@@ -1,30 +1,31 @@
-import { SessionTimeAndDate, SessionLogTopicContentFeelings } from "@/types";
+import { FullSessionLog } from "@/types";
 import { Prisma } from "@prisma/client";
 
-export const getSessionData = (
-  description: SessionLogTopicContentFeelings,
-  timeAndDate: SessionTimeAndDate,
-  id: number
-) => {
+export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
+  const { startTime, endTime, pauseDuration, topics, feelingDescription } =
+    sessionLog;
   const sessionData: Prisma.StudySessionCreateInput = {
-    startTime: timeAndDate.startTime,
-    endTime: timeAndDate.endTime,
+    startTime,
+    endTime,
     user: {
       connect: {
         id,
       },
     },
-    pauseDuration: timeAndDate.pausedTime,
+    pauseDuration,
     content: {
-      create: description.topics.map((topic) => ({
-        topic: topic.topic,
-        subtopic: topic.subtopic,
-        contentDescription: topic.content,
-      })),
+      create: topics.map(
+        ({ topic, hashtags, contentDescription, timeOfStudy }) => ({
+          topic,
+          hashtags,
+          contentDescription,
+          timeOfStudy,
+        })
+      ),
     },
     feeling: {
       create: {
-        feelingDescription: description.feelings,
+        feelingDescription,
       },
     },
   };

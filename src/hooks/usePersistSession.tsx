@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { SessionLog, SessionLogUpdate } from "@/types";
+import { FullSessionLog, SessionLog, SessionLogUpdate } from "@/types";
 import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
 import { getRequestHandler } from "@/lib/session-log/delete-utils";
 
 interface PersistSession {
-  body?: SessionLog | SessionLogUpdate;
+  body?: FullSessionLog | SessionLogUpdate;
   url: string;
   method: string;
   onSuccess?: () => void;
@@ -26,6 +26,7 @@ export const usePersistSession = () => {
 
     try {
       setIsLoading(true);
+      //await is required, otherwise try-catch block don't catch the error
       const response = await requestHandler();
       showToastSuccess(response);
       if (onSuccess) {
@@ -38,5 +39,6 @@ export const usePersistSession = () => {
       setIsLoading(false);
     }
   };
+
   return { isLoading, httpRequestHandler };
 };

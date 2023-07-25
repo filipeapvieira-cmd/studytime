@@ -10,7 +10,7 @@ interface SessionTextContextProps {
 }
 
 export const sessionTextCtxDefaultValues: SessionTextContextProps = {
-  sessionText: `----------\n### **Content**\n#### @[Main Subject - Topic]\n- Action 1\n----------\n### **Feelings**\n- This session...`,
+  sessionText: "",
   setSessionText: () => {},
   sessionTextUpdate: "",
   setSessionTextUpdate: () => {},

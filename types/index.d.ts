@@ -13,9 +13,7 @@ export type SessionTimer = {
 
 export type TimeContextType = {
   sessionTimer: SessionTimer;
-  setSessionTimer: (
-    sessionTimer: SessionTimer | ((prevState: SessionTimer) => SessionTimer)
-  ) => void;
+  setSessionTimer: Dispatch<SetStateAction<SessionTimer>>;
   getLastSessionTimer: () => SessionTimer;
   status: SessionStatus;
 };
@@ -27,9 +25,7 @@ type SessionChrono = {
 
 export type ChronoContextType = {
   sessionChrono: SessionChrono;
-  setSessionChrono: (
-    sessionChrono: SessionChrono | ((prevState: SessionChrono) => SessionChrono)
-  ) => void;
+  setSessionChrono: Dispatch<SetStateAction<SessionChrono>>;
 };
 
 export type ControlText = {
@@ -103,10 +99,25 @@ export type SessionLogUpdate = SessionLog & {
 
 /* SAVE SESSION FORM */
 
+export type FullSessionLog = {
+  startTime: Date;
+  endTime: Date;
+  pauseDuration: number;
+  feelingDescription: string;
+  topics: FormattedTopics[];
+};
+
+export type FormattedTopics = {
+  topic: string;
+  hashtags: string;
+  contentDescription: string;
+  timeOfStudy: number;
+};
+
 export type SessionReport = SessionTimer & {
   id: string;
   topic: string;
-  hashtags: string[];
+  hashtags: string;
   description: string;
 };
 

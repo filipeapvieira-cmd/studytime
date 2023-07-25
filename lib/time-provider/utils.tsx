@@ -50,11 +50,24 @@ export const handleInterval = (
   if (sessionTimer.status === "play") {
     setSessionTimer((prevSessionTimer) => ({
       ...prevSessionTimer,
+      /*       
+      EDITED on 25/07. Replaced by function
       effectiveTimeOfStudy:
         Date.now() -
-        (prevSessionTimer.sessionStartTime + prevSessionTimer.totalPauseTime),
+        (prevSessionTimer.sessionStartTime + prevSessionTimer.totalPauseTime), */
+      effectiveTimeOfStudy: getEffectiveTimeOfStudy(
+        prevSessionTimer.sessionStartTime,
+        prevSessionTimer.totalPauseTime
+      ),
     }));
   }
+};
+
+export const getEffectiveTimeOfStudy = (
+  sessionStartTime: number,
+  totalPauseTime: number
+) => {
+  return Date.now() - (sessionStartTime + totalPauseTime);
 };
 
 const handleIfSessionIsPaused = (

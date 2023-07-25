@@ -5,23 +5,48 @@ import {
   SessionTimeAndDate,
   SessionLog,
   SessionLogUpdate,
+  SessionReport,
+  FormattedTopics,
+  FullSessionLog,
 } from "@/types";
 import { validateTopics } from "@/lib/validations/session-log/validators";
+import { getEffectiveTimeOfStudy } from "@/lib/time-provider/utils";
 
-export const getSessionLog = (
-  sessionText: string,
-  sessionStartTime: number,
-  sessionEndTime: number,
-  totalPauseTime: number
-): SessionLog => {
-  return {
-    description: getDescription(sessionText),
-    timeAndDate: getSessionTimeAndDate(
-      sessionStartTime,
-      sessionEndTime,
-      totalPauseTime
-    ),
+interface getFullSessionLogProps {
+  sessionFeelings: string;
+  sessionTopics: SessionReport[];
+  sessionTime: {
+    sessionStartTime: number;
+    sessionEndTime: number;
+    totalPauseTime: number;
   };
+}
+
+export const getFullSessionLog = ({
+  sessionFeelings,
+  sessionTopics,
+  sessionTime,
+}: getFullSessionLogProps) => {
+  return {
+    startTime: adaptTimeZone(sessionTime.sessionStartTime),
+    endTime: adaptTimeZone(sessionTime.sessionEndTime),
+    pauseDuration: sessionTime.totalPauseTime,
+    feelingDescription: sessionFeelings,
+    topics: getSessionTopics(sessionTopics),
+  };
+};
+
+const getSessionTopics = (
+  sessionTopics: SessionReport[]
+): FormattedTopics[] => {
+  return sessionTopics.map((topic) => {
+    return {
+      topic: topic.topic,
+      hashtags: topic.hashtags,
+      contentDescription: topic.description,
+      timeOfStudy: topic.effectiveTimeOfStudy,
+    };
+  });
 };
 
 const joinTopicsToContent = (
@@ -99,26 +124,11 @@ const removeLinesAfterContent = (lines: string[]): string[] => {
   return lines.slice(0, lastIndex);
 };
 
-const getSessionTimeAndDate = (
+const formatSessionTime = (
   sessionStartTime: number,
   sessionEndTime: number,
   totalPauseTime: number
 ): SessionTimeAndDate => {
-  /*     
-    RETURN DATE AS STRING
-    const timeFormatOptions :Intl.DateTimeFormatOptions = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    const dateFormatOptions :Intl.DateTimeFormatOptions = {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    };
-    return {
-        date: new Date().toLocaleDateString('en-GB', dateFormatOptions).replace(/\//g, '-'),
-        startTime: new Date(sessionStartTime).toLocaleTimeString([], timeFormatOptions ),
-        endTime: new Date(sessionEndTime).toLocaleTimeString([], timeFormatOptions ),
-        pausedTime: totalPauseTime,
-    } 
-    */
   return {
     date: new Date(),
     startTime: adaptTimeZone(sessionStartTime),
@@ -140,7 +150,7 @@ const getDescription = (
 };
 
 export const persistSession = async (
-  sessionLog: SessionLog | SessionLogUpdate,
+  sessionLog: FullSessionLog | SessionLogUpdate,
   url: string,
   method: string
 ): Promise<void> => {
