@@ -7,7 +7,7 @@ import { SessionReport, Session } from "@/types";
 export const createNewSession = (): SessionReport => ({
   id: uuidv4(),
   topic: "",
-  hashtags: [""],
+  hashtags: "",
   description: "",
   effectiveTimeOfStudy: 0,
   status: "initial",

@@ -30,6 +30,7 @@ const SaveSession = ({}) => {
   const onClickHandler = () => {
     const { sessionStartTime, sessionEndTime, totalPauseTime } =
       getLastSessionTimer();
+
     const sessionTime = { sessionStartTime, sessionEndTime, totalPauseTime };
     try {
       sessionLog = getFullSessionLog({

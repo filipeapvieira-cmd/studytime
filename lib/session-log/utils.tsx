@@ -32,21 +32,39 @@ export const getFullSessionLog = ({
     endTime: adaptTimeZone(sessionTime.sessionEndTime),
     pauseDuration: sessionTime.totalPauseTime,
     feelingDescription: sessionFeelings,
-    topics: getSessionTopics(sessionTopics),
+    topics: getSessionTopics(sessionTopics, sessionTime.sessionEndTime),
   };
 };
 
 const getSessionTopics = (
-  sessionTopics: SessionReport[]
+  sessionTopics: SessionReport[],
+  sessionEndTime: number
 ): FormattedTopics[] => {
   return sessionTopics.map((topic) => {
     return {
       topic: topic.topic,
       hashtags: topic.hashtags,
       contentDescription: topic.description,
-      timeOfStudy: topic.effectiveTimeOfStudy,
+      timeOfStudy: getTopicTimeOfStudy(topic, sessionEndTime),
     };
   });
+};
+
+// Solution for when the component is unmounted on the Accordion
+const getTopicTimeOfStudy = (topic: SessionReport, sessionEndTime: number) => {
+  const { status } = topic;
+  switch (status) {
+    case "play":
+      return sessionEndTime - (topic.sessionStartTime + topic.totalPauseTime);
+    case "pause": {
+      const totalPauseTime =
+        topic.totalPauseTime + (sessionEndTime - topic.sessionPauseStartTime);
+      return sessionEndTime - (topic.sessionStartTime + totalPauseTime);
+    }
+    default: {
+      return topic.effectiveTimeOfStudy;
+    }
+  }
 };
 
 const joinTopicsToContent = (
