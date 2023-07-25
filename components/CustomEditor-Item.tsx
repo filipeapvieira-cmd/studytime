@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, Dispatch, SetStateAction } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -11,16 +11,27 @@ import { SessionReport, Session } from "@/types";
 interface CustomEditorItemProps {
   position: number;
   session: SessionReport;
+  openAccordionItem: Dispatch<SetStateAction<number>>;
 }
 
 const CustomEditorItem: FC<CustomEditorItemProps> = ({
   position,
   session,
+  openAccordionItem,
 }: CustomEditorItemProps) => {
   const title = session.topic ? session.topic : `Topic - ${position + 1}`;
   return (
     <>
-      <AccordionTrigger>{title}</AccordionTrigger>
+      <AccordionTrigger
+        onClick={() => {
+          openAccordionItem((visibleIndex) => {
+            const indexToShow = visibleIndex === position ? -1 : position;
+            return indexToShow;
+          });
+        }}
+      >
+        {title}
+      </AccordionTrigger>
       <AccordionContent>
         <CustomEditorForm session={session} />
       </AccordionContent>

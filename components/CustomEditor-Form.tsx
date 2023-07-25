@@ -66,7 +66,6 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     sessionPauseEndTime,
     totalPauseTime,
   });
-  console.log(componentTimeState);
 
   useEffect(() => {
     coerceComponentState(
