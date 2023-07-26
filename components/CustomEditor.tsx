@@ -40,7 +40,6 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
         <Accordion
           type="multiple"
           value={[String(indexToShow)]}
-
           //id="customEditorContainer"
         >
           {sessionTopics.map((session, index) => (

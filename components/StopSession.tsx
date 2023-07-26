@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import Alert from "@/components/Alert";
 import { retrieveTextFromJson } from "@/lib/utils";
+import { SessionTimer } from "@/types";
 
 interface StopSessionProps {}
 
@@ -21,11 +22,11 @@ const StopSession: FC<StopSessionProps> = ({}) => {
   const { title, description } = retrieveTextFromJson("stopSession");
 
   const stopSessionHandler = () => {
-    setSessionTimer((prevState) => ({
+    setSessionTimer((prevState: SessionTimer) => ({
       ...prevState,
       status: "stop",
     }));
-    setSessionChrono((prevState) => ({
+    setSessionChrono((prevState: SessionTimer) => ({
       ...prevState,
       isActive: false,
     }));

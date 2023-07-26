@@ -126,5 +126,7 @@ export const coerceComponentState = (
     handleState("play", setter);
   } else if (parentState === "stop") {
     setter((prevValue) => ({ ...prevValue, status: "stop" }));
+  } else if (parentState === "initial") {
+    setter((prevValue) => ({ ...prevValue, status: "initial" }));
   }
 };

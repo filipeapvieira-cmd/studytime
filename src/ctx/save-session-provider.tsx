@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useState, Dispatch, SetStateAction } from "react";
+import {
+  createContext,
+  useState,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 import { SessionReport, Session } from "@/types";
 
@@ -33,6 +39,12 @@ export default function SaveSessionProvider({ children }: SaveSessionProvider) {
   const [sessionsReport, setSessionsReport] = useState<SessionReport[]>(
     newSessionCtxDefaultValues.sessions
   );
+
+  useEffect(() => {
+    if (sessionsReport.length === 0) {
+      setSessionsReport(newSessionCtxDefaultValues.sessions);
+    }
+  }, [sessionsReport]);
 
   return (
     <SaveSessionContext.Provider
