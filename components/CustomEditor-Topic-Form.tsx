@@ -180,15 +180,17 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
 
   return (
     <>
-      <form>
+      <form className="p-2">
         <div className="flex">
           <Input
+            className="rounded-none w-1/3"
             placeholder="Subject"
             value={currentTopic.topic}
             name="topic"
             onChange={(e) => handleInputChange(e)}
           />
           <Input
+            className="rounded-none"
             placeholder="Hashtags"
             value={currentTopic.hashtags}
             name="hashtags"
@@ -197,7 +199,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
         </div>
         <textarea
           rows={10}
-          className="w-full"
+          className="w-full outline-0 p-1 bg-secondary caret-foreground"
           value={currentTopic.description}
           name="description"
           onChange={(e) => handleInputChange(e)}
