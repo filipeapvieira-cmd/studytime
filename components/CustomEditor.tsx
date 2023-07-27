@@ -37,6 +37,9 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
   return (
     <div className="flex">
       <div className="flex-1 self-start">
+        <h1 className="text-foreground bg-background text-3xl text-center rounded-md p-2">
+          Description
+        </h1>
         <Accordion
           type="multiple"
           value={[String(indexToShow)]}
@@ -58,16 +61,17 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
         </Accordion>
         <CustomEditorFeelingsForm />
       </div>
-      <MDEditor
+      {/* <MDEditor
         preview="preview"
         className="flex-1"
         value={organizeContent(
           organizeTopics(sessionTopics),
           organizeFeelings(sessionFeelings)
         )}
-        /* height={getElementHeightById("customEditorContainer")} */
+        
         height={650}
-      />
+      /> */}
+      {/* height={getElementHeightById("customEditorContainer")} */}
     </div>
   );
 };

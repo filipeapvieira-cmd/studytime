@@ -7,6 +7,7 @@ interface BtnTimerProps {
   status: string;
   effectiveTimeOfStudy: number;
   disabled: boolean;
+  size?: "default" | "sm" | "lg";
 }
 
 const BtnTimer: FC<BtnTimerProps> = ({
@@ -14,9 +15,15 @@ const BtnTimer: FC<BtnTimerProps> = ({
   effectiveTimeOfStudy,
   status,
   disabled,
+  size,
 }) => {
   return (
-    <Button variant="default" onClick={onClick} disabled={disabled}>
+    <Button
+      variant="default"
+      onClick={onClick}
+      disabled={disabled}
+      size={size || "default"}
+    >
       {showIconForState(status)}
       <p className="text-lg w-[82px]">
         {new Date(effectiveTimeOfStudy).toISOString().slice(11, 19)}

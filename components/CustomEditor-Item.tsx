@@ -20,6 +20,7 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
   openAccordionItem,
 }: CustomEditorItemProps) => {
   const title = session.topic ? session.topic : `Topic - ${position + 1}`;
+  const hashtags = session.hashtags;
   return (
     <>
       <AccordionTrigger
@@ -31,7 +32,7 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
           });
         }}
       >
-        {title}
+        {`${title} ${hashtags ? `| ${hashtags}` : ""}`}
       </AccordionTrigger>
       <AccordionContent>
         <CustomEditorForm session={session} />

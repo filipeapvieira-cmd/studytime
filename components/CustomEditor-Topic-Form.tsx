@@ -183,14 +183,14 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
       <form className="p-2">
         <div className="flex">
           <Input
-            className="rounded-none w-1/3"
+            className="rounded-none w-1/3 focus-visible:ring-0 focus-visible:ring-offset-0"
             placeholder="Subject"
             value={currentTopic.topic}
             name="topic"
             onChange={(e) => handleInputChange(e)}
           />
           <Input
-            className="rounded-none"
+            className="rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
             placeholder="Hashtags"
             value={currentTopic.hashtags}
             name="hashtags"
@@ -199,22 +199,29 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
         </div>
         <textarea
           rows={10}
-          className="w-full outline-0 p-1 bg-secondary caret-foreground"
+          className="w-full outline-0 p-1 bg-secondary caret-foreground border-input border"
           value={currentTopic.description}
           name="description"
           onChange={(e) => handleInputChange(e)}
         />
       </form>
-      <Button onClick={handleNewTopic}>New Topic</Button>
-      <Button onClick={handleDeleteTopic}>Delete</Button>
-      <BtnTimer
-        disabled={status === "stop" || sessionStatus !== "play"}
-        status={componentTimeState.status}
-        effectiveTimeOfStudy={componentTimeState.effectiveTimeOfStudy}
-        onClick={() =>
-          handleState(componentTimeState.status, setComponentTimeState)
-        }
-      />
+      <div className="flex space-x-1">
+        <Button onClick={handleNewTopic} size="sm">
+          New Topic
+        </Button>
+        <Button onClick={handleDeleteTopic} variant="destructive" size="sm">
+          Delete
+        </Button>
+        <BtnTimer
+          size="sm"
+          disabled={status === "stop" || sessionStatus !== "play"}
+          status={componentTimeState.status}
+          effectiveTimeOfStudy={componentTimeState.effectiveTimeOfStudy}
+          onClick={() =>
+            handleState(componentTimeState.status, setComponentTimeState)
+          }
+        />
+      </div>
     </>
   );
 };
