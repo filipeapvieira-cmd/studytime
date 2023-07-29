@@ -1,5 +1,5 @@
 "use client";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState, useMemo } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -15,11 +15,8 @@ import EditorSkeleton from "@/components/skeletons/EditorSkeleton";
 import { SessionReport } from "@/types";
 import CustomEditorFeelingsForm from "./CustomEditor-Feelings-Form";
 import { SessionTextContext } from "@/src/ctx/session-text-provider";
-
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
-  ssr: false,
-  loading: () => <EditorSkeleton />,
-});
+import { Button } from "./ui/button";
+import { marked } from "marked";
 
 interface CustomEditorProps {}
 
@@ -27,13 +24,31 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
   const { sessions: sessionTopics } = useContext(SaveSessionContext);
   const { sessionText: sessionFeelings } = useContext(SessionTextContext);
   const [indexToShow, setIndexToShow] = useState(sessionTopics.length - 1);
+  const [isMarkdownPreviewerVisible, setIsMarkdownPreviewerVisible] =
+    useState(true);
 
   useEffect(() => {
     setIndexToShow(sessionTopics.length - 1);
   }, [sessionTopics.length]);
 
   console.log(sessionTopics);
-  //console.log(getElementHeightById("customEditorContainer"));
+
+  const handleOpenPreviewer = () => {
+    setIsMarkdownPreviewerVisible((prevValue) => !prevValue);
+  };
+
+  const handleCreateMarkup = useMemo(() => {
+    const result = marked.parse(
+      organizeContent(
+        organizeTopics(sessionTopics),
+        organizeFeelings(sessionFeelings)
+      )
+    );
+    return {
+      __html: result,
+    };
+  }, [sessionTopics, sessionFeelings]);
+
   return (
     <div className="flex">
       <div className="flex-1 self-start">
@@ -61,17 +76,17 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
         </Accordion>
         <CustomEditorFeelingsForm />
       </div>
-      {/* <MDEditor
-        preview="preview"
-        className="flex-1"
-        value={organizeContent(
-          organizeTopics(sessionTopics),
-          organizeFeelings(sessionFeelings)
-        )}
-        
-        height={650}
-      /> */}
-      {/* height={getElementHeightById("customEditorContainer")} */}
+      <Button onClick={handleOpenPreviewer} className="h-full self-center">
+        {/* Add your arrow image or icon here */}
+        {isMarkdownPreviewerVisible ? "Close" : "Open"}
+      </Button>
+      {isMarkdownPreviewerVisible && (
+        <div
+          className="flex-1"
+          id="preview"
+          dangerouslySetInnerHTML={handleCreateMarkup}
+        />
+      )}
     </div>
   );
 };

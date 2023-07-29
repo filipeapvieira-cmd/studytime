@@ -84,6 +84,12 @@
   }
 }
 
+@layer components {
+  .input-custom-editor {
+    @apply rounded-none focus-visible:ring-0 focus-visible:ring-offset-0;
+  }
+}
+
 /* ------ MDEditor ------ */
 /* Edit */
 .w-md-editor-text-pre > code,

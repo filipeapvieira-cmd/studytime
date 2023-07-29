@@ -3,6 +3,7 @@ import Editor from "@/components/Editor";
 import ImageUpload from "@/components/ImageUpload";
 import { migrateSessionData } from "@/docs/migrate-data";
 import { createDummyData } from "@/docs/dummy-data";
+import CustomEditor from "@/components/CustomEditor";
 
 export default async function Home() {
   //migrateSessionData();
@@ -10,7 +11,8 @@ export default async function Home() {
   return (
     <div className="container bg-secondary/90 rounded-lg shadow-lg">
       <Counter />
-      <Editor />
+      {/* <Editor /> */}
+      <CustomEditor />
       <ImageUpload />
     </div>
   );
