@@ -17,6 +17,7 @@ import CustomEditorFeelingsForm from "./CustomEditor-Feelings-Form";
 import { SessionTextContext } from "@/src/ctx/session-text-provider";
 import { Button } from "./ui/button";
 import { marked } from "marked";
+import { Icons } from "@/components/icons";
 
 interface CustomEditorProps {}
 
@@ -76,16 +77,22 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
         </Accordion>
         <CustomEditorFeelingsForm />
       </div>
-      <Button onClick={handleOpenPreviewer} className="h-full self-center">
+      <Button onClick={handleOpenPreviewer} className="self-center">
         {/* Add your arrow image or icon here */}
-        {isMarkdownPreviewerVisible ? "Close" : "Open"}
+        {isMarkdownPreviewerVisible ? (
+          <Icons.arrowRight />
+        ) : (
+          <Icons.arrowLeft />
+        )}
       </Button>
       {isMarkdownPreviewerVisible && (
-        <div
-          className="flex-1"
-          id="preview"
-          dangerouslySetInnerHTML={handleCreateMarkup}
-        />
+        //TODO:Extract this logic into a separate component
+        <div className="flex-1">
+          <h1 className="text-foreground bg-background text-3xl text-center rounded-md p-2">
+            Markdown Preview
+          </h1>
+          <div id="preview" dangerouslySetInnerHTML={handleCreateMarkup} />
+        </div>
       )}
     </div>
   );
@@ -95,14 +102,16 @@ export default CustomEditor;
 
 const organizeTopics = (topics: SessionReport[]) => {
   let text = "";
-  text += `# Description \n`;
+  text += hasDescription(topics) ? `# Description \n` : ``;
   topics.forEach((topic) => {
     const subject = `### ${topic.topic} \n`;
     const hashtags = `#### ${topic.hashtags} \n`;
     const description = `${topic.description} \n`;
     const lineBreak = `----------\n`;
+
     text += subject + hashtags + description;
   });
+
   return text;
 };
 
@@ -125,4 +134,8 @@ const getElementHeightById = (elementId: string) => {
   const height = element?.clientHeight || 0;
   console.log("Height:", height);
   return height;
+};
+
+const hasDescription = (topics: SessionReport[]) => {
+  return topics.some((topic) => topic.description !== "");
 };

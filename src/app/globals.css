@@ -82,6 +82,24 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  h1 {
+    @apply text-3xl mt-5;
+  }
+  h2 {
+    @apply text-2xl mt-4;
+  }
+  h3 {
+    @apply text-xl mt-3;
+  }
+  h4 {
+    @apply text-lg mt-2;
+  }
+  ul {
+    @apply  pl-5 mt-1;
+  }
+  li {
+    @apply list-disc list-item;
+  }
 }
 
 @layer components {

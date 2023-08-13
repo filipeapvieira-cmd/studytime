@@ -19,6 +19,8 @@ import {
   CalendarClock,
   X,
   Check,
+  ChevronLeft,
+  ChevronRight,
   type Icon as LucideIcon,
 } from "lucide-react";
 
@@ -44,4 +46,6 @@ export const Icons = {
   download: Download,
   calendar: CalendarClock,
   check: Check,
+  arrowLeft: ChevronLeft,
+  arrowRight: ChevronRight,
 };
