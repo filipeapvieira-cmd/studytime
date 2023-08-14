@@ -18,6 +18,7 @@ import { SessionTextContext } from "@/src/ctx/session-text-provider";
 import { Button } from "./ui/button";
 import { marked } from "marked";
 import { Icons } from "@/components/icons";
+import CustomEditorMarkdownPreview from "./CustomEditor-Markdown-Preview";
 
 interface CustomEditorProps {}
 
@@ -47,6 +48,10 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
     );
     return {
       __html: result,
+      test: organizeContent(
+        organizeTopics(sessionTopics),
+        organizeFeelings(sessionFeelings)
+      ),
     };
   }, [sessionTopics, sessionFeelings]);
 
@@ -86,13 +91,10 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
         )}
       </Button>
       {isMarkdownPreviewerVisible && (
-        //TODO:Extract this logic into a separate component
-        <div className="flex-1">
-          <h1 className="text-foreground bg-background text-3xl text-center rounded-md p-2">
-            Markdown Preview
-          </h1>
-          <div id="preview" dangerouslySetInnerHTML={handleCreateMarkup} />
-        </div>
+        <CustomEditorMarkdownPreview
+          handleCreateMarkup={handleCreateMarkup}
+          test={handleCreateMarkup.test}
+        />
       )}
     </div>
   );
@@ -102,7 +104,7 @@ export default CustomEditor;
 
 const organizeTopics = (topics: SessionReport[]) => {
   let text = "";
-  text += hasDescription(topics) ? `# Description \n` : ``;
+  text += hasDescription(topics) ? `# Description \n\n----------\n\n` : ``;
   topics.forEach((topic) => {
     const subject = `### ${topic.topic} \n`;
     const hashtags = `#### ${topic.hashtags} \n`;
@@ -117,11 +119,12 @@ const organizeTopics = (topics: SessionReport[]) => {
 
 const organizeFeelings = (sessionFeelings: string) => {
   let text = "";
-  const title = `# Feelings \n`;
+  // In markdown, you often need two newlines to create a distinct separation between blocks
+  const title = `# Feelings \n\n----------\n\n`;
   const feelings = `${sessionFeelings}`;
 
   text += feelings !== "" ? title + feelings : "";
-
+  console.log(text);
   return text;
 };
 

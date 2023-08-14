@@ -1,7 +1,15 @@
-import { FC, TextareaHTMLAttributes, KeyboardEvent, useRef } from "react";
+import {
+  FC,
+  TextareaHTMLAttributes,
+  KeyboardEvent,
+  ChangeEventHandler,
+  ChangeEvent,
+} from "react";
 
 interface CustomTextAreaProps
-  extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
+  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  onChange: ChangeEventHandler<HTMLTextAreaElement>;
+}
 
 const CustomTextArea: FC<CustomTextAreaProps> = ({
   className,
@@ -24,9 +32,10 @@ const CustomTextArea: FC<CustomTextAreaProps> = ({
         textareaValue.slice(endPos);
 
       e.currentTarget.value = newValue;
-      onChange;
       e.currentTarget.selectionStart = startPos + 4;
       e.currentTarget.selectionEnd = startPos + 4;
+
+      onChange(e as any);
     }
   };
 

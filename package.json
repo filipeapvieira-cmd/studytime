@@ -41,6 +41,7 @@
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.4",
     "lucide-react": "^0.241.0",
+    "markdown-to-jsx": "^7.3.2",
     "marked": "^5.1.2",
     "next": "^13.4.6",
     "next-auth": "^4.22.1",
