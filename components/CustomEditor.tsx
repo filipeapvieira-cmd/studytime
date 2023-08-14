@@ -19,6 +19,7 @@ import { Button } from "./ui/button";
 import { marked } from "marked";
 import { Icons } from "@/components/icons";
 import CustomEditorMarkdownPreview from "./CustomEditor-Markdown-Preview";
+import BtnOpenMkdownPrev from "./ui/BtnOpenMkdownPrev";
 
 interface CustomEditorProps {}
 
@@ -80,14 +81,10 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
         </Accordion>
         <CustomEditorFeelingsForm />
       </div>
-      <Button onClick={handleOpenPreviewer} className="self-center">
-        {/* Add your arrow image or icon here */}
-        {isMarkdownPreviewerVisible ? (
-          <Icons.arrowRight />
-        ) : (
-          <Icons.arrowLeft />
-        )}
-      </Button>
+      <BtnOpenMkdownPrev
+        handleOpenPreviewer={handleOpenPreviewer}
+        isMarkdownPreviewerVisible={isMarkdownPreviewerVisible}
+      />
       {isMarkdownPreviewerVisible && (
         <CustomEditorMarkdownPreview handleCreateMarkup={handleCreateMarkup} />
       )}
