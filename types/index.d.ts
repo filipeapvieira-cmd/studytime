@@ -120,10 +120,3 @@ export type Topic = SessionTimer & {
   hashtags: string;
   description: string;
 };
-
-type SetTopic = Dispatch<SetStateAction<Topic[]>>;
-
-export type Session = {
-  sessions: Topic[];
-  setSessions: SetTopic;
-};

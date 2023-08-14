@@ -14,7 +14,7 @@ import { useStudySession } from "@/src/hooks/useStudySession";
 import { useSession } from "next-auth/react";
 import { SAVE_SESSION_ENDPOINT, HTTP_METHOD } from "@/constants/config";
 import { usePersistSession } from "@/src/hooks/usePersistSession";
-import { SaveSessionContext } from "@/src/ctx/save-session-provider";
+import { SaveSessionContext } from "@/src/ctx/session-topics-provider";
 
 const SaveSession = ({}) => {
   const { getLastSessionTimer, status } = useContext(TimeContext);

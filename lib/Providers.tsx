@@ -6,7 +6,7 @@ import ChronoProvider from "@/src/ctx/chrono-provider";
 import FeelingsProvider from "@/src/ctx/session-feelings-provider";
 import UploadImagesProvider from "@/src/ctx/upload-images-provider";
 import EditSessionProvider from "@/src/ctx/edit-sessions-provider";
-import SaveSessionProvider from "@/ctx/save-session-provider";
+import TopicsProvider from "@/src/ctx/session-topics-provider";
 import { ThemeProvider } from "next-themes";
 import { FC } from "react";
 
@@ -18,7 +18,7 @@ const Providers: FC<ProvidersProps> = ({ children }) => {
   return (
     <ThemeProvider attribute="class" enableSystem defaultTheme="system">
       <SessionProvider>
-        <SaveSessionProvider>
+        <TopicsProvider>
           <EditSessionProvider>
             <TimerProvider>
               <ChronoProvider>
@@ -28,7 +28,7 @@ const Providers: FC<ProvidersProps> = ({ children }) => {
               </ChronoProvider>
             </TimerProvider>
           </EditSessionProvider>
-        </SaveSessionProvider>
+        </TopicsProvider>
       </SessionProvider>
     </ThemeProvider>
   );

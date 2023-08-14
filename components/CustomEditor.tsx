@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import CustomEditorItem from "./CustomEditor-Item";
-import { SaveSessionContext } from "@/ctx/save-session-provider";
+import { SaveSessionContext } from "@/src/ctx/session-topics-provider";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";

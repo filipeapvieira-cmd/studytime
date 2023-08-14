@@ -15,7 +15,7 @@ import {
 import {
   SaveSessionContext,
   newSessionCtxDefaultValues,
-} from "../ctx/save-session-provider";
+} from "../ctx/session-topics-provider";
 
 export const useStudySession = () => {
   const { setSessionText } = useContext(SessionTextContext);

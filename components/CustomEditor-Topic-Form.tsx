@@ -11,8 +11,8 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Topic } from "@/types";
-import { SaveSessionContext } from "@/ctx/save-session-provider";
-import { createNewSession } from "@/ctx/save-session-provider";
+import { TopicsContext } from "@/src/ctx/session-topics-provider";
+import { createNewTopic } from "@/src/ctx/session-topics-provider";
 import {
   handleState,
   statusToHandler,
@@ -42,7 +42,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   topic,
 }: CustomEditorFormProps) => {
   const sessionStatus = useSessionStatus();
-  const { setSessions } = useContext(SaveSessionContext);
+  const { setSessionTopics } = useContext(TopicsContext);
   const { title, hashtags, description } = topic;
   const {
     effectiveTimeOfStudy,
@@ -78,15 +78,15 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
 
   useEffect(() => {
     const delay = setTimeout(() => {
-      setSessions((prevValue: Topic[]) =>
+      setSessionTopics((prevValue: Topic[]) =>
         handleReplaceTopic(prevValue, currentTopic)
       );
     }, 1000);
     return () => clearTimeout(delay);
-  }, [currentTopic, setSessions]);
+  }, [currentTopic, setSessionTopics]);
 
   useEffect(() => {
-    setSessions((prevValue: Topic[]) =>
+    setSessionTopics((prevValue: Topic[]) =>
       handleTimerChange(prevValue, componentTimeState)
     );
   }, [componentTimeState]);
@@ -152,11 +152,11 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   };
 
   const handleNewTopic = () => {
-    setSessions((prevValue: Topic[]) => [...prevValue, createNewSession()]);
+    setSessionTopics((prevValue: Topic[]) => [...prevValue, createNewTopic()]);
   };
 
   const handleDeleteTopic = () => {
-    setSessions((prevValue: Topic[]) =>
+    setSessionTopics((prevValue: Topic[]) =>
       prevValue.filter((currentTopic) => currentTopic.id !== topic.id)
     );
   };
