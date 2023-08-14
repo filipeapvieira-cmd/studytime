@@ -40,19 +40,17 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
   };
 
   const handleCreateMarkup = useMemo(() => {
-    const result = marked.parse(
-      organizeContent(
-        organizeTopics(sessionTopics),
-        organizeFeelings(sessionFeelings)
-      )
+    return organizeContent(
+      organizeTopics(sessionTopics),
+      organizeFeelings(sessionFeelings)
     );
-    return {
+    /* return {
       __html: result,
       test: organizeContent(
         organizeTopics(sessionTopics),
         organizeFeelings(sessionFeelings)
       ),
-    };
+    }; */
   }, [sessionTopics, sessionFeelings]);
 
   return (
@@ -91,10 +89,7 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
         )}
       </Button>
       {isMarkdownPreviewerVisible && (
-        <CustomEditorMarkdownPreview
-          handleCreateMarkup={handleCreateMarkup}
-          test={handleCreateMarkup.test}
-        />
+        <CustomEditorMarkdownPreview handleCreateMarkup={handleCreateMarkup} />
       )}
     </div>
   );
@@ -124,7 +119,6 @@ const organizeFeelings = (sessionFeelings: string) => {
   const feelings = `${sessionFeelings}`;
 
   text += feelings !== "" ? title + feelings : "";
-  console.log(text);
   return text;
 };
 
