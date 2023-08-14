@@ -26,6 +26,7 @@ import BtnTimer from "./ui/BtnTimer";
 import { SessionTimer } from "@/types";
 import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
 import useSessionStatus from "@/src/hooks/useSessionStatus";
+import CustomTextArea from "./ui/CustomTextArea";
 
 interface CustomEditorFormProps {
   session: SessionReport;
@@ -180,7 +181,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
 
   return (
     <>
-      <form className="p-2">
+      <form className="pb-2">
         <div className="flex">
           <Input
             className="rounded-none w-1/3 focus-visible:ring-0 focus-visible:ring-offset-0"
@@ -197,9 +198,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
             onChange={(e) => handleInputChange(e)}
           />
         </div>
-        <textarea
-          rows={10}
-          className="w-full outline-0 p-1 bg-secondary caret-foreground border-input border"
+        <CustomTextArea
           value={currentTopic.description}
           name="description"
           onChange={(e) => handleInputChange(e)}
