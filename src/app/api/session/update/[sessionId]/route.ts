@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth/next";
 import { getSessionData } from "@/lib/api/utils";
 
 export async function PUT(req: Request, context: any) {
+  /*
   const { params } = context;
   const id: number = Number(params.sessionId);
   const session = await getServerSession(authOptions);
@@ -32,7 +33,6 @@ export async function PUT(req: Request, context: any) {
   } = await req.json();
 
   const sessionData = getSessionData(description, timeAndDate, userId);
-  //console.log(sessionData);
 
   const updateSession = async () => {
     return await db.$transaction(async (tx) => {
@@ -72,4 +72,5 @@ export async function PUT(req: Request, context: any) {
   } finally {
     await db.$disconnect();
   }
+  */
 }

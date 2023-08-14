@@ -6,7 +6,6 @@ import { Button } from "./ui/button";
 import { Icons } from "@/components/icons";
 import UserActionConfirmation from "./UserActionConfirmation";
 import { SessionTextContext } from "@/src/ctx/session-text-provider";
-import { getSessionLog } from "@/lib/session-log/utils";
 import { SessionLog, SessionLogUpdate } from "@/types";
 import {
   UPDATE_SESSION_ENDPOINT,
@@ -58,7 +57,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   const { startTime, pauseDuration, endTime, effectiveTime, id, date } =
     sessionTiming;
   const actionType = useRef("");
-  const sessionLog: SessionLogUpdate = {
+  /* const sessionLog: SessionLogUpdate = {
     ...getSessionLog(
       sessionTextUpdate,
       timeStringToDate(startTime, date),
@@ -66,7 +65,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
       timeStringToMillis(pauseDuration)
     ),
     id,
-  };
+  }; */
 
   const onSuccess = () => {
     setIsModalOpen(false);
@@ -75,6 +74,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
   const { isLoading, httpRequestHandler } = usePersistSession();
 
+  /*
   const handleControl = (action: "update" | "delete") => {
     actionType.current = "";
     const updateParameters = {
@@ -97,7 +97,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
       httpRequestHandler(deleteParameters);
     }
   };
-
+  */
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSessionTiming((preValue) => {
@@ -143,10 +143,10 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
         />
       </div>
       <div className="flex space-x-2">
-        <UserActionConfirmation
+        {/*         <UserActionConfirmation
           type="updateSession"
           onConfirm={() => handleControl("update")}
-        >
+        > 
           <Button disabled={isLoading}>
             {getSaveBtnIcon(isLoading, actionType)}
           </Button>
@@ -159,7 +159,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           <Button variant="destructive" disabled={isLoading}>
             {getDeleteBtnIcon(isLoading, actionType)}
           </Button>
-        </UserActionConfirmation>
+        </UserActionConfirmation>*/}
       </div>
     </div>
   );

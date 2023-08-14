@@ -61,7 +61,7 @@ const convertToPrismaFormat = (
       content: {
         create: {
           topic: "MigrationTopic",
-          subtopic: null,
+          timeOfStudy: convertStringToMilliseconds(item.total_time),
           contentDescription: item.session_content,
         },
       },

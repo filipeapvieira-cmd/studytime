@@ -136,8 +136,9 @@ export async function createDummyData() {
       content: {
         create: description.topics.map((topic) => ({
           topic: topic.topic,
-          subtopic: topic.subtopic,
+          hashtags: topic.subtopic,
           contentDescription: topic.contentDescription,
+          timeOfStudy: 45,
         })),
       },
       feeling: {
