@@ -17,6 +17,7 @@ import Editor from "@/components/Editor";
 import ImageUpload from "@/components/ImageUpload";
 import EditSessionControl from "./EditSessionControl";
 import { Icons } from "@/components/icons";
+import CustomEditor from "@/components/CustomEditor";
 
 interface EditSessionProps {
   open: boolean;
@@ -50,7 +51,7 @@ const EditSession: FC<EditSessionProps> = ({
           </AlertDialogTitle>
           <AlertDialogDescription asChild>
             <>
-              <Editor action="update" sessionData={data} />
+              <CustomEditor action="update" sessionData={data} />
               <ImageUpload />
             </>
           </AlertDialogDescription>

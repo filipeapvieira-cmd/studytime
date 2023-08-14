@@ -2,7 +2,7 @@ import { useContext } from "react";
 import {
   SessionTextContext,
   sessionTextCtxDefaultValues,
-} from "@/src/ctx/session-text-provider";
+} from "@/src/ctx/session-feelings-provider";
 import { TimeContext, timeCtxDefaultValues } from "@/src/ctx/time-provider";
 import {
   ChronoContext,

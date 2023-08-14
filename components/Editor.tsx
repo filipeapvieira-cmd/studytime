@@ -4,7 +4,7 @@ import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import { FC, useState, useContext, useEffect } from "react";
-import { SessionTextContext } from "@/src/ctx/session-text-provider";
+import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import EditorSkeleton from "@/components/skeletons/EditorSkeleton";
 import { StudySession } from "@/types/tanstack-table";
 
@@ -19,9 +19,10 @@ interface EditorProps extends React.HTMLProps<HTMLDivElement> {
 }
 
 const Editor: FC<EditorProps> = ({ className, action, sessionData }) => {
+  /*
   const ctx = useContext(SessionTextContext);
 
-  const { text, setText } =
+   const { text, setText } =
     action && sessionData
       ? { text: ctx.sessionTextUpdate, setText: ctx.setSessionTextUpdate }
       : { text: ctx.sessionText, setText: ctx.setSessionText };
@@ -57,9 +58,10 @@ const Editor: FC<EditorProps> = ({ className, action, sessionData }) => {
           setText?.(value || "");
         }}
       />
-      {/* <button onClick={fecthSession}>Fetch Session</button> */}
     </>
   );
+  */
+  return <p>This component is deprecated</p>;
 };
 
 export default Editor;

@@ -5,16 +5,16 @@ import {
   SessionTimeAndDate,
   SessionLog,
   SessionLogUpdate,
-  SessionReport,
-  FormattedTopics,
+  Topic,
   FullSessionLog,
+  TopicFormatted,
 } from "@/types";
 import { validateTopics } from "@/lib/validations/session-log/validators";
 import { getEffectiveTimeOfStudy } from "@/lib/time-provider/utils";
 
 interface getFullSessionLogProps {
   sessionFeelings: string;
-  sessionTopics: SessionReport[];
+  sessionTopics: Topic[];
   sessionTime: {
     sessionStartTime: number;
     sessionEndTime: number;
@@ -37,21 +37,21 @@ export const getFullSessionLog = ({
 };
 
 const getSessionTopics = (
-  sessionTopics: SessionReport[],
+  sessionTopics: Topic[],
   sessionEndTime: number
-): FormattedTopics[] => {
+): TopicFormatted[] => {
   return sessionTopics.map((topic) => {
     return {
-      topic: topic.topic,
+      title: topic.title,
       hashtags: topic.hashtags,
-      contentDescription: topic.description,
+      description: topic.description,
       timeOfStudy: getTopicTimeOfStudy(topic, sessionEndTime),
     };
   });
 };
 
 // Solution for when the component is unmounted on the Accordion
-const getTopicTimeOfStudy = (topic: SessionReport, sessionEndTime: number) => {
+const getTopicTimeOfStudy = (topic: Topic, sessionEndTime: number) => {
   const { status } = topic;
   switch (status) {
     case "play":

@@ -104,26 +104,26 @@ export type FullSessionLog = {
   endTime: Date;
   pauseDuration: number;
   feelingDescription: string;
-  topics: FormattedTopics[];
+  topics: Topic[];
 };
 
-export type FormattedTopics = {
-  topic: string;
+export type TopicFormatted = {
+  title: string;
   hashtags: string;
-  contentDescription: string;
+  description: string;
   timeOfStudy: number;
 };
 
-export type SessionReport = SessionTimer & {
-  id: string;
-  topic: string;
+export type Topic = SessionTimer & {
+  id?: string;
+  title: string;
   hashtags: string;
   description: string;
 };
 
-type SetSessionReport = Dispatch<SetStateAction<SessionReport[]>>;
+type SetTopic = Dispatch<SetStateAction<Topic[]>>;
 
 export type Session = {
-  sessions: SessionReport[];
-  setSessions: SetSessionReport;
+  sessions: Topic[];
+  setSessions: SetTopic;
 };

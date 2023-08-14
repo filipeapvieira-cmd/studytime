@@ -1,15 +1,17 @@
 "use client";
 
-import { SessionTextContext } from "@/src/ctx/session-text-provider";
 import { FC, ChangeEvent, useContext } from "react";
-import { Roboto } from "next/font/google";
 import CustomTextArea from "./ui/CustomTextArea";
 
-interface CustomEditorFeelingsFormProps {}
+interface CustomEditorFeelingsFormProps {
+  sessionFeelings: string;
+  setSessionFeelings: (sessionFeelings: string) => void;
+}
 
-const CustomEditorFeelingsForm: FC<CustomEditorFeelingsFormProps> = ({}) => {
-  const { sessionText: sessionFeelings, setSessionText: setSessionFeelings } =
-    useContext(SessionTextContext);
+const CustomEditorFeelingsForm: FC<CustomEditorFeelingsFormProps> = ({
+  sessionFeelings,
+  setSessionFeelings,
+}) => {
   const handleFeelingsChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setSessionFeelings(e.target.value);
   };

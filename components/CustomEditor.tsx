@@ -12,20 +12,24 @@ import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/components/skeletons/EditorSkeleton";
-import { SessionReport } from "@/types";
+import { FullSessionLog, Topic } from "@/types";
 import CustomEditorFeelingsForm from "./CustomEditor-Feelings-Form";
-import { SessionTextContext } from "@/src/ctx/session-text-provider";
+import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { Button } from "./ui/button";
 import { marked } from "marked";
 import { Icons } from "@/components/icons";
 import CustomEditorMarkdownPreview from "./CustomEditor-Markdown-Preview";
 import BtnOpenMkdownPrev from "./ui/BtnOpenMkdownPrev";
 
-interface CustomEditorProps {}
+interface CustomEditorProps {
+  action?: "update";
+  sessionData?: FullSessionLog;
+}
 
-const CustomEditor: FC<CustomEditorProps> = ({}) => {
+const CustomEditor: FC<CustomEditorProps> = ({ action, sessionData }) => {
   const { sessions: sessionTopics } = useContext(SaveSessionContext);
-  const { sessionText: sessionFeelings } = useContext(SessionTextContext);
+  const { sessionFeelings, setSessionFeelings } = useContext(FeelingsContext);
+
   const [indexToShow, setIndexToShow] = useState(sessionTopics.length - 1);
   const [isMarkdownPreviewerVisible, setIsMarkdownPreviewerVisible] =
     useState(true);
@@ -45,13 +49,6 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
       organizeTopics(sessionTopics),
       organizeFeelings(sessionFeelings)
     );
-    /* return {
-      __html: result,
-      test: organizeContent(
-        organizeTopics(sessionTopics),
-        organizeFeelings(sessionFeelings)
-      ),
-    }; */
   }, [sessionTopics, sessionFeelings]);
 
   return (
@@ -65,21 +62,24 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
           value={[String(indexToShow)]}
           //id="customEditorContainer"
         >
-          {sessionTopics.map((session, index) => (
+          {sessionTopics.map((topic, index) => (
             <AccordionItem
               value={String(index)}
-              key={session.id}
+              key={topic.id}
               data-state="open"
             >
               <CustomEditorItem
                 position={index}
-                session={session}
+                topic={topic}
                 openAccordionItem={setIndexToShow}
               />
             </AccordionItem>
           ))}
         </Accordion>
-        <CustomEditorFeelingsForm />
+        <CustomEditorFeelingsForm
+          sessionFeelings={sessionFeelings}
+          setSessionFeelings={setSessionFeelings}
+        />
       </div>
       <BtnOpenMkdownPrev
         handleOpenPreviewer={handleOpenPreviewer}
@@ -94,11 +94,11 @@ const CustomEditor: FC<CustomEditorProps> = ({}) => {
 
 export default CustomEditor;
 
-const organizeTopics = (topics: SessionReport[]) => {
+const organizeTopics = (topics: Topic[]) => {
   let text = "";
   text += hasDescription(topics) ? `# Description \n\n----------\n\n` : ``;
   topics.forEach((topic) => {
-    const subject = `### ${topic.topic} \n`;
+    const subject = `### ${topic.title} \n`;
     const hashtags = `#### ${topic.hashtags} \n`;
     const description = `${topic.description} \n`;
     const lineBreak = `----------\n`;
@@ -130,6 +130,6 @@ const getElementHeightById = (elementId: string) => {
   return height;
 };
 
-const hasDescription = (topics: SessionReport[]) => {
+const hasDescription = (topics: Topic[]) => {
   return topics.some((topic) => topic.description !== "");
 };

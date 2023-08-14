@@ -13,19 +13,19 @@ export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
       },
     },
     pauseDuration,
-    content: {
+    topic: {
       create: topics.map(
-        ({ topic, hashtags, contentDescription, timeOfStudy }) => ({
-          topic,
+        ({ title, hashtags, description, effectiveTimeOfStudy }) => ({
+          title,
           hashtags,
-          contentDescription,
-          timeOfStudy,
+          description,
+          timeOfStudy: effectiveTimeOfStudy,
         })
       ),
     },
     feeling: {
       create: {
-        feelingDescription,
+        description: feelingDescription,
       },
     },
   };

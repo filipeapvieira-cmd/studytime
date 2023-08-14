@@ -6,21 +6,21 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import CustomEditorForm from "@/components/CustomEditor-Topic-Form";
-import { SessionReport, Session } from "@/types";
+import { Topic, Session } from "@/types";
 
 interface CustomEditorItemProps {
   position: number;
-  session: SessionReport;
+  topic: Topic;
   openAccordionItem: Dispatch<SetStateAction<number>>;
 }
 
 const CustomEditorItem: FC<CustomEditorItemProps> = ({
   position,
-  session,
+  topic,
   openAccordionItem,
 }: CustomEditorItemProps) => {
-  const title = session.topic ? session.topic : `Topic - ${position + 1}`;
-  const hashtags = session.hashtags;
+  const title = topic.title ? topic.title : `Topic - ${position + 1}`;
+  const hashtags = topic.hashtags;
   return (
     <>
       <AccordionTrigger
@@ -35,7 +35,7 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
         {`${title} ${hashtags ? `| ${hashtags}` : ""}`}
       </AccordionTrigger>
       <AccordionContent>
-        <CustomEditorForm session={session} />
+        <CustomEditorForm topic={topic} />
       </AccordionContent>
     </>
   );

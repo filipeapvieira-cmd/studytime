@@ -5,7 +5,7 @@ import FormField from "@/components/FormField";
 import { Button } from "./ui/button";
 import { Icons } from "@/components/icons";
 import UserActionConfirmation from "./UserActionConfirmation";
-import { SessionTextContext } from "@/src/ctx/session-text-provider";
+import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { SessionLog, SessionLogUpdate } from "@/types";
 import {
   UPDATE_SESSION_ENDPOINT,
@@ -53,7 +53,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
     });
   }, [data]);
 
-  const { sessionTextUpdate } = useContext(SessionTextContext);
+  const { sessionFeelingsUpdate } = useContext(FeelingsContext);
   const { startTime, pauseDuration, endTime, effectiveTime, id, date } =
     sessionTiming;
   const actionType = useRef("");

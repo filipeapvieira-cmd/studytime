@@ -10,7 +10,7 @@ import {
 } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { SessionReport } from "@/types";
+import { Topic } from "@/types";
 import { SaveSessionContext } from "@/ctx/save-session-provider";
 import { createNewSession } from "@/ctx/save-session-provider";
 import {
@@ -29,21 +29,21 @@ import useSessionStatus from "@/src/hooks/useSessionStatus";
 import CustomTextArea from "./ui/CustomTextArea";
 
 interface CustomEditorFormProps {
-  session: SessionReport;
+  topic: Topic;
 }
 
 interface CurrentTopic {
-  topic: string;
+  title: string;
   hashtags: string;
   description: string;
 }
 
 const CustomEditorForm: FC<CustomEditorFormProps> = ({
-  session,
+  topic,
 }: CustomEditorFormProps) => {
   const sessionStatus = useSessionStatus();
   const { setSessions } = useContext(SaveSessionContext);
-  const { topic, hashtags, description } = session;
+  const { title, hashtags, description } = topic;
   const {
     effectiveTimeOfStudy,
     status,
@@ -52,9 +52,9 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     sessionPauseStartTime,
     sessionPauseEndTime,
     totalPauseTime,
-  } = session;
+  } = topic;
   const [currentTopic, setCurrentTopic] = useState<CurrentTopic>({
-    topic,
+    title,
     hashtags,
     description,
   });
@@ -78,7 +78,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
 
   useEffect(() => {
     const delay = setTimeout(() => {
-      setSessions((prevValue: SessionReport[]) =>
+      setSessions((prevValue: Topic[]) =>
         handleReplaceTopic(prevValue, currentTopic)
       );
     }, 1000);
@@ -86,26 +86,26 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   }, [currentTopic, setSessions]);
 
   useEffect(() => {
-    setSessions((prevValue: SessionReport[]) =>
+    setSessions((prevValue: Topic[]) =>
       handleTimerChange(prevValue, componentTimeState)
     );
   }, [componentTimeState]);
 
   const handleReplaceTopic = (
-    allTopics: SessionReport[],
+    allTopics: Topic[],
     currentTopic: CurrentTopic
   ) => {
-    const topicToUpdate: SessionReport = allTopics.find(
-      (topic) => topic.id === session.id
-    ) as SessionReport;
+    const topicToUpdate: Topic = allTopics.find(
+      (currentTopic) => currentTopic.id === topic.id
+    ) as Topic;
 
-    const { topic, description } = currentTopic;
+    const { title, description } = currentTopic;
     const hashtags = currentTopic.hashtags;
 
-    const updatedTopic = { ...topicToUpdate, topic, hashtags, description };
+    const updatedTopic = { ...topicToUpdate, title, hashtags, description };
 
-    return allTopics.map((topic) => {
-      if (topic.id === session.id) {
+    return allTopics.map((currentTopic) => {
+      if (currentTopic.id === topic.id) {
         return updatedTopic;
       } else {
         return topic;
@@ -114,12 +114,12 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   };
 
   const handleTimerChange = (
-    allTopics: SessionReport[],
+    allTopics: Topic[],
     componentTimeState: SessionTimer
   ) => {
-    const topicToUpdate: SessionReport = allTopics.find(
-      (topic) => topic.id === session.id
-    ) as SessionReport;
+    const topicToUpdate: Topic = allTopics.find(
+      (currentTopic) => currentTopic.id === topic.id
+    ) as Topic;
 
     const {
       effectiveTimeOfStudy,
@@ -142,8 +142,8 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
       totalPauseTime,
     };
 
-    return allTopics.map((topic) => {
-      if (topic.id === session.id) {
+    return allTopics.map((currentTopic) => {
+      if (currentTopic.id === topic.id) {
         return updatedTopic;
       } else {
         return topic;
@@ -152,15 +152,12 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   };
 
   const handleNewTopic = () => {
-    setSessions((prevValue: SessionReport[]) => [
-      ...prevValue,
-      createNewSession(),
-    ]);
+    setSessions((prevValue: Topic[]) => [...prevValue, createNewSession()]);
   };
 
   const handleDeleteTopic = () => {
-    setSessions((prevValue: SessionReport[]) =>
-      prevValue.filter((currentSession) => currentSession.id !== session.id)
+    setSessions((prevValue: Topic[]) =>
+      prevValue.filter((currentTopic) => currentTopic.id !== topic.id)
     );
   };
 
@@ -186,7 +183,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
           <Input
             className="rounded-none w-1/3 focus-visible:ring-0 focus-visible:ring-offset-0"
             placeholder="Subject"
-            value={currentTopic.topic}
+            value={currentTopic.title}
             name="topic"
             onChange={(e) => handleInputChange(e)}
           />

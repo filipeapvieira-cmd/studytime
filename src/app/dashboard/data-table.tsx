@@ -35,6 +35,7 @@ import TableFilters from "@/components/table/Table-filters";
 import EditSession from "@/components/EditSession";
 import { StudySession } from "@/types/tanstack-table";
 import { set } from "date-fns";
+import { FullSessionLog } from "@/types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -45,7 +46,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const defaultStudySession: StudySession = {
+  const defaultStudySession = {
     id: 0,
     date: "",
     effectiveTime: "",
@@ -71,8 +72,7 @@ export function DataTable<TData, TValue>({
   const [inputGlobalFilter, setInputGlobalFilter] = useState("");
   const [rowSelection, setRowSelection] = useState({});
   const [isEditSessionOpen, setIsEditSessionOpen] = useState(false);
-  const [editSessionData, setEditSessionData] =
-    useState<StudySession>(defaultStudySession);
+  const [editSessionData, setEditSessionData] = useState({});
 
   // Only filter if column is visible
   const filterFn = useCallback(
@@ -122,7 +122,8 @@ export function DataTable<TData, TValue>({
 
   const handleCellClick = (cell: Cell<TData, unknown>) => {
     if (cell.column.id !== "select") {
-      const sessionData: StudySession = cell.row.original as StudySession;
+      console.log(cell.row.original);
+      const sessionData = cell.row.original as FullSessionLog;
       setEditSessionData(sessionData);
       setIsEditSessionOpen(true);
     }

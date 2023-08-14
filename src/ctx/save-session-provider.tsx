@@ -8,11 +8,12 @@ import {
   useEffect,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { SessionReport, Session } from "@/types";
+import { Topic, Session } from "@/types";
 
-export const createNewSession = (): SessionReport => ({
+//TODO: rename this method to createNewTopic
+export const createNewSession = (): Topic => ({
   id: uuidv4(),
-  topic: "",
+  title: "",
   hashtags: "",
   description: "",
   effectiveTimeOfStudy: 0,
@@ -35,8 +36,10 @@ interface SaveSessionProvider {
   children: React.ReactNode;
 }
 
+// Handles Topics
+//TODO: rename [sessionsReport, setSessionsReport] appropriately
 export default function SaveSessionProvider({ children }: SaveSessionProvider) {
-  const [sessionsReport, setSessionsReport] = useState<SessionReport[]>(
+  const [sessionsReport, setSessionsReport] = useState<Topic[]>(
     newSessionCtxDefaultValues.sessions
   );
 

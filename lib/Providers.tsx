@@ -3,7 +3,7 @@
 import { SessionProvider } from "next-auth/react";
 import TimerProvider from "@/src/ctx/time-provider";
 import ChronoProvider from "@/src/ctx/chrono-provider";
-import SessionTextProvider from "@/src/ctx/session-text-provider";
+import FeelingsProvider from "@/src/ctx/session-feelings-provider";
 import UploadImagesProvider from "@/src/ctx/upload-images-provider";
 import EditSessionProvider from "@/src/ctx/edit-sessions-provider";
 import SaveSessionProvider from "@/ctx/save-session-provider";
@@ -22,9 +22,9 @@ const Providers: FC<ProvidersProps> = ({ children }) => {
           <EditSessionProvider>
             <TimerProvider>
               <ChronoProvider>
-                <SessionTextProvider>
+                <FeelingsProvider>
                   <UploadImagesProvider>{children}</UploadImagesProvider>
-                </SessionTextProvider>
+                </FeelingsProvider>
               </ChronoProvider>
             </TimerProvider>
           </EditSessionProvider>

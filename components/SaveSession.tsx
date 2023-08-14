@@ -6,7 +6,7 @@ import { Icons } from "@/components/icons";
 import Alert from "@/components/Alert";
 import { retrieveTextFromJson } from "@/lib/utils";
 import { TimeContext } from "@/src/ctx/time-provider";
-import { SessionTextContext } from "@/src/ctx/session-text-provider";
+import { SessionTextContext } from "@/src/ctx/session-feelings-provider";
 import { getFullSessionLog, persistSession } from "@/lib/session-log/utils";
 import { FullSessionLog, SessionLog } from "@/types";
 import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
