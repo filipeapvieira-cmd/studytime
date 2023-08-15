@@ -33,7 +33,7 @@ export const createNewTopic = (): Topic => ({
 });
 
 export const topicsCtxDefaultValues: TopicsContextProps = {
-  sessionTopics: [createNewTopic()],
+  sessionTopics: [createNewTopic(), createNewTopic(), createNewTopic()],
   setSessionTopics: () => [],
 };
 
@@ -49,7 +49,11 @@ export default function TopicsProvider({ children }: SaveSessionProvider) {
   );
 
   useEffect(() => {
+    console.log("State changed:");
+    console.log(sessionTopics);
+    console.count();
     if (sessionTopics.length === 0) {
+      console.trace("About to set session topics");
       setSessionTopics(topicsCtxDefaultValues.sessionTopics);
     }
   }, [sessionTopics]);

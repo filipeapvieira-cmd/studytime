@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useContext } from "react";
+import { FC, memo, useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import Alert from "@/components/Alert";
@@ -9,7 +9,7 @@ import { useStudySession } from "@/src/hooks/useStudySession";
 
 interface NewSessionProps {}
 
-const NewSession: FC<NewSessionProps> = ({}) => {
+const NewSessionComponent: FC<NewSessionProps> = ({}) => {
   //console.count("NewSession");
   const { resetStudySession } = useStudySession();
   const { title, description } = retrieveTextFromJson("restartSession");
@@ -31,5 +31,8 @@ const NewSession: FC<NewSessionProps> = ({}) => {
     </Alert>
   );
 };
+
+const NewSession = memo(NewSessionComponent);
+NewSession.displayName = "NewSession";
 
 export default NewSession;

@@ -7,12 +7,16 @@ import {
   useState,
   useEffect,
   useMemo,
+  Dispatch,
+  SetStateAction,
 } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Topic } from "@/types";
-import { TopicsContext } from "@/src/ctx/session-topics-provider";
-import { createNewTopic } from "@/src/ctx/session-topics-provider";
+import {
+  TopicsContext,
+  createNewTopic,
+} from "@/src/ctx/session-topics-provider";
 import {
   handleState,
   statusToHandler,
@@ -30,6 +34,7 @@ import CustomTextArea from "./ui/CustomTextArea";
 
 interface CustomEditorFormProps {
   topic: Topic;
+  setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
 }
 
 interface CurrentTopic {
@@ -40,11 +45,15 @@ interface CurrentTopic {
 
 const CustomEditorForm: FC<CustomEditorFormProps> = ({
   topic,
+  setSessionTopics,
 }: CustomEditorFormProps) => {
+  const { sessionTopics } = useContext(TopicsContext);
+  console.log(sessionTopics);
   const sessionStatus = useSessionStatus();
-  const { setSessionTopics } = useContext(TopicsContext);
-  const { title, hashtags, description } = topic;
   const {
+    title,
+    hashtags,
+    description,
     effectiveTimeOfStudy,
     status,
     sessionStartTime,
@@ -53,6 +62,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     sessionPauseEndTime,
     totalPauseTime,
   } = topic;
+
   const [currentTopic, setCurrentTopic] = useState<CurrentTopic>({
     title,
     hashtags,
@@ -77,30 +87,31 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   }, [sessionStatus]);
 
   useEffect(() => {
+    setSessionTopics(
+      (prevValue: Topic[]) => handleTimerChange(prevValue, componentTimeState)
+      //[...prevValue]
+    );
+  }, [componentTimeState]);
+
+  useEffect(() => {
     const delay = setTimeout(() => {
       setSessionTopics((prevValue: Topic[]) =>
-        handleReplaceTopic(prevValue, currentTopic)
+        handleTopicUpdate(prevValue, currentTopic)
       );
     }, 1000);
     return () => clearTimeout(delay);
   }, [currentTopic, setSessionTopics]);
 
-  useEffect(() => {
-    setSessionTopics((prevValue: Topic[]) =>
-      handleTimerChange(prevValue, componentTimeState)
-    );
-  }, [componentTimeState]);
-
-  const handleReplaceTopic = (
+  const handleTopicUpdate = (
     allTopics: Topic[],
-    currentTopic: CurrentTopic
+    updatedTopicInformation: CurrentTopic
   ) => {
     const topicToUpdate: Topic = allTopics.find(
       (currentTopic) => currentTopic.id === topic.id
     ) as Topic;
 
-    const { title, description } = currentTopic;
-    const hashtags = currentTopic.hashtags;
+    const { title, description } = updatedTopicInformation;
+    const hashtags = updatedTopicInformation.hashtags;
 
     const updatedTopic = { ...topicToUpdate, title, hashtags, description };
 
@@ -108,7 +119,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
       if (currentTopic.id === topic.id) {
         return updatedTopic;
       } else {
-        return topic;
+        return currentTopic;
       }
     });
   };
@@ -146,7 +157,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
       if (currentTopic.id === topic.id) {
         return updatedTopic;
       } else {
-        return topic;
+        return currentTopic;
       }
     });
   };
@@ -184,7 +195,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
             className="rounded-none w-1/3 focus-visible:ring-0 focus-visible:ring-offset-0"
             placeholder="Subject"
             value={currentTopic.title}
-            name="topic"
+            name="title"
             onChange={(e) => handleInputChange(e)}
           />
           <Input

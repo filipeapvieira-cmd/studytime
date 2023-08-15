@@ -51,7 +51,7 @@ const EditSession: FC<EditSessionProps> = ({
           </AlertDialogTitle>
           <AlertDialogDescription asChild>
             <>
-              <CustomEditor action="update" sessionData={data} />
+              {/* <CustomEditor action="update" sessionData={data} /> */}
               <ImageUpload />
             </>
           </AlertDialogDescription>

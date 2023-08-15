@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import {
-  SessionTextContext,
-  sessionTextCtxDefaultValues,
+  FeelingsContext,
+  feelingsCtxDefaultValues,
 } from "@/src/ctx/session-feelings-provider";
 import { TimeContext, timeCtxDefaultValues } from "@/src/ctx/time-provider";
 import {
@@ -13,23 +13,24 @@ import {
   uploadImagesCtxDefaultValues,
 } from "@/src/ctx/upload-images-provider";
 import {
-  SaveSessionContext,
-  newSessionCtxDefaultValues,
+  TopicsContext,
+  topicsCtxDefaultValues,
 } from "../ctx/session-topics-provider";
 
 export const useStudySession = () => {
-  const { setSessionText } = useContext(SessionTextContext);
+  const { setSessionFeelings } = useContext(FeelingsContext);
   const { setSessionTimer } = useContext(TimeContext);
   const { setSessionChrono } = useContext(ChronoContext);
   const { setValidFile } = useContext(UploadImagesContext);
-  const { setSessions } = useContext(SaveSessionContext);
+  const { setSessionTopics } = useContext(TopicsContext);
 
   const resetStudySession = () => {
-    setSessionText(sessionTextCtxDefaultValues.sessionText);
+    setSessionFeelings(feelingsCtxDefaultValues.sessionFeelings);
     setSessionTimer(timeCtxDefaultValues.sessionTimer);
     setSessionChrono(chronoCtxDefaultValues.sessionChrono);
     setValidFile(uploadImagesCtxDefaultValues.validFile);
-    setSessions([]);
+    console.trace("About to set session topics");
+    setSessionTopics([]);
   };
   return { resetStudySession };
 };

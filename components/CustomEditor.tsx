@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import CustomEditorItem from "./CustomEditor-Item";
-import { SaveSessionContext } from "@/src/ctx/session-topics-provider";
+import { TopicsContext } from "@/src/ctx/session-topics-provider";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
@@ -27,18 +27,19 @@ interface CustomEditorProps {
 }
 
 const CustomEditor: FC<CustomEditorProps> = ({ action, sessionData }) => {
-  const { sessions: sessionTopics } = useContext(SaveSessionContext);
+  const { sessionTopics, setSessionTopics } = useContext(TopicsContext);
   const { sessionFeelings, setSessionFeelings } = useContext(FeelingsContext);
 
-  const [indexToShow, setIndexToShow] = useState(sessionTopics.length - 1);
+  const lastTopic = sessionTopics.length - 1;
+  const [topicToShow, setTopicToShow] = useState(lastTopic);
   const [isMarkdownPreviewerVisible, setIsMarkdownPreviewerVisible] =
     useState(true);
 
   useEffect(() => {
-    setIndexToShow(sessionTopics.length - 1);
-  }, [sessionTopics.length]);
+    setTopicToShow(lastTopic);
+  }, [sessionTopics.length, lastTopic]);
 
-  console.log(sessionTopics);
+  //console.log(sessionTopics);
 
   const handleOpenPreviewer = () => {
     setIsMarkdownPreviewerVisible((prevValue) => !prevValue);
@@ -59,7 +60,7 @@ const CustomEditor: FC<CustomEditorProps> = ({ action, sessionData }) => {
         </h1>
         <Accordion
           type="multiple"
-          value={[String(indexToShow)]}
+          value={[String(topicToShow)]}
           //id="customEditorContainer"
         >
           {sessionTopics.map((topic, index) => (
@@ -71,7 +72,8 @@ const CustomEditor: FC<CustomEditorProps> = ({ action, sessionData }) => {
               <CustomEditorItem
                 position={index}
                 topic={topic}
-                openAccordionItem={setIndexToShow}
+                openAccordionItem={setTopicToShow}
+                setSessionTopics={setSessionTopics}
               />
             </AccordionItem>
           ))}
