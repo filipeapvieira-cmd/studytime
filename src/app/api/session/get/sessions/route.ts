@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
-import { Topic, TopicDto, TopicFormatted } from "@/types";
+import { Topic, studySessionDto, TopicFormatted } from "@/types";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -83,7 +83,7 @@ const mapTopics = (topic: TopicFormatted) => ({
   timeOfStudy: topic.timeOfStudy,
 });
 
-const mapStudySession = (studySessions: any): TopicDto[] => {
+const mapStudySession = (studySessions: any): studySessionDto[] => {
   const { StudySession: sessions } = studySessions ?? {};
 
   //console.log(sessions);

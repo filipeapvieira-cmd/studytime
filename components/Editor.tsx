@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 import { FC, useState, useContext, useEffect } from "react";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import EditorSkeleton from "@/components/skeletons/EditorSkeleton";
-import { StudySession } from "@/types/tanstack-table";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
@@ -15,7 +14,7 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
 
 interface EditorProps extends React.HTMLProps<HTMLDivElement> {
   action?: "update";
-  sessionData?: StudySession;
+  sessionData?: any;
 }
 
 const Editor: FC<EditorProps> = ({ className, action, sessionData }) => {

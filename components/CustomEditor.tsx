@@ -12,7 +12,7 @@ import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/components/skeletons/EditorSkeleton";
-import { FullSessionLog, Topic } from "@/types";
+import { studySessionDto, Topic } from "@/types";
 import CustomEditorFeelingsForm from "./CustomEditor-Feelings-Form";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { Button } from "./ui/button";
@@ -23,10 +23,13 @@ import BtnOpenMkdownPrev from "./ui/BtnOpenMkdownPrev";
 
 interface CustomEditorProps {
   action?: "update";
-  sessionData?: FullSessionLog;
+  studySessionToUpdate?: studySessionDto;
 }
 
-const CustomEditor: FC<CustomEditorProps> = ({ action, sessionData }) => {
+const CustomEditor: FC<CustomEditorProps> = ({
+  action,
+  studySessionToUpdate: sessionData,
+}) => {
   const { sessionTopics, setSessionTopics } = useContext(TopicsContext);
   const { sessionFeelings, setSessionFeelings } = useContext(FeelingsContext);
 

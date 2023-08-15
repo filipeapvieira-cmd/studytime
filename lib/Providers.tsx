@@ -5,7 +5,6 @@ import TimerProvider from "@/src/ctx/time-provider";
 import ChronoProvider from "@/src/ctx/chrono-provider";
 import FeelingsProvider from "@/src/ctx/session-feelings-provider";
 import UploadImagesProvider from "@/src/ctx/upload-images-provider";
-import EditSessionProvider from "@/src/ctx/edit-sessions-provider";
 import TopicsProvider from "@/src/ctx/session-topics-provider";
 import { ThemeProvider } from "next-themes";
 import { FC } from "react";
@@ -19,15 +18,13 @@ const Providers: FC<ProvidersProps> = ({ children }) => {
     <ThemeProvider attribute="class" enableSystem defaultTheme="system">
       <SessionProvider>
         <TopicsProvider>
-          <EditSessionProvider>
-            <TimerProvider>
-              <ChronoProvider>
-                <FeelingsProvider>
-                  <UploadImagesProvider>{children}</UploadImagesProvider>
-                </FeelingsProvider>
-              </ChronoProvider>
-            </TimerProvider>
-          </EditSessionProvider>
+          <TimerProvider>
+            <ChronoProvider>
+              <FeelingsProvider>
+                <UploadImagesProvider>{children}</UploadImagesProvider>
+              </FeelingsProvider>
+            </ChronoProvider>
+          </TimerProvider>
         </TopicsProvider>
       </SessionProvider>
     </ThemeProvider>

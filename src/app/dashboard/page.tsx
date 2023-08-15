@@ -7,7 +7,7 @@ import useSWR from "swr";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { useToast } from "@/components/ui/use-toast";
 import { GET_ALL_SESSIONS_ENDPOINT } from "@/constants/config";
-import { TopicDto } from "@/types";
+import { studySessionDto } from "@/types";
 
 interface DashboardPageProps {}
 
@@ -37,7 +37,7 @@ const DashboardPage: FC<DashboardPageProps> = ({}) => {
 
   if (!data || error) return <TableSkeleton />;
 
-  const { data: extractedData }: { data: TopicDto[] } = data;
+  const { data: extractedData }: { data: studySessionDto[] } = data;
 
   return (
     <div className="container mx-auto py-10">

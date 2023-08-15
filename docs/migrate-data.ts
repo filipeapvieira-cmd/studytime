@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { hash } from "bcrypt";
 import { PrismaClient, Prisma } from "@prisma/client";
 import { adaptTimeZone } from "@/lib/session-log/utils";
-
+/*
 type ImportedSessionData = {
   id: number;
   session_content: string;
@@ -93,3 +93,4 @@ export const migrateSessionData = async () => {
   });
   console.log(`Ended Migration. A total of ${counter} records were migrated`);
 };
+*/

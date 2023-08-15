@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Icons } from "@/components/icons";
 import UserActionConfirmation from "./UserActionConfirmation";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
-import { SessionLog, SessionLogUpdate, TopicDto } from "@/types";
+import { SessionLog, SessionLogUpdate, studySessionDto } from "@/types";
 import {
   UPDATE_SESSION_ENDPOINT,
   HTTP_METHOD,
@@ -25,7 +25,7 @@ import { mutate } from "swr";
 
 interface EditSessionControlProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: TopicDto;
+  data: studySessionDto;
 }
 
 const EditSessionControl: FC<EditSessionControlProps> = ({

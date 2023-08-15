@@ -123,7 +123,7 @@ export type Topic = SessionTimer & {
 
 /* GET ALL SESSIONS */
 
-export type TopicDto = {
+export type studySessionDto = {
   id: number;
   date: string;
   startTime: string;

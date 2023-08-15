@@ -1,7 +1,6 @@
 import Counter from "@/components/Control";
 import Editor from "@/components/Editor";
 import ImageUpload from "@/components/ImageUpload";
-import { migrateSessionData } from "@/docs/migrate-data";
 import { createDummyData } from "@/docs/dummy-data";
 import CustomEditor from "@/components/CustomEditor";
 

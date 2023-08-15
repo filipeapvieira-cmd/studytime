@@ -34,7 +34,7 @@ import { Icons } from "@/components/icons";
 import TableFilters from "@/components/table/Table-filters";
 import EditSession from "@/components/EditSession";
 import { set } from "date-fns";
-import { FullSessionLog, TopicDto } from "@/types";
+import { FullSessionLog, studySessionDto } from "@/types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
   const [inputGlobalFilter, setInputGlobalFilter] = useState("");
   const [rowSelection, setRowSelection] = useState({});
   const [isEditSessionOpen, setIsEditSessionOpen] = useState(false);
-  const [editSessionData, setEditSessionData] = useState({});
+  const [sessionToEdit, setSessionToEdit] = useState({});
 
   // Only filter if column is visible
   const filterFn = useCallback(
@@ -122,8 +122,8 @@ export function DataTable<TData, TValue>({
   const handleCellClick = (cell: Cell<TData, unknown>) => {
     if (cell.column.id !== "select") {
       console.log(cell.row.original);
-      const sessionData = cell.row.original as FullSessionLog;
-      setEditSessionData(sessionData);
+      const sessionData = cell.row.original as studySessionDto;
+      setSessionToEdit(sessionData);
       setIsEditSessionOpen(true);
     }
   };
@@ -131,9 +131,9 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <EditSession
-        open={isEditSessionOpen}
-        close={setIsEditSessionOpen}
-        data={editSessionData}
+        isModalOpen={isEditSessionOpen}
+        handleModalClose={setIsEditSessionOpen}
+        selectedStudySession={sessionToEdit as studySessionDto}
       />
       <TableFilters
         columnFilters={columnFilters}
