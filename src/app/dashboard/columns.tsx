@@ -113,26 +113,27 @@ export const columns: ColumnDef<StudySession>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "content",
+    accessorKey: "topics",
     header: "Content",
     cell: ({ row }) => {
-      const rawContent: [{ topic: string; subtopic: string; text: string }] =
-        row.getValue("content");
-      const topicAndSubTopic = rawContent.map((content, index) => (
+      const rawContent: [
+        { title: string; hashtags: string; description: string }
+      ] = row.getValue("topics");
+      const topics = rawContent.map((topic, index) => (
         <SessionTopic
           key={index}
-          topic={content.topic}
-          subtopic={content.text}
+          title={topic.title}
+          hashtags={topic.hashtags}
           searchInput={
             (row.columnFiltersMeta.content as RankAndValue)?.value || ""
           }
         />
       ));
-      return <div className="space-y-2">{topicAndSubTopic}</div>;
+      return <div className="space-y-2">{topics}</div>;
     },
   },
   {
-    accessorKey: "feeling",
+    accessorKey: "feelings",
     header: ({ column }) => {
       return (
         <Button
@@ -145,7 +146,7 @@ export const columns: ColumnDef<StudySession>[] = [
       );
     },
     cell: ({ row }) => {
-      const text: string = row.getValue("feeling");
+      const text: string = row.getValue("feelings");
       const searchInput =
         (row.columnFiltersMeta.feeling as RankAndValue)?.value || "";
       return (

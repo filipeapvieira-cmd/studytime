@@ -4,22 +4,22 @@ import Highlight from "./Highlight";
 import { sub } from "date-fns";
 
 interface SessionTopicProps {
-  topic: string;
-  subtopic: string;
+  title: string;
+  hashtags: string;
   searchInput: string;
 }
 
 const SessionTopic: FC<SessionTopicProps> = ({
-  topic,
-  subtopic,
+  title,
+  hashtags,
   searchInput,
 }) => {
   return (
     <div className="flex items-center justify-start gap-1 w-96 flex-grow-0">
       <Badge variant="default" className="rounded-md">
-        <Highlight text={topic} searchInput={searchInput} />
+        <Highlight text={title} searchInput={searchInput} />
       </Badge>
-      <Highlight text={subtopic} searchInput={searchInput} />
+      <Highlight text={hashtags} searchInput={searchInput} />
     </div>
   );
 };
