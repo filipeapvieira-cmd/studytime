@@ -48,7 +48,6 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   setSessionTopics,
 }: CustomEditorFormProps) => {
   const { sessionTopics } = useContext(TopicsContext);
-  console.log(sessionTopics);
   const sessionStatus = useSessionStatus();
   const {
     title,
@@ -87,9 +86,8 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   }, [sessionStatus]);
 
   useEffect(() => {
-    setSessionTopics(
-      (prevValue: Topic[]) => handleTimerChange(prevValue, componentTimeState)
-      //[...prevValue]
+    setSessionTopics((prevValue: Topic[]) =>
+      handleTimerChange(prevValue, componentTimeState)
     );
   }, [componentTimeState]);
 

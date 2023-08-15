@@ -56,7 +56,7 @@ model Topic {
 
   studySession StudySession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  @@map(name: "contents")
+  @@map(name: "topics")
 }
 
 model Feeling {
