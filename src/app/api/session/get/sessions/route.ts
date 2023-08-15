@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
+import { Topic, TopicDto, TopicFormatted } from "@/types";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -25,7 +26,7 @@ export async function GET() {
       include: {
         StudySession: {
           include: {
-            content: true,
+            topic: true,
             feeling: true,
           },
         },
@@ -75,14 +76,18 @@ const toDateISOString = (date: Date) => new Date(date).toISOString();
 const toTimeISOString = (date: Date) => toDateISOString(date).slice(11, 19);
 const toDateOnlyISOString = (date: Date) => toDateISOString(date).slice(0, 10);
 
-const mapContent = (content: any) => ({
-  text: content.contentDescription,
-  topic: content.topic,
-  subtopic: content.subtopic,
+const mapTopics = (topic: TopicFormatted) => ({
+  description: topic.description,
+  title: topic.title,
+  hashtags: topic.hashtags,
+  timeOfStudy: topic.timeOfStudy,
 });
 
-const mapStudySession = (studySessions: any) => {
+const mapStudySession = (studySessions: any): TopicDto[] => {
   const { StudySession: sessions } = studySessions ?? {};
+
+  //console.log(sessions);
+  //sessions.forEach((sessions) => console.log(sessions.topic));
 
   const studySessionDto = sessions?.map((session: any) => {
     const effectiveTime =
@@ -95,8 +100,8 @@ const mapStudySession = (studySessions: any) => {
       endTime: toTimeISOString(session.endTime),
       pauseDuration: toTimeISOString(new Date(session.pauseDuration)),
       effectiveTime: toTimeISOString(new Date(effectiveTime)),
-      content: session.content.map((content: any) => mapContent(content)),
-      feeling: session.feeling?.feelingDescription,
+      topics: session.topic.map((topic: any) => mapTopics(topic)),
+      feelings: session.feeling?.description,
     };
   });
 

@@ -29,7 +29,6 @@ export const useStudySession = () => {
     setSessionTimer(timeCtxDefaultValues.sessionTimer);
     setSessionChrono(chronoCtxDefaultValues.sessionChrono);
     setValidFile(uploadImagesCtxDefaultValues.validFile);
-    console.trace("About to set session topics");
     setSessionTopics([]);
   };
   return { resetStudySession };

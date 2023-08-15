@@ -120,3 +120,16 @@ export type Topic = SessionTimer & {
   hashtags: string;
   description: string;
 };
+
+/* GET ALL SESSIONS */
+
+export type TopicDto = {
+  id: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  pauseDuration: string;
+  effectiveTime: string;
+  topics: TopicFormatted[];
+  feelings?: string;
+};
