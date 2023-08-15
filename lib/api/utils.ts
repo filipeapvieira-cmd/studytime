@@ -21,11 +21,15 @@ export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
         timeOfStudy,
       })),
     },
-    feeling: {
+  };
+
+  if (feelingDescription && feelingDescription.trim() !== "") {
+    sessionData.feeling = {
       create: {
         description: feelingDescription,
       },
-    },
-  };
+    };
+  }
+
   return sessionData;
 };
