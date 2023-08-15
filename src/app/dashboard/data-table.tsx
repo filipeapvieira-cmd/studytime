@@ -33,9 +33,8 @@ import { globalFilterFn } from "@/src/app/dashboard/columns";
 import { Icons } from "@/components/icons";
 import TableFilters from "@/components/table/Table-filters";
 import EditSession from "@/components/EditSession";
-import { StudySession } from "@/types/tanstack-table";
 import { set } from "date-fns";
-import { FullSessionLog } from "@/types";
+import { FullSessionLog, TopicDto } from "@/types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

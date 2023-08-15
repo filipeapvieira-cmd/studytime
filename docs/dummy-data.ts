@@ -133,17 +133,17 @@ export async function createDummyData() {
         },
       },
       pauseDuration: timeAndDate.pausedTime,
-      content: {
+      topic: {
         create: description.topics.map((topic) => ({
-          topic: topic.topic,
+          title: topic.topic,
           hashtags: topic.subtopic,
-          contentDescription: topic.contentDescription,
+          description: topic.contentDescription,
           timeOfStudy: 45,
         })),
       },
       feeling: {
         create: {
-          feelingDescription: description.feelings,
+          description: description.feelings,
         },
       },
     };

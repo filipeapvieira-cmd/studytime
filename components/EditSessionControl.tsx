@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Icons } from "@/components/icons";
 import UserActionConfirmation from "./UserActionConfirmation";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
-import { SessionLog, SessionLogUpdate } from "@/types";
+import { SessionLog, SessionLogUpdate, TopicDto } from "@/types";
 import {
   UPDATE_SESSION_ENDPOINT,
   HTTP_METHOD,
@@ -14,7 +14,6 @@ import {
   GET_ALL_SESSIONS_ENDPOINT,
 } from "@/constants/config";
 import { usePersistSession } from "@/src/hooks/usePersistSession";
-import { StudySession } from "@/types/tanstack-table";
 import {
   getSaveBtnIcon,
   getDeleteBtnIcon,
@@ -26,7 +25,7 @@ import { mutate } from "swr";
 
 interface EditSessionControlProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: StudySession;
+  data: TopicDto;
 }
 
 const EditSessionControl: FC<EditSessionControlProps> = ({

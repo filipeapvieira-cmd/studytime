@@ -4,7 +4,7 @@ export type RankAndValue = FilterMeta & {
   value: string;
 };
 
-export type StudySession = {
+/* export type StudySession = {
   id: number;
   date: string;
   effectiveTime: string;
@@ -13,4 +13,4 @@ export type StudySession = {
   endTime: string;
   startTime: string;
   pauseDuration: string;
-};
+}; */

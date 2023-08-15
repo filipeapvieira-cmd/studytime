@@ -12,7 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { StudySession } from "@/types/tanstack-table";
+import { TopicDto } from "@/types";
 import Editor from "@/components/Editor";
 import ImageUpload from "@/components/ImageUpload";
 import EditSessionControl from "./EditSessionControl";
@@ -22,7 +22,7 @@ import CustomEditor from "@/components/CustomEditor";
 interface EditSessionProps {
   open: boolean;
   close: React.Dispatch<React.SetStateAction<boolean>>;
-  data: StudySession;
+  data: TopicDto[];
 }
 
 const EditSession: FC<EditSessionProps> = ({
@@ -39,7 +39,9 @@ const EditSession: FC<EditSessionProps> = ({
               <div className="flex justify-between">
                 <div className="flex space-x-2">
                   <Icons.calendar />
-                  <p className="text-lg font-bold">{data?.date}</p>
+                  {/* TODO: data[0].date -> 
+                  take the date of the first index because they should all share the same date. this needs to be refactored and verified */}
+                  <p className="text-lg font-bold">{data[0].date}</p>
                 </div>
                 <Icons.closeCross
                   onClick={() => close(false)}

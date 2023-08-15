@@ -16,18 +16,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import SessionTopic from "@/components/SessionTopic";
 import { RankAndValue } from "@/types/tanstack-table";
 import Highlight from "@/components/Highlight";
-import { StudySession } from "@/types/tanstack-table";
+import { TopicDto } from "@/types/index";
 
 /*
 Columns are where you define the core of what your table will look like. 
 They define the data that will be displayed, how it will be formatted, sorted and filtered
 */
 
-export const contentFilterFn: FilterFn<StudySession> = (
-  row,
-  id,
-  filterValue
-) => {
+export const contentFilterFn: FilterFn<TopicDto> = (row, id, filterValue) => {
   const rawContent: [{ topic: string; subtopic: string; text: string }] =
     row.getValue("content");
   return rawContent.some(
@@ -37,7 +33,7 @@ export const contentFilterFn: FilterFn<StudySession> = (
   );
 };
 
-export const dateFilterFn: FilterFn<StudySession> = (row, id, filterValue) => {
+export const dateFilterFn: FilterFn<TopicDto> = (row, id, filterValue) => {
   // Parse the date from the row
   const rowDate = new Date(row.getValue("date"));
   return rowDate >= filterValue.from && rowDate <= filterValue.to;
@@ -88,7 +84,7 @@ export const globalFilterFn: FilterFn<any> = (
   return itemRank.passed;
 };
 
-export const columns: ColumnDef<StudySession>[] = [
+export const columns: ColumnDef<TopicDto>[] = [
   {
     id: "select",
     header: ({ table }) => {
