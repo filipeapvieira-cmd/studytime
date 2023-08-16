@@ -13,8 +13,8 @@ import { Topic, studySessionDto } from "@/types";
 interface TopicsContextProps {
   sessionTopics: Topic[];
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
-  sessionTopicsUpdate: studySessionDto[];
-  setSessionTopicsUpdate: Dispatch<SetStateAction<studySessionDto[]>>;
+  sessionTopicsUpdate: Topic[];
+  setSessionTopicsUpdate: Dispatch<SetStateAction<Topic[]>>;
 }
 
 export const createNewTopic = (): Topic => ({
@@ -48,8 +48,7 @@ export default function TopicsProvider({ children }: SaveSessionProvider) {
   const [sessionTopics, setSessionTopics] = useState<Topic[]>(
     topicsCtxDefaultValues.sessionTopics
   );
-  const [sessionTopicsUpdate, setSessionTopicsUpdate] =
-    useState<studySessionDto[]>(null);
+  const [sessionTopicsUpdate, setSessionTopicsUpdate] = useState<Topic[]>(null);
 
   useEffect(() => {
     console.log("TopicsProvider State changed:");

@@ -80,7 +80,7 @@ const mapTopics = (topic: TopicFormatted) => ({
   description: topic.description,
   title: topic.title,
   hashtags: topic.hashtags,
-  timeOfStudy: topic.timeOfStudy,
+  effectiveTimeOfStudy: topic.effectiveTimeOfStudy,
 });
 
 const mapStudySession = (studySessions: any): studySessionDto[] => {

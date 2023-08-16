@@ -111,7 +111,7 @@ export type TopicFormatted = {
   title: string;
   hashtags: string;
   description: string;
-  timeOfStudy: number;
+  effectiveTimeOfStudy: number;
 };
 
 export type Topic = SessionTimer & {

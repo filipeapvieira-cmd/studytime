@@ -4,7 +4,7 @@ import React, { createContext } from "react";
 
 interface FeelingsContextProps {
   sessionFeelings: string;
-  setSessionFeelings: (sessionFeelings: string) => void;
+  setSessionFeelings: React.Dispatch<React.SetStateAction<string>>;
   sessionFeelingsUpdate: string;
   setSessionFeelingsUpdate: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -27,7 +27,9 @@ export default function FeelingsProvider({
   const [sessionFeelings, setSessionFeelings] = React.useState(
     feelingsCtxDefaultValues.sessionFeelings
   );
-  const [sessionFeelingsUpdate, setSessionFeelingsUpdate] = React.useState("");
+  const [sessionFeelingsUpdate, setSessionFeelingsUpdate] = React.useState(
+    feelingsCtxDefaultValues.sessionFeelings
+  );
 
   return (
     <FeelingsContext.Provider

@@ -45,7 +45,7 @@ const getSessionTopics = (
       title: topic.title,
       hashtags: topic.hashtags,
       description: topic.description,
-      timeOfStudy: getTopicTimeOfStudy(topic, sessionEndTime),
+      effectiveTimeOfStudy: getTopicTimeOfStudy(topic, sessionEndTime),
     };
   });
 };
