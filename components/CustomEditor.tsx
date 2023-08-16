@@ -20,6 +20,7 @@ import { marked } from "marked";
 import { Icons } from "@/components/icons";
 import CustomEditorMarkdownPreview from "./CustomEditor-Markdown-Preview";
 import BtnOpenMkdownPrev from "./ui/BtnOpenMkdownPrev";
+import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
 
 interface CustomEditorProps {
   action?: "update";
@@ -28,10 +29,19 @@ interface CustomEditorProps {
 
 const CustomEditor: FC<CustomEditorProps> = ({
   action,
-  studySessionToUpdate: sessionData,
+  studySessionToUpdate,
 }) => {
-  const { sessionTopics, setSessionTopics } = useContext(TopicsContext);
-  const { sessionFeelings, setSessionFeelings } = useContext(FeelingsContext);
+  //const { sessionTopics, setSessionTopics } = useContext(TopicsContext);
+  //const { sessionFeelings, setSessionFeelings } = useContext(FeelingsContext);
+  const {
+    sessionFeelings,
+    setSessionFeelings,
+    sessionTopics,
+    setSessionTopics,
+  } = useFeelingsAndTopics({
+    action,
+    studySessionToUpdate,
+  });
 
   const lastTopic = sessionTopics.length - 1;
   const [topicToShow, setTopicToShow] = useState(lastTopic);

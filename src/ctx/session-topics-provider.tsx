@@ -8,14 +8,13 @@ import {
   useEffect,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Topic } from "@/types";
+import { Topic, studySessionDto } from "@/types";
 
 interface TopicsContextProps {
   sessionTopics: Topic[];
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
-
-  /* sessionFeelingsUpdate: string;
-  setSessionFeelingsUpdate: React.Dispatch<React.SetStateAction<string>>; */
+  sessionTopicsUpdate: studySessionDto[];
+  setSessionTopicsUpdate: Dispatch<SetStateAction<studySessionDto[]>>;
 }
 
 export const createNewTopic = (): Topic => ({
@@ -35,6 +34,8 @@ export const createNewTopic = (): Topic => ({
 export const topicsCtxDefaultValues: TopicsContextProps = {
   sessionTopics: [createNewTopic()],
   setSessionTopics: () => [],
+  sessionTopicsUpdate: [],
+  setSessionTopicsUpdate: () => [],
 };
 
 export const TopicsContext = createContext(topicsCtxDefaultValues);
@@ -47,6 +48,8 @@ export default function TopicsProvider({ children }: SaveSessionProvider) {
   const [sessionTopics, setSessionTopics] = useState<Topic[]>(
     topicsCtxDefaultValues.sessionTopics
   );
+  const [sessionTopicsUpdate, setSessionTopicsUpdate] =
+    useState<studySessionDto[]>(null);
 
   useEffect(() => {
     console.log("TopicsProvider State changed:");
@@ -57,7 +60,14 @@ export default function TopicsProvider({ children }: SaveSessionProvider) {
   }, [sessionTopics]);
 
   return (
-    <TopicsContext.Provider value={{ sessionTopics, setSessionTopics }}>
+    <TopicsContext.Provider
+      value={{
+        sessionTopics,
+        setSessionTopics,
+        sessionTopicsUpdate,
+        setSessionTopicsUpdate,
+      }}
+    >
       {children}
     </TopicsContext.Provider>
   );
