@@ -76,11 +76,12 @@ const toDateISOString = (date: Date) => new Date(date).toISOString();
 const toTimeISOString = (date: Date) => toDateISOString(date).slice(11, 19);
 const toDateOnlyISOString = (date: Date) => toDateISOString(date).slice(0, 10);
 
-const mapTopics = (topic: TopicFormatted) => ({
+const mapTopics = (topic: any) => ({
+  id: topic.id,
   description: topic.description,
   title: topic.title,
   hashtags: topic.hashtags,
-  effectiveTimeOfStudy: topic.effectiveTimeOfStudy,
+  effectiveTimeOfStudy: topic.timeOfStudy,
 });
 
 const mapStudySession = (studySessions: any): studySessionDto[] => {

@@ -48,7 +48,9 @@ export default function TopicsProvider({ children }: SaveSessionProvider) {
   const [sessionTopics, setSessionTopics] = useState<Topic[]>(
     topicsCtxDefaultValues.sessionTopics
   );
-  const [sessionTopicsUpdate, setSessionTopicsUpdate] = useState<Topic[]>(null);
+  const [sessionTopicsUpdate, setSessionTopicsUpdate] = useState<Topic[]>(
+    topicsCtxDefaultValues.sessionTopics
+  );
 
   useEffect(() => {
     console.log("TopicsProvider State changed:");

@@ -1,7 +1,7 @@
-import { FC, useContext } from "react";
+import { FC, useContext, useEffect } from "react";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
-import { TopicFormatted, studySessionDto } from "@/types";
+import { Topic, TopicFormatted, studySessionDto } from "@/types";
 import { set } from "date-fns";
 
 // Used to differentiate between New Session or Edit Session
@@ -37,10 +37,17 @@ const useFeelingsAndTopics = ({
     ? feelingsCtx.setSessionFeelingsUpdate
     : feelingsCtx.setSessionFeelings;
 
-  if (shouldUpdate) {
-    setSessionTopics(studySessionToUpdate.topics);
-    setSessionFeelings(studySessionToUpdate.feelings || "");
-  }
+  useEffect(() => {
+    if (shouldUpdate) {
+      setSessionTopics(convertListToTopic(studySessionToUpdate.topics));
+      setSessionFeelings(studySessionToUpdate.feelings || "");
+    }
+  }, [
+    shouldUpdate,
+    studySessionToUpdate,
+    setSessionTopics,
+    setSessionFeelings,
+  ]);
 
   return {
     sessionFeelings,
@@ -49,13 +56,32 @@ const useFeelingsAndTopics = ({
     setSessionTopics,
   };
 };
-// ADD an optional id field to the TopicFormatted type
-// fetch that field from the db on api\session\get\sessions\route.ts
-// continue the convertion below
-const convertTopicFormattedToTopic = (topic: TopicFormatted) => {
-  const convertedTopic = {
-    ...topic,
+
+const convertTopicFormattedToTopic = (topic: TopicFormatted): Topic => {
+  const { id, title, hashtags, description, effectiveTimeOfStudy } = topic;
+
+  //TODO: handle error
+  if (!id) {
+    throw new Error("Id is not available");
+  }
+
+  return {
+    id,
+    title,
+    hashtags,
+    description,
+    effectiveTimeOfStudy,
+    status: "stop",
+    sessionStartTime: 0,
+    sessionEndTime: 0,
+    sessionPauseStartTime: 0,
+    sessionPauseEndTime: 0,
+    totalPauseTime: 0,
   };
+};
+
+const convertListToTopic = (topicList: TopicFormatted[]): Topic[] => {
+  return topicList.map((topic) => convertTopicFormattedToTopic(topic));
 };
 
 export default useFeelingsAndTopics;

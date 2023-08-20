@@ -108,6 +108,7 @@ export type FullSessionLog = {
 };
 
 export type TopicFormatted = {
+  id?: number;
   title: string;
   hashtags: string;
   description: string;
@@ -115,7 +116,7 @@ export type TopicFormatted = {
 };
 
 export type Topic = SessionTimer & {
-  id: string;
+  id: string | number;
   title: string;
   hashtags: string;
   description: string;
