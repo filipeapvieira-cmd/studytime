@@ -65,36 +65,11 @@ export type UserDetails = {
 
 /* PERSIST SESSION LOG */
 
-export type SessionLogTopics = {
-  topic: string;
-  subtopic: string | undefined;
-};
-
-export type SessionLogTopicContent = {
-  topic: string;
-  subtopic: string | undefined;
-  content: string;
-};
-
-export type SessionLogTopicContentFeelings = {
-  topics: SessionLogTopicContent[];
-  feelings: string;
-};
-
 export type SessionTimeAndDate = {
   date: Date;
   startTime: Date;
   endTime: Date;
   pausedTime: number;
-};
-
-export type SessionLog = {
-  description: SessionLogTopicContentFeelings;
-  timeAndDate: SessionTimeAndDate;
-};
-
-export type SessionLogUpdate = SessionLog & {
-  id: number;
 };
 
 /* SAVE SESSION FORM */
@@ -133,4 +108,10 @@ export type studySessionDto = {
   effectiveTime: string;
   topics: TopicFormatted[];
   feelings?: string;
+};
+
+/* UPDATE SESSION */
+
+export type FullSessionLogUpdate = FullSessionLog & {
+  id: number;
 };

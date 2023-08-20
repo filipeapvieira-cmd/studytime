@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Icons } from "@/components/icons";
 import UserActionConfirmation from "./UserActionConfirmation";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
-import { SessionLog, SessionLogUpdate, studySessionDto } from "@/types";
+import { FullSessionLogUpdate, studySessionDto } from "@/types";
 import {
   UPDATE_SESSION_ENDPOINT,
   HTTP_METHOD,
@@ -22,49 +22,60 @@ import {
 } from "@/lib/session-log/update-utils";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
+import { getFullSessionLog } from "@/lib/session-log/utils";
+import { TopicsContext } from "@/src/ctx/session-topics-provider";
 
 interface EditSessionControlProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: studySessionDto;
+  studySessionToEdit: studySessionDto;
 }
 
 const EditSessionControl: FC<EditSessionControlProps> = ({
-  data,
+  studySessionToEdit,
   setIsModalOpen,
 }: EditSessionControlProps) => {
+  const { sessionFeelings } = useContext(FeelingsContext);
+  const { sessionTopics } = useContext(TopicsContext);
+
   const [sessionTiming, setSessionTiming] = useState({
-    id: data.id,
-    startTime: data.startTime,
-    pauseDuration: data.pauseDuration,
-    endTime: data.endTime,
-    effectiveTime: data.effectiveTime,
-    date: data.date,
+    id: studySessionToEdit.id,
+    startTime: studySessionToEdit.startTime,
+    pauseDuration: studySessionToEdit.pauseDuration,
+    endTime: studySessionToEdit.endTime,
+    effectiveTime: studySessionToEdit.effectiveTime,
+    date: studySessionToEdit.date,
   });
+
+  const { startTime, pauseDuration, endTime, effectiveTime, id, date } =
+    sessionTiming;
+
+  const sessionTime = {
+    sessionStartTime: timeStringToDate(startTime, date),
+    sessionEndTime: timeStringToDate(endTime, date),
+    totalPauseTime: timeStringToMillis(pauseDuration),
+  };
 
   useEffect(() => {
     setSessionTiming({
-      id: data.id,
-      startTime: data.startTime,
-      pauseDuration: data.pauseDuration,
-      endTime: data.endTime,
-      effectiveTime: data.effectiveTime,
-      date: data.date,
+      id: studySessionToEdit.id,
+      startTime: studySessionToEdit.startTime,
+      pauseDuration: studySessionToEdit.pauseDuration,
+      endTime: studySessionToEdit.endTime,
+      effectiveTime: studySessionToEdit.effectiveTime,
+      date: studySessionToEdit.date,
     });
-  }, [data]);
+  }, [studySessionToEdit]);
 
-  const { sessionFeelingsUpdate } = useContext(FeelingsContext);
-  const { startTime, pauseDuration, endTime, effectiveTime, id, date } =
-    sessionTiming;
   const actionType = useRef("");
-  /* const sessionLog: SessionLogUpdate = {
-    ...getSessionLog(
-      sessionTextUpdate,
-      timeStringToDate(startTime, date),
-      timeStringToDate(endTime, date),
-      timeStringToMillis(pauseDuration)
-    ),
-    id,
-  }; */
+
+  const sessionLog: FullSessionLogUpdate = {
+    ...getFullSessionLog({
+      sessionFeelings,
+      sessionTopics,
+      sessionTime,
+    }),
+    id: studySessionToEdit.id,
+  };
 
   const onSuccess = () => {
     setIsModalOpen(false);
@@ -73,7 +84,6 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
   const { isLoading, httpRequestHandler } = usePersistSession();
 
-  /*
   const handleControl = (action: "update" | "delete") => {
     actionType.current = "";
     const updateParameters = {
@@ -96,7 +106,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
       httpRequestHandler(deleteParameters);
     }
   };
-  */
+
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSessionTiming((preValue) => {

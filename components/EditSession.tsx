@@ -50,7 +50,7 @@ const EditSession: FC<EditSessionProps> = ({
               </div>
               <EditSessionControl
                 setIsModalOpen={handleModalClose}
-                data={selectedStudySession}
+                studySessionToEdit={selectedStudySession}
               />
             </>
           </AlertDialogTitle>
