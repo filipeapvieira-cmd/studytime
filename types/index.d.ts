@@ -83,7 +83,7 @@ export type FullSessionLog = {
 };
 
 export type TopicFormatted = {
-  id?: number;
+  id?: number | string;
   title: string;
   hashtags: string;
   description: string;

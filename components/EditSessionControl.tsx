@@ -34,8 +34,9 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   studySessionToEdit,
   setIsModalOpen,
 }: EditSessionControlProps) => {
-  const { sessionFeelings } = useContext(FeelingsContext);
-  const { sessionTopics } = useContext(TopicsContext);
+  const { sessionFeelingsUpdate: sessionFeelings } =
+    useContext(FeelingsContext);
+  const { sessionTopicsUpdate: sessionTopics } = useContext(TopicsContext);
 
   const [sessionTiming, setSessionTiming] = useState({
     id: studySessionToEdit.id,
@@ -152,10 +153,10 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
         />
       </div>
       <div className="flex space-x-2">
-        {/*         <UserActionConfirmation
+        <UserActionConfirmation
           type="updateSession"
           onConfirm={() => handleControl("update")}
-        > 
+        >
           <Button disabled={isLoading}>
             {getSaveBtnIcon(isLoading, actionType)}
           </Button>
@@ -168,7 +169,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           <Button variant="destructive" disabled={isLoading}>
             {getDeleteBtnIcon(isLoading, actionType)}
           </Button>
-        </UserActionConfirmation>*/}
+        </UserActionConfirmation>
       </div>
     </div>
   );

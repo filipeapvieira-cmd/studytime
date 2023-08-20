@@ -1,13 +1,12 @@
 import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { SessionTimeAndDate, SessionLogTopicContentFeelings } from "@/types";
+import { SessionTimeAndDate, FullSessionLogUpdate } from "@/types";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
-import { getSessionData } from "@/lib/api/utils";
+import { getSessionUpdateData } from "@/lib/api/utils";
 
 export async function PUT(req: Request, context: any) {
-  /*
   const { params } = context;
   const id: number = Number(params.sessionId);
   const session = await getServerSession(authOptions);
@@ -24,27 +23,30 @@ export async function PUT(req: Request, context: any) {
   }
 
   const userId: number = +session.user.id;
-  const {
-    description,
-    timeAndDate,
-  }: {
-    description: SessionLogTopicContentFeelings;
-    timeAndDate: SessionTimeAndDate;
-  } = await req.json();
+  const sessionToUpdate: FullSessionLogUpdate = await req.json();
 
-  const sessionData = getSessionData(description, timeAndDate, userId);
+  const sessionData = getSessionUpdateData(sessionToUpdate, userId);
 
   const updateSession = async () => {
+    return await db.$transaction(async (tx) => {
+      await tx.studySession.update({
+        where: { id },
+        data: sessionData,
+      });
+    });
+  };
+
+  /*   const updateSession = async () => {
     return await db.$transaction(async (tx) => {
       await tx.studySession.delete({
         where: { id },
       });
       await tx.studySession.create({ data: sessionData });
     });
-  };
-
+  }; */
+  await updateSession();
   try {
-    await updateSession();
+    // await updateSession();
 
     return NextResponse.json(
       {
@@ -72,5 +74,4 @@ export async function PUT(req: Request, context: any) {
   } finally {
     await db.$disconnect();
   }
-  */
 }
