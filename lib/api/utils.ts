@@ -78,7 +78,6 @@ export const getSessionUpdateData = (
   if (feelingDescription && feelingDescription.trim() !== "") {
     sessionData.feeling = {
       upsert: {
-        where: { sessionId: sessionLog.id },
         create: {
           description: feelingDescription,
         },

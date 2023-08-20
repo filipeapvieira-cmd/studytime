@@ -8,7 +8,7 @@ import { retrieveTextFromJson } from "@/lib/utils";
 import { TimeContext } from "@/src/ctx/time-provider";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { getFullSessionLog, persistSession } from "@/lib/session-log/utils";
-import { FullSessionLog, SessionLog } from "@/types";
+import { FullSessionLog } from "@/types";
 import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
 import { useStudySession } from "@/src/hooks/useStudySession";
 import { useSession } from "next-auth/react";

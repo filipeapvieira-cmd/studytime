@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
-import { SessionTimeAndDate, SessionLogTopicContentFeelings } from "@/types";
+import { SessionTimeAndDate } from "@/types";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
 

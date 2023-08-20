@@ -1,9 +1,9 @@
 import { persistSession, deleteSession } from "@/lib/session-log/utils";
-import { FullSessionLog, SessionLog, SessionLogUpdate } from "@/types";
+import { FullSessionLog } from "@/types";
 import { HTTP_METHOD } from "@/constants/config";
 
 export const getRequestHandler = (
-  body: FullSessionLog | SessionLogUpdate | undefined,
+  body: FullSessionLog | undefined,
   url: string,
   method: string
 ) => {
@@ -14,7 +14,7 @@ export const getRequestHandler = (
       {
         requestHandler = persistSession.bind(
           null,
-          body as FullSessionLog | SessionLogUpdate,
+          body as FullSessionLog,
           url,
           method
         );

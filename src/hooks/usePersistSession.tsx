@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { FullSessionLog, SessionLog, SessionLogUpdate } from "@/types";
+import { FullSessionLog } from "@/types";
 import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
 import { getRequestHandler } from "@/lib/session-log/delete-utils";
 
 interface PersistSession {
-  body?: FullSessionLog | SessionLogUpdate;
+  body?: FullSessionLog;
   url: string;
   method: string;
   onSuccess?: () => void;
