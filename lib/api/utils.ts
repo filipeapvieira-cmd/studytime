@@ -1,5 +1,6 @@
 import { FullSessionLog, FullSessionLogUpdate } from "@/types";
 import { Prisma } from "@prisma/client";
+import { db } from "@/lib/db";
 
 export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
   const { startTime, endTime, pauseDuration, topics, feelingDescription } =
@@ -53,6 +54,7 @@ export const getSessionUpdateData = (
           if (typeof id !== "number") {
             throw new Error(`Invalid topic ID: ${id}`);
           }
+
           return {
             where: { id },
             create: {
@@ -88,4 +90,16 @@ export const getSessionUpdateData = (
   }
 
   return sessionData;
+};
+
+export const topicsToDelete = async (sessionToUpdate: FullSessionLogUpdate) => {
+  const currentTopics = await db.topic.findMany({
+    where: { sessionId: sessionToUpdate.id },
+  });
+  const currentTopicsIds = currentTopics.map((t) => t.id);
+  const topicIdsInSessionToUpdate = sessionToUpdate.topics.map((t) => t.id);
+  const topicsToDelete = currentTopicsIds.filter(
+    (t) => !topicIdsInSessionToUpdate.includes(t)
+  );
+  return topicsToDelete;
 };

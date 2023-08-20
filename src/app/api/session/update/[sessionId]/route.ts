@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { SessionTimeAndDate, FullSessionLogUpdate } from "@/types";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
-import { getSessionUpdateData } from "@/lib/api/utils";
+import { getSessionUpdateData, topicsToDelete } from "@/lib/api/utils";
 
 export async function PUT(req: Request, context: any) {
   const { params } = context;
@@ -29,6 +29,11 @@ export async function PUT(req: Request, context: any) {
 
   const updateSession = async () => {
     return await db.$transaction(async (tx) => {
+      await tx.topic.deleteMany({
+        where: {
+          id: { in: await topicsToDelete(sessionToUpdate) },
+        },
+      });
       await tx.studySession.update({
         where: { id },
         data: sessionData,
