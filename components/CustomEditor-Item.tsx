@@ -41,7 +41,9 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
           });
         }}
       >
-        {`${title} ${hashtags ? `| ${hashtags}` : ""}`}
+        <p className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%]">{`${title} ${
+          hashtags ? `| ${hashtags}` : ""
+        }`}</p>
       </AccordionTrigger>
       <AccordionContent>
         <CustomEditorForm

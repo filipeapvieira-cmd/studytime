@@ -31,8 +31,6 @@ const CustomEditor: FC<CustomEditorProps> = ({
   action,
   studySessionToUpdate,
 }) => {
-  //const { sessionTopics, setSessionTopics } = useContext(TopicsContext);
-  //const { sessionFeelings, setSessionFeelings } = useContext(FeelingsContext);
   const {
     sessionFeelings,
     setSessionFeelings,
@@ -67,15 +65,11 @@ const CustomEditor: FC<CustomEditorProps> = ({
 
   return (
     <div className="flex">
-      <div className="flex-1 self-start">
+      <div className="flex-1 self-start overflow-hidden">
         <h1 className="text-foreground bg-background text-3xl text-center rounded-md p-2">
           Description
         </h1>
-        <Accordion
-          type="multiple"
-          value={[String(topicToShow)]}
-          //id="customEditorContainer"
-        >
+        <Accordion type="multiple" value={[String(topicToShow)]}>
           {sessionTopics.map((topic, index) => (
             <AccordionItem
               value={String(index)}
