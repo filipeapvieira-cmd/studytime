@@ -87,6 +87,7 @@ const CustomEditor: FC<CustomEditorProps> = ({
                 topic={topic}
                 openAccordionItem={setTopicToShow}
                 setSessionTopics={setSessionTopics}
+                isUpdate={!!(action && studySessionToUpdate)}
               />
             </AccordionItem>
           ))}

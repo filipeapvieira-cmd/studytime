@@ -17,6 +17,7 @@ interface CustomEditorItemProps {
   topic: Topic;
   openAccordionItem: Dispatch<SetStateAction<number>>;
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
+  isUpdate: boolean;
 }
 
 const CustomEditorItem: FC<CustomEditorItemProps> = ({
@@ -24,6 +25,7 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
   topic,
   openAccordionItem,
   setSessionTopics,
+  isUpdate,
 }: CustomEditorItemProps) => {
   const { sessionTopics } = useContext(TopicsContext);
   const title = topic.title ? topic.title : `Topic - ${position + 1}`;
@@ -42,7 +44,11 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
         {`${title} ${hashtags ? `| ${hashtags}` : ""}`}
       </AccordionTrigger>
       <AccordionContent>
-        <CustomEditorForm topic={topic} setSessionTopics={setSessionTopics} />
+        <CustomEditorForm
+          topic={topic}
+          setSessionTopics={setSessionTopics}
+          isUpdate={isUpdate}
+        />
       </AccordionContent>
     </>
   );

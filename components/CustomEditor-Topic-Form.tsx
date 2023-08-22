@@ -31,8 +31,10 @@ import { SessionTimer } from "@/types";
 import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
 import useSessionStatus from "@/src/hooks/useSessionStatus";
 import CustomTextArea from "./ui/CustomTextArea";
+import { timeStringToMillis } from "@/lib/session-log/update-utils";
 
 interface CustomEditorFormProps {
+  isUpdate: boolean;
   topic: Topic;
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
 }
@@ -44,6 +46,7 @@ interface CurrentTopic {
 }
 
 const CustomEditorForm: FC<CustomEditorFormProps> = ({
+  isUpdate,
   topic,
   setSessionTopics,
 }: CustomEditorFormProps) => {
@@ -76,6 +79,14 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     sessionPauseEndTime,
     totalPauseTime,
   });
+  const [userUpdatedEffectiveTimeOfStudy, setUserUpdatedEffectiveTimeOfStudy] =
+    useState(
+      String(
+        new Date(componentTimeState.effectiveTimeOfStudy)
+          .toISOString()
+          .slice(11, 19)
+      )
+    );
 
   useEffect(() => {
     coerceComponentState(
@@ -160,6 +171,22 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     });
   };
 
+  const handleManuallyUpdateEffectiveTimeOfStudy = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    setUserUpdatedEffectiveTimeOfStudy(e.target.value);
+  };
+
+  const handleManuallyUpdateEffectiveTimeOfStudyingBlur = () => {
+    const effectiveTimeOfStudy = timeStringToMillis(
+      userUpdatedEffectiveTimeOfStudy
+    );
+    setComponentTimeState((prevValue) => ({
+      ...prevValue,
+      effectiveTimeOfStudy,
+    }));
+  };
+
   const handleNewTopic = () => {
     setSessionTopics((prevValue: Topic[]) => [...prevValue, createNewTopic()]);
   };
@@ -217,15 +244,24 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
         <Button onClick={handleDeleteTopic} variant="destructive" size="sm">
           Delete
         </Button>
-        <BtnTimer
-          size="sm"
-          disabled={status === "stop" || sessionStatus !== "play"}
-          status={componentTimeState.status}
-          effectiveTimeOfStudy={componentTimeState.effectiveTimeOfStudy}
-          onClick={() =>
-            handleState(componentTimeState.status, setComponentTimeState)
-          }
-        />
+        {isUpdate ? (
+          <Input
+            className="max-w-[100px] h-[36px]"
+            value={userUpdatedEffectiveTimeOfStudy}
+            onChange={(e) => handleManuallyUpdateEffectiveTimeOfStudy(e)}
+            onBlur={handleManuallyUpdateEffectiveTimeOfStudyingBlur}
+          />
+        ) : (
+          <BtnTimer
+            size="sm"
+            disabled={status === "stop" || sessionStatus !== "play"}
+            status={componentTimeState.status}
+            effectiveTimeOfStudy={componentTimeState.effectiveTimeOfStudy}
+            onClick={() =>
+              handleState(componentTimeState.status, setComponentTimeState)
+            }
+          />
+        )}
       </div>
     </>
   );
