@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useState, ChangeEvent } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Icons } from "@/components/icons";
@@ -59,6 +59,17 @@ const TableFilters: FC<TableFiltersProps> = ({
     table.getColumn("date")?.setFilterValue(endOfDayRange);
   };
 
+  const handleResetGlobalFilter = () => {
+    //table.setGlobalFilter("")
+    setGlobalFilter("");
+    setInputGlobalFilter("");
+  };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputGlobalFilter(event.target.value);
+    startTransition(() => setGlobalFilter(event.target.value));
+  };
+
   return (
     <div className="flex items-center justify-between mb-4">
       <div className="flex items-center justify-start space-x-2">
@@ -67,16 +78,10 @@ const TableFilters: FC<TableFiltersProps> = ({
         <Input
           placeholder="Filter..."
           value={inputGlobalFilter}
-          onChange={(event) => {
-            setInputGlobalFilter(event.target.value);
-            startTransition(() => setGlobalFilter(event.target.value));
-          }}
+          onChange={(event) => handleInputChange(event)}
           className="max-w-sm"
         />
-        <BtnClose
-          visible={globalFilter}
-          onClick={() => table.setGlobalFilter("")}
-        />
+        <BtnClose visible={globalFilter} onClick={handleResetGlobalFilter} />
       </div>
       <div className="flex items-center justify-end space-x-2">
         <BtnClose

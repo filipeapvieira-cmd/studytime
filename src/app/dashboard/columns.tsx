@@ -73,15 +73,16 @@ export const globalFilterFn: FilterFn<any> = (
 
   let itemRank;
 
-  if (columnId === "content") {
-    // The 'content' column is an array of objects.
-    // Search both 'topic' and 'subtopic' fields.
-    const rawContent: [{ topic: string; subtopic: string; text: string }] =
-      row.getValue(columnId);
+  if (columnId === "topics") {
+    // The 'topics' column is an array of objects.
+    // Search both 'title', 'hashtags' and 'description' fields.
+    const rawTopics: [
+      { title: string; hashtags: string; description: string }
+    ] = row.getValue(columnId);
     itemRank = rankItem(
-      `${rawContent.map((content) => content.topic).join(" ")} ${rawContent
-        .map((content) => content.subtopic)
-        .join(" ")} ${rawContent.map((content) => content.text).join(" ")}`,
+      `${rawTopics.map((topic) => topic.title).join(" ")} ${rawTopics
+        .map((topic) => topic.hashtags)
+        .join(" ")} ${rawTopics.map((topic) => topic.description).join(" ")}`,
       value
     );
   } else {
