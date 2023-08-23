@@ -47,7 +47,7 @@ const TableFilters: FC<TableFiltersProps> = ({
     to: new Date(Date.now()),
   });
 
-  const filterByDateRangeHandler = (range: DateRange | undefined) => {
+  const handleFilterByDateRange = (range: DateRange | undefined) => {
     if (!range || !range.from) {
       return;
     }
@@ -93,7 +93,7 @@ const TableFilters: FC<TableFiltersProps> = ({
         <Button
           size="sm"
           variant="ghost"
-          onClick={() => filterByDateRangeHandler(range)}
+          onClick={() => handleFilterByDateRange(range)}
         >
           <Icons.filter />
         </Button>
