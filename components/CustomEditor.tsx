@@ -64,8 +64,8 @@ const CustomEditor: FC<CustomEditorProps> = ({
   }, [sessionTopics, sessionFeelings]);
 
   return (
-    <div className="flex">
-      <div className="flex-1 self-start overflow-hidden">
+    <div className="flex w-full">
+      <div className="flex-1 self-start">
         <h1 className="text-foreground bg-background text-3xl text-center rounded-md p-2">
           Description
         </h1>
@@ -82,6 +82,7 @@ const CustomEditor: FC<CustomEditorProps> = ({
                 openAccordionItem={setTopicToShow}
                 setSessionTopics={setSessionTopics}
                 isUpdate={!!(action && studySessionToUpdate)}
+                isMarkdownPreviewerVisible={isMarkdownPreviewerVisible}
               />
             </AccordionItem>
           ))}

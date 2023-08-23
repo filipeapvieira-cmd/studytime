@@ -18,6 +18,7 @@ interface CustomEditorItemProps {
   openAccordionItem: Dispatch<SetStateAction<number>>;
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
   isUpdate: boolean;
+  isMarkdownPreviewerVisible: boolean;
 }
 
 const CustomEditorItem: FC<CustomEditorItemProps> = ({
@@ -26,14 +27,18 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
   openAccordionItem,
   setSessionTopics,
   isUpdate,
+  isMarkdownPreviewerVisible,
 }: CustomEditorItemProps) => {
-  const { sessionTopics } = useContext(TopicsContext);
   const title = topic.title ? topic.title : `Topic - ${position + 1}`;
   const hashtags = topic.hashtags;
+
+  const accordionTriggerSize = isMarkdownPreviewerVisible
+    ? "max-w-[523px]"
+    : "w-full";
   return (
     <>
       <AccordionTrigger
-        className="hover:no-underline hover:bg-foreground hover:text-background rounded-md p-2"
+        className={`hover:no-underline hover:bg-foreground hover:text-background rounded-md p-2 ${accordionTriggerSize}`}
         onClick={() => {
           openAccordionItem((visibleIndex) => {
             const indexToShow = visibleIndex === position ? -1 : position;
@@ -41,7 +46,7 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
           });
         }}
       >
-        <p className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%]">{`${title} ${
+        <p className="whitespace-nowrap overflow-hidden text-ellipsis">{`${title} ${
           hashtags ? `| ${hashtags}` : ""
         }`}</p>
       </AccordionTrigger>
