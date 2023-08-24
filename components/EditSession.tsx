@@ -18,6 +18,9 @@ import ImageUpload from "@/components/ImageUpload";
 import EditSessionControl from "./EditSessionControl";
 import { Icons } from "@/components/icons";
 import CustomEditor from "@/components/CustomEditor";
+import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
+import { TopicsContext } from "@/src/ctx/session-topics-provider";
+import { createNewTopic } from "@/src/ctx/session-topics-provider";
 
 interface EditSessionProps {
   isModalOpen: boolean;
@@ -30,6 +33,16 @@ const EditSession: FC<EditSessionProps> = ({
   handleModalClose,
   selectedStudySession,
 }: EditSessionProps) => {
+  const { setSessionFeelingsUpdate } = useContext(FeelingsContext);
+  const { setSessionTopicsUpdate } = useContext(TopicsContext);
+
+  useEffect(() => {
+    return () => {
+      setSessionTopicsUpdate([createNewTopic()]);
+      setSessionFeelingsUpdate("");
+    };
+  }, [setSessionTopicsUpdate, setSessionFeelingsUpdate]);
+
   return (
     <AlertDialog open={isModalOpen}>
       <AlertDialogContent className="max-w-6xl">

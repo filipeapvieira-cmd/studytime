@@ -38,7 +38,7 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
   return (
     <>
       <AccordionTrigger
-        className={`hover:no-underline hover:bg-foreground hover:text-background rounded-md p-2 ${accordionTriggerSize}`}
+        className={`hover:no-underline hover:bg-foreground hover:text-background rounded-md p-2 `}
         onClick={() => {
           openAccordionItem((visibleIndex) => {
             const indexToShow = visibleIndex === position ? -1 : position;
@@ -46,9 +46,9 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
           });
         }}
       >
-        <p className="whitespace-nowrap overflow-hidden text-ellipsis">{`${title} ${
-          hashtags ? `| ${hashtags}` : ""
-        }`}</p>
+        <p
+          className={`text-left whitespace-nowrap overflow-hidden text-ellipsis ${accordionTriggerSize}`}
+        >{`${title} ${hashtags ? `| ${hashtags}` : ""}`}</p>
       </AccordionTrigger>
       <AccordionContent>
         <CustomEditorForm

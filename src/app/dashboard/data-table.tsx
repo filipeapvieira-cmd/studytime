@@ -130,11 +130,13 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <EditSession
-        isModalOpen={isEditSessionOpen}
-        handleModalClose={setIsEditSessionOpen}
-        selectedStudySession={sessionToEdit as studySessionDto}
-      />
+      {isEditSessionOpen && (
+        <EditSession
+          isModalOpen={isEditSessionOpen}
+          handleModalClose={setIsEditSessionOpen}
+          selectedStudySession={sessionToEdit as studySessionDto}
+        />
+      )}
       <TableFilters
         columnFilters={columnFilters}
         globalFilter={globalFilter}
