@@ -9,6 +9,7 @@ import ColumnVisibility from "@/components/table/Column-visibility";
 import { DateRange } from "react-day-picker";
 import BtnClose from "@/components/ui/BtnClose";
 import { useTransition } from "react";
+import { studySessionDto } from "@/types";
 
 interface TableFiltersProps {
   inputGlobalFilter: string;
@@ -60,7 +61,6 @@ const TableFilters: FC<TableFiltersProps> = ({
   };
 
   const handleResetGlobalFilter = () => {
-    //table.setGlobalFilter("")
     setGlobalFilter("");
     setInputGlobalFilter("");
   };
@@ -68,6 +68,13 @@ const TableFilters: FC<TableFiltersProps> = ({
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputGlobalFilter(event.target.value);
     startTransition(() => setGlobalFilter(event.target.value));
+  };
+
+  const handleExport = () => {
+    const filteredRows = table.getRowModel().rows;
+    const sessionsToExport: studySessionDto[] = filteredRows.map(
+      (row: any) => row.original
+    );
   };
 
   return (
@@ -97,7 +104,7 @@ const TableFilters: FC<TableFiltersProps> = ({
         >
           <Icons.filter />
         </Button>
-        <Button size="sm" variant="ghost">
+        <Button size="sm" variant="ghost" onClick={handleExport}>
           <Icons.download />
         </Button>
       </div>

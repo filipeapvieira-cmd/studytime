@@ -34,7 +34,7 @@ import { Icons } from "@/components/icons";
 import TableFilters from "@/components/table/Table-filters";
 import EditSession from "@/components/EditSession";
 import { set } from "date-fns";
-import { FullSessionLog, studySessionDto } from "@/types";
+import { studySessionDto } from "@/types";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { convertListToTopic } from "@/lib/hooks/utils";
