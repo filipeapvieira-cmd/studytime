@@ -22,6 +22,8 @@ import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
 import { createNewTopic } from "@/src/ctx/session-topics-provider";
 
+import { convertListToTopic } from "@/lib/hooks/utils";
+
 interface EditSessionProps {
   isModalOpen: boolean;
   handleModalClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,6 +38,7 @@ const EditSession: FC<EditSessionProps> = ({
   const { setSessionFeelingsUpdate } = useContext(FeelingsContext);
   const { setSessionTopicsUpdate } = useContext(TopicsContext);
 
+  // Add default data when modal closes
   useEffect(() => {
     return () => {
       setSessionTopicsUpdate([createNewTopic()]);

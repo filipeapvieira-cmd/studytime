@@ -37,51 +37,12 @@ const useFeelingsAndTopics = ({
     ? feelingsCtx.setSessionFeelingsUpdate
     : feelingsCtx.setSessionFeelings;
 
-  useEffect(() => {
-    if (shouldUpdate) {
-      setSessionTopics(convertListToTopic(studySessionToUpdate.topics));
-      setSessionFeelings(studySessionToUpdate.feelings || "");
-    }
-  }, [
-    shouldUpdate,
-    studySessionToUpdate,
-    setSessionTopics,
-    setSessionFeelings,
-  ]);
-
   return {
     sessionFeelings,
     setSessionFeelings,
     sessionTopics,
     setSessionTopics,
   };
-};
-
-const convertTopicFormattedToTopic = (topic: TopicFormatted): Topic => {
-  const { id, title, hashtags, description, effectiveTimeOfStudy } = topic;
-
-  //TODO: handle error
-  if (!id) {
-    throw new Error("Id is not available");
-  }
-
-  return {
-    id,
-    title,
-    hashtags,
-    description,
-    effectiveTimeOfStudy,
-    status: "stop",
-    sessionStartTime: 0,
-    sessionEndTime: 0,
-    sessionPauseStartTime: 0,
-    sessionPauseEndTime: 0,
-    totalPauseTime: 0,
-  };
-};
-
-const convertListToTopic = (topicList: TopicFormatted[]): Topic[] => {
-  return topicList.map((topic) => convertTopicFormattedToTopic(topic));
 };
 
 export default useFeelingsAndTopics;

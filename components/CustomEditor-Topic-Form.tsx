@@ -50,7 +50,6 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   topic,
   setSessionTopics,
 }: CustomEditorFormProps) => {
-  const { sessionTopics } = useContext(TopicsContext);
   const sessionStatus = useSessionStatus();
   const {
     title,

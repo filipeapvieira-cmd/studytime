@@ -26,7 +26,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useContext } from "react";
 import { CalendarDateRangePicker } from "@/components/Date-range-picker";
 import { DataTablePagination } from "@/components/table/data-table-pagination";
 import { globalFilterFn } from "@/src/app/dashboard/columns";
@@ -35,6 +35,9 @@ import TableFilters from "@/components/table/Table-filters";
 import EditSession from "@/components/EditSession";
 import { set } from "date-fns";
 import { FullSessionLog, studySessionDto } from "@/types";
+import { TopicsContext } from "@/src/ctx/session-topics-provider";
+import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
+import { convertListToTopic } from "@/lib/hooks/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -45,6 +48,8 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const { setSessionFeelingsUpdate } = useContext(FeelingsContext);
+  const { setSessionTopicsUpdate } = useContext(TopicsContext);
   const defaultStudySession = {
     id: 0,
     date: "",
@@ -127,6 +132,23 @@ export function DataTable<TData, TValue>({
       setIsEditSessionOpen(true);
     }
   };
+
+  // Update ctx with data from the selected session to edit
+  useEffect(() => {
+    if (isEditSessionOpen) {
+      setSessionTopicsUpdate(
+        convertListToTopic((sessionToEdit as studySessionDto).topics)
+      );
+      setSessionFeelingsUpdate(
+        (sessionToEdit as studySessionDto).feelings || ""
+      );
+    }
+  }, [
+    isEditSessionOpen,
+    setSessionTopicsUpdate,
+    setSessionFeelingsUpdate,
+    sessionToEdit,
+  ]);
 
   return (
     <div>
