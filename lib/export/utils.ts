@@ -2,6 +2,7 @@ import { studySessionDto } from "@/types";
 
 const convertSessionsToMarkdown = (sessionsToExport: studySessionDto[]) => {
   let markdownString = "";
+  markdownString += getIntroduction(sessionsToExport);
   sessionsToExport.forEach(
     (session, index) => (markdownString += sessionToMarkdown(session, index))
   );
@@ -14,9 +15,14 @@ const sessionToMarkdown = (studySession: studySessionDto, index: number) => {
   markdownString += `\n# Session Number: ${index + 1}\n\n`;
 
   // Create a table for date, effectiveTime, and endTime
-  markdownString += "| Date | Start Time | End Time | Effective Time |\n";
-  markdownString += "|-------|------|----------------|----------|\n";
-  markdownString += `| ${studySession.date} | ${studySession.startTime} | ${studySession.endTime} |${studySession.effectiveTime}  |\n`;
+  markdownString +=
+    "| Date | Start Time | End Time | Pause Duration | Effective Time |\n";
+  markdownString += "|-------|------|----------------|----------|----------|\n";
+  markdownString += `| ${studySession.date} (${getDayOfTheWeek(
+    studySession.date
+  )}) | ${studySession.startTime} | ${studySession.endTime} |${
+    studySession.pauseDuration
+  }|${studySession.effectiveTime}  |\n`;
 
   markdownString += "\n"; // New line after table
 
@@ -61,6 +67,53 @@ const convertMillisecondsToString = (milliseconds: number) => {
   const formattedSeconds = String(remainingSeconds).padStart(2, "0");
 
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+};
+
+const getDayOfTheWeek = (date: string) => {
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const dateObj = new Date(date);
+  const dayIndex = dateObj.getDay();
+  return days[dayIndex];
+};
+
+const getEarliestAndLatestDates = (studySessions: studySessionDto[]) => {
+  const dates = studySessions.map((studySession) => studySession.date);
+  // Step 1: Convert the strings to date objects and store in a new array
+  const dateObjects = dates.map((item) => {
+    const [year, month, day] = item.split("-").map(Number);
+    return new Date(Date.UTC(year, month - 1, day));
+  });
+
+  // Step 2: Sort the date objects
+  dateObjects.sort((a, b) => a.getTime() - b.getTime());
+  // Step 3: Get the first and last date objects
+  const earliestDate = dateObjects[0];
+  const latestDate = dateObjects[dateObjects.length - 1];
+  const earliestDateString = earliestDate.toISOString().slice(0, 10);
+  const latestDateString = latestDate.toISOString().slice(0, 10);
+  return { earliestDateString, latestDateString };
+};
+
+const getIntroduction = (studySessions: studySessionDto[]) => {
+  const today = new Date().toISOString().slice(0, 10);
+  const { earliestDateString, latestDateString } =
+    getEarliestAndLatestDates(studySessions);
+  const message = `This document, generated on ${getDayOfTheWeek(
+    today
+  )}, ${today}, contains the logs spanning from ${getDayOfTheWeek(
+    earliestDateString
+  )}, ${earliestDateString}, to ${getDayOfTheWeek(
+    latestDateString
+  )}, ${latestDateString}.\n`;
+  return message;
 };
 
 const downloadMarkdownFile = (markdown: string) => {
