@@ -10,11 +10,7 @@ import { DateRange } from "react-day-picker";
 import BtnClose from "@/components/ui/BtnClose";
 import { useTransition } from "react";
 import { studySessionDto } from "@/types";
-import {
-  convertSessionsToMarkdown,
-  downloadMarkdownFile,
-  exportFile,
-} from "@/lib/export/utils";
+import { exportFile } from "@/lib/export/utils";
 
 interface TableFiltersProps {
   inputGlobalFilter: string;

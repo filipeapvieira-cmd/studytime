@@ -3,15 +3,15 @@ import { studySessionDto } from "@/types";
 const convertSessionsToMarkdown = (sessionsToExport: studySessionDto[]) => {
   let markdownString = "";
   sessionsToExport.forEach(
-    (session) => (markdownString += sessionToMarkdown(session))
+    (session, index) => (markdownString += sessionToMarkdown(session, index))
   );
   return markdownString;
 };
 
-const sessionToMarkdown = (studySession: studySessionDto) => {
+const sessionToMarkdown = (studySession: studySessionDto, index: number) => {
   let markdownString = "";
 
-  markdownString += "---\n";
+  markdownString += `\n# Session Number: ${index + 1}\n\n`;
 
   // Create a table for date, effectiveTime, and endTime
   markdownString += "| Date | Start Time | End Time | Effective Time |\n";

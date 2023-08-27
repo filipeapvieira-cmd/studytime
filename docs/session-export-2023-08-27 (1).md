@@ -1,4 +1,6 @@
----
+
+# Session Number: 1
+
 | Date | Start Time | End Time | Effective Time |
 |-------|------|----------------|----------|
 | 2023-08-22 | 07:25:45 | 11:29:05 |03:31:02  |
@@ -33,7 +35,9 @@
 ## Feelings
 - I have compared various architectures: React/Next.js and Thymeleaf/SpringBoot. It was intriguing to validate my comprehension of the distinctions between these two.
 
----
+
+# Session Number: 2
+
 | Date | Start Time | End Time | Effective Time |
 |-------|------|----------------|----------|
 | 2023-08-22 | 21:11:30 | 21:58:25 |00:46:55  |
@@ -53,7 +57,9 @@
 - **Time Spent:** 00:35:29 
 - **Hashtags:** development studytimev2
 
----
+
+# Session Number: 3
+
 | Date | Start Time | End Time | Effective Time |
 |-------|------|----------------|----------|
 | 2023-08-22 | 13:00:40 | 16:30:12 |03:13:15  |
