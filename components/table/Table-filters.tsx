@@ -10,6 +10,11 @@ import { DateRange } from "react-day-picker";
 import BtnClose from "@/components/ui/BtnClose";
 import { useTransition } from "react";
 import { studySessionDto } from "@/types";
+import {
+  convertSessionsToMarkdown,
+  downloadMarkdownFile,
+  exportFile,
+} from "@/lib/export/utils";
 
 interface TableFiltersProps {
   inputGlobalFilter: string;
@@ -71,10 +76,7 @@ const TableFilters: FC<TableFiltersProps> = ({
   };
 
   const handleExport = () => {
-    const filteredRows = table.getRowModel().rows;
-    const sessionsToExport: studySessionDto[] = filteredRows.map(
-      (row: any) => row.original
-    );
+    exportFile(table);
   };
 
   return (

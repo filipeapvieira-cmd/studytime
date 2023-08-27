@@ -1,10 +1,17 @@
 import { studySessionDto } from "@/types";
 
-// write a function that receives an array of studySessionDto and converts
-// all its indexes to a string containing the markdown
-
-export const objectToMarkdown = (studySession: studySessionDto) => {
+const convertSessionsToMarkdown = (sessionsToExport: studySessionDto[]) => {
   let markdownString = "";
+  sessionsToExport.forEach(
+    (session) => (markdownString += sessionToMarkdown(session))
+  );
+  return markdownString;
+};
+
+const sessionToMarkdown = (studySession: studySessionDto) => {
+  let markdownString = "";
+
+  markdownString += "---\n";
 
   // Create a table for date, effectiveTime, and endTime
   markdownString += "| Date | Start Time | End Time | Effective Time |\n";
@@ -14,22 +21,29 @@ export const objectToMarkdown = (studySession: studySessionDto) => {
   markdownString += "\n"; // New line after table
 
   // Add topics
-  markdownString += "### Topics\n\n";
+  markdownString += "## Topics\n\n";
   studySession.topics.forEach((topic, index) => {
-    markdownString += `#### ${index + 1}. ${topic.title}\n`;
-    markdownString += `- Description: \n`;
+    markdownString += `### ${index + 1}. ${topic.title}\n`;
+    markdownString += `- **Description:** \n`;
     markdownString += `${addSpacesToDashes(topic.description)}\n`;
-    markdownString += `- Time Spent: ${convertMillisecondsToString(
+    markdownString += `- **Time Spent:** ${convertMillisecondsToString(
       topic.effectiveTimeOfStudy
     )} \n`;
-    markdownString += `- Hashtags: ${topic.hashtags}\n`;
+    markdownString += `- **Hashtags:** ${topic.hashtags}\n`;
     markdownString += "\n"; // New line between topics
   });
 
   // Add feelings
-  markdownString += `### Feelings\n${studySession.feelings}\n\n`;
+  markdownString += addFeelings(studySession);
 
   return markdownString;
+};
+
+const addFeelings = (studySession: studySessionDto) => {
+  if (studySession.feelings && studySession.feelings !== "") {
+    return `## Feelings\n${studySession.feelings}\n\n`;
+  }
+  return "";
 };
 
 const addSpacesToDashes = (inputString: string) => {
@@ -47,4 +61,32 @@ const convertMillisecondsToString = (milliseconds: number) => {
   const formattedSeconds = String(remainingSeconds).padStart(2, "0");
 
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+};
+
+const downloadMarkdownFile = (markdown: string) => {
+  const blob = new Blob([markdown], { type: "text/markdown" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+
+  const now = new Date();
+  const fileName = `session-export-${now.toISOString().slice(0, 10)}.md`;
+  a.download = fileName;
+
+  document.body.appendChild(a);
+  a.click();
+
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+export const exportFile = (table: any) => {
+  const filteredRows = table.getRowModel().rows;
+  const sessionsToExport: studySessionDto[] = filteredRows.map(
+    (row: any) => row.original
+  );
+  const markdown = convertSessionsToMarkdown(sessionsToExport);
+  downloadMarkdownFile(markdown);
+  //console.log(markdown);
 };
