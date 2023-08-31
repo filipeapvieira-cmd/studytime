@@ -8,14 +8,8 @@ import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { useToast } from "@/components/ui/use-toast";
 import { GET_ALL_SESSIONS_ENDPOINT } from "@/constants/config";
 import { studySessionDto } from "@/types";
-
+import { fetcher } from "@/lib/swr/utils";
 interface DashboardPageProps {}
-
-const fetcher = async (url: string) => {
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-};
 
 const DashboardPage: FC<DashboardPageProps> = ({}) => {
   const { data, error } = useSWR(GET_ALL_SESSIONS_ENDPOINT, fetcher);
@@ -28,7 +22,6 @@ const DashboardPage: FC<DashboardPageProps> = ({}) => {
       title: `Uh oh! Something went wrong`,
       description: `Unable to fetch data. Please try again later`,
     });
-    // If we continue having the error due to the server functions being unavailable, we can try to useRouter and reload the page on Error
   }, [error]);
 
   if (error) {

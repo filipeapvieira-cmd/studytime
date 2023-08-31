@@ -29,6 +29,9 @@ const Header: FC<HeaderProps> = ({}) => {
             <nav>
               <Navlink href="/dashboard">Dashboard</Navlink>
             </nav>
+            <nav>
+              <Navlink href="/charts">Charts</Navlink>
+            </nav>
           </>
         )}
       </div>

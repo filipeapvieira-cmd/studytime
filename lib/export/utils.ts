@@ -56,7 +56,7 @@ const addSpacesToDashes = (inputString: string) => {
   return inputString.replace(/(^|[\s\n])-/g, "$1    -");
 };
 
-const convertMillisecondsToString = (milliseconds: number) => {
+export const convertMillisecondsToString = (milliseconds: number) => {
   const seconds = Math.floor(milliseconds / 1000);
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
