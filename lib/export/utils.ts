@@ -108,11 +108,11 @@ const getIntroduction = (studySessions: studySessionDto[]) => {
     getEarliestAndLatestDates(studySessions);
   const message = `This document, generated on ${getDayOfTheWeek(
     today
-  )}, ${today}, contains the logs spanning from ${getDayOfTheWeek(
+  )}, ${today}, contains the logs spanning from **${getDayOfTheWeek(
     earliestDateString
-  )}, ${earliestDateString}, to ${getDayOfTheWeek(
+  )}, ${earliestDateString}**, to **${getDayOfTheWeek(
     latestDateString
-  )}, ${latestDateString}.\n`;
+  )}, ${latestDateString}**.\n`;
   return message;
 };
 

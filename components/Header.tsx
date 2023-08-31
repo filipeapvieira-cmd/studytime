@@ -22,9 +22,14 @@ const Header: FC<HeaderProps> = ({}) => {
           <Icons.logo size={50} />
         </Link>
         {status == "authenticated" && (
-          <nav>
-            <Navlink href="/dashboard">Dashboard</Navlink>
-          </nav>
+          <>
+            <nav>
+              <Navlink href="/journaling">Journaling</Navlink>
+            </nav>
+            <nav>
+              <Navlink href="/dashboard">Dashboard</Navlink>
+            </nav>
+          </>
         )}
       </div>
       <nav>
