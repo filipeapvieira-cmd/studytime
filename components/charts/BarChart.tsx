@@ -14,14 +14,20 @@ import {
   PieChart,
   Pie,
 } from "recharts";
-import { getTotalStudiedTimePerDayOfTheWeek } from "@/lib/charts/utils";
+import {
+  getTotalStudiedTimePerDayOfTheWeek,
+  getYAxisUpperBound,
+  formatHSL,
+} from "@/lib/charts/utils";
 import { convertMillisecondsToString } from "@/lib/export/utils";
 interface BarChartProps {
   studySessions: studySessionDto[];
 }
 
 const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
-  const [chartData, setChartData] = useState(null);
+  const [chartData, setChartData] = useState<
+    { name: string; total: number }[] | null
+  >(null);
   const fontSize = 15;
 
   useEffect(() => {
@@ -33,13 +39,13 @@ const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
       <ResponsiveContainer height={400} width="100%" className={`mt-2`}>
         <BarChart
           width={500}
-          max-height={300}
-          data={chartData}
+          //max-height={300}
+          data={chartData || []}
           maxBarSize={300}
         >
           <CartesianGrid vertical={false} />
           <XAxis dataKey="name" fontSize={fontSize} />
-          <YAxis />
+          <YAxis domain={[0, getYAxisUpperBound(chartData)]} />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           <Bar dataKey="total" fill="#8884d8" barSize={25}>
@@ -57,7 +63,7 @@ const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
 
 export default BarChartCustom;
 
-const CustomTooltip = ({ payload, label, active }) => {
+const CustomTooltip = ({ payload, label, active }: any) => {
   if (active) {
     const totalInSeconds = payload[0].value;
 
@@ -78,18 +84,33 @@ const CustomTooltip = ({ payload, label, active }) => {
   return null;
 };
 
-const CustomLabel = (props) => {
+const CustomLabel = (props: any) => {
   const { x, y, value } = props;
   const hours = Math.floor(value / 3600);
   const minutes = Math.floor((value % 3600) / 60);
   const seconds = value % 60;
+
+  // Fetch the color from the root CSS variables
+  const rootStyle = getComputedStyle(document.documentElement);
+  const foregroundColor = rootStyle
+    .getPropertyValue("--secondary-foreground")
+    .trim();
+  // Convert it to a proper HSL string
+  const formattedForegroundColor = formatHSL(foregroundColor);
 
   const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
     .toString()
     .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 
   return (
-    <text x={x} y={y} dy={-4} fontSize={12} textAnchor="middle">
+    <text
+      x={x + 13} // Shift the x position 13 units to the right
+      y={y}
+      dy={-4}
+      fontSize={14}
+      textAnchor="middle"
+      fill={formattedForegroundColor}
+    >
       {formattedTime}
     </text>
   );
