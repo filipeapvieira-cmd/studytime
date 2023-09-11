@@ -3,8 +3,15 @@ import { Table } from "@tanstack/table-core";
 
 const convertSessionsToMarkdown = (sessionsToExport: studySessionDto[]) => {
   let markdownString = "";
-  markdownString += getIntroduction(sessionsToExport);
-  sessionsToExport.forEach(
+
+  const orderedAscByDate = [...sessionsToExport].sort(
+    (a, b) =>
+      convertStringDateToDate(a.date).getTime() -
+      convertStringDateToDate(b.date).getTime()
+  );
+
+  markdownString += getIntroduction(orderedAscByDate);
+  orderedAscByDate.forEach(
     (session, index) => (markdownString += sessionToMarkdown(session, index))
   );
   return markdownString;
@@ -85,13 +92,15 @@ const getDayOfTheWeek = (date: string) => {
   return days[dayIndex];
 };
 
+const convertStringDateToDate = (stringDate: string): Date => {
+  const [year, month, day] = stringDate.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day));
+};
+
 const getEarliestAndLatestDates = (studySessions: studySessionDto[]) => {
   const dates = studySessions.map((studySession) => studySession.date);
   // Step 1: Convert the strings to date objects and store in a new array
-  const dateObjects = dates.map((item) => {
-    const [year, month, day] = item.split("-").map(Number);
-    return new Date(Date.UTC(year, month - 1, day));
-  });
+  const dateObjects = dates.map((item) => convertStringDateToDate(item));
 
   // Step 2: Sort the date objects
   dateObjects.sort((a, b) => a.getTime() - b.getTime());
