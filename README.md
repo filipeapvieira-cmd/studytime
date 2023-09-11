@@ -1,30 +1,29 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## 📚 StudyTime Logger 
+An intuitive application designed for students to efficiently log, retrieve, and analyze their study sessions.
 
-## Getting Started
+## 🎯 Objective
+StudyTime Logger simplifies the student's journey by offering:
 
-First, run the development server:
+- **Logging Sessions**: Easily record each study session with relevant details.
+- **Retrieval**: Swiftly access past entries without any hassle.
+- **Analytics**: Get a statistical breakdown of your study hours, helping you understand your study patterns better.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## 🚀 Live Demo
+Experience the application firsthand: [StudyTime](https://projectstudytimev2.vercel.app/)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
+- Frontend Framework: React with TypeScript
+- Backend: Next.js
+- Database: Postgres
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Role Models
+## 🌟 Inspired By
+I've taken inspiration and learned from some amazing projects:
 
 - [taxonomy](https://github.com/shadcn/taxonomy)
 - [nextjs-postgres-auth-starter](https://github.com/vercel/nextjs-postgres-auth-starter)
 
-## Dependencies
+## 📦 Dependencies
+My project leverages some powerful libraries and tools:
 
-- [react-md-editor](https://github.com/uiwjs/react-md-editor)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [Prisma](https://www.prisma.io/)
+- UI Components: [shadcn/ui](https://ui.shadcn.com/)
+- ORM: [Prisma](https://www.prisma.io/)
