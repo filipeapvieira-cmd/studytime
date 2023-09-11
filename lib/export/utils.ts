@@ -1,4 +1,5 @@
 import { studySessionDto } from "@/types";
+import { Table } from "@tanstack/table-core";
 
 const convertSessionsToMarkdown = (sessionsToExport: studySessionDto[]) => {
   let markdownString = "";
@@ -134,8 +135,8 @@ const downloadMarkdownFile = (markdown: string) => {
   URL.revokeObjectURL(url);
 };
 
-export const exportFile = (table: any) => {
-  const filteredRows = table.getRowModel().rows;
+export const exportFile = <TData>(table: Table<TData>) => {
+  const filteredRows = table.getFilteredRowModel().rows;
   const sessionsToExport: studySessionDto[] = filteredRows.map(
     (row: any) => row.original
   );

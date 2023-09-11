@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Icons } from "@/components/icons";
@@ -11,15 +11,16 @@ import BtnClose from "@/components/ui/BtnClose";
 import { useTransition } from "react";
 import { studySessionDto } from "@/types";
 import { exportFile } from "@/lib/export/utils";
+import { Table } from "@tanstack/table-core";
 
-interface TableFiltersProps {
+interface TableFiltersProps<TData> {
   inputGlobalFilter: string;
   globalFilter: string;
   columnFilters: any[];
   setInputGlobalFilter: (value: string) => void;
   setGlobalFilter: (value: string) => void;
   setColumnFilters: (value: any[]) => void;
-  table: any;
+  table: Table<TData>;
 }
 
 const endOfDay = (date: Date) => {
@@ -34,7 +35,8 @@ const startOfDay = (date: Date) => {
   return start;
 };
 
-const TableFilters: FC<TableFiltersProps> = ({
+// The comma essentially signals to TypeScript that you're working with a generic and not starting a JSX element.
+const TableFilters = <TData,>({
   inputGlobalFilter,
   globalFilter,
   columnFilters,
@@ -42,12 +44,19 @@ const TableFilters: FC<TableFiltersProps> = ({
   setGlobalFilter,
   setColumnFilters,
   table,
-}) => {
+}: TableFiltersProps<TData>) => {
   const [isPending, startTransition] = useTransition();
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(Date.now()),
     to: new Date(Date.now()),
   });
+  const [isExport, setIsExport] = useState(false);
+
+  useEffect(() => {
+    if (!isExport) return;
+    exportFile(table);
+    setIsExport(false);
+  }, [columnFilters, isExport, setIsExport, table]);
 
   const handleFilterByDateRange = (range: DateRange | undefined) => {
     if (!range || !range.from) {
@@ -72,7 +81,8 @@ const TableFilters: FC<TableFiltersProps> = ({
   };
 
   const handleExport = () => {
-    exportFile(table);
+    setIsExport(true);
+    handleFilterByDateRange(range);
   };
 
   return (
