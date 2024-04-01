@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useContext } from "react";
 import { SessionTimer, TimeContextType, SessionStatus } from "@/types";
 import {
   handleInitial,
@@ -28,6 +28,14 @@ export const timeCtxDefaultValues: TimeContextType = {
 };
 
 export const TimeContext = createContext(timeCtxDefaultValues);
+
+export const useTimeContext = () => {
+  const context = useContext(TimeContext);
+  if (!context) {
+    throw new Error("useTimeContext must be used within a TimerProvider");
+  }
+  return context;
+};
 
 export default function TimerProvider({
   children,
