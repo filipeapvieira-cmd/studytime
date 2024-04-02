@@ -12,7 +12,7 @@ import {
   ChronoContext,
   chronoCtxDefaultValues,
 } from "@/src/ctx/chrono-provider";
-import { TimeContext } from "@/src/ctx/time-provider";
+import { useTimeContext } from "@/src/ctx/time-provider";
 import { Icons } from "@/components/icons";
 import ChronoMenu from "./Chrono-menu";
 
@@ -22,7 +22,7 @@ const Chrono: FC<ChronoProps> = ({}) => {
   const { sessionChrono, setSessionChrono } = useContext(ChronoContext);
   const {
     sessionTimer: { status },
-  } = useContext(TimeContext);
+  } = useTimeContext();
   const btnRef = useRef<HTMLButtonElement>(null);
 
   const startHandler = (minutes: number) => {

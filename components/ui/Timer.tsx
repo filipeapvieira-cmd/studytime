@@ -1,23 +1,21 @@
 "use client";
 
-import { useContext, useEffect, useState, useRef } from "react";
-import { TimeContext } from "@/src/ctx/time-provider";
+import { useTimeContext } from "@/src/ctx/time-provider";
 import BtnTimer from "./BtnTimer";
-import { handleState } from "@/lib/time-provider/utils";
+import { updateSessionTimerStatus } from "@/lib/time-provider/utils";
+import { SessionStatusEnum } from "@/constants/config";
 
 const Timer = () => {
-  const { sessionTimer, setSessionTimer } = useContext(TimeContext);
+  const { sessionTimer, updateSessionTimer } = useTimeContext();
   const { effectiveTimeOfStudy, status } = sessionTimer;
 
   return (
-    <>
-      <BtnTimer
-        onClick={() => handleState(status, setSessionTimer)}
-        status={status}
-        effectiveTimeOfStudy={effectiveTimeOfStudy}
-        disabled={status === "stop"}
-      />
-    </>
+    <BtnTimer
+      onClick={() => updateSessionTimerStatus(status, updateSessionTimer)}
+      status={status}
+      effectiveTimeOfStudy={effectiveTimeOfStudy}
+      disabled={status === SessionStatusEnum.Stop}
+    />
   );
 };
 

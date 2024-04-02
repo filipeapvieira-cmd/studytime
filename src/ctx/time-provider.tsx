@@ -2,14 +2,6 @@
 
 import { createContext, useState, useContext } from "react";
 import { SessionTimer, TimeContextType, SessionStatus } from "@/types";
-import {
-  handleInitial,
-  handlePause,
-  handleStop,
-  handlePlay,
-  handleInterval,
-  statusToHandler,
-} from "@/lib/time-provider/utils";
 import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
 
 export const timeCtxDefaultValues: TimeContextType = {
@@ -25,6 +17,8 @@ export const timeCtxDefaultValues: TimeContextType = {
   setSessionTimer: () => {},
   getLastSessionTimer: () => timeCtxDefaultValues.sessionTimer,
   status: "initial",
+  // Objective is to replace setSessionTimer with updateSessionTimer
+  updateSessionTimer: () => {},
 };
 
 export const TimeContext = createContext(timeCtxDefaultValues);
@@ -48,6 +42,12 @@ export default function TimerProvider({
   const { status } = sessionTimer;
 
   useEffectStatusHandling(status, sessionTimer, setSessionTimer);
+  //TODO: Continue to replace setSessionTimer with updateSessionTimer
+  const updateSessionTimer = (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => {
+    setSessionTimer((prev) => updateFunction(prev));
+  };
 
   const getLastSessionTimer = () => {
     return sessionTimer;
@@ -59,6 +59,7 @@ export default function TimerProvider({
         status,
         sessionTimer,
         setSessionTimer,
+        updateSessionTimer,
         getLastSessionTimer,
       }}
     >

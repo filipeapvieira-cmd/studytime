@@ -18,7 +18,7 @@ import {
   createNewTopic,
 } from "@/src/ctx/session-topics-provider";
 import {
-  handleState,
+  updateSessionTimerStatus,
   statusToHandler,
   handleInterval,
   handlePause,
@@ -257,7 +257,10 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
             status={componentTimeState.status}
             effectiveTimeOfStudy={componentTimeState.effectiveTimeOfStudy}
             onClick={() =>
-              handleState(componentTimeState.status, setComponentTimeState)
+              updateSessionTimerStatus(
+                componentTimeState.status,
+                setComponentTimeState
+              )
             }
           />
         )}

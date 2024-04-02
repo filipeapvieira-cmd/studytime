@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import Alert from "@/components/Alert";
 import { retrieveTextFromJson } from "@/lib/utils";
-import { TimeContext } from "@/src/ctx/time-provider";
+import { TimeContext, useTimeContext } from "@/src/ctx/time-provider";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { getFullSessionLog, persistSession } from "@/lib/session-log/utils";
 import { FullSessionLog } from "@/types";
@@ -17,7 +17,7 @@ import { usePersistSession } from "@/src/hooks/usePersistSession";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
 
 const SaveSession = ({}) => {
-  const { getLastSessionTimer, status } = useContext(TimeContext);
+  const { getLastSessionTimer, status } = useTimeContext();
   const { sessionFeelings } = useContext(FeelingsContext);
   const { resetStudySession } = useStudySession();
   const { title, description } = retrieveTextFromJson("saveSession");

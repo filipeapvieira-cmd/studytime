@@ -1,3 +1,4 @@
+import { SessionStatusEnum } from "@/constants/config";
 import { SessionStatus, SessionTimer } from "@/types";
 import { Dispatch, SetStateAction } from "react";
 
@@ -97,16 +98,16 @@ const handleIfStartOfSession = (
   }
 };
 
-export const handleState = (
+export const updateSessionTimerStatus = (
   status: SessionStatus,
-  setter: Dispatch<SetStateAction<SessionTimer>>
+  cbFn: (updateFunction: (prev: SessionTimer) => SessionTimer) => void
 ) => {
-  if (status === "initial") {
-    setter((prevState) => ({ ...prevState, status: "play" }));
-  } else if (status === "play") {
-    setter((prevState) => ({ ...prevState, status: "pause" }));
-  } else if (status === "pause") {
-    setter((prevState) => ({ ...prevState, status: "play" }));
+  if (status === SessionStatusEnum.Initial) {
+    cbFn((prevState) => ({ ...prevState, status: SessionStatusEnum.Play }));
+  } else if (status === SessionStatusEnum.Play) {
+    cbFn((prevState) => ({ ...prevState, status: SessionStatusEnum.Pause }));
+  } else if (status === SessionStatusEnum.Pause) {
+    cbFn((prevState) => ({ ...prevState, status: SessionStatusEnum.Play }));
   }
 };
 
@@ -123,7 +124,7 @@ export const coerceComponentState = (
   setter: Dispatch<SetStateAction<SessionTimer>>
 ) => {
   if (parentState === "pause" && childState === "play") {
-    handleState("play", setter);
+    updateSessionTimerStatus("play", setter);
   } else if (parentState === "stop") {
     setter((prevValue) => ({ ...prevValue, status: "stop" }));
   } else if (parentState === "initial") {

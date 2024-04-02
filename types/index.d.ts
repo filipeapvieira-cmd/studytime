@@ -17,6 +17,9 @@ export type TimeContextType = {
   setSessionTimer: Dispatch<SetStateAction<SessionTimer>>;
   getLastSessionTimer: () => SessionTimer;
   status: SessionStatus;
+  updateSessionTimer: (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => void;
 };
 
 type SessionChrono = {

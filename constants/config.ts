@@ -8,3 +8,9 @@ export const HTTP_METHOD = {
   DELETE: "DELETE",
   GET: "GET",
 };
+export enum SessionStatusEnum {
+  Initial = "initial",
+  Play = "play",
+  Pause = "pause",
+  Stop = "stop",
+}
