@@ -100,12 +100,12 @@ const handleIfStartOfSession = (
 
 const sessionTimerStatusTransitionMap: Record<
   SessionStatusEnum,
-  SessionStatusEnum | null
+  SessionStatusEnum
 > = {
   [SessionStatusEnum.Initial]: SessionStatusEnum.Play,
   [SessionStatusEnum.Play]: SessionStatusEnum.Pause,
   [SessionStatusEnum.Pause]: SessionStatusEnum.Play,
-  [SessionStatusEnum.Stop]: null,
+  [SessionStatusEnum.Stop]: SessionStatusEnum.Stop,
 };
 
 export const updateSessionTimerStatus = (

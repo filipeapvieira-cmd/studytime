@@ -9,6 +9,7 @@ import Alert from "@/components/Alert";
 import { retrieveTextFromJson } from "@/lib/utils";
 import { SessionTimer } from "@/types";
 import { SessionStatusEnum } from "@/constants/config";
+import { updateSessionTimerStatus } from "@/lib/time-provider/utils";
 
 interface StopSessionProps {}
 
@@ -23,10 +24,7 @@ const StopSession: FC<StopSessionProps> = ({}) => {
   const { title, description } = retrieveTextFromJson("stopSession");
 
   const stopSessionHandler = () => {
-    updateSessionTimer((prevState: SessionTimer) => ({
-      ...prevState,
-      status: SessionStatusEnum.Stop,
-    }));
+    updateSessionTimerStatus(SessionStatusEnum.Stop, updateSessionTimer);
 
     setSessionChrono((prevState: SessionTimer) => ({
       ...prevState,
