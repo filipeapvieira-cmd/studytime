@@ -98,16 +98,26 @@ const handleIfStartOfSession = (
   }
 };
 
+const sessionTimerStatusTransitionMap: Record<
+  SessionStatusEnum,
+  SessionStatusEnum | null
+> = {
+  [SessionStatusEnum.Initial]: SessionStatusEnum.Play,
+  [SessionStatusEnum.Play]: SessionStatusEnum.Pause,
+  [SessionStatusEnum.Pause]: SessionStatusEnum.Play,
+  [SessionStatusEnum.Stop]: null,
+};
+
 export const updateSessionTimerStatus = (
   status: SessionStatus,
   cbFn: (updateFunction: (prev: SessionTimer) => SessionTimer) => void
 ) => {
-  if (status === SessionStatusEnum.Initial) {
-    cbFn((prevState) => ({ ...prevState, status: SessionStatusEnum.Play }));
-  } else if (status === SessionStatusEnum.Play) {
-    cbFn((prevState) => ({ ...prevState, status: SessionStatusEnum.Pause }));
-  } else if (status === SessionStatusEnum.Pause) {
-    cbFn((prevState) => ({ ...prevState, status: SessionStatusEnum.Play }));
+  const nextStatus = sessionTimerStatusTransitionMap[status];
+
+  if (nextStatus) {
+    cbFn((prevState) => ({ ...prevState, status: nextStatus }));
+  } else {
+    throw new Error("Invalid Session Timer Status transition.");
   }
 };
 
