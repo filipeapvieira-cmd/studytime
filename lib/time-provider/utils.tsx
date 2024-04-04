@@ -3,65 +3,72 @@ import { SessionStatus, SessionTimer } from "@/types";
 import { Dispatch, SetStateAction } from "react";
 
 export const handleInitial = (
-  sessionTimer: SessionTimer,
-  setSessionTimer: Dispatch<SetStateAction<SessionTimer>>
+  updateSessionTimer: (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => void
 ) => {
   return;
 };
 
 export const handlePause = (
-  sessionTimer: SessionTimer,
-  setSessionTimer: Dispatch<SetStateAction<SessionTimer>>
+  updateSessionTimer: (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => void
 ) => {
-  if (sessionTimer.sessionPauseStartTime === 0) {
-    setSessionTimer({
-      ...sessionTimer,
-      sessionPauseStartTime: Date.now(),
-    });
-  }
-};
-
-export const handleStop = (
-  sessionTimer: SessionTimer,
-  setSessionTimer: Dispatch<SetStateAction<SessionTimer>>
-) => {
-  handleIfSessionIsPaused(sessionTimer, setSessionTimer);
-  setSessionTimer((prevSessionTimer) => {
-    //console.log(prevSessionTimer.effectiveTimeOfStudy);
-    //console.log(Date.now() - (prevSessionTimer.sessionStartTime + prevSessionTimer.totalPauseTime));
-    return {
-      ...prevSessionTimer,
-      sessionEndTime: Date.now(),
-    };
+  updateSessionTimer((prevSessionTimer) => {
+    const isFirstPause = prevSessionTimer.sessionPauseStartTime === 0;
+    if (isFirstPause) {
+      return {
+        ...prevSessionTimer,
+        sessionPauseStartTime: Date.now(),
+      };
+    }
+    return prevSessionTimer;
   });
 };
 
-export const handlePlay = (
-  sessionTimer: SessionTimer,
-  setSessionTimer: Dispatch<SetStateAction<SessionTimer>>
+export const handleStop = (
+  updateSessionTimer: (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => void
 ) => {
-  handleIfStartOfSession(sessionTimer, setSessionTimer);
-  handleIfSessionIsPaused(sessionTimer, setSessionTimer);
+  handleIfSessionIsPaused(updateSessionTimer);
+
+  updateSessionTimer((prevSessionTimer) => ({
+    //console.log(prevSessionTimer.effectiveTimeOfStudy);
+    //console.log(Date.now() - (prevSessionTimer.sessionStartTime + prevSessionTimer.totalPauseTime));
+    ...prevSessionTimer,
+    sessionEndTime: Date.now(),
+  }));
 };
 
-export const handleInterval = (
-  sessionTimer: SessionTimer,
-  setSessionTimer: Dispatch<SetStateAction<SessionTimer>>
+export const handlePlay = (
+  updateSessionTimer: (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => void
 ) => {
-  if (sessionTimer.status === "play") {
-    setSessionTimer((prevSessionTimer) => ({
-      ...prevSessionTimer,
-      /*       
-      EDITED on 25/07. Replaced by function
-      effectiveTimeOfStudy:
-        Date.now() -
-        (prevSessionTimer.sessionStartTime + prevSessionTimer.totalPauseTime), */
-      effectiveTimeOfStudy: getEffectiveTimeOfStudy(
-        prevSessionTimer.sessionStartTime,
-        prevSessionTimer.totalPauseTime
-      ),
-    }));
-  }
+  handleIfStartOfSession(updateSessionTimer);
+  handleIfSessionIsPaused(updateSessionTimer);
+};
+
+export const handleEffectiveTimeOfStudyIncrease = (
+  updateSessionTimer: (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => void
+) => {
+  updateSessionTimer((prevSessionTimer) => {
+    const isSessionInPlay = prevSessionTimer.status === SessionStatusEnum.Play;
+    if (isSessionInPlay) {
+      return {
+        ...prevSessionTimer,
+        effectiveTimeOfStudy: getEffectiveTimeOfStudy(
+          prevSessionTimer.sessionStartTime,
+          prevSessionTimer.totalPauseTime
+        ),
+      };
+    }
+    return prevSessionTimer;
+  });
 };
 
 export const getEffectiveTimeOfStudy = (
@@ -72,30 +79,40 @@ export const getEffectiveTimeOfStudy = (
 };
 
 const handleIfSessionIsPaused = (
-  sessionTimer: SessionTimer,
-  setSessionTimer: Dispatch<SetStateAction<SessionTimer>>
+  updateSessionTimer: (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => void
 ) => {
-  if (sessionTimer.sessionPauseStartTime !== 0) {
-    setSessionTimer((prevSessionTimer) => ({
-      ...prevSessionTimer,
-      totalPauseTime:
-        prevSessionTimer.totalPauseTime +
-        (Date.now() - prevSessionTimer.sessionPauseStartTime),
-      sessionPauseStartTime: 0,
-    }));
-  }
+  updateSessionTimer((prevSessionTimer) => {
+    const isSessionPaused = prevSessionTimer.sessionPauseStartTime !== 0;
+    if (isSessionPaused) {
+      return {
+        ...prevSessionTimer,
+        totalPauseTime:
+          prevSessionTimer.totalPauseTime +
+          (Date.now() - prevSessionTimer.sessionPauseStartTime),
+        sessionPauseStartTime: 0,
+      };
+    }
+    return prevSessionTimer;
+  });
 };
 
 const handleIfStartOfSession = (
-  sessionTimer: SessionTimer,
-  setSessionTimer: Dispatch<SetStateAction<SessionTimer>>
+  updateSessionTimer: (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => void
 ) => {
-  if (sessionTimer.sessionStartTime === 0) {
-    setSessionTimer((prevSessionTimer) => ({
-      ...prevSessionTimer,
-      sessionStartTime: Date.now(),
-    }));
-  }
+  updateSessionTimer((prevSessionTimer) => {
+    const isStartOfSession = prevSessionTimer.sessionStartTime === 0;
+    if (isStartOfSession) {
+      return {
+        ...prevSessionTimer,
+        sessionStartTime: Date.now(),
+      };
+    }
+    return prevSessionTimer;
+  });
 };
 
 const sessionTimerStatusTransitionMap: Record<
@@ -110,17 +127,20 @@ const sessionTimerStatusTransitionMap: Record<
 
 export const updateSessionTimerStatus = (
   status: SessionStatus,
-  cbFn: (updateFunction: (prev: SessionTimer) => SessionTimer) => void
+  updateSessionTimer: (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => void
 ) => {
   const nextStatus = sessionTimerStatusTransitionMap[status];
 
   if (nextStatus) {
-    cbFn((prevState) => ({ ...prevState, status: nextStatus }));
+    updateSessionTimer((prevState) => ({ ...prevState, status: nextStatus }));
   } else {
     throw new Error("Invalid Session Timer Status transition.");
   }
 };
 
+//TODO: refactor to use a record
 export const statusToHandler = {
   initial: handleInitial,
   pause: handlePause,

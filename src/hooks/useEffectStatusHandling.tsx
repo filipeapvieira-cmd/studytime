@@ -1,21 +1,25 @@
-import { useEffect, Dispatch, SetStateAction } from "react";
-import { statusToHandler, handleInterval } from "@/lib/time-provider/utils";
+import { useEffect } from "react";
+import {
+  statusToHandler,
+  handleEffectiveTimeOfStudyIncrease,
+} from "@/lib/time-provider/utils";
 import { SessionStatus, SessionTimer } from "@/types";
 
 const useEffectStatusHandling = (
   status: SessionStatus,
-  sessionTimer: SessionTimer,
-  setSessionTimer: Dispatch<SetStateAction<SessionTimer>>
+  updateSessionTimer: (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => void
 ) => {
   useEffect(() => {
     let interval: NodeJS.Timer;
+    //TODO: Replace setSessionTimer with updateSessionTimer
+    const handleSessionStatus = statusToHandler[status];
+    handleSessionStatus(updateSessionTimer);
 
-    const handler = statusToHandler[status];
-    handler(sessionTimer, setSessionTimer);
-
-    // increment study session time
+    // Increment effectiveTimeOfStudy every second
     interval = setInterval(() => {
-      handleInterval(sessionTimer, setSessionTimer);
+      handleEffectiveTimeOfStudyIncrease(updateSessionTimer);
     }, 1000);
 
     return () => {

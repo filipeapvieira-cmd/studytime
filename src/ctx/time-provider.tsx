@@ -41,13 +41,15 @@ export default function TimerProvider({
   );
   const { status } = sessionTimer;
 
-  useEffectStatusHandling(status, sessionTimer, setSessionTimer);
-  //TODO: Continue to replace setSessionTimer with updateSessionTimer
   const updateSessionTimer = (
     updateFunction: (prev: SessionTimer) => SessionTimer
   ) => {
     setSessionTimer((prev) => updateFunction(prev));
   };
+
+  useEffectStatusHandling(status, updateSessionTimer);
+
+  //TODO: Continue to replace setSessionTimer with updateSessionTimer
 
   const getLastSessionTimer = () => {
     return sessionTimer;

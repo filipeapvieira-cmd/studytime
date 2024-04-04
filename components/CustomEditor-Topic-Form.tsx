@@ -20,7 +20,7 @@ import {
 import {
   updateSessionTimerStatus,
   statusToHandler,
-  handleInterval,
+  handleEffectiveTimeOfStudyIncrease,
   handlePause,
   handleStop,
   coerceComponentState,
