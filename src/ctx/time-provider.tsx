@@ -14,10 +14,8 @@ export const timeCtxDefaultValues: TimeContextType = {
     sessionPauseEndTime: 0,
     totalPauseTime: 0,
   },
-  setSessionTimer: () => {},
   getLastSessionTimer: () => timeCtxDefaultValues.sessionTimer,
   status: "initial",
-  // Objective is to replace setSessionTimer with updateSessionTimer
   updateSessionTimer: () => {},
 };
 
@@ -49,8 +47,6 @@ export default function TimerProvider({
 
   useEffectStatusHandling(status, updateSessionTimer);
 
-  //TODO: Continue to replace setSessionTimer with updateSessionTimer
-
   const getLastSessionTimer = () => {
     return sessionTimer;
   };
@@ -60,7 +56,6 @@ export default function TimerProvider({
       value={{
         status,
         sessionTimer,
-        setSessionTimer,
         updateSessionTimer,
         getLastSessionTimer,
       }}

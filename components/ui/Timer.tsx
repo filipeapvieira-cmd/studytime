@@ -2,7 +2,7 @@
 
 import { useTimeContext } from "@/src/ctx/time-provider";
 import BtnTimer from "./BtnTimer";
-import { updateSessionTimerStatus } from "@/lib/time-provider/utils";
+import { updateTimerStatus } from "@/lib/time-provider/utils";
 import { SessionStatusEnum } from "@/constants/config";
 
 const Timer = () => {
@@ -11,7 +11,7 @@ const Timer = () => {
 
   return (
     <BtnTimer
-      onClick={() => updateSessionTimerStatus(status, updateSessionTimer)}
+      onClick={() => updateTimerStatus(status, updateSessionTimer)}
       status={status}
       effectiveTimeOfStudy={effectiveTimeOfStudy}
       disabled={status === SessionStatusEnum.Stop}

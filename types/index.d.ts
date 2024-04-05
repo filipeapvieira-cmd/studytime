@@ -12,9 +12,10 @@ export type SessionTimer = {
   totalPauseTime: number;
 };
 
+export type TopicTimer = SessionTimer;
+
 export type TimeContextType = {
   sessionTimer: SessionTimer;
-  setSessionTimer: Dispatch<SetStateAction<SessionTimer>>;
   getLastSessionTimer: () => SessionTimer;
   status: SessionStatus;
   updateSessionTimer: (

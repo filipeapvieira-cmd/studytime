@@ -1,14 +1,5 @@
 import { SessionStatusEnum } from "@/constants/config";
-import { SessionStatus, SessionTimer } from "@/types";
-import { Dispatch, SetStateAction } from "react";
-
-export const handleInitial = (
-  updateSessionTimer: (
-    updateFunction: (prev: SessionTimer) => SessionTimer
-  ) => void
-) => {
-  return;
-};
+import { SessionStatus, SessionTimer, TopicTimer } from "@/types";
 
 export const handlePause = (
   updateSessionTimer: (
@@ -58,13 +49,14 @@ export const handleEffectiveTimeOfStudyIncrease = (
 ) => {
   updateSessionTimer((prevSessionTimer) => {
     const isSessionInPlay = prevSessionTimer.status === SessionStatusEnum.Play;
+    const effectiveTimeOfStudy = getEffectiveTimeOfStudy(
+      prevSessionTimer.sessionStartTime,
+      prevSessionTimer.totalPauseTime
+    );
     if (isSessionInPlay) {
       return {
         ...prevSessionTimer,
-        effectiveTimeOfStudy: getEffectiveTimeOfStudy(
-          prevSessionTimer.sessionStartTime,
-          prevSessionTimer.totalPauseTime
-        ),
+        effectiveTimeOfStudy,
       };
     }
     return prevSessionTimer;
@@ -85,12 +77,13 @@ const handleIfSessionIsPaused = (
 ) => {
   updateSessionTimer((prevSessionTimer) => {
     const isSessionPaused = prevSessionTimer.sessionPauseStartTime !== 0;
+    const totalPauseTime =
+      prevSessionTimer.totalPauseTime +
+      (Date.now() - prevSessionTimer.sessionPauseStartTime);
     if (isSessionPaused) {
       return {
         ...prevSessionTimer,
-        totalPauseTime:
-          prevSessionTimer.totalPauseTime +
-          (Date.now() - prevSessionTimer.sessionPauseStartTime),
+        totalPauseTime,
         sessionPauseStartTime: 0,
       };
     }
@@ -125,39 +118,53 @@ const sessionTimerStatusTransitionMap: Record<
   [SessionStatusEnum.Stop]: SessionStatusEnum.Stop,
 };
 
-export const updateSessionTimerStatus = (
+// Can update Session and Topic Timer status
+export const updateTimerStatus = (
   status: SessionStatus,
-  updateSessionTimer: (
-    updateFunction: (prev: SessionTimer) => SessionTimer
-  ) => void
+  updateTimer: (updateFunction: (prev: SessionTimer) => SessionTimer) => void
 ) => {
   const nextStatus = sessionTimerStatusTransitionMap[status];
 
   if (nextStatus) {
-    updateSessionTimer((prevState) => ({ ...prevState, status: nextStatus }));
+    updateTimer((prevState) => ({ ...prevState, status: nextStatus }));
   } else {
     throw new Error("Invalid Session Timer Status transition.");
   }
 };
 
-//TODO: refactor to use a record
-export const statusToHandler = {
-  initial: handleInitial,
-  pause: handlePause,
-  stop: handleStop,
-  play: handlePlay,
+export const sessionStatusToHandlerMap: Record<
+  SessionStatusEnum,
+  (
+    updateSessionTimer: (
+      updateFunction: (prev: SessionTimer) => SessionTimer
+    ) => void
+  ) => void
+> = {
+  [SessionStatusEnum.Initial]: () => {},
+  [SessionStatusEnum.Pause]: handlePause,
+  [SessionStatusEnum.Stop]: handleStop,
+  [SessionStatusEnum.Play]: handlePlay,
 };
 
-export const coerceComponentState = (
-  parentState: SessionStatus,
-  childState: SessionStatus,
-  setter: Dispatch<SetStateAction<SessionTimer>>
+export const forceSessionStatusOnTopicStatus = (
+  sessionStatus: SessionStatus,
+  topicStatus: SessionStatus,
+  updateTopicTimer: (updateFunction: (prev: TopicTimer) => TopicTimer) => void
 ) => {
-  if (parentState === "pause" && childState === "play") {
-    updateSessionTimerStatus("play", setter);
-  } else if (parentState === "stop") {
-    setter((prevValue) => ({ ...prevValue, status: "stop" }));
-  } else if (parentState === "initial") {
-    setter((prevValue) => ({ ...prevValue, status: "initial" }));
+  if (
+    sessionStatus === SessionStatusEnum.Pause &&
+    topicStatus === SessionStatusEnum.Play
+  ) {
+    updateTimerStatus(SessionStatusEnum.Play, updateTopicTimer);
+  } else if (sessionStatus === SessionStatusEnum.Stop) {
+    updateTopicTimer((prevValue) => ({
+      ...prevValue,
+      status: SessionStatusEnum.Stop,
+    }));
+  } else if (sessionStatus === SessionStatusEnum.Initial) {
+    updateTopicTimer((prevValue) => ({
+      ...prevValue,
+      status: SessionStatusEnum.Initial,
+    }));
   }
 };

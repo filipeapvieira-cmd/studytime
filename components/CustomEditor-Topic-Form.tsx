@@ -12,18 +12,14 @@ import {
 } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Topic } from "@/types";
+import { Topic, TopicTimer } from "@/types";
 import {
   TopicsContext,
   createNewTopic,
 } from "@/src/ctx/session-topics-provider";
 import {
-  updateSessionTimerStatus,
-  statusToHandler,
-  handleEffectiveTimeOfStudyIncrease,
-  handlePause,
-  handleStop,
-  coerceComponentState,
+  updateTimerStatus,
+  forceSessionStatusOnTopicStatus,
 } from "@/lib/time-provider/utils";
 import { TimeContext } from "@/src/ctx/time-provider";
 import BtnTimer from "./ui/BtnTimer";
@@ -69,7 +65,8 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     hashtags,
     description,
   });
-  const [componentTimeState, setComponentTimeState] = useState<SessionTimer>({
+
+  const [topicTimer, setTopicTimer] = useState<TopicTimer>({
     effectiveTimeOfStudy,
     status,
     sessionStartTime,
@@ -78,28 +75,33 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     sessionPauseEndTime,
     totalPauseTime,
   });
+
+  const updateTopicTimer = (
+    updateFunction: (prev: TopicTimer) => TopicTimer
+  ) => {
+    setTopicTimer((prev) => updateFunction(prev));
+  };
+
   const [userUpdatedEffectiveTimeOfStudy, setUserUpdatedEffectiveTimeOfStudy] =
     useState(
       String(
-        new Date(componentTimeState.effectiveTimeOfStudy)
-          .toISOString()
-          .slice(11, 19)
+        new Date(topicTimer.effectiveTimeOfStudy).toISOString().slice(11, 19)
       )
     );
 
   useEffect(() => {
-    coerceComponentState(
+    forceSessionStatusOnTopicStatus(
       sessionStatus,
-      componentTimeState.status,
-      setComponentTimeState
+      topicTimer.status,
+      updateTopicTimer
     );
   }, [sessionStatus]);
 
   useEffect(() => {
     setSessionTopics((prevValue: Topic[]) =>
-      handleTimerChange(prevValue, componentTimeState)
+      handleTimerChange(prevValue, topicTimer)
     );
-  }, [componentTimeState]);
+  }, [topicTimer]);
 
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -180,7 +182,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     const effectiveTimeOfStudy = timeStringToMillis(
       userUpdatedEffectiveTimeOfStudy
     );
-    setComponentTimeState((prevValue) => ({
+    setTopicTimer((prevValue) => ({
       ...prevValue,
       effectiveTimeOfStudy,
     }));
@@ -205,11 +207,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     }));
   };
 
-  useEffectStatusHandling(
-    componentTimeState.status,
-    componentTimeState,
-    setComponentTimeState
-  );
+  useEffectStatusHandling(topicTimer.status, updateTopicTimer);
 
   return (
     <>
@@ -254,14 +252,9 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
           <BtnTimer
             size="sm"
             disabled={status === "stop" || sessionStatus !== "play"}
-            status={componentTimeState.status}
-            effectiveTimeOfStudy={componentTimeState.effectiveTimeOfStudy}
-            onClick={() =>
-              updateSessionTimerStatus(
-                componentTimeState.status,
-                setComponentTimeState
-              )
-            }
+            status={topicTimer.status}
+            effectiveTimeOfStudy={topicTimer.effectiveTimeOfStudy}
+            onClick={() => updateTimerStatus(topicTimer.status, setTopicTimer)}
           />
         )}
       </div>
