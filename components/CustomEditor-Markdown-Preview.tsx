@@ -24,6 +24,8 @@ const CustomEditorMarkdownPreview: FC<CustomEditorMarkdownPreviewProps> = memo(
         {/* <div id="preview" dangerouslySetInnerHTML={handleCreateMarkup} /> */}
 
         <ReactMarkdown
+          // prose classes: https://github.com/tailwindlabs/tailwindcss-typography
+          className="prose text-foreground prose-headings:text-foreground prose-a:text-sky-600"
           // maps img element to next.js Image
           // https://www.codeconcisely.com/posts/nextjs-image-in-markdown/
           components={{
