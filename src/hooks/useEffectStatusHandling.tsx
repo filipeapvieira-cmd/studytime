@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import {
   handleEffectiveTimeOfStudyIncrease,
-  sessionStatusToHandlerMap,
+  statusToUpdateHandlerMap,
 } from "@/lib/time-provider/utils";
 import { SessionStatus, SessionTimer } from "@/types";
 
+// Used to handle the status update of Sessions and Topics
 const useEffectStatusHandling = (
   status: SessionStatus,
   updateTimer: (updateFunction: (prev: SessionTimer) => SessionTimer) => void
@@ -12,8 +13,8 @@ const useEffectStatusHandling = (
   useEffect(() => {
     let interval: NodeJS.Timer;
 
-    const handleSessionStatus = sessionStatusToHandlerMap[status];
-    handleSessionStatus(updateTimer);
+    const handleStatusUpdate = statusToUpdateHandlerMap[status];
+    handleStatusUpdate(updateTimer);
 
     // Increment effectiveTimeOfStudy every second
     interval = setInterval(() => {

@@ -132,7 +132,7 @@ export const updateTimerStatus = (
   }
 };
 
-export const sessionStatusToHandlerMap: Record<
+export const statusToUpdateHandlerMap: Record<
   SessionStatusEnum,
   (
     updateSessionTimer: (
