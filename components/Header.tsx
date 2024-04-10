@@ -1,50 +1,20 @@
-"use client";
-
 import Link from "next/link";
-import { FC, useEffect, useState } from "react";
 import { Icons } from "@/components/icons";
-import Navlink from "./ui/Navlink";
-import Btnlink from "./ui/Btnlink";
-import { useSession } from "next-auth/react";
-import UserNav from "@/components/User-Nav";
+import NavLinks from "@/components/header/nav-links";
+import Login from "@/components/header/nav-login";
 
-interface HeaderProps {}
-
-const Header: FC<HeaderProps> = ({}) => {
-  const { data: session, status } = useSession();
-  //console.log(session);
-  console.log(status);
-
+function Header() {
   return (
-    <div className="container flex justify-between items-center py-4 h-header">
+    <header className="container flex justify-between items-center py-4 h-header">
       <div className="flex items-center gap-6">
         <Link href="/">
           <Icons.logo size={50} />
         </Link>
-        {status == "authenticated" && (
-          <>
-            <nav>
-              <Navlink href="/journaling">Journaling</Navlink>
-            </nav>
-            <nav>
-              <Navlink href="/dashboard">Dashboard</Navlink>
-            </nav>
-            <nav>
-              <Navlink href="/charts">Charts</Navlink>
-            </nav>
-          </>
-        )}
+        <NavLinks />
       </div>
-      <nav>
-        {status == "authenticated" && <UserNav />}
-        {status != "authenticated" && (
-          <Btnlink>
-            <Icons.login />
-          </Btnlink>
-        )}
-      </nav>
-    </div>
+      <Login />
+    </header>
   );
-};
+}
 
 export default Header;
