@@ -25,7 +25,7 @@ const CustomEditorMarkdownPreview: FC<CustomEditorMarkdownPreviewProps> = memo(
 
         <ReactMarkdown
           // prose classes: https://github.com/tailwindlabs/tailwindcss-typography
-          className="prose text-foreground prose-headings:text-foreground prose-a:text-sky-600 prose-code:text-sm prose-code:text-yellow-500"
+          className="prose text-foreground prose-headings:text-foreground prose-a:text-sky-600 prose-code:text-sm prose-code:text-yellow-500 prose-strong:text-foreground prose-strong:font-bold"
           // maps img element to next.js Image
           // https://www.codeconcisely.com/posts/nextjs-image-in-markdown/
           components={{

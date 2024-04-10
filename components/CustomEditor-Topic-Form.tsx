@@ -28,6 +28,7 @@ import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
 import useSessionStatus from "@/src/hooks/useSessionStatus";
 import CustomTextArea from "./ui/CustomTextArea";
 import { timeStringToMillis } from "@/lib/session-log/update-utils";
+import { TopicSelection } from "./ui/topic-selection";
 
 interface CustomEditorFormProps {
   isUpdate: boolean;
@@ -213,6 +214,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     <>
       <form className="pb-2">
         <div className="flex">
+          <TopicSelection />
           <Input
             className="rounded-none w-1/3 focus-visible:ring-0 focus-visible:ring-offset-0"
             placeholder="Subject"
