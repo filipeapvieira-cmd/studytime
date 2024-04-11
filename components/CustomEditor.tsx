@@ -13,7 +13,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/components/skeletons/EditorSkeleton";
 import { studySessionDto, Topic } from "@/types";
-import CustomEditorFeelingsForm from "./CustomEditor-Feelings-Form";
+import CustomEditorFeelingsForm from "./custom-editor-feelings-form";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { Button } from "./ui/button";
 import { marked } from "marked";

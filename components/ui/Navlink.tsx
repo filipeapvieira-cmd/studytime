@@ -1,5 +1,7 @@
 import { FC } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { clsx } from "clsx";
 
 interface NavlinkProps {
   children: string;
@@ -7,10 +9,14 @@ interface NavlinkProps {
 }
 
 const Navlink: FC<NavlinkProps> = ({ children, href }) => {
+  const isActive = href === usePathname();
   return (
     <Link
       href={href}
-      className="transition-colors hover:text-foreground/80 text-lg"
+      className={clsx("transition-colors hover:text-foreground/80 text-lg", {
+        "text-foreground/70": !isActive,
+        "text-foreground": isActive,
+      })}
     >
       {children}
     </Link>
