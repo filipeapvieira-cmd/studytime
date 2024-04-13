@@ -57,7 +57,6 @@ const Login: FC<LoginProps> = ({ type }) => {
       showToast({
         status: "error",
         message,
-        data: null,
       });
     } finally {
       setIsLoading(false);

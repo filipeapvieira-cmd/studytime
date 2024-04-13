@@ -7,8 +7,8 @@ type CallAPIParams = {
   body?: FullSessionLog | object;
   url: string;
   method: string;
-  onSuccess?: (data: any) => void;
-  onFailure?: (error: Error) => void;
+  onSuccess?: () => void;
+  onFailure?: () => void;
 };
 
 export const useFetch = () => {
@@ -46,7 +46,7 @@ export const useFetch = () => {
       showToast({ status: "success", message: data.message });
 
       if (onSuccess) {
-        onSuccess(data);
+        onSuccess();
       }
     } catch (error) {
       console.error(error);
@@ -54,7 +54,7 @@ export const useFetch = () => {
         error instanceof Error ? error.message : "Something went wrong";
       showToast({ status: "error", message: errorMessage });
       if (onFailure) {
-        onFailure(error);
+        onFailure();
       }
     } finally {
       setIsLoading(false);

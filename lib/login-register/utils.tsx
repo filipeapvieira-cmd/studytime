@@ -44,7 +44,6 @@ const loginUser = async (userDetails: UserDetails) => {
   return {
     status: "success",
     message: "Redirecting to dashboard...",
-    data: null,
     redirectUrl: "/dashboard",
   };
 };
