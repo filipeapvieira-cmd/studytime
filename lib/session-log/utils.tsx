@@ -76,6 +76,7 @@ const formatSessionTime = (
   };
 };
 
+//TODO: REPLACE WITH USE FETCH
 export const persistSession = async (
   sessionLog: FullSessionLog | FullSessionLogUpdate,
   url: string,
@@ -98,6 +99,7 @@ export const persistSession = async (
   return data;
 };
 
+//TODO: REPLACE WITH USE FETCH
 export const deleteSession = async (url: string, method: string) => {
   console.log(method);
   const response = await fetch(url, {

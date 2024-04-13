@@ -64,7 +64,7 @@ const CustomEditor: FC<CustomEditorProps> = ({
   }, [sessionTopics, sessionFeelings]);
 
   return (
-    <div className="flex w-full overflow-scroll">
+    <div className="flex w-full overflow-auto">
       <div className="flex-1 self-start">
         <h1 className="text-foreground bg-background text-3xl text-center rounded-md p-2">
           Description

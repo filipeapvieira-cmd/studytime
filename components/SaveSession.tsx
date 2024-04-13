@@ -15,6 +15,7 @@ import { useSession } from "next-auth/react";
 import { SAVE_SESSION_ENDPOINT, HTTP_METHOD } from "@/constants/config";
 import { usePersistSession } from "@/src/hooks/usePersistSession";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
+import { useFetch } from "@/src/hooks/useFetch";
 
 const SaveSession = ({}) => {
   const { getLastSessionTimer, status } = useTimeContext();
@@ -24,27 +25,20 @@ const SaveSession = ({}) => {
   const { sessionTopics } = useContext(TopicsContext);
   let sessionLog: FullSessionLog | undefined = undefined;
 
-  const { isLoading, httpRequestHandler: saveSessionHandler } =
-    usePersistSession();
+  /* const { isLoading, httpRequestHandler: saveSessionHandler } =
+    usePersistSession(); */
+  const { isLoading, callAPI } = useFetch();
 
-  const onClickHandler = () => {
-    const { sessionStartTime, sessionEndTime, totalPauseTime } =
-      getLastSessionTimer();
+  const onClickHandler = async () => {
+    const sessionTime = getLastSessionTimer();
 
-    const sessionTime = { sessionStartTime, sessionEndTime, totalPauseTime };
-    try {
-      sessionLog = getFullSessionLog({
-        sessionFeelings,
-        sessionTopics,
-        sessionTime,
-      });
-      console.log(sessionLog);
-    } catch (error) {
-      console.log(error);
-      return;
-    }
+    sessionLog = getFullSessionLog({
+      sessionFeelings,
+      sessionTopics,
+      sessionTime,
+    });
 
-    saveSessionHandler({
+    await callAPI({
       body: sessionLog,
       url: SAVE_SESSION_ENDPOINT,
       method: HTTP_METHOD.POST,
