@@ -49,7 +49,7 @@ const EditSession: FC<EditSessionProps> = ({
   return (
     <AlertDialog open={isModalOpen}>
       <AlertDialogContent className="max-w-6xl">
-        <AlertDialogHeader>
+        <AlertDialogHeader className="max-h-[90vh]">
           <AlertDialogTitle asChild>
             <>
               <div className="flex justify-between">

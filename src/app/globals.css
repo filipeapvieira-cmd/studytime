@@ -82,24 +82,6 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-/*   h1 {
-    @apply text-3xl mt-5;
-  }
-  h2 {
-    @apply text-2xl mt-4;
-  }
-  h3 {
-    @apply text-xl mt-3;
-  }
-  h4 {
-    @apply text-lg mt-2;
-  }
-  ul {
-    @apply  pl-5 mt-1;
-  }
-  li {
-    @apply list-disc list-item;
-  } */
 }
 
 @layer components {
@@ -165,4 +147,29 @@
 /* Other text */
 .w-md-editor-text-input, .w-md-editor-text-pre>code {
   color: hsl(var(--foreground)) !important;
+}
+
+/* Scrollbar styling */
+/* Chrome, Edge, and Safari */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f1015;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1); /* scrollbar handle */
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* scrollbar handle on hover */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) #0f1015;
 }
