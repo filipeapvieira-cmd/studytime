@@ -22,6 +22,7 @@ import CustomEditorMarkdownPreview from "./CustomEditor-Markdown-Preview";
 import BtnOpenMkdownPrev from "./ui/BtnOpenMkdownPrev";
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
 import convertListToTopic from "@/hooks/useFeelingsAndTopics";
+import Title from "./custom-editor/title";
 interface CustomEditorProps {
   action?: "update";
   studySessionToUpdate?: studySessionDto;
@@ -66,9 +67,7 @@ const CustomEditor: FC<CustomEditorProps> = ({
   return (
     <div className="flex w-full overflow-auto">
       <div className="flex-1 self-start">
-        <h1 className="text-foreground bg-background text-3xl text-center rounded-md p-2">
-          Description
-        </h1>
+        <Title title="Description" />
         <Accordion type="multiple" value={[String(topicToShow)]}>
           {sessionTopics.map((topic, index) => (
             <AccordionItem

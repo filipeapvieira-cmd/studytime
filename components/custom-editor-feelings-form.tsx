@@ -2,6 +2,7 @@
 
 import { FC, ChangeEvent } from "react";
 import CustomTextArea from "./ui/CustomTextArea";
+import Title from "./custom-editor/title";
 
 interface CustomEditorFeelingsFormProps {
   sessionFeelings: string;
@@ -18,9 +19,7 @@ const CustomEditorFeelingsForm: FC<CustomEditorFeelingsFormProps> = ({
 
   return (
     <div className="mt-5 space-y-2">
-      <h1 className="font-heading text-foreground bg-background text-3xl text-center rounded-md p-2">
-        Feelings
-      </h1>
+      <Title title="Feelings" />
       <CustomTextArea
         value={sessionFeelings}
         onChange={(e) => handleFeelingsChange(e)}

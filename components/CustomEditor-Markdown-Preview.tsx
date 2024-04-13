@@ -2,6 +2,7 @@ import { FC, memo } from "react";
 import ReactMarkdown from "react-markdown";
 
 import Image from "next/image";
+import Title from "./custom-editor/title";
 
 interface CustomEditorMarkdownPreviewProps {
   handleCreateMarkup: string;
@@ -18,9 +19,7 @@ const CustomEditorMarkdownPreview: FC<CustomEditorMarkdownPreviewProps> = memo(
   ({ handleCreateMarkup }) => {
     return (
       <div className="flex-1">
-        <h1 className="text-foreground bg-background text-3xl text-center rounded-md p-2">
-          Markdown Preview
-        </h1>
+        <Title title="Markdown Preview" />
         {/* <div id="preview" dangerouslySetInnerHTML={handleCreateMarkup} /> */}
 
         <ReactMarkdown
