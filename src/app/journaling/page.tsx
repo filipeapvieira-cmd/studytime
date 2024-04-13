@@ -2,9 +2,13 @@ import { FC } from "react";
 import CustomEditor from "@/components/CustomEditor";
 import Counter from "@/components/Control";
 import ImageUpload from "@/components/ImageUpload";
-interface JournalingPageProps {}
+import { Metadata } from "next";
 
-const JournalingPage: FC<JournalingPageProps> = ({}) => {
+export const metadata: Metadata = {
+  title: "✅ Journaling...",
+};
+
+function JournalingPage() {
   return (
     <div className="container bg-secondary/90 rounded-lg shadow-lg">
       <Counter />
@@ -12,6 +16,6 @@ const JournalingPage: FC<JournalingPageProps> = ({}) => {
       <ImageUpload />
     </div>
   );
-};
+}
 
 export default JournalingPage;

@@ -9,9 +9,13 @@ import { useToast } from "@/components/ui/use-toast";
 import { GET_ALL_SESSIONS_ENDPOINT } from "@/constants/config";
 import { studySessionDto } from "@/types";
 import { fetcher } from "@/lib/swr/utils";
-interface DashboardPageProps {}
+import { Metadata } from "next";
 
-const DashboardPage: FC<DashboardPageProps> = ({}) => {
+export const metadata: Metadata = {
+  title: "📋 Dashboard",
+};
+
+function DashboardPage() {
   const { data, error } = useSWR(GET_ALL_SESSIONS_ENDPOINT, fetcher);
   const { toast } = useToast();
 
@@ -37,6 +41,6 @@ const DashboardPage: FC<DashboardPageProps> = ({}) => {
       <DataTable columns={columns} data={extractedData || []} />
     </div>
   );
-};
+}
 
 export default DashboardPage;

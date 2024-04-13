@@ -7,10 +7,13 @@ import { studySessionDto } from "@/types";
 import { GET_ALL_SESSIONS_ENDPOINT } from "@/constants/config";
 import { useToast } from "@/components/ui/use-toast";
 import BarChartCustom from "@/components/charts/BarChart";
+import { Metadata } from "next";
 
-interface ChartsPageProps {}
+export const metadata: Metadata = {
+  title: "📊 Charts",
+};
 
-const ChartsPage: FC<ChartsPageProps> = ({}) => {
+function ChartsPage() {
   const { data, error } = useSWR(GET_ALL_SESSIONS_ENDPOINT, fetcher);
   const { toast } = useToast();
 
@@ -33,6 +36,6 @@ const ChartsPage: FC<ChartsPageProps> = ({}) => {
       <BarChartCustom studySessions={extractedData} />
     </div>
   );
-};
+}
 
 export default ChartsPage;
