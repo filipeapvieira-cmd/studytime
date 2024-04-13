@@ -9,7 +9,8 @@ import { useToast } from "@/components/ui/use-toast";
 import BarChartCustom from "@/components/charts/BarChart";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
+//TODO: Verify if this Page should not be "use client";
+const metadata: Metadata = {
   title: "📊 Charts",
 };
 
