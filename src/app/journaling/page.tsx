@@ -1,4 +1,3 @@
-import { FC } from "react";
 import CustomEditor from "@/components/CustomEditor";
 import Counter from "@/components/Control";
 import ImageUpload from "@/components/ImageUpload";

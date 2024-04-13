@@ -11,7 +11,8 @@ import { studySessionDto } from "@/types";
 import { fetcher } from "@/lib/swr/utils";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
+//TODO: Verify if this Page should be "use client";
+const metadata: Metadata = {
   title: "📋 Dashboard",
 };
 
