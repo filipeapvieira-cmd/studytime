@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, Loader2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -19,82 +19,40 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Label } from "recharts";
+import { GET_UNIQUE_TOPICS_ENDPOINT } from "@/constants/config";
+import { useFetch } from "@/src/hooks/useFetch";
+import { fetcher } from "@/lib/swr/utils";
+import useSWR from "swr";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-  {
-    value: "react",
-    label: "React",
-  },
-  {
-    value: "vue",
-    label: "Vue.js",
-  },
-  {
-    value: "angular",
-    label: "Angular",
-  },
-  {
-    value: "ember",
-    label: "Ember.js",
-  },
-  {
-    value: "gatsby",
-    label: "Gatsby",
-  },
-  {
-    value: "blitz",
-    label: "Blitz.js",
-  },
-  {
-    value: "redwood",
-    label: "RedwoodJS",
-  },
-  {
-    value: "alpine",
-    label: "Alpine.js",
-  },
-  {
-    value: "solid",
-    label: "SolidJS",
-  },
-  {
-    value: "backbone",
-    label: "Backbone.js",
-  },
-];
+type TopicSelectionProps = {
+  currentTopic: string;
+  onTopicSelection: (topic: string) => void;
+};
 
-export function TopicSelection() {
+export function TopicSelection({
+  currentTopic,
+  onTopicSelection,
+}: Readonly<TopicSelectionProps>) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
   const [customValue, setCustomValue] = React.useState("");
+  const [topicsList, setTopicsList] = React.useState<string[]>([]);
+
+  const { data, error } = useSWR(GET_UNIQUE_TOPICS_ENDPOINT, fetcher);
+  const isLoading = !data && !error;
+
+  React.useEffect(() => {
+    if (data) {
+      setTopicsList(data.data);
+    }
+  }, [data]);
 
   const handleOnChange = (text: string) => {
     setCustomValue(text);
   };
 
   const handleOnAddingNewTopic = () => {
-    console.log("setting value", customValue);
-    setValue(customValue);
+    //console.log("setting value", customValue);
+    onTopicSelection(customValue);
     setOpen(false);
   };
 
@@ -105,13 +63,19 @@ export function TopicSelection() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className={cn(
+            "w-[200px] rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent",
+            isLoading ? "justify-center" : "justify-between"
+          )}
         >
-          {value
-            ? /* ? frameworks.find((framework) => framework.value === value)?.label */
-              value
-            : "Subject"}
-          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <>
+              {currentTopic || "Subject"}
+              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
@@ -124,22 +88,22 @@ export function TopicSelection() {
           <CommandEmpty>No Subject found.</CommandEmpty>
           <CommandList>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {topicsList.map((topic) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={topic}
+                  value={topic}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                    onTopicSelection(currentValue);
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
+                      currentTopic === topic ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  {framework.label}
+                  {topic}
                 </CommandItem>
               ))}
             </CommandGroup>

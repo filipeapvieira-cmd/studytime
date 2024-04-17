@@ -208,19 +208,21 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     }));
   };
 
-  useEffectStatusHandling(topicTimer.status, updateTopicTimer);
+  const handleOnTopicSelection = (topic: string) => {
+    setCurrentTopic((prevValue) => ({
+      ...prevValue,
+      title: topic,
+    }));
+  };
 
+  useEffectStatusHandling(topicTimer.status, updateTopicTimer);
   return (
     <>
       <form className="pb-2">
         <div className="flex">
-          <TopicSelection />
-          <Input
-            className="rounded-none w-1/3 focus-visible:ring-0 focus-visible:ring-offset-0"
-            placeholder="Subject"
-            value={currentTopic.title}
-            name="title"
-            onChange={(e) => handleInputChange(e)}
+          <TopicSelection
+            currentTopic={currentTopic.title}
+            onTopicSelection={handleOnTopicSelection}
           />
           <Input
             className="rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"

@@ -102,3 +102,24 @@ export const topicsToDelete = async (sessionToUpdate: FullSessionLogUpdate) => {
   );
   return topicsToDelete;
 };
+
+export const getUniqueTopicTitles = async (
+  userId: number
+): Promise<string[]> => {
+  const topics = await db.topic.findMany({
+    where: {
+      studySession: {
+        userId: userId, // Filter topics through their associated StudySession by the userId
+      },
+    },
+    select: {
+      title: true, // Only select the title field
+    },
+    distinct: ["title"], // Ensure that the titles are unique
+    orderBy: {
+      title: "asc",
+    },
+  });
+
+  return topics.map((topic) => topic.title);
+};

@@ -19,21 +19,21 @@ const useFeelingsAndTopics = ({
   const feelingsCtx = useContext(FeelingsContext);
   const topicsCtx = useContext(TopicsContext);
 
-  const shouldUpdate = action && studySessionToUpdate;
+  const isUpdate = action && studySessionToUpdate;
 
-  const sessionTopics = shouldUpdate
+  const sessionTopics = isUpdate
     ? topicsCtx.sessionTopicsUpdate
     : topicsCtx.sessionTopics;
 
-  const setSessionTopics = shouldUpdate
+  const setSessionTopics = isUpdate
     ? topicsCtx.setSessionTopicsUpdate
     : topicsCtx.setSessionTopics;
 
-  const sessionFeelings = shouldUpdate
+  const sessionFeelings = isUpdate
     ? feelingsCtx.sessionFeelingsUpdate
     : feelingsCtx.sessionFeelings;
 
-  const setSessionFeelings = shouldUpdate
+  const setSessionFeelings = isUpdate
     ? feelingsCtx.setSessionFeelingsUpdate
     : feelingsCtx.setSessionFeelings;
 
