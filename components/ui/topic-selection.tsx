@@ -18,9 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Label } from "recharts";
 import { GET_UNIQUE_TOPICS_ENDPOINT } from "@/constants/config";
-import { useFetch } from "@/src/hooks/useFetch";
 import { fetcher } from "@/lib/swr/utils";
 import useSWR from "swr";
 
@@ -52,7 +50,7 @@ export function TopicSelection({
 
   const handleOnAddingNewTopic = () => {
     //console.log("setting value", customValue);
-    onTopicSelection(customValue);
+    onTopicSelection(customValue.trim());
     setOpen(false);
   };
 
