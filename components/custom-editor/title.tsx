@@ -6,7 +6,7 @@ type TitleProps = {
 
 export default function Title({ title }: Readonly<TitleProps>) {
   return (
-    <h1 className="text-3xl text-center rounded-md p-2 border-b-4 font-semibold leading-none tracking-wide">
+    <h1 className="text-2xl border-b-2 p-2 font-semibold leading-none tracking-wide">
       {title}
     </h1>
   );
