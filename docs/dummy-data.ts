@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db } from "@/src/lib/db";
 import { hash } from "bcrypt";
 import { PrismaClient, Prisma } from "@prisma/client";
 

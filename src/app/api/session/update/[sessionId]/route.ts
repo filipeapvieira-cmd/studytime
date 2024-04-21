@@ -1,10 +1,10 @@
-import { db } from "@/lib/db";
+import { db } from "@/src/lib/db";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { SessionTimeAndDate, FullSessionLogUpdate } from "@/types";
-import { authOptions } from "@/lib/auth";
+import { SessionTimeAndDate, FullSessionLogUpdate } from "@/src/types";
+import { authOptions } from "@/src/lib/auth";
 import { getServerSession } from "next-auth/next";
-import { getSessionUpdateData, topicsToDelete } from "@/lib/api/utils";
+import { getSessionUpdateData, topicsToDelete } from "@/src/lib/api/utils";
 
 export async function PUT(req: Request, context: any) {
   const { params } = context;

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useState, useEffect } from "react";
-import { ChronoContextType } from "@/types";
+import { ChronoContextType } from "@/src/types";
 
 export const chronoCtxDefaultValues: ChronoContextType = {
   sessionChrono: {

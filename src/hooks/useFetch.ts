@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { FullSessionLog } from "@/types";
+import { FullSessionLog } from "@/src/types";
 import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
 import { useCustomToast } from "./useCustomToast";
 import { set } from "date-fns";

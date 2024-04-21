@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import {
   handleEffectiveTimeOfStudyIncrease,
   statusToUpdateHandlerMap,
-} from "@/lib/time-provider/utils";
-import { SessionStatus, SessionTimer } from "@/types";
+} from "@/src/lib/time-provider/utils";
+import { SessionStatus, SessionTimer } from "@/src/types";
 
 // Used to handle the status update of Sessions and Topics
 const useEffectStatusHandling = (

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useState, useContext } from "react";
-import { SessionTimer, TimeContextType, SessionStatus } from "@/types";
+import { SessionTimer, TimeContextType, SessionStatus } from "@/src/types";
 import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
 
 export const timeCtxDefaultValues: TimeContextType = {

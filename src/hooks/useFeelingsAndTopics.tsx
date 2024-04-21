@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect } from "react";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
-import { Topic, TopicFormatted, studySessionDto } from "@/types";
+import { Topic, TopicFormatted, studySessionDto } from "@/src/types";
 import { set } from "date-fns";
 
 // Used to differentiate between New Session or Edit Session

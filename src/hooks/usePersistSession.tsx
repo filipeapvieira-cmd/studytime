@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { FullSessionLog } from "@/types";
+import { FullSessionLog } from "@/src/types";
 import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
-import { getRequestHandler } from "@/lib/session-log/delete-utils";
+import { getRequestHandler } from "@/src/lib/session-log/delete-utils";
 
 interface PersistSession {
   body?: FullSessionLog;

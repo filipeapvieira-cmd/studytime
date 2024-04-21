@@ -1,5 +1,5 @@
 import { FC } from "react";
-import Login from "@/components/Login";
+import Login from "@/src/components/Login";
 
 interface RegisterPageProps {}
 

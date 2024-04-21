@@ -8,7 +8,7 @@ import {
   useEffect,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Topic, studySessionDto } from "@/types";
+import { Topic, studySessionDto } from "@/src/types";
 
 interface TopicsContextProps {
   sessionTopics: Topic[];

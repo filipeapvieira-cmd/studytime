@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { authOptions } from "@/lib/auth";
+import { db } from "@/src/lib/db";
+import { authOptions } from "@/src/lib/auth";
 import { getServerSession } from "next-auth/next";
-import { Topic, studySessionDto, TopicFormatted } from "@/types";
+import { Topic, studySessionDto, TopicFormatted } from "@/src/types";
 import { get } from "http";
-import { getUniqueTopicTitles } from "@/lib/api/utils";
+import { getUniqueTopicTitles } from "@/src/lib/api/utils";
 
 export async function GET() {
   const session = await getServerSession(authOptions);

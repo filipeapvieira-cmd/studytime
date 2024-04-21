@@ -1,7 +1,7 @@
-import { db } from "@/lib/db";
+import { db } from "@/src/lib/db";
 import { NextResponse } from "next/server";
-import { SessionTimeAndDate } from "@/types";
-import { authOptions } from "@/lib/auth";
+import { SessionTimeAndDate } from "@/src/types";
+import { authOptions } from "@/src/lib/auth";
 import { getServerSession } from "next-auth/next";
 
 export async function DELETE(req: Request, context: any) {

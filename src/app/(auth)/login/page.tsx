@@ -1,4 +1,4 @@
-import Login from "@/components/Login";
+import Login from "@/src/components/Login";
 import { FC } from "react";
 
 interface LoginPageProps {}
