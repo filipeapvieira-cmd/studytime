@@ -23,6 +23,7 @@ import BtnOpenMkdownPrev from "./ui/BtnOpenMkdownPrev";
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
 import convertListToTopic from "@/hooks/useFeelingsAndTopics";
 import Title from "./custom-editor/title";
+import EditorContainer from "./custom-editor/container";
 interface CustomEditorProps {
   action?: "update";
   studySessionToUpdate?: studySessionDto;
@@ -65,27 +66,29 @@ const CustomEditor: FC<CustomEditorProps> = ({
   }, [sessionTopics, sessionFeelings]);
 
   return (
-    <div className="flex w-full overflow-auto">
+    <div className="flex w-full overflow-auto max-h-[745px]">
       <div className="flex-1 self-start">
-        <Title title="Description" />
-        <Accordion type="multiple" value={[String(topicToShow)]}>
-          {sessionTopics.map((topic, index) => (
-            <AccordionItem
-              value={String(index)}
-              key={topic.id}
-              data-state="open"
-            >
-              <CustomEditorItem
-                position={index}
-                topic={topic}
-                openAccordionItem={setTopicToShow}
-                setSessionTopics={setSessionTopics}
-                isUpdate={!!(action && studySessionToUpdate)}
-                isMarkdownPreviewerVisible={isMarkdownPreviewerVisible}
-              />
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <EditorContainer className="flex flex-col space-y-2">
+          <Title title="Description" />
+          <Accordion type="multiple" value={[String(topicToShow)]}>
+            {sessionTopics.map((topic, index) => (
+              <AccordionItem
+                value={String(index)}
+                key={topic.id}
+                data-state="open"
+              >
+                <CustomEditorItem
+                  position={index}
+                  topic={topic}
+                  openAccordionItem={setTopicToShow}
+                  setSessionTopics={setSessionTopics}
+                  isUpdate={!!(action && studySessionToUpdate)}
+                  isMarkdownPreviewerVisible={isMarkdownPreviewerVisible}
+                />
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </EditorContainer>
         <CustomEditorFeelingsForm
           sessionFeelings={sessionFeelings}
           setSessionFeelings={setSessionFeelings}

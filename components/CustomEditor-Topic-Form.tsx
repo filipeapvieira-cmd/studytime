@@ -225,7 +225,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
             onTopicSelection={handleOnTopicSelection}
           />
           <Input
-            className="rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="rounded-none bg-secondary focus-visible:ring-0 focus-visible:ring-offset-0"
             placeholder="Hashtags"
             value={currentTopic.hashtags}
             name="hashtags"

@@ -38,7 +38,7 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
   return (
     <>
       <AccordionTrigger
-        className={`hover:no-underline hover:bg-foreground hover:text-background rounded-md p-2 `}
+        className={`hover:no-underline bg-secondary hover:bg-foreground hover:text-background p-2 border-b-[1px] border-primary`}
         onClick={() => {
           openAccordionItem((visibleIndex) => {
             const indexToShow = visibleIndex === position ? -1 : position;

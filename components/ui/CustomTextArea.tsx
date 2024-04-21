@@ -46,7 +46,7 @@ const CustomTextArea: FC<CustomTextAreaProps> = ({
       onChange={onChange}
       value={value || ""}
       rows={rows || 10}
-      className={`w-full outline-0 p-1 bg-secondary caret-foreground border-input border ${className}`}
+      className={`w-full outline-0 p-1 bg-secondary caret-foreground border-input border ${className} rounded-lg`}
     />
   );
 };

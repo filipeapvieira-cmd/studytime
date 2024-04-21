@@ -3,6 +3,7 @@
 import { FC, ChangeEvent } from "react";
 import CustomTextArea from "./ui/CustomTextArea";
 import Title from "./custom-editor/title";
+import EditorContainer from "./custom-editor/container";
 
 interface CustomEditorFeelingsFormProps {
   sessionFeelings: string;
@@ -18,13 +19,13 @@ const CustomEditorFeelingsForm: FC<CustomEditorFeelingsFormProps> = ({
   };
 
   return (
-    <div className="mt-5 space-y-2">
+    <EditorContainer className="mt-5 space-y-2">
       <Title title="Feelings" />
       <CustomTextArea
         value={sessionFeelings}
         onChange={(e) => handleFeelingsChange(e)}
       />
-    </div>
+    </EditorContainer>
   );
 };
 
