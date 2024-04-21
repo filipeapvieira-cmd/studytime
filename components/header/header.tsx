@@ -8,7 +8,7 @@ function Header() {
     <header className="container flex justify-between items-center py-4 h-header">
       <div className="flex items-center gap-6">
         <Link href="/">
-          <Icons.logo size={50} />
+          <Icons.Logo size={50} />
         </Link>
         <NavLinks />
       </div>

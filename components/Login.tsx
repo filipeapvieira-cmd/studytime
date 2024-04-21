@@ -72,7 +72,7 @@ const Login: FC<LoginProps> = ({ type }) => {
       className={`flex flex-col items-center justify-center rounded-md shadow-md border-border bg-secondary/90 overflow-hidden w-[300px] ${componentHeight}`}
     >
       <div className="flex flex-col items-center justify-center bg-primary text-primary-foreground w-full flex-1">
-        <Icons.logo size={70} />
+        <Icons.Logo size={70} />
         <p className="text-3xl">Study Time</p>
       </div>
       <form

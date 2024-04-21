@@ -13,7 +13,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { studySessionDto } from "@/types";
-import Editor from "@/components/Editor";
 import ImageUpload from "@/components/ImageUpload";
 import EditSessionControl from "./EditSessionControl";
 import { Icons } from "@/components/icons";

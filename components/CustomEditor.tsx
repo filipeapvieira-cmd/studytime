@@ -1,27 +1,12 @@
 "use client";
-import { FC, useContext, useEffect, useState, useMemo } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { FC, useEffect, useState, useMemo } from "react";
+import { Accordion, AccordionItem } from "@/components/ui/accordion";
 import CustomEditorItem from "./CustomEditor-Item";
-import { TopicsContext } from "@/src/ctx/session-topics-provider";
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
-import dynamic from "next/dynamic";
-import EditorSkeleton from "@/components/skeletons/EditorSkeleton";
 import { studySessionDto, Topic } from "@/types";
 import CustomEditorFeelingsForm from "./custom-editor-feelings-form";
-import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
-import { Button } from "./ui/button";
-import { marked } from "marked";
-import { Icons } from "@/components/icons";
 import CustomEditorMarkdownPreview from "./CustomEditor-Markdown-Preview";
 import BtnOpenMkdownPrev from "./ui/BtnOpenMkdownPrev";
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
-import convertListToTopic from "@/hooks/useFeelingsAndTopics";
 import Title from "./custom-editor/title";
 import EditorContainer from "./custom-editor/container";
 interface CustomEditorProps {
