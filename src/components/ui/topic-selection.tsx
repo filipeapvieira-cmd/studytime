@@ -62,7 +62,7 @@ export function TopicSelection({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "w-[200px] rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent bg-secondary",
+            "w-[200px] rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-secondary",
             isLoading ? "justify-center" : "justify-between"
           )}
         >

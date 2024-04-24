@@ -29,6 +29,7 @@ import useSessionStatus from "@/src/hooks/useSessionStatus";
 import CustomTextArea from "./ui/CustomTextArea";
 import { timeStringToMillis } from "@/src/lib/session-log/update-utils";
 import { TopicSelection } from "./ui/topic-selection";
+import HashtagSelection from "./custom-editor/hashtag-selection";
 
 interface CustomEditorFormProps {
   isUpdate: boolean;
@@ -215,6 +216,13 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     }));
   };
 
+  const handleOnHashtagSelection = (hashtags: string) => {
+    setCurrentTopic((prevValue) => ({
+      ...prevValue,
+      hashtags,
+    }));
+  };
+
   useEffectStatusHandling(topicTimer.status, updateTopicTimer);
   return (
     <>
@@ -224,12 +232,9 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
             currentTopic={currentTopic.title}
             onTopicSelection={handleOnTopicSelection}
           />
-          <Input
-            className="rounded-none bg-secondary focus-visible:ring-0 focus-visible:ring-offset-0"
-            placeholder="Hashtags"
-            value={currentTopic.hashtags}
-            name="hashtags"
-            onChange={(e) => handleInputChange(e)}
+          <HashtagSelection
+            currentHashtags={currentTopic.hashtags}
+            onHashtagSelection={handleOnHashtagSelection}
           />
         </div>
         <CustomTextArea

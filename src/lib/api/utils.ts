@@ -123,3 +123,27 @@ export const getUniqueTopicTitles = async (
 
   return topics.map((topic) => topic.title);
 };
+
+export const getUniqueHashtags = async (userId: number): Promise<string[]> => {
+  const hashtags = await db.topic.findMany({
+    where: {
+      studySession: {
+        userId: userId, // Filter topics through their associated StudySession by the userId
+      },
+    },
+    select: {
+      hashtags: true, // Only select the title field
+    },
+    distinct: ["hashtags"],
+    orderBy: {
+      title: "asc",
+    },
+  });
+
+  const allHashtags = hashtags
+    .flatMap(({ hashtags }) => (hashtags ? hashtags.split(" ") : []))
+    .filter((value, index, self) => self.indexOf(value) === index)
+    .sort();
+
+  return allHashtags;
+};
