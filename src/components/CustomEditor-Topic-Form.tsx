@@ -241,9 +241,10 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
           value={currentTopic.description}
           name="description"
           onChange={(e) => handleInputChange(e)}
+          className="rounded-t-none"
         />
       </form>
-      <div className="flex space-x-1">
+      <div className="flex gap-x-1 p-2">
         <Button onClick={handleNewTopic} size="sm">
           New Topic
         </Button>

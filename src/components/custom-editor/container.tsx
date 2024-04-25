@@ -10,7 +10,7 @@ export default function EditorContainer({
   className,
   ...props
 }: Readonly<EditorContainerProps>) {
-  const mergedClasses = cn("bg-primary/5 p-1 rounded-lg", className);
+  const mergedClasses = cn("bg-primary/5 py-1 rounded-lg", className);
 
   return (
     <section className={mergedClasses} {...props}>

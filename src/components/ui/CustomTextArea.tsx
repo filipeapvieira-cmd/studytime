@@ -1,3 +1,4 @@
+import { cn } from "@/src/lib/utils";
 import {
   FC,
   TextareaHTMLAttributes,
@@ -46,7 +47,10 @@ const CustomTextArea: FC<CustomTextAreaProps> = ({
       onChange={onChange}
       value={value || ""}
       rows={rows || 10}
-      className={`w-full outline-0 p-1 bg-secondary caret-foreground border-input border ${className} rounded-lg`}
+      className={cn(
+        "w-full outline-0 p-1 bg-secondary caret-foreground border-input border rounded-lg",
+        className
+      )}
     />
   );
 };

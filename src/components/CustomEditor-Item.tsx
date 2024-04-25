@@ -11,6 +11,7 @@ import {
   TopicsContext,
   createNewTopic,
 } from "@/src/ctx/session-topics-provider";
+import { cn } from "../lib/utils";
 
 interface CustomEditorItemProps {
   position: number;
@@ -29,8 +30,7 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
   isUpdate,
   isMarkdownPreviewerVisible,
 }: CustomEditorItemProps) => {
-  const title = topic.title ? topic.title : `Topic - ${position + 1}`;
-  const hashtags = topic.hashtags;
+  const title = topic.title ? topic.title : `📚 Subject`;
 
   const accordionTriggerSize = isMarkdownPreviewerVisible
     ? "max-w-[523px]"
@@ -47,8 +47,13 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
         }}
       >
         <p
-          className={`text-left whitespace-nowrap overflow-hidden text-ellipsis ${accordionTriggerSize}`}
-        >{`${title} ${hashtags ? `| ${hashtags}` : ""}`}</p>
+          className={cn(
+            "text-left whitespace-nowrap overflow-hidden text-ellipsis",
+            accordionTriggerSize
+          )}
+        >
+          {title}
+        </p>
       </AccordionTrigger>
       <AccordionContent>
         <CustomEditorForm
