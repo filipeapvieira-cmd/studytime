@@ -51,7 +51,7 @@ const CustomEditor: FC<CustomEditorProps> = ({
   }, [sessionTopics, sessionFeelings]);
 
   return (
-    <div className="flex w-full overflow-auto max-h-[745px]">
+    <div className="flex w-full overflow-auto max-h-[755px]">
       <div className="flex-1 self-start">
         <EditorContainer className="flex flex-col space-y-2">
           <Title title="Description" />
