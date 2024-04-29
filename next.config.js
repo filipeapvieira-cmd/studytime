@@ -6,6 +6,9 @@ const nextConfig = {
   images: {
     remotePatterns: [{ hostname: "i.ibb.co" }],
   },
+  experimental: {
+    serverActions: true,
+  },
 };
 
 module.exports = nextConfig;

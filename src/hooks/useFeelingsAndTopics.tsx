@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect } from "react";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
-import { Topic, TopicFormatted, studySessionDto } from "@/types";
+import { Topic, TopicFormatted, studySessionDto } from "@/src/types";
 import { set } from "date-fns";
 
 // Used to differentiate between New Session or Edit Session
@@ -19,21 +19,21 @@ const useFeelingsAndTopics = ({
   const feelingsCtx = useContext(FeelingsContext);
   const topicsCtx = useContext(TopicsContext);
 
-  const shouldUpdate = action && studySessionToUpdate;
+  const isUpdate = action && studySessionToUpdate;
 
-  const sessionTopics = shouldUpdate
+  const sessionTopics = isUpdate
     ? topicsCtx.sessionTopicsUpdate
     : topicsCtx.sessionTopics;
 
-  const setSessionTopics = shouldUpdate
+  const setSessionTopics = isUpdate
     ? topicsCtx.setSessionTopicsUpdate
     : topicsCtx.setSessionTopics;
 
-  const sessionFeelings = shouldUpdate
+  const sessionFeelings = isUpdate
     ? feelingsCtx.sessionFeelingsUpdate
     : feelingsCtx.sessionFeelings;
 
-  const setSessionFeelings = shouldUpdate
+  const setSessionFeelings = isUpdate
     ? feelingsCtx.setSessionFeelingsUpdate
     : feelingsCtx.setSessionFeelings;
 

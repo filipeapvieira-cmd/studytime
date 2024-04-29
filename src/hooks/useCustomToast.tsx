@@ -1,15 +1,14 @@
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/src/components/ui/use-toast";
 
-interface showToastProps {
+type ShowToastProps = {
   status: "success" | "error";
   message: string;
-  data: any;
-}
+};
 
 export const useCustomToast = () => {
   const { toast } = useToast();
 
-  const showToast = (obj: showToastProps) => {
+  const showToast = (obj: ShowToastProps) => {
     const variant = obj.status === "success" ? "default" : "destructive";
     const title =
       obj.status === "success" ? "Success" : "Uh oh! Something went wrong";

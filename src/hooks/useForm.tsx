@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { defaultErrorState } from "@/lib/validations/login-register/rules";
-import { FormState, ErrorState, ValidationRules } from "@/types";
+import { defaultErrorState } from "@/src/lib/validations/login-register/rules";
+import { FormState, ErrorState, ValidationRules } from "@/src/types";
 
 interface useFormProps {
   initialFormState: FormState;

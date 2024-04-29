@@ -1,9 +1,9 @@
 import path from "path";
 import { promises as fs } from "fs";
-import { db } from "@/lib/db";
+import { db } from "@/src/lib/db";
 import { hash } from "bcrypt";
 import { PrismaClient, Prisma } from "@prisma/client";
-import { adaptTimeZone } from "@/lib/session-log/utils";
+import { adaptTimeZone } from "@/src/lib/session-log/utils";
 /*
 type ImportedSessionData = {
   id: number;

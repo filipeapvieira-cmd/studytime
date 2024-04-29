@@ -1,15 +1,7 @@
 "use client";
 
 import { createContext, useState, useContext } from "react";
-import { SessionTimer, TimeContextType, SessionStatus } from "@/types";
-import {
-  handleInitial,
-  handlePause,
-  handleStop,
-  handlePlay,
-  handleInterval,
-  statusToHandler,
-} from "@/lib/time-provider/utils";
+import { SessionTimer, TimeContextType, SessionStatus } from "@/src/types";
 import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
 
 export const timeCtxDefaultValues: TimeContextType = {
@@ -22,9 +14,9 @@ export const timeCtxDefaultValues: TimeContextType = {
     sessionPauseEndTime: 0,
     totalPauseTime: 0,
   },
-  setSessionTimer: () => {},
   getLastSessionTimer: () => timeCtxDefaultValues.sessionTimer,
   status: "initial",
+  updateSessionTimer: () => {},
 };
 
 export const TimeContext = createContext(timeCtxDefaultValues);
@@ -47,7 +39,13 @@ export default function TimerProvider({
   );
   const { status } = sessionTimer;
 
-  useEffectStatusHandling(status, sessionTimer, setSessionTimer);
+  const updateSessionTimer = (
+    updateFunction: (prev: SessionTimer) => SessionTimer
+  ) => {
+    setSessionTimer((prev) => updateFunction(prev));
+  };
+
+  useEffectStatusHandling(status, updateSessionTimer);
 
   const getLastSessionTimer = () => {
     return sessionTimer;
@@ -58,7 +56,7 @@ export default function TimerProvider({
       value={{
         status,
         sessionTimer,
-        setSessionTimer,
+        updateSessionTimer,
         getLastSessionTimer,
       }}
     >

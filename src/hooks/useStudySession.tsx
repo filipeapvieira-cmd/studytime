@@ -3,7 +3,11 @@ import {
   FeelingsContext,
   feelingsCtxDefaultValues,
 } from "@/src/ctx/session-feelings-provider";
-import { TimeContext, timeCtxDefaultValues } from "@/src/ctx/time-provider";
+import {
+  TimeContext,
+  timeCtxDefaultValues,
+  useTimeContext,
+} from "@/src/ctx/time-provider";
 import {
   ChronoContext,
   chronoCtxDefaultValues,
@@ -19,14 +23,14 @@ import {
 
 export const useStudySession = () => {
   const { setSessionFeelings } = useContext(FeelingsContext);
-  const { setSessionTimer } = useContext(TimeContext);
+  const { updateSessionTimer } = useTimeContext();
   const { setSessionChrono } = useContext(ChronoContext);
   const { setValidFile } = useContext(UploadImagesContext);
   const { setSessionTopics } = useContext(TopicsContext);
 
   const resetStudySession = () => {
     setSessionFeelings(feelingsCtxDefaultValues.sessionFeelings);
-    setSessionTimer(timeCtxDefaultValues.sessionTimer);
+    updateSessionTimer(() => timeCtxDefaultValues.sessionTimer);
     setSessionChrono(chronoCtxDefaultValues.sessionChrono);
     setValidFile(uploadImagesCtxDefaultValues.validFile);
     setSessionTopics([]);
