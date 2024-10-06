@@ -1,14 +1,15 @@
-import { FC } from "react";
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 
-interface NavlinkProps {
+type NavLinkProps = {
   children: string;
   href: string;
-}
+};
 
-const Navlink: FC<NavlinkProps> = ({ children, href }) => {
+const NavLink = ({ children, href }: NavLinkProps) => {
   const isActive = href === usePathname();
   return (
     <Link
@@ -23,4 +24,4 @@ const Navlink: FC<NavlinkProps> = ({ children, href }) => {
   );
 };
 
-export default Navlink;
+export default NavLink;

@@ -29,7 +29,7 @@ import { Input } from "@/src/components/ui/input";
 import { useState, useCallback, useEffect, useContext } from "react";
 import { CalendarDateRangePicker } from "@/src/components/Date-range-picker";
 import { DataTablePagination } from "@/src/components/table/data-table-pagination";
-import { globalFilterFn } from "@/src/app/(user-options)/dashboard/columns";
+import { globalFilterFn } from "@/src/app/(protected)/dashboard/columns";
 import { Icons } from "@/src/components/icons";
 import TableFilters from "@/src/components/table/Table-filters";
 import EditSession from "@/src/components/EditSession";

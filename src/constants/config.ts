@@ -16,3 +16,5 @@ export enum SessionStatusEnum {
   Pause = "pause",
   Stop = "stop",
 }
+
+export const DOMAIN = process.env.DOMAIN;

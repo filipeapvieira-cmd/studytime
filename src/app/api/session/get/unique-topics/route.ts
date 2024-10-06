@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 import { db } from "@/src/lib/db";
-import { authOptions } from "@/src/lib/auth";
-import { getServerSession } from "next-auth/next";
 import { Topic, studySessionDto, TopicFormatted } from "@/src/types";
-import { get } from "http";
 import { getUniqueTopicTitles } from "@/src/lib/api/utils";
+import { auth } from "@/src/auth";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
+  console.log(session);
 
   //TODO: Refactor this in all API routes
   if (!session || !session.user) {

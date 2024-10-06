@@ -1,8 +1,6 @@
-"use client";
-
 import React from "react";
-import Navlink from "../ui/Navlink";
-import { useSession } from "next-auth/react";
+import NavLink from "@/components/header/nav-link";
+import { currentUser } from "@/src/lib/authentication";
 
 const navItems = [
   {
@@ -19,15 +17,15 @@ const navItems = [
   },
 ];
 
-export default function NavLinks() {
-  const { status } = useSession();
-  const isAuthenticated = status === "authenticated";
+export default async function NavLinks() {
+  const user = await currentUser();
+  const isAuthenticated = !!user;
   return isAuthenticated ? (
     <nav>
       <ul className="flex space-x-5">
         {navItems.map(({ name, path }) => (
           <li key={path}>
-            <Navlink href={path}>{name}</Navlink>
+            <NavLink href={path}>{name}</NavLink>
           </li>
         ))}
       </ul>
