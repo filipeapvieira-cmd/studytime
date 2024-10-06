@@ -1,56 +1,67 @@
 "use client";
-import React, { useRef } from "react";
-import AuthContainer from "./container";
-import Link from "next/link";
-import { Button, buttonVariants } from "../ui/button";
 
-import { useForm } from "react-hook-form";
-import { formSchema } from "@/src/lib/schemas/loginFormSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import React, { useRef, useState, useTransition } from "react";
+import CardWrapper from "./card-wrapper";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { Icons } from "../icons";
-import { onSubmitAction } from "@/src/app/actions/login-form-submit";
-// @ts-expect-error
-import { useFormState } from "react-dom";
-
-type LoginFormSchema = z.output<typeof formSchema>;
-
-const onSubmit = async (data: LoginFormSchema) => {
-  const formData = new FormData();
-  formData.append("email", data.email);
-  formData.append("password", data.password);
-  console.log(await onSubmitAction(formData));
-};
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema } from "@/src/schemas";
+import { z } from "zod";
+import { login } from "@/src/actions/login";
+import FormError from "../form-error";
+import FormSuccess from "../form-success";
 
 export default function LoginForm() {
-  const form = useForm<LoginFormSchema>({
-    resolver: zodResolver(formSchema),
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
+
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: { email: "", password: "" },
     mode: "onBlur",
   });
   const formRef = useRef<HTMLFormElement>(null);
   const isValid = form.formState.isValid;
-  const isLoading = false;
+
+  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
+    setError("");
+    setSuccess("");
+
+    startTransition(async () => {
+      const response = await login(data);
+      if (response.error) {
+        setError(response.error);
+      } else {
+        setSuccess(response.success);
+      }
+    });
+  };
+
   return (
-    <AuthContainer className="h-[500px]">
+    <CardWrapper
+      headerLabel="Welcome back"
+      backButtonLabel="Don't have an account?"
+      backButtonHref="/register"
+      showSocial={!isPending}
+    >
       <Form {...form}>
         <form
           ref={formRef}
-          className="flex flex-col items-center justify-center w-4/5 h-4/5"
-          /*           action={}
-           */ onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col items-center justify-center w-full h-4/5 mx-auto space-y-6"
+          onSubmit={form.handleSubmit(onSubmit)}
         >
-          <div className="space-y-3">
+          <div className="space-y-3 w-full">
             <FormField
               control={form.control}
               name="email"
@@ -58,7 +69,12 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="" {...field} className="bg-white/10" />
+                    <Input
+                      placeholder=""
+                      {...field}
+                      className="bg-white/10"
+                      disabled={isPending}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -72,7 +88,13 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="" {...field} className="bg-white/10" />
+                    <Input
+                      placeholder=""
+                      {...field}
+                      className="bg-white/10"
+                      type="password"
+                      disabled={isPending}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -80,24 +102,20 @@ export default function LoginForm() {
               )}
             />
           </div>
+          <FormError message={error} />
+          <FormSuccess message={success} />
           <Button
-            className={`mt-12 w-full disabled:cursor-not-allowed`}
+            className={`w-full disabled:cursor-not-allowed`}
             type="submit"
-            disabled={!isValid || isLoading}
+            disabled={!isValid || isPending}
           >
-            {isLoading && (
+            {isPending && (
               <Icons.loading className="mr-2 h-4 w-4 animate-spin" />
             )}
-            {!isLoading && "Log-in"}
+            {!isPending && "Log-in"}
           </Button>
-          <Link
-            href="/register"
-            className={`${buttonVariants({ variant: "link" })} mt-3`}
-          >
-            Create an account
-          </Link>
         </form>
       </Form>
-    </AuthContainer>
+    </CardWrapper>
   );
 }
