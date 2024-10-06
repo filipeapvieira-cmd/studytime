@@ -17,3 +17,16 @@ export const getUserById = async (id: number) => {
     return null;
   }
 };
+
+export const createUser = async (data: {
+  email: string;
+  password: string;
+  name: string;
+}) => {
+  try {
+    const user = await db.user.create({ data });
+    return user;
+  } catch (error) {
+    return null;
+  }
+};

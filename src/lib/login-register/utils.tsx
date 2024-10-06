@@ -23,7 +23,7 @@ const registerUser = async (userDetails: UserDetails) => {
     );
   }
 
-  const obj = { ...data, redirectUrl: "/login" };
+  const obj = { ...data, redirectUrl: "/auth/login" };
 
   return obj;
 };

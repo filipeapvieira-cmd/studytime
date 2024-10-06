@@ -15,31 +15,31 @@ import { Button } from "../ui/button";
 import { Icons } from "../icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema } from "@/src/schemas";
+import { RegisterSchema } from "@/src/schemas";
 import { z } from "zod";
-import { login } from "@/src/actions/login";
 import FormError from "../form-error";
 import FormSuccess from "../form-success";
+import { register } from "@/src/actions/register";
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
-    defaultValues: { email: "", password: "" },
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
+    defaultValues: { name: "", email: "", password: "" },
     mode: "onBlur",
   });
   const formRef = useRef<HTMLFormElement>(null);
   const isValid = form.formState.isValid;
 
-  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
+  const onSubmit = async (data: z.infer<typeof RegisterSchema>) => {
     setError("");
     setSuccess("");
 
     startTransition(async () => {
-      const response = await login(data);
+      const response = await register(data);
       if (response.error) {
         setError(response.error);
       } else {
@@ -50,9 +50,9 @@ export default function LoginForm() {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back"
-      backButtonLabel="Don't have an account?"
-      backButtonHref="/auth/register"
+      headerLabel="Create an account"
+      backButtonLabel="Already have an account?"
+      backButtonHref="/auth/login"
       showSocial={!isPending}
     >
       <Form {...form}>
@@ -62,6 +62,25 @@ export default function LoginForm() {
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <div className="space-y-3 w-full">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder=""
+                      {...field}
+                      className="bg-white/10"
+                      disabled={isPending}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"
@@ -112,7 +131,7 @@ export default function LoginForm() {
             {isPending && (
               <Icons.loading className="mr-2 h-4 w-4 animate-spin" />
             )}
-            {!isPending && "Log-in"}
+            {!isPending && "Register"}
           </Button>
         </form>
       </Form>
