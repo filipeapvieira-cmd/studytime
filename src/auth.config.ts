@@ -17,9 +17,10 @@ export default {
           if (!user || !user.password) return null;
           const passwordsMatch = await bcrypt.compare(password, user.password);
           if (passwordsMatch) {
-            return user;
+            return { ...user, id: user.id.toString() };
           }
         }
+        return null;
       },
     }),
   ],

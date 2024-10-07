@@ -1,17 +1,15 @@
 import { db } from "@/src/lib/db";
-import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { SessionTimeAndDate, FullSessionLogUpdate } from "@/src/types";
-import { authOptions } from "@/src/lib/auth";
-import { getServerSession } from "next-auth/next";
+import { FullSessionLogUpdate } from "@/src/types";
 import { getSessionUpdateData, topicsToDelete } from "@/src/lib/api/utils";
+import { currentUser } from "@/src/lib/authentication";
 
 export async function PUT(req: Request, context: any) {
   const { params } = context;
   const id: number = Number(params.sessionId);
-  const session = await getServerSession(authOptions);
+  const user = await currentUser();
 
-  if (!session) {
+  if (!user) {
     return NextResponse.json(
       {
         status: "error",
@@ -22,7 +20,7 @@ export async function PUT(req: Request, context: any) {
     );
   }
 
-  const userId: number = +session.user.id;
+  const userId: number = +user?.id;
   const sessionToUpdate: FullSessionLogUpdate = await req.json();
 
   const sessionData = getSessionUpdateData(sessionToUpdate, userId);

@@ -1,15 +1,13 @@
 import { db } from "@/src/lib/db";
 import { NextResponse } from "next/server";
-import { SessionTimeAndDate } from "@/src/types";
-import { authOptions } from "@/src/lib/auth";
-import { getServerSession } from "next-auth/next";
+import { currentUser } from "@/src/lib/authentication";
 
 export async function DELETE(req: Request, context: any) {
   const { params } = context;
   const sessionId: number = Number(params.sessionId);
-  const session = await getServerSession(authOptions);
+  const user = await currentUser();
 
-  if (!session) {
+  if (!user) {
     return NextResponse.json(
       {
         status: "error",

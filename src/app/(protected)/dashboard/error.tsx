@@ -1,10 +1,29 @@
 "use client";
 
-export default function Error({ error, reset }) {
+import { useEffect } from "react";
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   return (
-    <div className="container mx-auto py-10">
-      <p className="text-red-500">Error: {error.message}</p>
-      <button onClick={() => reset()}>Retry</button>
+    <div>
+      <h2>Something went wrong!</h2>
+      <button
+        onClick={
+          // Attempt to recover by trying to re-render the segment
+          () => reset()
+        }
+      >
+        Try again
+      </button>
     </div>
   );
 }
