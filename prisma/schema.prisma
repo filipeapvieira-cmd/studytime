@@ -16,16 +16,47 @@ datasource db {
 //  // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // commented to solve this issue: https://github.com/prisma/prisma/issues/19234
 //}
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
 model User {
-  id           Int            @id @default(autoincrement())
-  name         String
-  email        String         @unique
-  password     String
-  createdAt    DateTime       @default(now()) @map(name: "created_at")
-  updatedAt    DateTime       @default(now()) @map(name: "updated_at")
-  StudySession StudySession[]
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole       @default(USER)
+  accounts      Account[]
+  createdAt     DateTime       @default(now()) @map(name: "created_at")
+  updatedAt     DateTime       @default(now()) @map(name: "updated_at")
+  StudySession  StudySession[]
 
   @@map(name: "users")
+}
+
+// Account model represents a table used to store third-party authentication provider data (social login) 
+model Account {
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
 }
 
 model StudySession {

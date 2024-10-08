@@ -6,7 +6,7 @@ import { currentUser } from "@/src/lib/authentication";
 export async function POST(req: Request) {
   const user = await currentUser();
 
-  if (!user) {
+  if (!user?.id) {
     return NextResponse.json(
       {
         status: "error",

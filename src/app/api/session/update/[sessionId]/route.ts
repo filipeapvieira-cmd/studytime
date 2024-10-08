@@ -9,7 +9,7 @@ export async function PUT(req: Request, context: any) {
   const id: number = Number(params.sessionId);
   const user = await currentUser();
 
-  if (!user) {
+  if (!user?.id) {
     return NextResponse.json(
       {
         status: "error",
