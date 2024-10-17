@@ -8,6 +8,8 @@ import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
 import { createUser, getUserByEmail } from "../data/user";
 import { db } from "../lib/db";
+import { generateVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export type FormState = {
   error?: string;
@@ -34,12 +36,12 @@ export async function register(
 
   await createUser({ email, password: hashedPassword, name });
 
-  // TODO: send verification token by email
-  /*  const verificationToken = await generateVerificationToken(email);
+  const verificationToken = await generateVerificationToken(email);
+  if (!verificationToken) return { error: "Something went wrong!" };
   await sendVerificationEmail(
     verificationToken?.email,
     verificationToken?.token
-  ); */
+  );
 
   return { success: "Confirmation email sent!" };
 }

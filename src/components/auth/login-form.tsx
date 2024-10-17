@@ -47,10 +47,11 @@ export default function LoginForm() {
 
     startTransition(async () => {
       const response = await login(data);
-      if (response.error) {
-        setError(response.error);
-      } else {
+
+      if (response.success) {
         setSuccess(response.success);
+      } else {
+        setError(response.error);
       }
     });
   };
