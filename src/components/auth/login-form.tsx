@@ -21,6 +21,7 @@ import { login } from "@/src/actions/login";
 import FormError from "../form-error";
 import FormSuccess from "../form-success";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -104,7 +105,14 @@ export default function LoginForm() {
                       disabled={isPending}
                     />
                   </FormControl>
-
+                  <Button
+                    asChild
+                    size="sm"
+                    variant="link"
+                    className="px-0 font-normal"
+                  >
+                    <Link href="/auth/reset">Forgot password?</Link>
+                  </Button>
                   <FormMessage />
                 </FormItem>
               )}
