@@ -50,7 +50,9 @@ export async function login(
       verificationToken?.email,
       verificationToken?.token
     );
-    return { success: "Confirmation email sent!" };
+    return {
+      success: "Please check your inbox and verify your Email address!",
+    };
   }
 
   // 2 Factor Authentication
