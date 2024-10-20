@@ -2,20 +2,28 @@ import authConfig from "./auth.config";
 import NextAuth from "next-auth";
 import {
   apiAuthPrefix,
+  authorizationRoutes,
   authRoutes,
   DEFAULT_LOGIN_REDIRECT,
   publicRoutes,
 } from "./routes";
+import { currentRole } from "./lib/authentication";
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req) => {
+export default auth(async (req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
+  const role = await currentRole();
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const authorizationRoute = authorizationRoutes.find(
+    (route) =>
+      nextUrl.pathname === route.path ||
+      nextUrl.pathname.startsWith(`${route.path}/`)
+  );
 
   if (isApiAuthRoute) {
     return undefined;
@@ -30,6 +38,12 @@ export default auth((req) => {
 
   if (!isLoggedIn && !isPublicRoute) {
     return Response.redirect(new URL("/auth/login", nextUrl));
+  }
+
+  if (authorizationRoute && role) {
+    if (!authorizationRoute.roles.includes(role)) {
+      return Response.redirect(new URL("/auth/not-authorized", req.url));
+    }
   }
 
   return undefined;
