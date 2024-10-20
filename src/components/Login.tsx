@@ -128,7 +128,7 @@ const Login: FC<LoginProps> = ({ type }) => {
 
         {type === "login" && (
           <Link
-            href="/register"
+            href="/auth/register"
             className={`${buttonVariants({ variant: "link" })} mt-3`}
           >
             Create an account

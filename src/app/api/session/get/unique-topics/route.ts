@@ -1,16 +1,12 @@
 import { NextResponse } from "next/server";
 import { db } from "@/src/lib/db";
-import { authOptions } from "@/src/lib/auth";
-import { getServerSession } from "next-auth/next";
-import { Topic, studySessionDto, TopicFormatted } from "@/src/types";
-import { get } from "http";
 import { getUniqueTopicTitles } from "@/src/lib/api/utils";
+import { currentUser } from "@/src/lib/authentication";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
+  const user = await currentUser();
 
-  //TODO: Refactor this in all API routes
-  if (!session || !session.user) {
+  if (!user?.id) {
     return NextResponse.json(
       {
         status: "error",
@@ -21,7 +17,7 @@ export async function GET() {
     );
   }
 
-  const userId = +session.user.id;
+  const userId = +user.id;
 
   try {
     const uniqueTopics = await getUniqueTopicTitles(userId);

@@ -1,14 +1,12 @@
-"use client";
-
-import { useSession } from "next-auth/react";
 import React from "react";
 import UserNav from "../User-Nav";
 import Btnlink from "../ui/Btnlink";
 import { Icons } from "../icons";
+import { currentUser } from "@/src/lib/authentication";
 
-export default function Login() {
-  const { status } = useSession();
-  const isAuthenticated = status === "authenticated";
+export default async function Login() {
+  const user = await currentUser();
+  const isAuthenticated = !!user;
   return (
     <nav>
       {isAuthenticated ? (

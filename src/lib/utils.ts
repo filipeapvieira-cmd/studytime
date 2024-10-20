@@ -73,3 +73,8 @@ export const uploadFile = async ({
     }
   }
 };
+
+// Helper function to check if a value is a valid integer
+export function isValidInteger(value: string | undefined): boolean {
+  return value !== undefined && !isNaN(parseInt(value));
+}

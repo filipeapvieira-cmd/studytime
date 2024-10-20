@@ -1,14 +1,12 @@
 import { db } from "@/src/lib/db";
-import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { authOptions } from "@/src/lib/auth";
-import { getServerSession } from "next-auth/next";
 import { getSessionData } from "@/src/lib/api/utils";
+import { currentUser } from "@/src/lib/authentication";
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
+  const user = await currentUser();
 
-  if (!session) {
+  if (!user?.id) {
     return NextResponse.json(
       {
         status: "error",
@@ -19,7 +17,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const userId: number = +session.user.id;
+  const userId: number = +user?.id;
 
   const sessionLog = await req.json();
 
