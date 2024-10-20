@@ -22,6 +22,16 @@ export const authRoutes = [
 ];
 
 /**
+ * An array of protected routes with the roles required to access them.
+ */
+export const authorizationRoutes = [
+  {
+    path: "/admin",
+    roles: ["ADMIN"],
+  },
+];
+
+/**
  * The prefix for API routes that are used for authentication.
  * Auth needs these routers to operate correctly.
  */
