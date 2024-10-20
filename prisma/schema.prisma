@@ -21,17 +21,19 @@ enum UserRole {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  name          String
-  email         String         @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          UserRole       @default(USER)
-  accounts      Account[]
-  createdAt     DateTime       @default(now()) @map(name: "created_at")
-  updatedAt     DateTime       @default(now()) @map(name: "updated_at")
-  StudySession  StudySession[]
+  id                    Int                    @id @default(autoincrement())
+  name                  String
+  email                 String                 @unique
+  emailVerified         DateTime?
+  image                 String?
+  password              String?
+  role                  UserRole               @default(USER)
+  accounts              Account[]
+  createdAt             DateTime               @default(now()) @map(name: "created_at")
+  updatedAt             DateTime               @default(now()) @map(name: "updated_at")
+  StudySession          StudySession[]
+  isTwoFactorEnabled    Boolean                @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
 
   @@map(name: "users")
 }
@@ -76,6 +78,24 @@ model PasswordResetToken {
   expires DateTime
 
   @@unique([email, token])
+}
+
+// TwoFactorToken model will temporarily store the two-factor authentication token
+model TwoFactorToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+// TwoFactorConfirmation model will temporarily store the status of two-factor authentication for a user
+// If a record exists for a user, it means that the user has successfully validated the two-factor authentication token
+model TwoFactorConfirmation {
+  id     String @id @default(cuid())
+  userId Int    @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model StudySession {
