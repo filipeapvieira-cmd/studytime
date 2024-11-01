@@ -5,23 +5,18 @@ import { studySessionDto } from "@/src/types";
 import {
   BarChart,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
   Legend,
   ResponsiveContainer,
   LabelList,
-  PieChart,
-  Pie,
 } from "recharts";
 import {
   getTotalStudiedTimePerDayOfTheWeek,
   getYAxisUpperBound,
   formatHSL,
 } from "@/src/lib/charts/utils";
-import { convertMillisecondsToString } from "@/src/lib/export/utils";
 interface BarChartProps {
   studySessions: studySessionDto[];
 }
@@ -39,22 +34,35 @@ const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
   return (
     <div className="mt-4">
       <ResponsiveContainer height={400} width="100%" className={`mt-2`}>
-        <BarChart
-          width={500}
-          //max-height={300}
-          data={chartData || []}
-          maxBarSize={300}
-        >
-          <CartesianGrid vertical={false} />
-          <XAxis dataKey="name" fontSize={fontSize} />
-          <YAxis domain={[0, getYAxisUpperBound(chartData)]} />
-          <Tooltip content={<CustomTooltip />} />
+        <BarChart width={500} data={chartData || []} maxBarSize={300}>
+          <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
+          <XAxis
+            dataKey="name"
+            fontSize={fontSize}
+            tick={{ fill: "hsl(var(--foreground))" }}
+          />
+          <YAxis
+            domain={[0, getYAxisUpperBound(chartData)]}
+            tickFormatter={(tick) => (tick / 3600).toFixed(1)}
+            label={{
+              value: "Hours",
+              angle: -90,
+              position: "insideLeft",
+              fontSize,
+            }}
+          />
           <Legend />
-          <Bar dataKey="total" fill="#8884d8" barSize={25}>
+          <Bar
+            dataKey="total"
+            fill="hsl(var(--primary))"
+            barSize={25}
+            radius={[10, 10, 0, 0]}
+          >
             <LabelList
               dataKey="total"
               position="top"
               content={<CustomLabel />}
+              fill="hsl(var(--primary))"
             />
           </Bar>
         </BarChart>
@@ -64,27 +72,6 @@ const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
 };
 
 export default BarChartCustom;
-
-const CustomTooltip = ({ payload, label, active }: any) => {
-  if (active) {
-    const totalInSeconds = payload[0].value;
-
-    const hours = Math.floor(totalInSeconds / 3600);
-    const minutes = Math.floor((totalInSeconds % 3600) / 60);
-    const seconds = totalInSeconds % 60;
-
-    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-
-    return (
-      <div className="custom-tooltip">
-        <p className="intro">{`Total Time: ${formattedTime}`}</p>
-      </div>
-    );
-  }
-  return null;
-};
 
 const CustomLabel = (props: any) => {
   const { x, y, value } = props;

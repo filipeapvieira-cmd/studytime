@@ -50,7 +50,12 @@ export const getYAxisUpperBound = (
 ) => {
   if (chartData) {
     const maxValue = Math.max(...chartData.map((item) => item.total));
-    const upperBound = maxValue + maxValue * 0.1; // Add 10% more space
+    // Convert maxValue to hours
+    const maxHours = maxValue / 3600;
+    // Add 10% more space and round up to the next whole number
+    const upperBoundHours = Math.ceil(maxHours * 1.1);
+    // Convert back to seconds
+    const upperBound = upperBoundHours * 3600;
     return upperBound;
   }
   return 0;
