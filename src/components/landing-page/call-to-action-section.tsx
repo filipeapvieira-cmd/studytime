@@ -14,10 +14,10 @@ function CallToActionSection() {
           </h2>
           <p className="text-xl text-blue-100 max-w-xl">
             Join thousands of students who have transformed their study habits
-            with StudyJournal
+            with Study Time
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-wrap justify-center gap-4">
           <Button
             size="lg"
             className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105"
