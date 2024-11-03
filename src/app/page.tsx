@@ -1,21 +1,13 @@
-import { createDummyData } from "@/docs/dummy-data";
+import HeroSection from "@/components/landing-page/hero-section";
+import FeaturesSection from "@/components/landing-page/features-sections";
+import CallToActionSection from "@/components/landing-page/call-to-action-section";
 
 export default async function HomePage() {
-  //migrateSessionData();
-  //createDummyData();
   return (
-    <div className="container flex-1 flex-col justify-center items-center flex w-full">
-      <div className="h-64 flex items-center justify-center text-white">
-        <h1 className="text-4xl font-bold">Unleash your study potential now</h1>
-      </div>
-
-      <div className="bg-secondary/90 rounded-lg shadow-lg w-full">
-        <div className="bg-gradient-to-r from-bg-primary to-secondary h-64 flex items-center justify-center text-white">
-          <h3 className="text-2xl font-bold">
-            Transform the way you study and keep track of your notes.
-          </h3>
-        </div>
-      </div>
-    </div>
+    <main className="container mx-auto px-4 py-16 md:py-24 flex flex-col justify-center flex-1">
+      <HeroSection />
+      <FeaturesSection />
+      <CallToActionSection />
+    </main>
   );
 }
