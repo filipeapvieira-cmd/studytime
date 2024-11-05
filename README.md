@@ -33,5 +33,3 @@ My project leverages some powerful libraries and tools:
 
 - UI Components: [shadcn/ui](https://ui.shadcn.com/)
 - ORM: [Prisma](https://www.prisma.io/)
-
-Test
