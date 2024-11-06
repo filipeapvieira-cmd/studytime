@@ -1,8 +1,5 @@
 "use client";
 
-import { FC, useCallback, useMemo, useState } from "react";
-import { studySessionDto } from "@/src/types";
-import { format } from "date-fns";
 import {
   BarChart,
   Bar,
@@ -13,135 +10,59 @@ import {
   ResponsiveContainer,
   LabelList,
 } from "recharts";
-import {
-  getTotalStudiedTimePerDayOfTheWeek,
-  getYAxisUpperBound,
-  formatHSL,
-  getPredefinedDateRanges,
-  PredefinedDateRangeKey,
-} from "@/src/lib/charts/utils";
-import { DateRange } from "react-day-picker";
-import { DateRangeSelector } from "./DateRangeSelector";
-import { CUSTOM_RANGE, THIS_WEEK } from "@/src/constants/constants.charts";
+import { getYAxisUpperBound, formatHSL } from "@/src/lib/charts/utils";
+
 interface BarChartProps {
-  studySessions: studySessionDto[];
+  chartData:
+    | {
+        name: string;
+        total: number;
+      }[]
+    | null;
 }
 
-const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
-  const studySessionsDates = studySessions.map(
-    (session) => new Date(session.date)
-  );
-  const predefinedDateRanges = getPredefinedDateRanges(studySessionsDates);
+const fontSize = 15;
 
-  const [range, setRange] = useState<DateRange | undefined>(
-    predefinedDateRanges[THIS_WEEK]
-  );
-
-  const [selectedPredefinedRange, setSelectedPredefinedRange] =
-    useState<string>(THIS_WEEK);
-
-  const fontSize = 15;
-  const isMessageVisible = range?.from && range?.to;
-
-  const filterStudySessions = useCallback(() => {
-    if (!range?.from) {
-      return studySessions;
-    }
-
-    const from = range.from;
-    const to = range.to ?? from;
-
-    return studySessions.filter((session) => {
-      const sessionDate = new Date(session.date);
-      return sessionDate >= from && sessionDate <= to;
-    });
-  }, [range, studySessions]);
-
-  const chartData = useMemo(() => {
-    const filteredSessions = filterStudySessions();
-    return getTotalStudiedTimePerDayOfTheWeek(filteredSessions);
-  }, [filterStudySessions]);
-
-  // Handle selection from the predefined ranges
-  const handlePredefinedRangeSelect = (value: PredefinedDateRangeKey) => {
-    const selectedRange = predefinedDateRanges[value];
-    if (selectedRange) {
-      setRange(selectedRange);
-      setSelectedPredefinedRange(value);
-    }
-  };
-
-  // Handle custom range selection
-  const handleCustomRangeSelect = (newRange: DateRange | undefined) => {
-    if (!newRange) return;
-
-    const { from, to } = newRange;
-    if (from && !to) {
-      setRange({ from, to: from });
-    } else {
-      setRange(newRange);
-    }
-    setSelectedPredefinedRange(CUSTOM_RANGE);
-  };
+const BarChartCustom = ({ chartData }: BarChartProps) => {
+  if (!chartData) {
+    return null;
+  }
 
   return (
-    <div className="mt-4">
-      <div className="flex flex-row justify-between py-4">
-        <DateRangeSelector
-          range={range}
-          selectedPredefinedRange={selectedPredefinedRange}
-          predefinedDateRanges={predefinedDateRanges}
-          onPredefinedRangeSelect={handlePredefinedRangeSelect}
-          onCustomRangeSelect={handleCustomRangeSelect}
+    <ResponsiveContainer height={400} width="100%" className="mt-2">
+      <BarChart data={chartData} maxBarSize={300}>
+        <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
+        <XAxis
+          dataKey="name"
+          fontSize={fontSize}
+          tick={{ fill: "hsl(var(--foreground))" }}
         />
-        {isMessageVisible && (
-          <div className="text-sm text-muted-foreground">
-            Showing data for {format(range?.from ?? new Date(), "PPP")} to{" "}
-            {format(range?.to ?? new Date(), "PPP")}
-          </div>
-        )}
-      </div>
-      {chartData && chartData.length > 0 ? (
-        <ResponsiveContainer height={400} width="100%" className="mt-2">
-          <BarChart data={chartData} maxBarSize={300}>
-            <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
-            <XAxis
-              dataKey="name"
-              fontSize={fontSize}
-              tick={{ fill: "hsl(var(--foreground))" }}
-            />
-            <YAxis
-              domain={[0, getYAxisUpperBound(chartData)]}
-              tickFormatter={(tick) => (tick / 3600).toFixed(1)}
-              label={{
-                value: "Hours",
-                angle: -90,
-                position: "insideLeft",
-                fontSize,
-              }}
-            />
-            <Legend />
-            <Bar
-              dataKey="total"
-              fill="hsl(var(--primary))"
-              barSize={25}
-              radius={[10, 10, 0, 0]}
-            >
-              <LabelList
-                dataKey="total"
-                position="top"
-                content={<CustomLabel />}
-                fill="hsl(var(--primary))"
-              />
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      ) : (
-        <div className="mt-4 text-center text-muted-foreground">
-          No results found...
-        </div>
-      )}
-    </div>
+        <YAxis
+          domain={[0, getYAxisUpperBound(chartData)]}
+          tickFormatter={(tick) => (tick / 3600).toFixed(1)}
+          label={{
+            value: "Hours",
+            angle: -90,
+            position: "insideLeft",
+            fontSize,
+          }}
+        />
+        <Legend />
+        <Bar
+          dataKey="total"
+          fill="hsl(var(--primary))"
+          barSize={25}
+          radius={[10, 10, 0, 0]}
+        >
+          <LabelList
+            dataKey="total"
+            position="top"
+            content={<CustomLabel />}
+            fill="hsl(var(--primary))"
+          />
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
   );
 };
 

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
-import BarChartCustom from "@/src/components/charts/BarChart";
 import { getStudySessionsByUserId } from "@/src/data/study-sessions";
 import { StudySessionsResponse } from "@/src/types/study-sessions";
+import ChartDashboard from "@/src/components/charts/ChartDashboard";
 
 function ChartsPage() {
   return (
@@ -23,7 +23,7 @@ async function ChartsData() {
 
   return (
     <div className="container mx-auto">
-      <BarChartCustom studySessions={data} />
+      <ChartDashboard studySessions={data} />
     </div>
   );
 }
