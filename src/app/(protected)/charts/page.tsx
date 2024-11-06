@@ -2,10 +2,11 @@ import { Suspense } from "react";
 import { getStudySessionsByUserId } from "@/src/data/study-sessions";
 import { StudySessionsResponse } from "@/src/types/study-sessions";
 import ChartDashboard from "@/src/components/charts/ChartDashboard";
+import BarChartSkeleton from "@/src/components/skeletons/BarChartSkeleton";
 
 function ChartsPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<BarChartSkeleton />}>
       <ChartsData />
     </Suspense>
   );

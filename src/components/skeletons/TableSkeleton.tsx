@@ -1,9 +1,6 @@
-import { FC } from "react";
 import { Skeleton } from "@/src/components/ui/skeleton";
 
-interface TableSkeletonProps {}
-
-const ColumnSkeleton: FC<TableSkeletonProps> = ({}) => {
+const ColumnSkeleton = () => {
   return (
     <div className="flex flex-col items-center justify-center space-y-4 w-1/4">
       <Skeleton className="h-6 bg-primary w-full" />
@@ -16,7 +13,7 @@ const ColumnSkeleton: FC<TableSkeletonProps> = ({}) => {
   );
 };
 
-const TableSkeleton: FC<TableSkeletonProps> = ({}) => {
+const TableSkeleton = () => {
   return (
     <div className="container mt-10 pt-2">
       <div className="flex items-center justify-between space-x-4 ">

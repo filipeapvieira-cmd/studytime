@@ -29,40 +29,45 @@ const BarChartCustom = ({ chartData }: BarChartProps) => {
   }
 
   return (
-    <ResponsiveContainer height={400} width="100%" className="mt-2">
-      <BarChart data={chartData} maxBarSize={300}>
-        <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
-        <XAxis
-          dataKey="name"
-          fontSize={fontSize}
-          tick={{ fill: "hsl(var(--foreground))" }}
-        />
-        <YAxis
-          domain={[0, getYAxisUpperBound(chartData)]}
-          tickFormatter={(tick) => (tick / 3600).toFixed(1)}
-          label={{
-            value: "Hours",
-            angle: -90,
-            position: "insideLeft",
-            fontSize,
-          }}
-        />
-        <Legend />
-        <Bar
-          dataKey="total"
-          fill="hsl(var(--primary))"
-          barSize={25}
-          radius={[10, 10, 0, 0]}
-        >
-          <LabelList
-            dataKey="total"
-            position="top"
-            content={<CustomLabel />}
-            fill="hsl(var(--primary))"
+    <div className="mt-5">
+      <h1 className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text">
+        Weekly Time Distribution
+      </h1>
+      <ResponsiveContainer height={400} width="100%" className="mt-2">
+        <BarChart data={chartData} maxBarSize={300}>
+          <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
+          <XAxis
+            dataKey="name"
+            fontSize={fontSize}
+            tick={{ fill: "hsl(var(--foreground))" }}
           />
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
+          <YAxis
+            domain={[0, getYAxisUpperBound(chartData)]}
+            tickFormatter={(tick) => (tick / 3600).toFixed(1)}
+            label={{
+              value: "Hours",
+              angle: -90,
+              position: "insideLeft",
+              fontSize,
+            }}
+          />
+          <Legend />
+          <Bar
+            dataKey="total"
+            fill="hsl(var(--primary))"
+            barSize={25}
+            radius={[10, 10, 0, 0]}
+          >
+            <LabelList
+              dataKey="total"
+              position="top"
+              content={<CustomLabel />}
+              fill="hsl(var(--primary))"
+            />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 };
 

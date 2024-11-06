@@ -1,78 +1,52 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { studySessionDto } from "@/src/types";
 import { format } from "date-fns";
-import {
-  getTotalStudiedTimePerDayOfTheWeek,
-  getPredefinedDateRanges,
-  PredefinedDateRangeKey,
-} from "@/src/lib/charts/utils";
-import { DateRange } from "react-day-picker";
+import { getTotalStudiedTimePerDayOfTheWeek } from "@/src/lib/charts/utils";
 import { DateRangeSelector } from "./DateRangeSelector";
-import { CUSTOM_RANGE, THIS_WEEK } from "@/src/constants/constants.charts";
 import BarChartCustom from "./BarChart";
 import TopicDistributionChart from "./TopicDistributionChart";
+import useStudySessionFilter from "@/src/hooks/useStudySessionFilter";
 
 interface ChartDashboardProps {
   studySessions: studySessionDto[];
 }
 
 const ChartDashboard = ({ studySessions }: ChartDashboardProps) => {
-  const studySessionsDates = studySessions.map(
-    (session) => new Date(session.date)
-  );
-  const predefinedDateRanges = getPredefinedDateRanges(studySessionsDates);
+  const {
+    range,
+    selectedPredefinedRange,
+    predefinedDateRanges,
+    isMessageVisible,
+    handlePredefinedRangeSelect,
+    handleCustomRangeSelect,
+    filteredStudySessions,
+  } = useStudySessionFilter({ studySessions });
 
-  const [range, setRange] = useState<DateRange | undefined>(
-    predefinedDateRanges[THIS_WEEK]
-  );
+  const barChartData = useMemo(() => {
+    return getTotalStudiedTimePerDayOfTheWeek(filteredStudySessions);
+  }, [filteredStudySessions]);
 
-  const [selectedPredefinedRange, setSelectedPredefinedRange] =
-    useState<string>(THIS_WEEK);
+  const topicDistributionData = useMemo(() => {
+    const topicMap: { [title: string]: number } = {};
 
-  const isMessageVisible = range?.from && range?.to;
-
-  const filterStudySessions = useCallback(() => {
-    if (!range?.from) {
-      return studySessions;
-    }
-
-    const from = range.from;
-    const to = range.to ?? from;
-
-    return studySessions.filter((session) => {
-      const sessionDate = new Date(session.date);
-      return sessionDate >= from && sessionDate <= to;
+    filteredStudySessions.forEach((session) => {
+      session.topics.forEach((topic) => {
+        if (topicMap[topic.title]) {
+          topicMap[topic.title] += topic.effectiveTimeOfStudy;
+        } else {
+          topicMap[topic.title] = topic.effectiveTimeOfStudy;
+        }
+      });
     });
-  }, [range, studySessions]);
 
-  const chartData = useMemo(() => {
-    const filteredSessions = filterStudySessions();
-    return getTotalStudiedTimePerDayOfTheWeek(filteredSessions);
-  }, [filterStudySessions]);
-
-  // Handle selection from the predefined ranges
-  const handlePredefinedRangeSelect = (value: PredefinedDateRangeKey) => {
-    const selectedRange = predefinedDateRanges[value];
-    if (selectedRange) {
-      setRange(selectedRange);
-      setSelectedPredefinedRange(value);
-    }
-  };
-
-  // Handle custom range selection
-  const handleCustomRangeSelect = (newRange: DateRange | undefined) => {
-    if (!newRange) return;
-
-    const { from, to } = newRange;
-    if (from && !to) {
-      setRange({ from, to: from });
-    } else {
-      setRange(newRange);
-    }
-    setSelectedPredefinedRange(CUSTOM_RANGE);
-  };
+    // Convert the map to an array suitable for Recharts
+    return Object.keys(topicMap).map((title) => ({
+      name: title,
+      value: topicMap[title],
+    }));
+  }, [filteredStudySessions]);
 
   return (
     <div className="mt-4">
@@ -91,10 +65,10 @@ const ChartDashboard = ({ studySessions }: ChartDashboardProps) => {
           </div>
         )}
       </div>
-      {chartData && chartData.length > 0 ? (
-        <div className="flex flex-col gap-y-3">
-          <BarChartCustom chartData={chartData} />
-          <TopicDistributionChart studySessions={studySessions} />
+      {filteredStudySessions.length > 0 ? (
+        <div className="flex flex-col gap-y-6">
+          <BarChartCustom chartData={barChartData} />
+          <TopicDistributionChart chartData={topicDistributionData} />
         </div>
       ) : (
         <div className="mt-4 text-center text-muted-foreground">
