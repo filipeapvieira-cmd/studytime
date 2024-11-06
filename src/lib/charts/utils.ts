@@ -8,6 +8,10 @@ function addTimesInSeconds(time1: number, time2: string): number {
 export const getTotalStudiedTimePerDayOfTheWeek = (
   studySessions: studySessionDto[]
 ) => {
+  if (!studySessions || studySessions.length === 0) {
+    return null;
+  }
+
   const daysOfWeek = [
     "Sunday",
     "Monday",
@@ -40,8 +44,6 @@ export const getTotalStudiedTimePerDayOfTheWeek = (
     name: day,
     total: dayTimeMap[day],
   }));
-  console.log("utils");
-  console.log(result);
   return result;
 };
 
