@@ -8,7 +8,9 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  Label,
 } from "recharts";
+import CustomTooltip from "./CustomTooltip";
 
 // Define a color palette
 export const COLORS = [
@@ -35,7 +37,22 @@ type TopicDistributionChartProps = {
 };
 
 const TopicDistributionChart = ({ chartData }: TopicDistributionChartProps) => {
-  const filteredChartData = filterChartData(chartData);
+  const filteredChartData = filterChartData(chartData).map((item, index) => ({
+    ...item,
+    fill: COLORS[index % COLORS.length],
+  }));
+
+  const totalTimeStudied = React.useMemo(() => {
+    const totalSeconds = chartData.reduce((acc, curr) => acc + curr.value, 0);
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  }, [chartData]);
   return (
     <div className="mt-5">
       <h1 className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-blue-500 text-transparent bg-clip-text">
@@ -49,27 +66,63 @@ const TopicDistributionChart = ({ chartData }: TopicDistributionChartProps) => {
             nameKey="name"
             cx="50%"
             cy="50%"
-            outerRadius={150}
+            innerRadius={100}
+            strokeWidth={1}
             fill="#8884d8"
           >
             {filteredChartData.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
+              <Cell key={`cell-${index}`} fill={entry.fill} />
             ))}
+            <Label
+              content={({ viewBox }) => {
+                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                  return (
+                    <text
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fontSize={12}
+                    >
+                      <tspan
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        className="fill-foreground text-3xl font-bold"
+                      >
+                        {totalTimeStudied}
+                      </tspan>
+                      <tspan
+                        x={viewBox.cx}
+                        y={(viewBox.cy || 0) + 24}
+                        className="fill-muted-foreground"
+                      >
+                        Total Time Studied
+                      </tspan>
+                    </text>
+                  );
+                }
+              }}
+            />
           </Pie>
-          <Tooltip
-            formatter={(value: number) => {
-              const hours = Math.floor(value / 3600);
-              const minutes = Math.floor((value % 3600) / 60);
-              const seconds = value % 60;
-              return `${hours.toString().padStart(2, "0")}:${minutes
-                .toString()
-                .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+          <Tooltip content={<CustomTooltip />} />
+
+          <Legend
+            align="center"
+            verticalAlign="bottom"
+            height={36}
+            wrapperStyle={{
+              marginTop: "-2rem",
+              margin: "0 auto",
+              position: "relative",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              flexWrap: "wrap",
+              maxWidth: "500px",
+              gap: "0.5rem",
             }}
           />
-          <Legend verticalAlign="bottom" height={36} />
         </PieChart>
       </ResponsiveContainer>
     </div>
@@ -79,5 +132,6 @@ const TopicDistributionChart = ({ chartData }: TopicDistributionChartProps) => {
 export default TopicDistributionChart;
 
 function filterChartData(chartData: ChartDataItem[]): ChartDataItem[] {
-  return chartData.filter((item) => item.value >= 3600);
+  //return chartData.filter((item) => item.value >= 3600);
+  return chartData;
 }
