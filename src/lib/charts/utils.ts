@@ -1,4 +1,11 @@
+import {
+  THIS_WEEK,
+  WEEK_START_DAY,
+  LAST_WEEK,
+  LAST_30_DAYS,
+} from "@/src/constants/constants.charts";
 import { studySessionDto } from "@/src/types";
+import { addDays, endOfWeek, startOfWeek, subWeeks } from "date-fns";
 
 function addTimesInSeconds(time1: number, time2: string): number {
   const [hours, minutes, seconds] = time2.split(":").map(Number);
@@ -67,3 +74,21 @@ export const formatHSL = (hslString: string) => {
   const [hue, saturation, lightness] = hslString.split(" ");
   return `hsl(${hue}, ${saturation}, ${lightness})`;
 };
+
+export const predefinedDateRanges: { [key: string]: { from: Date; to: Date } } =
+  {
+    [THIS_WEEK]: {
+      from: startOfWeek(new Date(), { weekStartsOn: WEEK_START_DAY }),
+      to: endOfWeek(new Date(), { weekStartsOn: WEEK_START_DAY }),
+    },
+    [LAST_WEEK]: {
+      from: startOfWeek(subWeeks(new Date(), 1), {
+        weekStartsOn: WEEK_START_DAY,
+      }),
+      to: endOfWeek(subWeeks(new Date(), 1), { weekStartsOn: WEEK_START_DAY }),
+    },
+    [LAST_30_DAYS]: {
+      from: addDays(new Date(), -30),
+      to: new Date(),
+    },
+  };

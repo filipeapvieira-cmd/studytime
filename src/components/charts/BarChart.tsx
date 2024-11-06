@@ -1,8 +1,8 @@
 "use client";
 
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { studySessionDto } from "@/src/types";
-import { addDays, format, startOfWeek, endOfWeek, subWeeks } from "date-fns";
+import { format } from "date-fns";
 import {
   BarChart,
   Bar,
@@ -17,49 +17,16 @@ import {
   getTotalStudiedTimePerDayOfTheWeek,
   getYAxisUpperBound,
   formatHSL,
+  predefinedDateRanges,
 } from "@/src/lib/charts/utils";
-import { CalendarDateRangePicker } from "../Date-range-picker";
 import { DateRange } from "react-day-picker";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { DateRangeSelector } from "./DateRangeSelector";
+import { CUSTOM_RANGE, THIS_WEEK } from "@/src/constants/constants.charts";
 interface BarChartProps {
   studySessions: studySessionDto[];
 }
 
-// Define the start of the week as Sunday (0)
-const WEEK_START_DAY = 0; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-const THIS_WEEK = "This Week";
-const LAST_WEEK = "Last Week";
-const LAST_30_DAYS = "Last 30 Days";
-const CUSTOM_RANGE = "Custom Range";
-
-const predefinedDateRanges: { [key: string]: { from: Date; to: Date } } = {
-  [THIS_WEEK]: {
-    from: startOfWeek(new Date(), { weekStartsOn: WEEK_START_DAY }),
-    to: endOfWeek(new Date(), { weekStartsOn: WEEK_START_DAY }),
-  },
-  [LAST_WEEK]: {
-    from: startOfWeek(subWeeks(new Date(), 1), {
-      weekStartsOn: WEEK_START_DAY,
-    }),
-    to: endOfWeek(subWeeks(new Date(), 1), { weekStartsOn: WEEK_START_DAY }),
-  },
-  [LAST_30_DAYS]: {
-    from: addDays(new Date(), -30),
-    to: new Date(),
-  },
-};
-
 const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
-  const [chartData, setChartData] = useState<
-    { name: string; total: number }[] | null
-  >(null);
-
   const [range, setRange] = useState<DateRange | undefined>({
     from: predefinedDateRanges[THIS_WEEK].from,
     to: predefinedDateRanges[THIS_WEEK].to,
@@ -85,11 +52,10 @@ const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
     });
   }, [range, studySessions]);
 
-  useEffect(() => {
+  const chartData = useMemo(() => {
     const filteredSessions = filterStudySessions();
-    const processedData = getTotalStudiedTimePerDayOfTheWeek(filteredSessions);
-    setChartData(processedData);
-  }, [filterStudySessions, range, studySessions]);
+    return getTotalStudiedTimePerDayOfTheWeek(filteredSessions);
+  }, [filterStudySessions]);
 
   // Handle selection from the predefined ranges
   const handlePredefinedRangeSelect = (value: string) => {
@@ -116,31 +82,12 @@ const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
   return (
     <div className="mt-4">
       <div className="flex flex-row justify-between py-4">
-        <div className="flex gap-x-3">
-          <CalendarDateRangePicker
-            date={range}
-            setDate={handleCustomRangeSelect}
-          />
-          {/* Select Dropdown for Predefined Ranges */}
-          <Select
-            value={selectedPredefinedRange || undefined}
-            onValueChange={handlePredefinedRangeSelect}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select range" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.keys(predefinedDateRanges).map((rangeKey) => (
-                <SelectItem key={rangeKey} value={rangeKey}>
-                  {rangeKey}
-                </SelectItem>
-              ))}
-              <SelectItem value={CUSTOM_RANGE} disabled>
-                {CUSTOM_RANGE}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <DateRangeSelector
+          range={range}
+          selectedPredefinedRange={selectedPredefinedRange}
+          onPredefinedRangeSelect={handlePredefinedRangeSelect}
+          onCustomRangeSelect={handleCustomRangeSelect}
+        />
         {isMessageVisible && (
           <div className="text-sm text-muted-foreground">
             Showing data for {format(range?.from ?? new Date(), "PPP")} to{" "}
