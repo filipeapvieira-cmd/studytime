@@ -3,6 +3,7 @@ import {
   WEEK_START_DAY,
   LAST_WEEK,
   LAST_30_DAYS,
+  ALL,
 } from "@/src/constants/constants.charts";
 import { studySessionDto } from "@/src/types";
 import { addDays, endOfWeek, startOfWeek, subWeeks } from "date-fns";
@@ -75,8 +76,10 @@ export const formatHSL = (hslString: string) => {
   return `hsl(${hue}, ${saturation}, ${lightness})`;
 };
 
-export const predefinedDateRanges: { [key: string]: { from: Date; to: Date } } =
-  {
+export const getPredefinedDateRanges = (studySessionsDates: Date[]) => {
+  const earliestDate = getEarliestDate(studySessionsDates);
+
+  return {
     [THIS_WEEK]: {
       from: startOfWeek(new Date(), { weekStartsOn: WEEK_START_DAY }),
       to: endOfWeek(new Date(), { weekStartsOn: WEEK_START_DAY }),
@@ -91,4 +94,22 @@ export const predefinedDateRanges: { [key: string]: { from: Date; to: Date } } =
       from: addDays(new Date(), -30),
       to: new Date(),
     },
+    [ALL]: {
+      from: earliestDate || new Date(),
+      to: new Date(),
+    },
   };
+};
+
+export type PredefinedDateRanges = ReturnType<typeof getPredefinedDateRanges>;
+export type PredefinedDateRangeKey = keyof PredefinedDateRanges;
+
+export const getEarliestDate = (studySessionsDates: Date[]): Date | null => {
+  if (!studySessionsDates || studySessionsDates.length === 0) {
+    return null;
+  }
+
+  return studySessionsDates.reduce((earliest, current) => {
+    return current < earliest ? current : earliest;
+  }, studySessionsDates[0]);
+};

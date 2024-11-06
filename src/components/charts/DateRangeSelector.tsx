@@ -7,19 +7,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { predefinedDateRanges } from "@/src/lib/charts/utils";
+import {
+  PredefinedDateRangeKey,
+  PredefinedDateRanges,
+} from "@/src/lib/charts/utils";
 import { CUSTOM_RANGE } from "@/src/constants/constants.charts";
 
 interface DateRangeSelectorProps {
   range: DateRange | undefined;
   selectedPredefinedRange: string;
-  onPredefinedRangeSelect: (value: string) => void;
+  predefinedDateRanges: PredefinedDateRanges;
+  onPredefinedRangeSelect: (value: PredefinedDateRangeKey) => void;
   onCustomRangeSelect: (newRange: DateRange | undefined) => void;
 }
 
 export const DateRangeSelector = ({
   range,
   selectedPredefinedRange,
+  predefinedDateRanges,
   onPredefinedRangeSelect,
   onCustomRangeSelect,
 }: DateRangeSelectorProps) => {

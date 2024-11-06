@@ -4,3 +4,4 @@ export const THIS_WEEK = "This Week";
 export const LAST_WEEK = "Last Week";
 export const LAST_30_DAYS = "Last 30 Days";
 export const CUSTOM_RANGE = "Custom Range";
+export const ALL = "All";

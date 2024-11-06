@@ -17,7 +17,8 @@ import {
   getTotalStudiedTimePerDayOfTheWeek,
   getYAxisUpperBound,
   formatHSL,
-  predefinedDateRanges,
+  getPredefinedDateRanges,
+  PredefinedDateRangeKey,
 } from "@/src/lib/charts/utils";
 import { DateRange } from "react-day-picker";
 import { DateRangeSelector } from "./DateRangeSelector";
@@ -27,10 +28,14 @@ interface BarChartProps {
 }
 
 const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
-  const [range, setRange] = useState<DateRange | undefined>({
-    from: predefinedDateRanges[THIS_WEEK].from,
-    to: predefinedDateRanges[THIS_WEEK].to,
-  });
+  const studySessionsDates = studySessions.map(
+    (session) => new Date(session.date)
+  );
+  const predefinedDateRanges = getPredefinedDateRanges(studySessionsDates);
+
+  const [range, setRange] = useState<DateRange | undefined>(
+    predefinedDateRanges[THIS_WEEK]
+  );
 
   const [selectedPredefinedRange, setSelectedPredefinedRange] =
     useState<string>(THIS_WEEK);
@@ -58,7 +63,7 @@ const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
   }, [filterStudySessions]);
 
   // Handle selection from the predefined ranges
-  const handlePredefinedRangeSelect = (value: string) => {
+  const handlePredefinedRangeSelect = (value: PredefinedDateRangeKey) => {
     const selectedRange = predefinedDateRanges[value];
     if (selectedRange) {
       setRange(selectedRange);
@@ -85,6 +90,7 @@ const BarChartCustom: FC<BarChartProps> = ({ studySessions }) => {
         <DateRangeSelector
           range={range}
           selectedPredefinedRange={selectedPredefinedRange}
+          predefinedDateRanges={predefinedDateRanges}
           onPredefinedRangeSelect={handlePredefinedRangeSelect}
           onCustomRangeSelect={handleCustomRangeSelect}
         />
