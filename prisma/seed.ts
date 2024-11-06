@@ -32,29 +32,47 @@ async function main() {
         ...userData,
         password: hashedPassword, // Use the hashed password
         StudySession: {
-          create: Array.from({ length: 5 }, (_, index) => {
-            // Adjusting dates for valid Date objects
+          create: Array.from({ length: 10 }, (_, index) => {
             const startTime = new Date();
             startTime.setDate(startTime.getDate() - index); // Each session is on a consecutive past day
             const endTime = new Date(startTime);
             endTime.setHours(endTime.getHours() + 1); // End time is 1 hour after start time
 
+            const sessionDuration = 60 * 60 * 1000; // Session duration in milliseconds (1 hour)
+
+            // Distribute timeOfStudy among topics within the session duration
+            const topicTimes = [
+              sessionDuration * 0.4, // 40% of session duration
+              sessionDuration * 0.3, // 30% of session duration
+              sessionDuration * 0.3, // 30% of session duration
+            ];
+
             return {
               startTime,
               endTime,
-              pauseDuration: 5,
+              pauseDuration: 5 * 60 * 1000, // 5 minutes in milliseconds
               topic: {
                 create: [
                   {
-                    title: `Topic ${index + 1}`,
-                    description: `Description for topic ${index + 1}`,
-                    timeOfStudy: 60,
+                    title: `Topic ${index + 1} - Mathematics`,
+                    description: `Mathematics session ${index + 1}`,
+                    timeOfStudy: topicTimes[0],
+                  },
+                  {
+                    title: `Topic ${index + 1} - Physics`,
+                    description: `Physics session ${index + 1}`,
+                    timeOfStudy: topicTimes[1],
+                  },
+                  {
+                    title: `Topic ${index + 1} - Programming`,
+                    description: `Programming session ${index + 1}`,
+                    timeOfStudy: topicTimes[2],
                   },
                 ],
               },
               feeling: {
                 create: {
-                  description: `Feeling ${index + 1}`,
+                  description: `Feeling ${index + 1} - Productive`,
                 },
               },
             };

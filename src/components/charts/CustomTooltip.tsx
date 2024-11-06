@@ -5,7 +5,7 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0];
     const name = data.name;
-    const value = data.value;
+    const value = data.value / 1000; // Convert milliseconds to seconds
     const color = data.payload.fill || "#000"; // Fallback to black if color is undefined
 
     // Format the value as HH:MM:SS

@@ -43,16 +43,20 @@ const TopicDistributionChart = ({ chartData }: TopicDistributionChartProps) => {
   }));
 
   const totalTimeStudied = React.useMemo(() => {
-    const totalSeconds = chartData.reduce((acc, curr) => acc + curr.value, 0);
+    const totalSeconds = chartData.reduce(
+      (acc, curr) => acc + curr.value / 1000, // Convert milliseconds to seconds
+      0
+    );
 
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
+    const seconds = Math.floor(totalSeconds % 60);
 
     return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds
       .toString()
       .padStart(2, "0")}`;
   }, [chartData]);
+
   return (
     <div className="mt-5">
       <h1 className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-blue-500 text-transparent bg-clip-text">
@@ -105,24 +109,6 @@ const TopicDistributionChart = ({ chartData }: TopicDistributionChartProps) => {
             />
           </Pie>
           <Tooltip content={<CustomTooltip />} />
-
-          <Legend
-            align="center"
-            verticalAlign="bottom"
-            height={36}
-            wrapperStyle={{
-              marginTop: "-2rem",
-              margin: "0 auto",
-              position: "relative",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              flexWrap: "wrap",
-              maxWidth: "500px",
-              gap: "0.5rem",
-            }}
-          />
         </PieChart>
       </ResponsiveContainer>
     </div>
