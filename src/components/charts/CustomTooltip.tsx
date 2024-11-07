@@ -1,5 +1,4 @@
 import React from "react";
-import { TooltipProps } from "recharts";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {

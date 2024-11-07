@@ -14,19 +14,17 @@ import CustomTooltip from "./CustomTooltip";
 
 // Define a color palette
 export const COLORS = [
-  "#F9FAFB", // light gray-50
-  "#E5E7EB", // gray-200
-  "#D1D5DB", // gray-300
-  "#9CA3AF", // gray-400
-  "#6B7280", // gray-500
-  "#4B5563", // gray-600
-  "#2563EB", // blue-600 (adds contrast)
-  "#059669", // green-600 (adds contrast)
-  "#D97706", // amber-600 (adds contrast)
-  "#1F2937", // gray-800 (dark contrast)
-  "#111827", // gray-900 (dark contrast)
+  "#7C3AED", // purple-600
+  "#EF4444", // red-500
+  "#F59E0B", // yellow-500
+  "#2563EB", // blue-600
+  "#059669", // green-600
+  "#D97706", // amber-600
+  "#1F2937", // gray-800
+  "#111827", // gray-900
   "#FFFFFF", // white
 ];
+
 type ChartDataItem = {
   name: string;
   value: number;
@@ -70,7 +68,7 @@ const TopicDistributionChart = ({ chartData }: TopicDistributionChartProps) => {
             nameKey="name"
             cx="50%"
             cy="50%"
-            innerRadius={100}
+            innerRadius={115}
             strokeWidth={1}
             fill="#8884d8"
           >
