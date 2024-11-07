@@ -118,6 +118,5 @@ const TopicDistributionChart = ({ chartData }: TopicDistributionChartProps) => {
 export default TopicDistributionChart;
 
 function filterChartData(chartData: ChartDataItem[]): ChartDataItem[] {
-  //return chartData.filter((item) => item.value >= 3600);
-  return chartData;
+  return chartData.filter((item) => item.value >= 1800);
 }
