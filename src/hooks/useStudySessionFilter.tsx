@@ -6,6 +6,7 @@ import {
   PredefinedDateRangeKey,
 } from "@/src/lib/charts/utils";
 import { CUSTOM_RANGE, THIS_WEEK } from "@/src/constants/constants.charts";
+import { endOfDay, startOfDay } from "date-fns";
 
 interface UseStudySessionFilterProps {
   studySessions: studySessionDto[];
@@ -56,14 +57,23 @@ const useStudySessionFilter = ({
   };
 
   const handleCustomRangeSelect = (newRange: DateRange | undefined) => {
-    if (!newRange) return;
+    if (!newRange) {
+      setRange(undefined);
+      return;
+    }
 
     const { from, to } = newRange;
-    if (from && !to) {
-      setRange({ from, to: from });
-    } else {
-      setRange(newRange);
+
+    if (from && to) {
+      const dateEndOfDay = endOfDay(new Date(to));
+      const beginningOfDay = startOfDay(new Date(from));
+      setRange({ from: beginningOfDay, to: dateEndOfDay });
+    } else if (from && !to) {
+      const beginningOfDay = startOfDay(new Date(from));
+      const endOfSameDay = endOfDay(new Date(from));
+      setRange({ from: beginningOfDay, to: endOfSameDay });
     }
+
     setSelectedPredefinedRange(CUSTOM_RANGE);
   };
 

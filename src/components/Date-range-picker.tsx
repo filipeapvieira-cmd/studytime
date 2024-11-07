@@ -26,11 +26,6 @@ export function CalendarDateRangePicker({
   date,
   setDate,
 }: DateRangePickerProps) {
-  /*   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2023, 0, 20),
-    to: addDays(new Date(2023, 0, 20), 20),
-  }); */
-
   const calendarSelectHandler = (range: DateRange | undefined) => {
     setDate(range);
   };
@@ -68,7 +63,6 @@ export function CalendarDateRangePicker({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            /* onSelect={setDate} */
             onSelect={(range) => {
               calendarSelectHandler(range);
             }}
