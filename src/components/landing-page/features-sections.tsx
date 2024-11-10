@@ -22,7 +22,7 @@ function FeaturesSection() {
       icon: BookOpen,
       title: "Smart Journaling",
       description:
-        "Document your learning journey with our intuitive journaling system",
+        "Easily find the notes and information you need without sifting through multiple files",
       colorClasses: {
         shadow: "hover:shadow-purple-500/20",
         bgGradient: "bg-gradient-to-br from-purple-900/30 to-purple-600/30",
