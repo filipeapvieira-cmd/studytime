@@ -25,7 +25,7 @@ import { convertListToTopic } from "@/src/lib/hooks/utils";
 
 interface EditSessionProps {
   isModalOpen: boolean;
-  handleModalClose: React.Dispatch<React.SetStateAction<boolean>>;
+  handleModalClose: (isOpen: boolean) => void;
   selectedStudySession: studySessionDto;
 }
 
@@ -34,17 +34,7 @@ const EditSession: FC<EditSessionProps> = ({
   handleModalClose,
   selectedStudySession,
 }: EditSessionProps) => {
-  const { setSessionFeelingsUpdate } = useContext(FeelingsContext);
-  const { setSessionTopicsUpdate } = useContext(TopicsContext);
-
-  // Add default data when modal closes
-  useEffect(() => {
-    return () => {
-      setSessionTopicsUpdate([createNewTopic()]);
-      setSessionFeelingsUpdate("");
-    };
-  }, [setSessionTopicsUpdate, setSessionFeelingsUpdate]);
-
+  
   return (
     <AlertDialog open={isModalOpen}>
       <AlertDialogContent className="max-w-6xl">

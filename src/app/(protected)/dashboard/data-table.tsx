@@ -35,7 +35,7 @@ import TableFilters from "@/src/components/table/Table-filters";
 import EditSession from "@/src/components/EditSession";
 import { set } from "date-fns";
 import { studySessionDto } from "@/src/types";
-import { TopicsContext } from "@/src/ctx/session-topics-provider";
+import { createNewTopic, TopicsContext } from "@/src/ctx/session-topics-provider";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { convertListToTopic } from "@/src/lib/hooks/utils";
 
@@ -150,12 +150,19 @@ export function DataTable<TData, TValue>({
     sessionToEdit,
   ]);
 
+  const handleModalClose = (isOpen: boolean) => {
+    // Add default data when modal closes
+    setSessionTopicsUpdate([createNewTopic()]);
+    setSessionFeelingsUpdate("");
+    setIsEditSessionOpen(isOpen);
+  };
+
   return (
     <div>
       {isEditSessionOpen && (
         <EditSession
           isModalOpen={isEditSessionOpen}
-          handleModalClose={setIsEditSessionOpen}
+          handleModalClose={handleModalClose}
           selectedStudySession={sessionToEdit as studySessionDto}
         />
       )}
