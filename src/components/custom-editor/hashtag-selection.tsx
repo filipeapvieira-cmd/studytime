@@ -40,7 +40,7 @@ export default function HashtagSelection({
   const isLoading = !data && !error;
 
   let selectedValues =
-    (currentHashtags.length > 0 && currentHashtags.split(" ")) || [];
+    (currentHashtags?.length > 0 && currentHashtags?.split(" ")) || [];
 
   React.useEffect(() => {
     if (data) {
