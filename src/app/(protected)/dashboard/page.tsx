@@ -1,31 +1,25 @@
-import { getStudySessionsByUserId } from "@/src/data/study-sessions";
-import { Suspense } from "react";
-import TableSkeleton from "@/src/components/skeletons/TableSkeleton";
+"use client";
+
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import { StudySessionsResponse } from "@/src/types/study-sessions";
+import { useStudySessions } from "@/src/hooks/new/useStudySessions";
+import { useErrorToast } from "@/src/hooks/new/useErrorToast";
+import TableSkeleton from "@/src/components/skeletons/TableSkeleton";
 
-async function DashboardPage() {
-  return (
-    <Suspense fallback={<TableSkeleton />}>
-      <DashboardData />
-    </Suspense>
-  );
-}
+const DashboardPage = () => {
+  const { data, isLoading, error } = useStudySessions();
+  
+  useErrorToast(error, "Unable to fetch data for dashboard. Please try again later.");
 
-export default DashboardPage;
-
-async function DashboardData() {
-  const response: StudySessionsResponse = await getStudySessionsByUserId();
-  const { data, status } = response;
-
-  if (status === "error") {
-    throw new Error(response.message);
-  }
+  if (isLoading) return <TableSkeleton />;
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={data || []} />
     </div>
   );
-}
+};
+
+export default DashboardPage;
+
+
