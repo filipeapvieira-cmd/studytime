@@ -8,6 +8,12 @@ import { DateRangeSelector } from "./DateRangeSelector";
 import BarChartCustom from "./BarChart";
 import TopicDistributionChart from "./TopicDistributionChart";
 import useStudySessionFilter from "@/src/hooks/useStudySessionFilter";
+import { Tabs } from "@/components/ui/tabs";
+import { TabsTrigger } from "@/components/ui/tabs";
+import { TabsContent } from "@/components/ui/tabs";
+import { TabsList } from "@/components/ui/tabs";
+import { MonthlyDistributionChart } from "./MonthlyDistributionChart";
+import { groupSessionsByAcademicYear } from "@/src/lib/charts/monthlyDistributionChart.utils";
 
 interface ChartDashboardProps {
   studySessions: studySessionDto[];
@@ -48,34 +54,48 @@ const ChartDashboard = ({ studySessions }: ChartDashboardProps) => {
     }));
   }, [filteredStudySessions]);
 
+  const monthlyDistributionData = useMemo(() => {
+    return groupSessionsByAcademicYear(studySessions);
+  }, [studySessions]);
+
   return (
-    <div className="mt-4">
-      <div className="flex flex-row justify-between py-4">
-        <DateRangeSelector
-          range={range}
-          selectedPredefinedRange={selectedPredefinedRange}
-          predefinedDateRanges={predefinedDateRanges}
-          onPredefinedRangeSelect={handlePredefinedRangeSelect}
-          onCustomRangeSelect={handleCustomRangeSelect}
-        />
-        {isMessageVisible && (
-          <div className="text-sm text-muted-foreground">
-            Showing data for {format(range?.from ?? new Date(), "PPP")} to{" "}
-            {format(range?.to ?? new Date(), "PPP")}
+    <Tabs defaultValue="timeDistribution">
+      <TabsList className="mx-auto w-full">
+        <TabsTrigger value="timeDistribution">Time Distribution</TabsTrigger>
+        <TabsTrigger value="password">Community</TabsTrigger>
+      </TabsList>
+      <TabsContent value="timeDistribution">
+        <div className="mt-4">
+          <MonthlyDistributionChart chartData={monthlyDistributionData} />
+          <div className="flex flex-row justify-between py-4">
+            <DateRangeSelector
+              range={range}
+              selectedPredefinedRange={selectedPredefinedRange}
+              predefinedDateRanges={predefinedDateRanges}
+              onPredefinedRangeSelect={handlePredefinedRangeSelect}
+              onCustomRangeSelect={handleCustomRangeSelect}
+            />
+            {isMessageVisible && (
+              <div className="text-sm text-muted-foreground">
+                Showing data for {format(range?.from ?? new Date(), "PPP")} to{" "}
+                {format(range?.to ?? new Date(), "PPP")}
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      {filteredStudySessions.length > 0 ? (
-        <div className="flex flex-col gap-y-6">
-          <BarChartCustom chartData={barChartData} />
-          <TopicDistributionChart chartData={topicDistributionData} />
+          {filteredStudySessions.length > 0 ? (
+            <div className="flex flex-col gap-y-6">
+              <BarChartCustom chartData={barChartData} />
+              <TopicDistributionChart chartData={topicDistributionData} />
+            </div>
+          ) : (
+            <div className="mt-4 text-center text-muted-foreground">
+              No results found...
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="mt-4 text-center text-muted-foreground">
-          No results found...
-        </div>
-      )}
-    </div>
+      </TabsContent>
+      <TabsContent value="password">Change your password here.</TabsContent>
+    </Tabs>
   );
 };
 
