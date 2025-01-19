@@ -20,6 +20,14 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { AcademicYearData, ChartItem } from "@/src/types/charts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const fontSize = 15;
 
@@ -63,11 +71,11 @@ export function MonthlyDistributionChart({
   const yAxisUpperBound = getYAxisUpperBound(data);
 
   return (
-    <div className="mt-5">
-      <div className="flex justify-between mb-6">
-        <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-primary to-yellow-500 text-transparent bg-clip-text">
+    <Card>
+      <CardHeader className="flex-row justify-between mb-6">
+        <CardTitle className="text-xl md:text-3xl bg-gradient-to-r from-primary to-yellow-500 text-transparent bg-clip-text">
           Monthly Time Distribution
-        </h1>
+        </CardTitle>
         <div className="flex gap-x-3 items-center">
           <div className="text-sm text-muted-foreground">Academic Years</div>
           <SelectCustom
@@ -76,34 +84,41 @@ export function MonthlyDistributionChart({
             onYearChange={handleYearChange}
           />
         </div>
-      </div>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart accessibilityLayer data={data}>
-          <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
-          <XAxis
-            dataKey="name"
-            fontSize={fontSize}
-            tick={{ fill: "hsl(var(--foreground))" }}
-          />
-          <YAxis
-            allowDecimals={false}
-            domain={[0, yAxisUpperBound]}
-            label={{
-              value: "Hours",
-              angle: -90,
-              position: "insideLeft",
-              fontSize,
-            }}
-          />
-          <Bar dataKey="total" barSize={50} radius={[10, 10, 0, 0]}>
-            <LabelList position="top" dataKey="total" fillOpacity={1} />
-            {data.map((item) => (
-              <Cell key={item.name} fill={"hsl(var(--primary))"} />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+      </CardHeader>
+      <CardContent>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart accessibilityLayer data={data}>
+            <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
+            <XAxis
+              dataKey="name"
+              fontSize={fontSize}
+              tick={{ fill: "hsl(var(--foreground))" }}
+            />
+            <YAxis
+              allowDecimals={false}
+              domain={[0, yAxisUpperBound]}
+              label={{
+                value: "Hours",
+                angle: -90,
+                position: "insideLeft",
+                fontSize,
+              }}
+            />
+            <Bar dataKey="total" barSize={50} radius={[10, 10, 0, 0]}>
+              <LabelList position="top" dataKey="total" fillOpacity={1} />
+              {data.map((item) => (
+                <Cell key={item.name} fill={"hsl(var(--primary))"} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </CardContent>
+      <CardFooter className="flex-col items-start gap-2 text-sm">
+        <p className="leading-none text-muted-foreground">
+          Showing total number of hours studied per month
+        </p>
+      </CardFooter>
+    </Card>
   );
 }
 
