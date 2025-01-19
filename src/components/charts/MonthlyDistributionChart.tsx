@@ -59,7 +59,7 @@ export function MonthlyDistributionChart({
   };
 
   const getYAxisUpperBound = (chartData: { name: string; total: number }[]) => {
-    const upperBoundery = 1.1;
+    const upperBoundery = 1.3;
     const maxValue = Math.max(...chartData.map((item) => item.total));
     return maxValue * upperBoundery;
   };
@@ -79,7 +79,7 @@ export function MonthlyDistributionChart({
           />
         </div>
       </div>
-      <ResponsiveContainer width="100%" height={250}>
+      <ResponsiveContainer width="100%" height={300}>
         <BarChart accessibilityLayer data={data}>
           <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
           <XAxis
