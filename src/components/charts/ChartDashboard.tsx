@@ -5,7 +5,7 @@ import { studySessionDto } from "@/src/types";
 import { format } from "date-fns";
 import { getTotalStudiedTimePerDayOfTheWeek } from "@/src/lib/charts/utils";
 import { DateRangeSelector } from "./DateRangeSelector";
-import BarChartCustom from "./BarChart";
+import WeeklyDistributionChart from "./WeeklyDistributionChart";
 import TopicDistributionChart from "./TopicDistributionChart";
 import useStudySessionFilter from "@/src/hooks/useStudySessionFilter";
 import { Tabs } from "@/components/ui/tabs";
@@ -84,7 +84,7 @@ const ChartDashboard = ({ studySessions }: ChartDashboardProps) => {
           </div>
           {filteredStudySessions.length > 0 ? (
             <div className="flex flex-col gap-y-6">
-              <BarChartCustom chartData={barChartData} />
+              <WeeklyDistributionChart chartData={barChartData} />
               <TopicDistributionChart chartData={topicDistributionData} />
             </div>
           ) : (

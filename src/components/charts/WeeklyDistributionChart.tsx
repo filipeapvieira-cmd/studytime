@@ -23,7 +23,7 @@ interface BarChartProps {
 
 const fontSize = 15;
 
-const BarChartCustom = ({ chartData }: BarChartProps) => {
+const WeeklyDistributionChart = ({ chartData }: BarChartProps) => {
   if (!chartData) {
     return null;
   }
@@ -72,7 +72,7 @@ const BarChartCustom = ({ chartData }: BarChartProps) => {
   );
 };
 
-export default BarChartCustom;
+export default WeeklyDistributionChart;
 
 const CustomLabel = (props: any) => {
   const { x, y, value } = props;

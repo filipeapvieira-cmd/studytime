@@ -23,7 +23,6 @@ import { AcademicYearData, ChartItem } from "@/src/types/charts";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
