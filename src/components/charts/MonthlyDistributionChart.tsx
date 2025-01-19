@@ -10,10 +10,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import {
-  AcademicYearData,
-  ChartItem,
-} from "@/src/lib/charts/monthlyDistributionChart.utils";
 import { useState } from "react";
 import {
   Select,
@@ -21,9 +17,9 @@ import {
   SelectValue,
   SelectContent,
   SelectGroup,
-  SelectLabel,
   SelectItem,
 } from "@/components/ui/select";
+import { AcademicYearData, ChartItem } from "@/src/types/charts";
 
 const fontSize = 15;
 
@@ -59,7 +55,7 @@ export function MonthlyDistributionChart({
   };
 
   const getYAxisUpperBound = (chartData: ChartItem[]) => {
-    const bufferMultiplier = 1.1;
+    const bufferMultiplier = 1.2;
     const maxValue = Math.max(...chartData.map((item) => item.total));
     return Math.ceil(maxValue * bufferMultiplier);
   };
@@ -111,11 +107,11 @@ export function MonthlyDistributionChart({
   );
 }
 
-interface SelectCustomProps {
+type SelectCustomProps = {
   academicYearKeys: string[];
   selectedYear: string;
   onYearChange: (year: string) => void;
-}
+};
 
 export function SelectCustom({
   academicYearKeys,
