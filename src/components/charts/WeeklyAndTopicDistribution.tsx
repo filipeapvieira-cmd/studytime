@@ -1,0 +1,90 @@
+"use client";
+
+import { format } from "date-fns";
+import useStudySessionFilter from "@/src/hooks/useStudySessionFilter";
+import { DateRangeSelector } from "./DateRangeSelector";
+import TopicDistributionChart from "./TopicDistributionChart";
+import WeeklyDistributionChart from "./WeeklyDistributionChart";
+import { useMemo } from "react";
+import { getTotalStudiedTimePerDayOfTheWeek } from "@/src/lib/charts/utils";
+import { studySessionDto } from "@/src/types";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+
+type WeeklyAndTopicDistributionProps = {
+  data: studySessionDto[];
+};
+
+export const WeeklyAndTopicDistribution = ({
+  data,
+}: WeeklyAndTopicDistributionProps) => {
+  const studySessions = data;
+  const {
+    range,
+    selectedPredefinedRange,
+    predefinedDateRanges,
+    isMessageVisible,
+    handlePredefinedRangeSelect,
+    handleCustomRangeSelect,
+    filteredStudySessions,
+  } = useStudySessionFilter({ studySessions });
+
+  const barChartData = useMemo(() => {
+    return getTotalStudiedTimePerDayOfTheWeek(filteredStudySessions);
+  }, [filteredStudySessions]);
+
+  const topicDistributionData = useMemo(() => {
+    const topicMap: { [title: string]: number } = {};
+
+    filteredStudySessions.forEach((session) => {
+      session.topics.forEach((topic) => {
+        if (topicMap[topic.title]) {
+          topicMap[topic.title] += topic.effectiveTimeOfStudy;
+        } else {
+          topicMap[topic.title] = topic.effectiveTimeOfStudy;
+        }
+      });
+    });
+
+    // Convert the map to an array suitable for Recharts
+    return Object.keys(topicMap).map((title) => ({
+      name: title,
+      value: topicMap[title],
+    }));
+  }, [filteredStudySessions]);
+  return (
+    <Card>
+      <CardHeader className="flex flex-col gap-y-6">
+        <CardTitle className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text">
+          Weekly & Topic Time Distribution
+        </CardTitle>
+        <div className="flex flex-row justify-between">
+          <DateRangeSelector
+            range={range}
+            selectedPredefinedRange={selectedPredefinedRange}
+            predefinedDateRanges={predefinedDateRanges}
+            onPredefinedRangeSelect={handlePredefinedRangeSelect}
+            onCustomRangeSelect={handleCustomRangeSelect}
+          />
+          {isMessageVisible && (
+            <div className="text-sm text-muted-foreground">
+              Showing data for {format(range?.from ?? new Date(), "PPP")} to{" "}
+              {format(range?.to ?? new Date(), "PPP")}
+            </div>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent>
+        {filteredStudySessions.length > 0 ? (
+          <div className="flex flex-col gap-y-6">
+            <WeeklyDistributionChart chartData={barChartData} />
+            <TopicDistributionChart chartData={topicDistributionData} />
+          </div>
+        ) : (
+          <div className="mt-4 text-center text-muted-foreground">
+            No results found...
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};

@@ -30,8 +30,8 @@ const WeeklyDistributionChart = ({ chartData }: BarChartProps) => {
 
   return (
     <div className="mt-5">
-      <h1 className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text">
-        Weekly Time Distribution
+      <h1 className="text-lg md:text-2xl font-bold mb-6 text-center bg-gradient-to-r from-primary to-yellow-500 text-transparent bg-clip-text">
+        Weekly
       </h1>
       <ResponsiveContainer height={400} width="100%" className="mt-2">
         <BarChart data={chartData} maxBarSize={300}>

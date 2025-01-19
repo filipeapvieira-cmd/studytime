@@ -57,8 +57,8 @@ const TopicDistributionChart = ({ chartData }: TopicDistributionChartProps) => {
 
   return (
     <div className="mt-5">
-      <h1 className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-blue-500 text-transparent bg-clip-text">
-        Topic Time Distribution
+      <h1 className="text-lg md:text-2xl font-bold mb-6 text-center bg-gradient-to-r from-primary to-yellow-500 text-transparent bg-clip-text">
+        Topic
       </h1>
       <ResponsiveContainer width="100%" height={400}>
         <PieChart>
