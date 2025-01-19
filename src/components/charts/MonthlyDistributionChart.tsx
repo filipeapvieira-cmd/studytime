@@ -34,7 +34,6 @@ type MonthlyDistributionChartProps = {
 export function MonthlyDistributionChart({
   chartData,
 }: MonthlyDistributionChartProps) {
-  console.log(chartData);
   const academicYearKeys = Object.keys(chartData);
 
   const transformData = (dataObj: Record<string, number>): ChartItem[] => {
@@ -44,9 +43,10 @@ export function MonthlyDistributionChart({
     }));
   };
 
-  const [selectedYear, setSelectedYear] = useState<string>(academicYearKeys[0]);
+  const lastAcademicYear = academicYearKeys[academicYearKeys.length - 1];
+  const [selectedYear, setSelectedYear] = useState<string>(lastAcademicYear);
   const [data, setData] = useState<ChartItem[]>(
-    transformData(chartData[academicYearKeys[0]])
+    transformData(chartData[lastAcademicYear])
   );
 
   if (!chartData) {
@@ -58,11 +58,13 @@ export function MonthlyDistributionChart({
     setData(transformData(chartData[year]));
   };
 
-  const getYAxisUpperBound = (chartData: { name: string; total: number }[]) => {
-    const upperBoundery = 1.3;
+  const getYAxisUpperBound = (chartData: ChartItem[]) => {
+    const bufferMultiplier = 1.1;
     const maxValue = Math.max(...chartData.map((item) => item.total));
-    return maxValue * upperBoundery;
+    return Math.ceil(maxValue * bufferMultiplier);
   };
+
+  const yAxisUpperBound = getYAxisUpperBound(data);
 
   return (
     <div className="mt-5">
@@ -88,7 +90,8 @@ export function MonthlyDistributionChart({
             tick={{ fill: "hsl(var(--foreground))" }}
           />
           <YAxis
-            domain={[0, getYAxisUpperBound(data)]}
+            allowDecimals={false}
+            domain={[0, yAxisUpperBound]}
             label={{
               value: "Hours",
               angle: -90,

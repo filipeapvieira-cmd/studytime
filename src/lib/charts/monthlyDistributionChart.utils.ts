@@ -90,7 +90,7 @@ export function groupSessionsByAcademicYear(
     const hours = parseEffectiveTimeToHours(session.effectiveTime);
     result[yearLabel][monthName] += hours;
   }
-  console.log(result);
+
   return result;
 }
 
