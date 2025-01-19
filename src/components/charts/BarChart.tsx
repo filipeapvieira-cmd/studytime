@@ -43,7 +43,8 @@ const BarChartCustom = ({ chartData }: BarChartProps) => {
           />
           <YAxis
             domain={[0, getYAxisUpperBound(chartData)]}
-            tickFormatter={(tick) => (tick / 3600).toFixed(1)}
+            tickFormatter={(tick: number) => Math.ceil(tick / 3600).toString()}
+            allowDecimals={false}
             label={{
               value: "Hours",
               angle: -90,
