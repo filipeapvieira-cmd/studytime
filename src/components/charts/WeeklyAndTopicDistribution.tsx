@@ -52,9 +52,9 @@ export const WeeklyAndTopicDistribution = ({
     }));
   }, [filteredStudySessions]);
   return (
-    <Card>
+    <Card className="flex flex-col gap-y-5">
       <CardHeader className="flex flex-col gap-y-6">
-        <CardTitle className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text">
+        <CardTitle className="text-xl md:text-3xl bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text">
           Weekly & Topic Time Distribution
         </CardTitle>
         <div className="flex flex-row justify-between">
@@ -75,7 +75,7 @@ export const WeeklyAndTopicDistribution = ({
       </CardHeader>
       <CardContent>
         {filteredStudySessions.length > 0 ? (
-          <div className="flex flex-col gap-y-6">
+          <div className="flex flex-col md:flex-row w-full">
             <WeeklyDistributionChart chartData={barChartData} />
             <TopicDistributionChart chartData={topicDistributionData} />
           </div>

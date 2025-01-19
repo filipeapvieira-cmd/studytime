@@ -7,8 +7,11 @@ import BarChartSkeleton from "@/src/components/skeletons/BarChartSkeleton";
 
 const ChartsPage = () => {
   const { data, isLoading, error } = useStudySessions();
-  
-  useErrorToast(error, "Unable to fetch data for charts. Please try again later.");
+
+  useErrorToast(
+    error,
+    "Unable to fetch data for charts. Please try again later."
+  );
 
   if (isLoading) return <BarChartSkeleton />;
 
@@ -20,4 +23,3 @@ const ChartsPage = () => {
 };
 
 export default ChartsPage;
-

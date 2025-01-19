@@ -71,7 +71,7 @@ export function MonthlyDistributionChart({
 
   return (
     <Card>
-      <CardHeader className="flex-row justify-between mb-6">
+      <CardHeader className="flex-col md:flex-row justify-between mb-6">
         <CardTitle className="text-xl md:text-3xl bg-gradient-to-r from-primary to-yellow-500 text-transparent bg-clip-text">
           Monthly Time Distribution
         </CardTitle>

@@ -29,11 +29,8 @@ const WeeklyDistributionChart = ({ chartData }: BarChartProps) => {
   }
 
   return (
-    <div className="mt-5">
-      <h1 className="text-lg md:text-2xl font-bold mb-6 text-center bg-gradient-to-r from-primary to-yellow-500 text-transparent bg-clip-text">
-        Weekly
-      </h1>
-      <ResponsiveContainer height={400} width="100%" className="mt-2">
+    <div className="flex-1">
+      <ResponsiveContainer height={400} width="100%">
         <BarChart data={chartData} maxBarSize={300}>
           <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
           <XAxis
@@ -52,7 +49,7 @@ const WeeklyDistributionChart = ({ chartData }: BarChartProps) => {
               fontSize,
             }}
           />
-          <Legend />
+
           <Bar
             dataKey="total"
             fill="hsl(var(--primary))"

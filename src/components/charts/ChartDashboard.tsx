@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { studySessionDto } from "@/src/types";
 import { Tabs } from "@/components/ui/tabs";
 import { TabsTrigger } from "@/components/ui/tabs";
@@ -18,6 +18,15 @@ const ChartDashboard = ({ studySessions }: ChartDashboardProps) => {
   const monthlyDistributionData = useMemo(() => {
     return groupSessionsByAcademicYear(studySessions);
   }, [studySessions]);
+
+  // Avoid layout shift when moving between tabs
+  useEffect(() => {
+    document.documentElement.style.overflowY = "scroll";
+
+    return () => {
+      document.documentElement.style.overflowY = "";
+    };
+  }, []);
 
   return (
     <Tabs defaultValue="timeDistribution">
