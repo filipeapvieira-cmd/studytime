@@ -19,15 +19,6 @@ const ChartDashboard = ({ studySessions }: ChartDashboardProps) => {
     return groupSessionsByAcademicYear(studySessions);
   }, [studySessions]);
 
-  // Avoid layout shift when moving between tabs
-  useEffect(() => {
-    document.documentElement.style.overflowY = "scroll";
-
-    return () => {
-      document.documentElement.style.overflowY = "";
-    };
-  }, []);
-
   return (
     <Tabs defaultValue="timeDistribution">
       <TabsList className="mx-auto w-full">

@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+   https://github.com/shadcn-ui/ui/issues/977
+   Fix layout shift when using Radix UI Select
+*/
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+:root {
+  height: 100%;
+}
+/*-----*/
+
 @layer base {
   :root {
     --background: 0 0% 100%;
