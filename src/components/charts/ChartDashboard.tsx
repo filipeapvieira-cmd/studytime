@@ -9,12 +9,18 @@ import { TabsList } from "@/components/ui/tabs";
 import { MonthlyDistributionChart } from "./MonthlyDistributionChart";
 import { groupSessionsByAcademicYear } from "@/src/lib/charts/monthlyDistributionChart.utils";
 import { WeeklyAndTopicDistribution } from "./WeeklyAndTopicDistribution";
+import { CommunityMonthlyDistributionChart } from "./Community-Monthly";
+import { CommunityData } from "@/src/types/community-analytics";
 
 interface ChartDashboardProps {
   studySessions: studySessionDto[];
+  communityData: CommunityData;
 }
 
-const ChartDashboard = ({ studySessions }: ChartDashboardProps) => {
+const ChartDashboard = ({
+  studySessions,
+  communityData,
+}: ChartDashboardProps) => {
   const monthlyDistributionData = useMemo(() => {
     return groupSessionsByAcademicYear(studySessions);
   }, [studySessions]);
@@ -31,7 +37,9 @@ const ChartDashboard = ({ studySessions }: ChartDashboardProps) => {
           <WeeklyAndTopicDistribution data={studySessions} />
         </div>
       </TabsContent>
-      <TabsContent value="password">Change your password here.</TabsContent>
+      <TabsContent value="password">
+        <CommunityMonthlyDistributionChart data={communityData} />
+      </TabsContent>
     </Tabs>
   );
 };

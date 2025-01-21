@@ -9,7 +9,7 @@ interface UseStudySessionsResult {
   error: any;
 }
 
-export const useStudySessions = (): UseStudySessionsResult => {
+export const useUserStudySessions = (): UseStudySessionsResult => {
   const { data, error } = useSWR<{ data: studySessionDto[] }>(
     GET_ALL_SESSIONS_ENDPOINT,
     fetcher

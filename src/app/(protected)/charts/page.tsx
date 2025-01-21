@@ -1,12 +1,26 @@
 "use client";
 
 import ChartDashboard from "@/src/components/charts/ChartDashboard";
-import { useStudySessions } from "@/src/hooks/new/useStudySessions";
+import { useUserStudySessions } from "@/src/hooks/new/useUserStudySessions";
 import { useErrorToast } from "@/src/hooks/new/useErrorToast";
 import BarChartSkeleton from "@/src/components/skeletons/BarChartSkeleton";
+import { useCommunityAnalytics } from "@/src/hooks/new/useCommunityAnalytics";
 
 const ChartsPage = () => {
-  const { data, isLoading, error } = useStudySessions();
+  const {
+    data: userStudySessions,
+    isLoading: userIsLoading,
+    error: userError,
+  } = useUserStudySessions();
+
+  const {
+    data: communityData,
+    isLoading: communityIsLoading,
+    error: communityError,
+  } = useCommunityAnalytics();
+
+  const isLoading = userIsLoading || communityIsLoading;
+  const error = userError || communityError;
 
   useErrorToast(
     error,
@@ -14,10 +28,13 @@ const ChartsPage = () => {
   );
 
   if (isLoading) return <BarChartSkeleton />;
-
+  console.log(communityData);
   return (
     <div className="container mx-auto">
-      <ChartDashboard studySessions={data || []} />
+      <ChartDashboard
+        studySessions={userStudySessions || []}
+        communityData={communityData || {}}
+      />
     </div>
   );
 };

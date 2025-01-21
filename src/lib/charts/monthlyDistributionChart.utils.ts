@@ -54,6 +54,117 @@ export function getAcademicYearLabel(date: Date): string {
   }
 }
 
+// Converts "YYYY-MM" to an academic year string "2022-2023", "2023-2024", etc.
+export function getAcademicYear(yearMonthKey: string): string {
+  const [yearStr, monthStr] = yearMonthKey.split("-");
+  const year = parseInt(yearStr, 10);
+  const month = parseInt(monthStr, 10);
+
+  // If month >= 9 (i.e., September–December), academic year is "YYYY-YYYY+1"
+  // e.g., if it's 2023-09, it's the 2023-2024 academic year
+  if (month >= 9) {
+    return `${year}-${year + 1}`;
+  }
+  // Otherwise (January–August), academic year is "YYYY-1-YYYY"
+  // e.g., if it's 2024-01, it's still the 2023-2024 academic year
+  return `${year - 1}-${year}`;
+}
+/**
+ * Groups user/community monthly totals by academic year (September-August).
+ */
+export function getAcademicYearData(
+  userTotals: Record<string, number>,
+  communityTotals: Record<string, number>
+): Record<string, { month: string; user: number; community: number }[]> {
+  // This will hold something like:
+  // {
+  //   "2023-2024": [
+  //     { month: "September", user: 0, community: 0 },
+  //     ...
+  //   ]
+  // }
+  const academicYearData: Record<
+    string,
+    { month: string; user: number; community: number }[]
+  > = {};
+
+  // Helper: Initialize a new academic year with zeroed months
+  function initAcademicYear(ay: string) {
+    if (!academicYearData[ay]) {
+      academicYearData[ay] = allMonths.map((m) => ({
+        month: m,
+        user: 0,
+        community: 0,
+      }));
+    }
+  }
+
+  // Fill in the user data
+  for (const [ym, userValue] of Object.entries(userTotals)) {
+    const ay = getAcademicYear(ym); // e.g. "2023-2024"
+    initAcademicYear(ay);
+
+    // Determine which of the 12 months in allMonths this corresponds to
+    // e.g., "2023-01" => "January" => find in allMonths
+    const [_, mm] = ym.split("-");
+    const monthIndex = parseInt(mm, 10) - 1; // JS months are 0-based
+    // We have a separate array for display "January", "February", ...
+    // But we want to match it to "September" -> 8, "January" -> 4, etc.
+    // So let's figure out the actual month name in standard order:
+    const standardMonthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const actualMonthName = standardMonthNames[monthIndex];
+
+    // Now find the position in allMonths
+    const targetIndex = allMonths.findIndex((m) => m === actualMonthName);
+    if (targetIndex !== -1) {
+      academicYearData[ay][targetIndex].user = userValue;
+    }
+  }
+
+  // Fill in the community data
+  for (const [ym, communityValue] of Object.entries(communityTotals)) {
+    const ay = getAcademicYear(ym);
+    initAcademicYear(ay);
+
+    const [_, mm] = ym.split("-");
+    const monthIndex = parseInt(mm, 10) - 1;
+    const standardMonthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const actualMonthName = standardMonthNames[monthIndex];
+
+    const targetIndex = allMonths.findIndex((m) => m === actualMonthName);
+    if (targetIndex !== -1) {
+      academicYearData[ay][targetIndex].community = communityValue;
+    }
+  }
+
+  return academicYearData;
+}
 /**
  * Organizes study sessions into an object grouped by academic years,
  * with the total effective study time (in hours) for each month
