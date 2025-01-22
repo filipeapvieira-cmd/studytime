@@ -8,3 +8,15 @@ export type ChartItem = {
   name: string;
   total: number;
 };
+
+type DataPoint = {
+  month: string;
+  user: number;
+  community: number;
+};
+
+export type CommunityDataStructure = {
+  academicYearData: {
+    [year: string]: DataPoint[];
+  };
+};

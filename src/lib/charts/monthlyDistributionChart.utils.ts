@@ -16,6 +16,21 @@ const allMonths = [
   "August",
 ];
 
+const standardMonthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 /**
  * Converts a time string "HH:MM:SS" into total hours (float).
  * E.g. "01:30:00" -> 1.5
@@ -28,29 +43,22 @@ export function parseEffectiveTimeToHours(effectiveTimeStr: string): number {
 }
 
 /**
- * Returns a string label (e.g. "24/25") indicating the academic year.
+ * Returns a string label (e.g. "2024/2025") indicating the academic year.
  * It calculates the academic year based on whether the date falls before or after September.
  */
 export function getAcademicYearLabel(date: Date): string {
   const year = date.getFullYear();
   const month = date.getMonth();
 
-  // If it's September (8) or later, the academic year label starts in that year
   if (month >= 8) {
-    // e.g. 2024 -> "24/25"
-    const start = year % 100; // e.g. 24
-    const end = (year + 1) % 100; // e.g. 25
-    return `${start.toString().padStart(2, "0")}/${end
-      .toString()
-      .padStart(2, "0")}`;
+    // September is month 8 (0-based index)
+    const start = year; // Current year
+    const end = year + 1; // Next year
+    return `${start}/${end}`;
   } else {
-    // If month < 8, it belongs to the previous year’s start
-    // e.g. date in Jan 2025 => academic year is 2024/2025 => "24/25"
-    const start = (year - 1) % 100;
-    const end = year % 100;
-    return `${start.toString().padStart(2, "0")}/${end
-      .toString()
-      .padStart(2, "0")}`;
+    const start = year - 1; // Previous year
+    const end = year; // Current year
+    return `${start}/${end}`;
   }
 }
 
@@ -69,6 +77,7 @@ export function getAcademicYear(yearMonthKey: string): string {
   // e.g., if it's 2024-01, it's still the 2023-2024 academic year
   return `${year - 1}-${year}`;
 }
+
 /**
  * Groups user/community monthly totals by academic year (September-August).
  */
@@ -107,24 +116,11 @@ export function getAcademicYearData(
     // Determine which of the 12 months in allMonths this corresponds to
     // e.g., "2023-01" => "January" => find in allMonths
     const [_, mm] = ym.split("-");
-    const monthIndex = parseInt(mm, 10) - 1; // JS months are 0-based
+    const monthIndex = parseInt(mm, 10) - 1;
     // We have a separate array for display "January", "February", ...
     // But we want to match it to "September" -> 8, "January" -> 4, etc.
     // So let's figure out the actual month name in standard order:
-    const standardMonthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
+
     const actualMonthName = standardMonthNames[monthIndex];
 
     // Now find the position in allMonths
@@ -141,20 +137,7 @@ export function getAcademicYearData(
 
     const [_, mm] = ym.split("-");
     const monthIndex = parseInt(mm, 10) - 1;
-    const standardMonthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
+
     const actualMonthName = standardMonthNames[monthIndex];
 
     const targetIndex = allMonths.findIndex((m) => m === actualMonthName);

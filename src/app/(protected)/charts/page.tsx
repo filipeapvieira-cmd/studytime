@@ -28,7 +28,7 @@ const ChartsPage = () => {
   );
 
   if (isLoading) return <BarChartSkeleton />;
-  console.log(communityData);
+
   return (
     <div className="container mx-auto">
       <ChartDashboard

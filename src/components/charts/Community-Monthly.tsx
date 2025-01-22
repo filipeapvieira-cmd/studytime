@@ -1,12 +1,11 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
+import * as React from "react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -17,40 +16,81 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { CommunityData } from "@/src/types/community-analytics";
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { CommunityDataStructure } from "@/src/types/charts";
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  user: {
+    label: "You",
     color: "hsl(var(--chart-1))",
   },
-  mobile: {
-    label: "Mobile",
+  community: {
+    label: "Your Colleagues",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
 type CommunityMonthlyDistributionChartProps = {
-  data: CommunityData;
+  data: CommunityDataStructure;
 };
 
 export function CommunityMonthlyDistributionChart({
   data,
 }: CommunityMonthlyDistributionChartProps) {
+  const { academicYearData } = data;
+  const academicYearKeys = React.useMemo(
+    () => Object.keys(academicYearData),
+    [data]
+  );
+  const [selectedYear, setSelectedYear] = React.useState(
+    academicYearKeys[0] ?? ""
+  );
+
+  const chartData = React.useMemo(() => {
+    if (!selectedYear || !academicYearData[selectedYear]) {
+      return [];
+    }
+
+    return academicYearData[selectedYear].map((entry) => ({
+      month: entry.month,
+      user: entry.user,
+      community: entry.community,
+    }));
+  }, [selectedYear, academicYearData]);
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Line Chart - Multiple</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+      <CardHeader className="flex-col md:flex-row justify-between mb-6">
+        <CardTitle className="text-xl md:text-3xl bg-gradient-to-r from-primary to-red-500 text-transparent bg-clip-text">
+          Your Studied Time Vs. Community Studied Time
+        </CardTitle>
+        <div className="flex gap-x-3 items-center">
+          <div className="text-sm text-muted-foreground">Academic Years</div>
+          <Select value={selectedYear} onValueChange={setSelectedYear}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select Academic Year" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {academicYearKeys.map((year) => (
+                  <SelectItem key={year} value={year}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </CardHeader>
+
       <CardContent>
         <ChartContainer config={chartConfig}>
           <LineChart
@@ -71,30 +111,28 @@ export function CommunityMonthlyDistributionChart({
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Line
-              dataKey="desktop"
+              dataKey="user"
               type="monotone"
-              stroke="var(--color-desktop)"
+              stroke="var(--color-user)"
               strokeWidth={2}
               dot={false}
             />
             <Line
-              dataKey="mobile"
+              dataKey="community"
               type="monotone"
-              stroke="var(--color-mobile)"
+              stroke="var(--color-community)"
               strokeWidth={2}
               dot={false}
             />
           </LineChart>
         </ChartContainer>
       </CardContent>
+
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              Showing total visitors for the last 6 months
+              Find out how your study hours compare to others.
             </div>
           </div>
         </div>
