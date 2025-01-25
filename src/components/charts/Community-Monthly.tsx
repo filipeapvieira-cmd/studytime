@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -69,8 +69,14 @@ export function CommunityMonthlyDistributionChart({
   return (
     <Card>
       <CardHeader className="flex-col md:flex-row justify-between mb-6">
-        <CardTitle className="text-xl md:text-3xl bg-gradient-to-r from-primary to-red-500 text-transparent bg-clip-text">
-          Your Studied Time Vs. Community Studied Time
+        <CardTitle className="text-xl md:text-3xl ">
+          <p className="bg-gradient-to-r from-primary to-pink-700 text-transparent bg-clip-text">
+            Your Studied Time
+          </p>
+          <p>Vs.</p>
+          <p className="bg-gradient-to-r from-primary to-yellow-500 text-transparent bg-clip-text">
+            Community Studied Time
+          </p>
         </CardTitle>
         <div className="flex gap-x-3 items-center">
           <div className="text-sm text-muted-foreground">Academic Years</div>
@@ -108,6 +114,14 @@ export function CommunityMonthlyDistributionChart({
               axisLine={false}
               tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <YAxis
+              dataKey="user"
+              label={{
+                value: "Hours",
+                angle: -90,
+                position: "insideLeft",
+              }}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Line
