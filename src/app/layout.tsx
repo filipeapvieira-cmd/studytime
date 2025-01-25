@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} bg-background min-h-screen flex flex-col`}
+        className={`${inter.className} bg-background min-h-screen flex flex-col w-screen overflow-x-hidden`}
       >
         <Providers>
           <Header />

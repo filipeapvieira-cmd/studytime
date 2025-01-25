@@ -26,7 +26,7 @@ import { getFullSessionLog } from "@/src/lib/session-log/utils";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
 
 interface EditSessionControlProps {
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalOpen: (isOpen: boolean) => void;
   studySessionToEdit: studySessionDto;
 }
 

@@ -56,11 +56,8 @@ const TopicDistributionChart = ({ chartData }: TopicDistributionChartProps) => {
   }, [chartData]);
 
   return (
-    <div className="mt-5">
-      <h1 className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-blue-500 text-transparent bg-clip-text">
-        Topic Time Distribution
-      </h1>
-      <ResponsiveContainer width="100%" height={400}>
+    <div className="flex-1">
+      <ResponsiveContainer height={400} width="100%">
         <PieChart>
           <Pie
             dataKey="value"

@@ -1,0 +1,1 @@
+- Functions lacked proper comments, making it harder to understand their purpose and reducing reusability. Adding clear comments would improve comprehension and maintainability.

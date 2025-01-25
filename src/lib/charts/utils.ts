@@ -113,3 +113,6 @@ export const getEarliestDate = (studySessionsDates: Date[]): Date | null => {
     return current < earliest ? current : earliest;
   }, studySessionsDates[0]);
 };
+
+export const isEmpty = (obj: Record<string, any>): boolean =>
+  Object.keys(obj).length === 0;

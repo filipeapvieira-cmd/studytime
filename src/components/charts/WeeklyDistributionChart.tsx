@@ -23,17 +23,14 @@ interface BarChartProps {
 
 const fontSize = 15;
 
-const BarChartCustom = ({ chartData }: BarChartProps) => {
+const WeeklyDistributionChart = ({ chartData }: BarChartProps) => {
   if (!chartData) {
     return null;
   }
 
   return (
-    <div className="mt-5">
-      <h1 className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text">
-        Weekly Time Distribution
-      </h1>
-      <ResponsiveContainer height={400} width="100%" className="mt-2">
+    <div className="flex-1">
+      <ResponsiveContainer height={400} width="100%">
         <BarChart data={chartData} maxBarSize={300}>
           <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
           <XAxis
@@ -43,7 +40,8 @@ const BarChartCustom = ({ chartData }: BarChartProps) => {
           />
           <YAxis
             domain={[0, getYAxisUpperBound(chartData)]}
-            tickFormatter={(tick) => (tick / 3600).toFixed(1)}
+            tickFormatter={(tick: number) => Math.ceil(tick / 3600).toString()}
+            allowDecimals={false}
             label={{
               value: "Hours",
               angle: -90,
@@ -51,7 +49,7 @@ const BarChartCustom = ({ chartData }: BarChartProps) => {
               fontSize,
             }}
           />
-          <Legend />
+
           <Bar
             dataKey="total"
             fill="hsl(var(--primary))"
@@ -71,7 +69,7 @@ const BarChartCustom = ({ chartData }: BarChartProps) => {
   );
 };
 
-export default BarChartCustom;
+export default WeeklyDistributionChart;
 
 const CustomLabel = (props: any) => {
   const { x, y, value } = props;

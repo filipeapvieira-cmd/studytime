@@ -1,30 +1,42 @@
-import { Suspense } from "react";
-import { getStudySessionsByUserId } from "@/src/data/study-sessions";
-import { StudySessionsResponse } from "@/src/types/study-sessions";
+"use client";
+
 import ChartDashboard from "@/src/components/charts/ChartDashboard";
+import { useUserStudySessions } from "@/src/hooks/new/useUserStudySessions";
+import { useErrorToast } from "@/src/hooks/new/useErrorToast";
 import BarChartSkeleton from "@/src/components/skeletons/BarChartSkeleton";
+import { useCommunityAnalytics } from "@/src/hooks/new/useCommunityAnalytics";
 
-function ChartsPage() {
-  return (
-    <Suspense fallback={<BarChartSkeleton />}>
-      <ChartsData />
-    </Suspense>
+const ChartsPage = () => {
+  const {
+    data: userStudySessions,
+    isLoading: userIsLoading,
+    error: userError,
+  } = useUserStudySessions();
+
+  const {
+    data: communityData,
+    isLoading: communityIsLoading,
+    error: communityError,
+  } = useCommunityAnalytics();
+
+  const isLoading = userIsLoading || communityIsLoading;
+  const error = userError || communityError;
+
+  useErrorToast(
+    error,
+    "Unable to fetch data for charts. Please try again later."
   );
-}
 
-export default ChartsPage;
-
-async function ChartsData() {
-  const response: StudySessionsResponse = await getStudySessionsByUserId();
-  const { data, status } = response;
-
-  if (status === "error") {
-    throw new Error(response.message);
-  }
+  if (isLoading) return <BarChartSkeleton />;
 
   return (
     <div className="container mx-auto">
-      <ChartDashboard studySessions={data} />
+      <ChartDashboard
+        studySessions={userStudySessions || []}
+        communityData={communityData || {}}
+      />
     </div>
   );
-}
+};
+
+export default ChartsPage;
