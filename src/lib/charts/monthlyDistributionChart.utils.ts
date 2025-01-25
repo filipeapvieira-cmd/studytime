@@ -64,7 +64,7 @@ export function getAcademicYearLabel(date: Date): string {
 
 // Converts "YYYY-MM" to an academic year string "2022-2023", "2023-2024", etc.
 export function getAcademicYear(yearMonthKey: string): string {
-  const [yearStr, monthStr] = yearMonthKey.split("-");
+  const [yearStr, monthStr] = yearMonthKey.split("/");
   const year = parseInt(yearStr, 10);
   const month = parseInt(monthStr, 10);
 

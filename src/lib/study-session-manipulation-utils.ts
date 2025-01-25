@@ -4,7 +4,7 @@ import { MonthlyTotals } from "../types/study-sessions";
  * Utility to get a Year-Month key like '2025-01'
  */
 export function getYearMonthString(date: Date): string {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+  return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(
     2,
     "0"
   )}`;
