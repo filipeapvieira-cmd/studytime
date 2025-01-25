@@ -71,11 +71,11 @@ export function getAcademicYear(yearMonthKey: string): string {
   // If month >= 9 (i.e., September–December), academic year is "YYYY-YYYY+1"
   // e.g., if it's 2023-09, it's the 2023-2024 academic year
   if (month >= 9) {
-    return `${year}-${year + 1}`;
+    return `${year}/${year + 1}`;
   }
   // Otherwise (January–August), academic year is "YYYY-1-YYYY"
   // e.g., if it's 2024-01, it's still the 2023-2024 academic year
-  return `${year - 1}-${year}`;
+  return `${year - 1}/${year}`;
 }
 
 /**
@@ -87,7 +87,7 @@ export function getAcademicYearData(
 ): Record<string, { month: string; user: number; community: number }[]> {
   // This will hold something like:
   // {
-  //   "2023-2024": [
+  //   "2023/2024": [
   //     { month: "September", user: 0, community: 0 },
   //     ...
   //   ]
@@ -110,12 +110,12 @@ export function getAcademicYearData(
 
   // Fill in the user data
   for (const [ym, userValue] of Object.entries(userTotals)) {
-    const ay = getAcademicYear(ym); // e.g. "2023-2024"
+    const ay = getAcademicYear(ym); // e.g. "2023/2024"
     initAcademicYear(ay);
 
     // Determine which of the 12 months in allMonths this corresponds to
     // e.g., "2023-01" => "January" => find in allMonths
-    const [_, mm] = ym.split("-");
+    const [_, mm] = ym.split("/");
     const monthIndex = parseInt(mm, 10) - 1;
     // We have a separate array for display "January", "February", ...
     // But we want to match it to "September" -> 8, "January" -> 4, etc.
@@ -135,7 +135,7 @@ export function getAcademicYearData(
     const ay = getAcademicYear(ym);
     initAcademicYear(ay);
 
-    const [_, mm] = ym.split("-");
+    const [_, mm] = ym.split("/");
     const monthIndex = parseInt(mm, 10) - 1;
 
     const actualMonthName = standardMonthNames[monthIndex];

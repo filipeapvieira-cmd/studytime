@@ -50,9 +50,9 @@ export function CommunityMonthlyDistributionChart({
     () => Object.keys(academicYearData),
     [data]
   );
-  const [selectedYear, setSelectedYear] = React.useState(
-    academicYearKeys[0] ?? ""
-  );
+  const lastAcademicYear = academicYearKeys[academicYearKeys.length - 1];
+
+  const [selectedYear, setSelectedYear] = React.useState(lastAcademicYear);
 
   const chartData = React.useMemo(() => {
     if (!selectedYear || !academicYearData[selectedYear]) {
