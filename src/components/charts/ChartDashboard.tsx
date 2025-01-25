@@ -9,6 +9,7 @@ import { WeeklyAndTopicDistribution } from "./WeeklyAndTopicDistribution";
 import { CommunityMonthlyDistributionChart } from "./Community-Monthly";
 import { CommunityDataStructure } from "@/src/types/charts";
 import { isEmpty } from "@/src/lib/charts/utils";
+import NoStudySessionsFound from "./NoStudySessionsFound";
 
 interface ChartDashboardProps {
   studySessions: studySessionDto[];
@@ -22,6 +23,10 @@ const ChartDashboard = ({
   const monthlyDistributionData = useMemo(() => {
     return groupSessionsByAcademicYear(studySessions);
   }, [studySessions]);
+
+  if (!studySessions.length) {
+    return <NoStudySessionsFound />;
+  }
 
   return (
     <Tabs defaultValue="timeDistribution">

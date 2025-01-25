@@ -39,7 +39,7 @@ export function MonthlyDistributionChart({
 }: MonthlyDistributionChartProps) {
   const academicYearKeys = Object.keys(chartData);
 
-  const transformData = (dataObj: Record<string, number>): ChartItem[] => {
+  const transformData = (dataObj: Record<string, number> = {}): ChartItem[] => {
     return Object.entries(dataObj).map(([month, value]) => ({
       name: month,
       total: Math.round(value),
