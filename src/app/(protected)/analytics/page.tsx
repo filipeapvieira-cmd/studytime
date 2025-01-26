@@ -6,7 +6,7 @@ import { useErrorToast } from "@/src/hooks/new/useErrorToast";
 import BarChartSkeleton from "@/src/components/skeletons/BarChartSkeleton";
 import { useCommunityAnalytics } from "@/src/hooks/new/useCommunityAnalytics";
 
-const ChartsPage = () => {
+const AnalyticsPage = () => {
   const {
     data: userStudySessions,
     isLoading: userIsLoading,
@@ -39,4 +39,4 @@ const ChartsPage = () => {
   );
 };
 
-export default ChartsPage;
+export default AnalyticsPage;

@@ -14,8 +14,8 @@ const navItems = [
     roles: ["USER", "ADMIN"],
   },
   {
-    name: "Charts",
-    path: "/charts",
+    name: "Analytics",
+    path: "/analytics",
     roles: ["USER", "ADMIN"],
   },
   {
