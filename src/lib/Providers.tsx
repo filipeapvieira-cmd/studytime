@@ -16,7 +16,7 @@ interface ProvidersProps {
 
 const Providers: FC<ProvidersProps> = ({ children }) => {
   return (
-    <ThemeProvider attribute="class" enableSystem defaultTheme="system">
+    <ThemeProvider attribute="class" enableSystem defaultTheme="dark">
       <SessionProvider>
         <TopicsProvider>
           <TimerProvider>

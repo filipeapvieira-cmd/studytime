@@ -17,15 +17,6 @@ interface UserNavProps {}
 
 const UserNav: FC<UserNavProps> = ({}) => {
   const { data: session, status } = useSession();
-  const { setTheme, theme } = useTheme();
-
-  const handleChangeTheme = () => {
-    if (theme === "dark") {
-      setTheme("light");
-    } else {
-      setTheme("dark");
-    }
-  };
 
   return (
     <DropdownMenu>
@@ -49,11 +40,6 @@ const UserNav: FC<UserNavProps> = ({}) => {
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuItem>Billing</DropdownMenuItem>
         <DropdownMenuItem>Team</DropdownMenuItem>
-        <DropdownMenuItem onClick={handleChangeTheme}>
-          <Icons.moon className="mr-2 h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Icons.sun className="mr-2 h-4 w-4 absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span>{`${theme === "dark" ? "Light" : "Dark"} mode`}</span>
-        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>
           <Icons.login className="mr-2 h-4 w-4" />
