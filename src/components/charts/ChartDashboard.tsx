@@ -9,13 +9,19 @@ import { WeeklyAndTopicDistribution } from "./WeeklyAndTopicDistribution";
 import { CommunityMonthlyDistributionChart } from "./Community-Monthly";
 import { CommunityDataStructure } from "@/src/types/charts";
 import { isEmpty } from "@/src/lib/charts/utils";
-import NoStudySessionsFound from "./NoStudySessionsFound";
+import UnexpectedEvent from "../Unexpected-Event";
 import { Clock, Users } from "lucide-react";
 
 interface ChartDashboardProps {
   studySessions: studySessionDto[];
   communityData: CommunityDataStructure | {};
 }
+
+const unexpectedEventConfig = {
+  header: "No study sessions found",
+  message:
+    "It looks like you haven't logged any sessions yet. Start by  adding your first study session to track your progress!",
+};
 
 const ChartDashboard = ({
   studySessions,
@@ -26,7 +32,7 @@ const ChartDashboard = ({
   }, [studySessions]);
 
   if (!studySessions.length) {
-    return <NoStudySessionsFound />;
+    return <UnexpectedEvent config={unexpectedEventConfig} />;
   }
 
   return (
