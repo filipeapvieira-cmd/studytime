@@ -14,7 +14,7 @@ interface CustomEditorItemProps {
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
   isUpdate: boolean;
   isMarkdownPreviewerVisible: boolean;
-  currentSession: studySessionDto;
+  currentSession?: studySessionDto;
 }
 
 const CustomEditorItem: FC<CustomEditorItemProps> = ({

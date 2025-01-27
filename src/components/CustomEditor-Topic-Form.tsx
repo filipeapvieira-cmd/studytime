@@ -36,7 +36,7 @@ interface CustomEditorFormProps {
   isUpdate: boolean;
   topic: Topic;
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
-  currentSession: studySessionDto;
+  currentSession?: studySessionDto;
 }
 
 interface CurrentTopic {
@@ -181,6 +181,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   };
 
   const handleManuallyUpdateEffectiveTimeOfStudyingBlur = () => {
+    if (!currentSession) return;
     const { startTime, endTime, pauseDuration, topics } = currentSession;
     const currentSessionStartTime = convertTimeStringToMilliseconds(startTime);
     const currentSessionEndTime = convertTimeStringToMilliseconds(endTime);
