@@ -11,7 +11,7 @@ import Title from "./custom-editor/title";
 import EditorContainer from "./custom-editor/container";
 interface CustomEditorProps {
   action?: "update";
-  studySessionToUpdate?: studySessionDto;
+  studySessionToUpdate: studySessionDto;
 }
 
 const CustomEditor: FC<CustomEditorProps> = ({
@@ -69,6 +69,7 @@ const CustomEditor: FC<CustomEditorProps> = ({
                   setSessionTopics={setSessionTopics}
                   isUpdate={!!(action && studySessionToUpdate)}
                   isMarkdownPreviewerVisible={isMarkdownPreviewerVisible}
+                  currentSession={studySessionToUpdate}
                 />
               </AccordionItem>
             ))}

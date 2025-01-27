@@ -100,6 +100,7 @@ export type Topic = SessionTimer & {
   title: string;
   hashtags: string;
   description: string;
+  effectiveTimeOfStudy: number;
 };
 
 /* GET ALL SESSIONS */

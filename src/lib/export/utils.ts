@@ -1,5 +1,6 @@
 import { studySessionDto } from "@/src/types";
 import { Table } from "@tanstack/table-core";
+import { convertMillisecondsToTimeString } from "../session-log/update-utils";
 
 const convertSessionsToMarkdown = (sessionsToExport: studySessionDto[]) => {
   let markdownString = "";
@@ -40,7 +41,7 @@ const sessionToMarkdown = (studySession: studySessionDto, index: number) => {
     markdownString += `### ${index + 1}. ${topic.title}\n`;
     markdownString += `- **Description:** \n`;
     markdownString += `${addSpacesToDashes(topic.description)}\n`;
-    markdownString += `- **Time Spent:** ${convertMillisecondsToString(
+    markdownString += `- **Time Spent:** ${convertMillisecondsToTimeString(
       topic.effectiveTimeOfStudy
     )} \n`;
     markdownString += `- **Hashtags:** ${topic.hashtags}\n`;
@@ -62,19 +63,6 @@ const addFeelings = (studySession: studySessionDto) => {
 
 const addSpacesToDashes = (inputString: string) => {
   return inputString.replace(/(^|[\s\n])-/g, "$1    -");
-};
-
-export const convertMillisecondsToString = (milliseconds: number) => {
-  const seconds = Math.floor(milliseconds / 1000);
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-
-  const formattedHours = String(hours).padStart(2, "0");
-  const formattedMinutes = String(minutes).padStart(2, "0");
-  const formattedSeconds = String(remainingSeconds).padStart(2, "0");
-
-  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 };
 
 const getDayOfTheWeek = (date: string) => {

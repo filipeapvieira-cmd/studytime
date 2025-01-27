@@ -11,7 +11,7 @@ export default function MobileMessage() {
               Mobile Version in Development
             </h1>
             <p className="text-gray-400 text-lg">
-              We're crafting something special for your mobile experience.
+              We&apos;re crafting something special for your mobile experience.
             </p>
           </div>
 

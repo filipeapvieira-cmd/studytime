@@ -17,8 +17,8 @@ import { usePersistSession } from "@/src/hooks/usePersistSession";
 import {
   getSaveBtnIcon,
   getDeleteBtnIcon,
-  timeStringToDate,
-  timeStringToMillis,
+  convertTimeStringToDate,
+  convertTimeStringToMilliseconds,
 } from "@/src/lib/session-log/update-utils";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
@@ -51,9 +51,9 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
     sessionTiming;
 
   const sessionTime = {
-    sessionStartTime: timeStringToDate(startTime, date),
-    sessionEndTime: timeStringToDate(endTime, date),
-    totalPauseTime: timeStringToMillis(pauseDuration),
+    sessionStartTime: convertTimeStringToDate(startTime, date),
+    sessionEndTime: convertTimeStringToDate(endTime, date),
+    totalPauseTime: convertTimeStringToMilliseconds(pauseDuration),
   };
 
   useEffect(() => {

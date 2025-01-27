@@ -1,7 +1,7 @@
 import { MutableRefObject } from "react";
 import { Icons } from "@/src/components/icons";
 
-export const timeStringToDate = (
+export const convertTimeStringToDate = (
   sessionTime: string,
   sessionDate: string
 ): number => {
@@ -13,11 +13,25 @@ export const timeStringToDate = (
   return date.getTime();
 };
 
-export const timeStringToMillis = (pauseDuration: string): any => {
+export const convertTimeStringToMilliseconds = (
+  pauseDuration: string
+): number => {
   const [hours, minutes, seconds] = pauseDuration.split(":").map(Number);
   const totalMilliseconds =
     hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000;
   return totalMilliseconds;
+};
+
+export const convertMillisecondsToTimeString = (
+  milliseconds: number
+): string => {
+  const hours = Math.floor(milliseconds / (60 * 60 * 1000));
+  const minutes = Math.floor((milliseconds % (60 * 60 * 1000)) / (60 * 1000));
+  const seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
+
+  const pad = (num: number): string => String(num).padStart(2, "0");
+
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
 
 export const getSaveBtnIcon = (

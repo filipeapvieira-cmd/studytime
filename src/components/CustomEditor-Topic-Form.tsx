@@ -6,13 +6,12 @@ import {
   ChangeEvent,
   useState,
   useEffect,
-  useMemo,
   Dispatch,
   SetStateAction,
 } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Topic, TopicTimer } from "@/src/types";
+import { studySessionDto, Topic, TopicTimer } from "@/src/types";
 import {
   TopicsContext,
   createNewTopic,
@@ -21,13 +20,15 @@ import {
   updateTimerStatus,
   forceSessionStatusOnTopicStatus,
 } from "@/src/lib/time-provider/utils";
-import { TimeContext } from "@/src/ctx/time-provider";
 import BtnTimer from "./ui/BtnTimer";
 import { SessionTimer } from "@/src/types";
 import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
 import useSessionStatus from "@/src/hooks/useSessionStatus";
 import CustomTextArea from "./ui/CustomTextArea";
-import { timeStringToMillis } from "@/src/lib/session-log/update-utils";
+import {
+  convertMillisecondsToTimeString,
+  convertTimeStringToMilliseconds,
+} from "@/src/lib/session-log/update-utils";
 import { TopicSelection } from "./ui/topic-selection";
 import HashtagSelection from "./custom-editor/hashtag-selection";
 
@@ -35,6 +36,7 @@ interface CustomEditorFormProps {
   isUpdate: boolean;
   topic: Topic;
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
+  currentSession: studySessionDto;
 }
 
 interface CurrentTopic {
@@ -47,8 +49,10 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   isUpdate,
   topic,
   setSessionTopics,
+  currentSession,
 }: CustomEditorFormProps) => {
   const sessionStatus = useSessionStatus();
+  const { sessionTopics } = useContext(TopicsContext);
   const {
     title,
     hashtags,
@@ -85,11 +89,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   };
 
   const [userUpdatedEffectiveTimeOfStudy, setUserUpdatedEffectiveTimeOfStudy] =
-    useState(
-      String(
-        new Date(topicTimer.effectiveTimeOfStudy).toISOString().slice(11, 19)
-      )
-    );
+    useState(convertMillisecondsToTimeString(topicTimer.effectiveTimeOfStudy));
 
   useEffect(() => {
     forceSessionStatusOnTopicStatus(
@@ -181,13 +181,37 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   };
 
   const handleManuallyUpdateEffectiveTimeOfStudyingBlur = () => {
-    const effectiveTimeOfStudy = timeStringToMillis(
+    const { startTime, endTime, pauseDuration, topics } = currentSession;
+    const currentSessionStartTime = convertTimeStringToMilliseconds(startTime);
+    const currentSessionEndTime = convertTimeStringToMilliseconds(endTime);
+    const currentSessionPauseStartTime =
+      convertTimeStringToMilliseconds(pauseDuration);
+    const totalStudySessionTime =
+      currentSessionEndTime -
+      (currentSessionStartTime + currentSessionPauseStartTime);
+
+    const totalCombinedOtherTopicTime = topics
+      .filter((topicInSession) => topicInSession.id !== topic.id)
+      .reduce((sum, topic) => sum + topic.effectiveTimeOfStudy, 0);
+
+    const possibleModification =
+      totalStudySessionTime - totalCombinedOtherTopicTime;
+
+    const manuallyEditedEffectiveTimeOfStudy = convertTimeStringToMilliseconds(
       userUpdatedEffectiveTimeOfStudy
     );
-    setTopicTimer((prevValue) => ({
-      ...prevValue,
-      effectiveTimeOfStudy,
-    }));
+
+    if (manuallyEditedEffectiveTimeOfStudy <= possibleModification) {
+      setTopicTimer((prevValue) => ({
+        ...prevValue,
+        effectiveTimeOfStudy: manuallyEditedEffectiveTimeOfStudy,
+      }));
+    } else {
+      // Reset the value to the previous one
+      setUserUpdatedEffectiveTimeOfStudy(
+        convertMillisecondsToTimeString(topicTimer.effectiveTimeOfStudy)
+      );
+    }
   };
 
   const handleNewTopic = () => {

@@ -1,16 +1,10 @@
-import { FC, Dispatch, SetStateAction, useContext } from "react";
+import { FC, Dispatch, SetStateAction } from "react";
 import {
-  Accordion,
   AccordionContent,
-  AccordionItem,
   AccordionTrigger,
 } from "@/src/components/ui/accordion";
 import CustomEditorForm from "@/src/components/CustomEditor-Topic-Form";
-import { Topic } from "@/src/types";
-import {
-  TopicsContext,
-  createNewTopic,
-} from "@/src/ctx/session-topics-provider";
+import { studySessionDto, Topic } from "@/src/types";
 import { cn } from "../lib/utils";
 
 interface CustomEditorItemProps {
@@ -20,6 +14,7 @@ interface CustomEditorItemProps {
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
   isUpdate: boolean;
   isMarkdownPreviewerVisible: boolean;
+  currentSession: studySessionDto;
 }
 
 const CustomEditorItem: FC<CustomEditorItemProps> = ({
@@ -29,6 +24,7 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
   setSessionTopics,
   isUpdate,
   isMarkdownPreviewerVisible,
+  currentSession,
 }: CustomEditorItemProps) => {
   const title = topic.title ? topic.title : `📚 Subject`;
 
@@ -60,6 +56,7 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
           topic={topic}
           setSessionTopics={setSessionTopics}
           isUpdate={isUpdate}
+          currentSession={currentSession}
         />
       </AccordionContent>
     </>
