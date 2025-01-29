@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
-import { studySessionDto } from "@/src/types";
+import { StudySessionDto } from "@/src/types";
 import { DateRange } from "react-day-picker";
 import {
   getPredefinedDateRanges,
@@ -9,7 +9,7 @@ import { CUSTOM_RANGE, THIS_WEEK } from "@/src/constants/constants.charts";
 import { endOfDay, startOfDay } from "date-fns";
 
 interface UseStudySessionFilterProps {
-  studySessions: studySessionDto[];
+  studySessions: StudySessionDto[];
 }
 
 const useStudySessionFilter = ({

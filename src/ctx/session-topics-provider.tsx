@@ -8,7 +8,7 @@ import {
   useEffect,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Topic, studySessionDto } from "@/src/types";
+import { Topic, StudySessionDto } from "@/src/types";
 
 interface TopicsContextProps {
   sessionTopics: Topic[];
@@ -24,10 +24,10 @@ export const createNewTopic = (): Topic => ({
   description: "",
   effectiveTimeOfStudy: 0,
   status: "initial",
-  sessionStartTime: 0,
-  sessionEndTime: 0,
-  sessionPauseStartTime: 0,
-  sessionPauseEndTime: 0,
+  startTime: 0,
+  endTime: 0,
+  pauseStartTime: 0,
+  pauseEndTime: 0,
   totalPauseTime: 0,
 });
 

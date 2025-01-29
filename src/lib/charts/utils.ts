@@ -5,7 +5,7 @@ import {
   LAST_30_DAYS,
   ALL,
 } from "@/src/constants/constants.charts";
-import { studySessionDto } from "@/src/types";
+import { StudySessionDto } from "@/src/types";
 import { addDays, endOfWeek, startOfWeek, subWeeks } from "date-fns";
 
 function addTimesInSeconds(time1: number, time2: string): number {
@@ -14,7 +14,7 @@ function addTimesInSeconds(time1: number, time2: string): number {
 }
 
 export const getTotalStudiedTimePerDayOfTheWeek = (
-  studySessions: studySessionDto[]
+  studySessions: StudySessionDto[]
 ) => {
   if (!studySessions || studySessions.length === 0) {
     return null;

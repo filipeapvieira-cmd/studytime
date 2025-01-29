@@ -2,7 +2,7 @@
 import { FC, useEffect, useState, useMemo } from "react";
 import { Accordion, AccordionItem } from "@/src/components/ui/accordion";
 import CustomEditorItem from "./CustomEditor-Item";
-import { studySessionDto, Topic } from "@/src/types";
+import { StudySessionDto, Topic } from "@/src/types";
 import CustomEditorFeelingsForm from "./custom-editor-feelings-form";
 import CustomEditorMarkdownPreview from "./CustomEditor-Markdown-Preview";
 import BtnOpenMkdownPrev from "./ui/BtnOpenMkdownPrev";
@@ -11,7 +11,7 @@ import Title from "./custom-editor/title";
 import EditorContainer from "./custom-editor/container";
 interface CustomEditorProps {
   action?: "update";
-  studySessionToUpdate?: studySessionDto;
+  studySessionToUpdate?: StudySessionDto;
 }
 
 const CustomEditor: FC<CustomEditorProps> = ({

@@ -21,7 +21,7 @@ interface ChronoProps {}
 const Chrono: FC<ChronoProps> = ({}) => {
   const { sessionChrono, setSessionChrono } = useContext(ChronoContext);
   const {
-    sessionTimer: { status },
+    Timer: { status },
   } = useTimeContext();
   const btnRef = useRef<HTMLButtonElement>(null);
 

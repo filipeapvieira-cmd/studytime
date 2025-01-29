@@ -1,5 +1,5 @@
 import { db } from "@/src/lib/db";
-import { studySessionDto } from "@/src/types";
+import { StudySessionDto } from "@/src/types";
 import { currentUser } from "../lib/authentication";
 import { StudySessionsResponse } from "../types/study-sessions";
 
@@ -73,13 +73,13 @@ const mapTopics = (topic: any) => ({
   effectiveTimeOfStudy: topic.timeOfStudy,
 });
 
-const mapStudySession = (studySessions: any): studySessionDto[] => {
+const mapStudySession = (studySessions: any): StudySessionDto[] => {
   const { StudySession: sessions } = studySessions ?? {};
 
   //console.log(sessions);
   //sessions.forEach((sessions) => console.log(sessions.topic));
 
-  const studySessionDto = sessions?.map((session: any) => {
+  const StudySessionDto = sessions?.map((session: any) => {
     const effectiveTime =
       session.endTime.getTime() -
       (session.startTime.getTime() + session.pauseDuration);
@@ -95,5 +95,5 @@ const mapStudySession = (studySessions: any): studySessionDto[] => {
     };
   });
 
-  return studySessionDto;
+  return StudySessionDto;
 };

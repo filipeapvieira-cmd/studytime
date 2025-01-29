@@ -7,7 +7,7 @@ import { Button } from "@/src/components/ui/button";
 import { Icons } from "@/src/components/icons";
 import Alert from "@/src/components/Alert";
 import { retrieveTextFromJson } from "@/src/lib/utils";
-import { SessionTimer } from "@/src/types";
+import { Timer } from "@/src/types";
 import { SessionStatusEnum } from "@/src/constants/config";
 import { updateTimerStatus } from "@/src/lib/time-provider/utils";
 
@@ -16,17 +16,17 @@ interface StopSessionProps {}
 const StopSession: FC<StopSessionProps> = ({}) => {
   //console.count("StopSession");
   const {
-    sessionTimer: { status },
-    updateSessionTimer,
+    Timer: { status },
+    updateTimer,
   } = useTimeContext();
   const { setSessionChrono } = useContext(ChronoContext);
 
   const { title, description } = retrieveTextFromJson("stopSession");
 
   const stopSessionHandler = () => {
-    updateTimerStatus(SessionStatusEnum.Stop, updateSessionTimer);
+    updateTimerStatus(SessionStatusEnum.Stop, updateTimer);
 
-    setSessionChrono((prevState: SessionTimer) => ({
+    setSessionChrono((prevState: Timer) => ({
       ...prevState,
       isActive: false,
     }));

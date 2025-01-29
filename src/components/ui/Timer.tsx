@@ -6,12 +6,12 @@ import { updateTimerStatus } from "@/src/lib/time-provider/utils";
 import { SessionStatusEnum } from "@/src/constants/config";
 
 const Timer = () => {
-  const { sessionTimer, updateSessionTimer } = useTimeContext();
-  const { effectiveTimeOfStudy, status } = sessionTimer;
+  const { Timer, updateTimer } = useTimeContext();
+  const { effectiveTimeOfStudy, status } = Timer;
 
   return (
     <BtnTimer
-      onClick={() => updateTimerStatus(status, updateSessionTimer)}
+      onClick={() => updateTimerStatus(status, updateTimer)}
       status={status}
       effectiveTimeOfStudy={effectiveTimeOfStudy}
       disabled={status === SessionStatusEnum.Stop}

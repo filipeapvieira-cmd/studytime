@@ -34,8 +34,11 @@ import { Icons } from "@/src/components/icons";
 import TableFilters from "@/src/components/table/Table-filters";
 import EditSession from "@/src/components/EditSession";
 import { set } from "date-fns";
-import { studySessionDto } from "@/src/types";
-import { createNewTopic, TopicsContext } from "@/src/ctx/session-topics-provider";
+import { StudySessionDto } from "@/src/types";
+import {
+  createNewTopic,
+  TopicsContext,
+} from "@/src/ctx/session-topics-provider";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { convertListToTopic } from "@/src/lib/hooks/utils";
 
@@ -127,7 +130,7 @@ export function DataTable<TData, TValue>({
   const handleCellClick = (cell: Cell<TData, unknown>) => {
     if (cell.column.id !== "select") {
       console.log(cell.row.original);
-      const sessionData = cell.row.original as studySessionDto;
+      const sessionData = cell.row.original as StudySessionDto;
       setSessionToEdit(sessionData);
       setIsEditSessionOpen(true);
     }
@@ -137,10 +140,10 @@ export function DataTable<TData, TValue>({
   useEffect(() => {
     if (isEditSessionOpen) {
       setSessionTopicsUpdate(
-        convertListToTopic((sessionToEdit as studySessionDto).topics)
+        convertListToTopic((sessionToEdit as StudySessionDto).topics)
       );
       setSessionFeelingsUpdate(
-        (sessionToEdit as studySessionDto).feelings || ""
+        (sessionToEdit as StudySessionDto).feelings || ""
       );
     }
   }, [
@@ -163,7 +166,7 @@ export function DataTable<TData, TValue>({
         <EditSession
           isModalOpen={isEditSessionOpen}
           handleModalClose={handleModalClose}
-          selectedStudySession={sessionToEdit as studySessionDto}
+          selectedStudySession={sessionToEdit as StudySessionDto}
         />
       )}
       <TableFilters

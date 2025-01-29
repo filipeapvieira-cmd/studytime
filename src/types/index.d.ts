@@ -2,25 +2,23 @@
 
 export type SessionStatus = "initial" | "play" | "pause" | "stop";
 
-export type SessionTimer = {
+export type Timer = {
   effectiveTimeOfStudy: number;
   status: SessionStatus;
-  sessionStartTime: number;
-  sessionEndTime: number;
-  sessionPauseStartTime: number;
-  sessionPauseEndTime: number;
+  startTime: number;
+  endTime: number;
+  pauseStartTime: number;
+  pauseEndTime: number;
   totalPauseTime: number;
 };
 
-export type TopicTimer = SessionTimer;
+export type TopicTimer = Timer;
 
 export type TimeContextType = {
-  sessionTimer: SessionTimer;
-  getLastSessionTimer: () => SessionTimer;
+  Timer: Timer;
+  getLastTimer: () => Timer;
   status: SessionStatus;
-  updateSessionTimer: (
-    updateFunction: (prev: SessionTimer) => SessionTimer
-  ) => void;
+  updateTimer: (updateFunction: (prev: Timer) => Timer) => void;
 };
 
 type SessionChrono = {
@@ -95,17 +93,16 @@ export type TopicFormatted = {
   effectiveTimeOfStudy: number;
 };
 
-export type Topic = SessionTimer & {
+export type Topic = Timer & {
   id: string | number;
   title: string;
   hashtags: string;
   description: string;
-  effectiveTimeOfStudy: number;
 };
 
 /* GET ALL SESSIONS */
 
-export type studySessionDto = {
+export type StudySessionDto = {
   id: number;
   date: string;
   startTime: string;

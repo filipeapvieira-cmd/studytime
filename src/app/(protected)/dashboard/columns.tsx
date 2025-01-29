@@ -16,14 +16,14 @@ import { Checkbox } from "@/src/components/ui/checkbox";
 import SessionTopic from "@/src/components/SessionTopic";
 import { RankAndValue } from "@/src/types/tanstack-table";
 import Highlight from "@/src/components/Highlight";
-import { studySessionDto } from "@/src/types/index";
+import { StudySessionDto } from "@/src/types/index";
 
 /*
 Columns are where you define the core of what your table will look like. 
 They define the data that will be displayed, how it will be formatted, sorted and filtered
 */
 
-export const contentFilterFn: FilterFn<studySessionDto> = (
+export const contentFilterFn: FilterFn<StudySessionDto> = (
   row,
   id,
   filterValue
@@ -37,7 +37,7 @@ export const contentFilterFn: FilterFn<studySessionDto> = (
   );
 };
 
-export const dateFilterFn: FilterFn<studySessionDto> = (
+export const dateFilterFn: FilterFn<StudySessionDto> = (
   row,
   id,
   filterValue
@@ -93,7 +93,7 @@ export const globalFilterFn: FilterFn<any> = (
   return itemRank.passed;
 };
 
-export const columns: ColumnDef<studySessionDto>[] = [
+export const columns: ColumnDef<StudySessionDto>[] = [
   {
     id: "select",
     header: ({ table }) => {

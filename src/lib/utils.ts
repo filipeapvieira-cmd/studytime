@@ -1,7 +1,7 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import alerts from "@/text/alerts.json";
-import { ControlText, SessionTimer } from "@/src/types";
+import { ControlText, Timer } from "@/src/types";
 import axios from "axios";
 
 export function cn(...inputs: ClassValue[]) {

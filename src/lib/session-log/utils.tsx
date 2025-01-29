@@ -10,8 +10,8 @@ interface getFullSessionLogProps {
   sessionFeelings: string;
   sessionTopics: Topic[];
   sessionTime: {
-    sessionStartTime: number;
-    sessionEndTime: number;
+    startTime: number;
+    endTime: number;
     totalPauseTime: number;
   };
 }
@@ -22,17 +22,17 @@ export const getFullSessionLog = ({
   sessionTime,
 }: getFullSessionLogProps) => {
   return {
-    startTime: adaptTimeZone(sessionTime.sessionStartTime),
-    endTime: adaptTimeZone(sessionTime.sessionEndTime),
+    startTime: adaptTimeZone(sessionTime.startTime),
+    endTime: adaptTimeZone(sessionTime.endTime),
     pauseDuration: sessionTime.totalPauseTime,
     feelingDescription: sessionFeelings,
-    topics: getSessionTopics(sessionTopics, sessionTime.sessionEndTime),
+    topics: getSessionTopics(sessionTopics, sessionTime.endTime),
   };
 };
 
 const getSessionTopics = (
   sessionTopics: Topic[],
-  sessionEndTime: number
+  endTime: number
 ): TopicFormatted[] => {
   return sessionTopics.map((topic) => {
     let topicId = typeof topic.id === "number" ? topic.id : 0;
@@ -41,21 +41,21 @@ const getSessionTopics = (
       title: topic.title,
       hashtags: topic.hashtags,
       description: topic.description,
-      effectiveTimeOfStudy: getTopicTimeOfStudy(topic, sessionEndTime),
+      effectiveTimeOfStudy: getTopicTimeOfStudy(topic, endTime),
     };
   });
 };
 
 // Solution for when the component is unmounted on the Accordion
-const getTopicTimeOfStudy = (topic: Topic, sessionEndTime: number) => {
+const getTopicTimeOfStudy = (topic: Topic, endTime: number) => {
   const { status } = topic;
   switch (status) {
     case "play":
-      return sessionEndTime - (topic.sessionStartTime + topic.totalPauseTime);
+      return endTime - (topic.startTime + topic.totalPauseTime);
     case "pause": {
       const totalPauseTime =
-        topic.totalPauseTime + (sessionEndTime - topic.sessionPauseStartTime);
-      return sessionEndTime - (topic.sessionStartTime + totalPauseTime);
+        topic.totalPauseTime + (endTime - topic.pauseStartTime);
+      return endTime - (topic.startTime + totalPauseTime);
     }
     default: {
       return topic.effectiveTimeOfStudy;
@@ -64,14 +64,14 @@ const getTopicTimeOfStudy = (topic: Topic, sessionEndTime: number) => {
 };
 
 const formatSessionTime = (
-  sessionStartTime: number,
-  sessionEndTime: number,
+  startTime: number,
+  endTime: number,
   totalPauseTime: number
 ): SessionTimeAndDate => {
   return {
     date: new Date(),
-    startTime: adaptTimeZone(sessionStartTime),
-    endTime: adaptTimeZone(sessionEndTime),
+    startTime: adaptTimeZone(startTime),
+    endTime: adaptTimeZone(endTime),
     pausedTime: totalPauseTime,
   };
 };

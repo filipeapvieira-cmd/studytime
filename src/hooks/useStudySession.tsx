@@ -23,14 +23,14 @@ import {
 
 export const useStudySession = () => {
   const { setSessionFeelings } = useContext(FeelingsContext);
-  const { updateSessionTimer } = useTimeContext();
+  const { updateTimer } = useTimeContext();
   const { setSessionChrono } = useContext(ChronoContext);
   const { setValidFile } = useContext(UploadImagesContext);
   const { setSessionTopics } = useContext(TopicsContext);
 
   const resetStudySession = () => {
     setSessionFeelings(feelingsCtxDefaultValues.sessionFeelings);
-    updateSessionTimer(() => timeCtxDefaultValues.sessionTimer);
+    updateTimer(() => timeCtxDefaultValues.Timer);
     setSessionChrono(chronoCtxDefaultValues.sessionChrono);
     setValidFile(uploadImagesCtxDefaultValues.validFile);
     setSessionTopics([]);

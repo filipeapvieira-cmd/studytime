@@ -1,8 +1,8 @@
-import { studySessionDto } from "@/src/types";
+import { StudySessionDto } from "@/src/types";
 import { Table } from "@tanstack/table-core";
 import { convertMillisecondsToTimeString } from "../session-log/update-utils";
 
-const convertSessionsToMarkdown = (sessionsToExport: studySessionDto[]) => {
+const convertSessionsToMarkdown = (sessionsToExport: StudySessionDto[]) => {
   let markdownString = "";
 
   const orderedAscByDate = [...sessionsToExport].sort(
@@ -18,7 +18,7 @@ const convertSessionsToMarkdown = (sessionsToExport: studySessionDto[]) => {
   return markdownString;
 };
 
-const sessionToMarkdown = (studySession: studySessionDto, index: number) => {
+const sessionToMarkdown = (studySession: StudySessionDto, index: number) => {
   let markdownString = "";
 
   markdownString += `\n# Session Number: ${index + 1}\n\n`;
@@ -54,7 +54,7 @@ const sessionToMarkdown = (studySession: studySessionDto, index: number) => {
   return markdownString;
 };
 
-const addFeelings = (studySession: studySessionDto) => {
+const addFeelings = (studySession: StudySessionDto) => {
   if (studySession.feelings && studySession.feelings !== "") {
     return `## Feelings\n${studySession.feelings}\n\n`;
   }
@@ -85,7 +85,7 @@ const convertStringDateToDate = (stringDate: string): Date => {
   return new Date(Date.UTC(year, month - 1, day));
 };
 
-const getEarliestAndLatestDates = (studySessions: studySessionDto[]) => {
+const getEarliestAndLatestDates = (studySessions: StudySessionDto[]) => {
   const dates = studySessions.map((studySession) => studySession.date);
   // Step 1: Convert the strings to date objects and store in a new array
   const dateObjects = dates.map((item) => convertStringDateToDate(item));
@@ -100,7 +100,7 @@ const getEarliestAndLatestDates = (studySessions: studySessionDto[]) => {
   return { earliestDateString, latestDateString };
 };
 
-const getIntroduction = (studySessions: studySessionDto[]) => {
+const getIntroduction = (studySessions: StudySessionDto[]) => {
   const today = new Date().toISOString().slice(0, 10);
   const { earliestDateString, latestDateString } =
     getEarliestAndLatestDates(studySessions);
@@ -134,7 +134,7 @@ const downloadMarkdownFile = (markdown: string) => {
 
 export const exportFile = <TData>(table: Table<TData>) => {
   const filteredRows = table.getFilteredRowModel().rows;
-  const sessionsToExport: studySessionDto[] = filteredRows.map(
+  const sessionsToExport: StudySessionDto[] = filteredRows.map(
     (row: any) => row.original
   );
   const markdown = convertSessionsToMarkdown(sessionsToExport);

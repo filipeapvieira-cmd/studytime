@@ -11,7 +11,7 @@ import {
 } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { studySessionDto, Topic, TopicTimer } from "@/src/types";
+import { StudySessionDto, Topic, TopicTimer } from "@/src/types";
 import {
   TopicsContext,
   createNewTopic,
@@ -21,7 +21,7 @@ import {
   forceSessionStatusOnTopicStatus,
 } from "@/src/lib/time-provider/utils";
 import BtnTimer from "./ui/BtnTimer";
-import { SessionTimer } from "@/src/types";
+import { Timer } from "@/src/types";
 import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
 import useSessionStatus from "@/src/hooks/useSessionStatus";
 import CustomTextArea from "./ui/CustomTextArea";
@@ -36,7 +36,7 @@ interface CustomEditorFormProps {
   isUpdate: boolean;
   topic: Topic;
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
-  currentSession?: studySessionDto;
+  currentSession?: StudySessionDto;
 }
 
 interface CurrentTopic {
@@ -59,10 +59,10 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     description,
     effectiveTimeOfStudy,
     status,
-    sessionStartTime,
-    sessionEndTime,
-    sessionPauseStartTime,
-    sessionPauseEndTime,
+    startTime,
+    endTime,
+    pauseStartTime,
+    pauseEndTime,
     totalPauseTime,
   } = topic;
 
@@ -75,10 +75,10 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   const [topicTimer, setTopicTimer] = useState<TopicTimer>({
     effectiveTimeOfStudy,
     status,
-    sessionStartTime,
-    sessionEndTime,
-    sessionPauseStartTime,
-    sessionPauseEndTime,
+    startTime,
+    endTime,
+    pauseStartTime,
+    pauseEndTime,
     totalPauseTime,
   });
 
@@ -136,10 +136,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     });
   };
 
-  const handleTimerChange = (
-    allTopics: Topic[],
-    componentTimeState: SessionTimer
-  ) => {
+  const handleTimerChange = (allTopics: Topic[], componentTimeState: Timer) => {
     const topicToUpdate: Topic = allTopics.find(
       (currentTopic) => currentTopic.id === topic.id
     ) as Topic;
@@ -147,10 +144,10 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     const {
       effectiveTimeOfStudy,
       status,
-      sessionStartTime,
-      sessionEndTime,
-      sessionPauseStartTime,
-      sessionPauseEndTime,
+      startTime,
+      endTime,
+      pauseStartTime,
+      pauseEndTime,
       totalPauseTime,
     } = componentTimeState;
 
@@ -158,10 +155,10 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
       ...topicToUpdate,
       effectiveTimeOfStudy,
       status,
-      sessionStartTime,
-      sessionEndTime,
-      sessionPauseStartTime,
-      sessionPauseEndTime,
+      startTime,
+      endTime,
+      pauseStartTime,
+      pauseEndTime,
       totalPauseTime,
     };
 

@@ -12,7 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/src/components/ui/alert-dialog";
-import { studySessionDto } from "@/src/types";
+import { StudySessionDto } from "@/src/types";
 import ImageUpload from "@/src/components/ImageUpload";
 import EditSessionControl from "./EditSessionControl";
 import { Icons } from "@/src/components/icons";
@@ -26,7 +26,7 @@ import { convertListToTopic } from "@/src/lib/hooks/utils";
 interface EditSessionProps {
   isModalOpen: boolean;
   handleModalClose: (isOpen: boolean) => void;
-  selectedStudySession: studySessionDto;
+  selectedStudySession: StudySessionDto;
 }
 
 const EditSession: FC<EditSessionProps> = ({
@@ -34,7 +34,6 @@ const EditSession: FC<EditSessionProps> = ({
   handleModalClose,
   selectedStudySession,
 }: EditSessionProps) => {
-  
   return (
     <AlertDialog open={isModalOpen}>
       <AlertDialogContent className="max-w-6xl">

@@ -1,22 +1,22 @@
 "use client";
 
 import { createContext, useState, useContext } from "react";
-import { SessionTimer, TimeContextType, SessionStatus } from "@/src/types";
+import { Timer, TimeContextType, SessionStatus } from "@/src/types";
 import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
 
 export const timeCtxDefaultValues: TimeContextType = {
-  sessionTimer: {
+  Timer: {
     effectiveTimeOfStudy: 0,
     status: "initial",
-    sessionStartTime: 0,
-    sessionEndTime: 0,
-    sessionPauseStartTime: 0,
-    sessionPauseEndTime: 0,
+    startTime: 0,
+    endTime: 0,
+    pauseStartTime: 0,
+    pauseEndTime: 0,
     totalPauseTime: 0,
   },
-  getLastSessionTimer: () => timeCtxDefaultValues.sessionTimer,
+  getLastTimer: () => timeCtxDefaultValues.Timer,
   status: "initial",
-  updateSessionTimer: () => {},
+  updateTimer: () => {},
 };
 
 export const TimeContext = createContext(timeCtxDefaultValues);
@@ -34,30 +34,26 @@ export default function TimerProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [sessionTimer, setSessionTimer] = useState<SessionTimer>(
-    timeCtxDefaultValues.sessionTimer
-  );
-  const { status } = sessionTimer;
+  const [Timer, setTimer] = useState<Timer>(timeCtxDefaultValues.Timer);
+  const { status } = Timer;
 
-  const updateSessionTimer = (
-    updateFunction: (prev: SessionTimer) => SessionTimer
-  ) => {
-    setSessionTimer((prev) => updateFunction(prev));
+  const updateTimer = (updateFunction: (prev: Timer) => Timer) => {
+    setTimer((prev) => updateFunction(prev));
   };
 
-  useEffectStatusHandling(status, updateSessionTimer);
+  useEffectStatusHandling(status, updateTimer);
 
-  const getLastSessionTimer = () => {
-    return sessionTimer;
+  const getLastTimer = () => {
+    return Timer;
   };
 
   return (
     <TimeContext.Provider
       value={{
         status,
-        sessionTimer,
-        updateSessionTimer,
-        getLastSessionTimer,
+        Timer,
+        updateTimer,
+        getLastTimer,
       }}
     >
       {children}

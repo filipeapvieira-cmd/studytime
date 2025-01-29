@@ -15,10 +15,10 @@ const convertTopicFormattedToTopic = (topic: TopicFormatted): Topic => {
     description,
     effectiveTimeOfStudy,
     status: "stop",
-    sessionStartTime: 0,
-    sessionEndTime: 0,
-    sessionPauseStartTime: 0,
-    sessionPauseEndTime: 0,
+    startTime: 0,
+    endTime: 0,
+    pauseStartTime: 0,
+    pauseEndTime: 0,
     totalPauseTime: 0,
   };
 };

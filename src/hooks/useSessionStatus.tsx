@@ -2,12 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { TimeContext, useTimeContext } from "@/src/ctx/time-provider";
 
 const useSessionStatus = () => {
-  const { sessionTimer } = useTimeContext();
-  const [status, setStatus] = useState(sessionTimer.status);
+  const { Timer } = useTimeContext();
+  const [status, setStatus] = useState(Timer.status);
 
   useEffect(() => {
-    setStatus(sessionTimer.status);
-  }, [sessionTimer]);
+    setStatus(Timer.status);
+  }, [Timer]);
 
   return status;
 };

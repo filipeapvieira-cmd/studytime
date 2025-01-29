@@ -1,4 +1,4 @@
-import { studySessionDto } from "@/src/types";
+import { StudySessionDto } from "@/src/types";
 import { AcademicYearData } from "@/src/types/charts";
 
 const allMonths = [
@@ -162,7 +162,7 @@ export function getAcademicYearData(
  * to the total hours studied in that month.
  */
 export function groupSessionsByAcademicYear(
-  sessions: studySessionDto[]
+  sessions: StudySessionDto[]
 ): AcademicYearData {
   const result: AcademicYearData = {};
 

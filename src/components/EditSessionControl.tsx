@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Icons } from "@/src/components/icons";
 import UserActionConfirmation from "./UserActionConfirmation";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
-import { FullSessionLogUpdate, studySessionDto } from "@/src/types";
+import { FullSessionLogUpdate, StudySessionDto } from "@/src/types";
 import {
   UPDATE_SESSION_ENDPOINT,
   HTTP_METHOD,
@@ -27,7 +27,7 @@ import { TopicsContext } from "@/src/ctx/session-topics-provider";
 
 interface EditSessionControlProps {
   setIsModalOpen: (isOpen: boolean) => void;
-  studySessionToEdit: studySessionDto;
+  studySessionToEdit: StudySessionDto;
 }
 
 const EditSessionControl: FC<EditSessionControlProps> = ({
@@ -51,8 +51,8 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
     sessionTiming;
 
   const sessionTime = {
-    sessionStartTime: convertTimeStringToDate(startTime, date),
-    sessionEndTime: convertTimeStringToDate(endTime, date),
+    startTime: convertTimeStringToDate(startTime, date),
+    endTime: convertTimeStringToDate(endTime, date),
     totalPauseTime: convertTimeStringToMilliseconds(pauseDuration),
   };
 

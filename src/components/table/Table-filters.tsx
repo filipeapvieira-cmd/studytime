@@ -9,7 +9,7 @@ import ColumnVisibility from "@/src/components/table/Column-visibility";
 import { DateRange } from "react-day-picker";
 import BtnClose from "@/src/components/ui/BtnClose";
 import { useTransition } from "react";
-import { studySessionDto } from "@/src/types";
+import { StudySessionDto } from "@/src/types";
 import { exportFile } from "@/src/lib/export/utils";
 import { Table } from "@tanstack/table-core";
 

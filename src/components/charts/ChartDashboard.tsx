@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { studySessionDto } from "@/src/types";
+import { StudySessionDto } from "@/src/types";
 import { Tabs, TabsTrigger, TabsContent, TabsList } from "@/components/ui/tabs";
 import { MonthlyDistributionChart } from "./MonthlyDistributionChart";
 import { groupSessionsByAcademicYear } from "@/src/lib/charts/monthlyDistributionChart.utils";
@@ -13,7 +13,7 @@ import UnexpectedEvent from "../Unexpected-Event";
 import { Clock, Users } from "lucide-react";
 
 interface ChartDashboardProps {
-  studySessions: studySessionDto[];
+  studySessions: StudySessionDto[];
   communityData: CommunityDataStructure | {};
 }
 

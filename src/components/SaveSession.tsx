@@ -18,7 +18,7 @@ import { TopicsContext } from "@/src/ctx/session-topics-provider";
 import { useFetch } from "@/src/hooks/useFetch";
 
 const SaveSession = ({}) => {
-  const { getLastSessionTimer, status } = useTimeContext();
+  const { getLastTimer, status } = useTimeContext();
   const { sessionFeelings } = useContext(FeelingsContext);
   const { resetStudySession } = useStudySession();
   const { title, description } = retrieveTextFromJson("saveSession");
@@ -30,7 +30,7 @@ const SaveSession = ({}) => {
   const { isLoading, callAPI } = useFetch();
 
   const onClickHandler = async () => {
-    const sessionTime = getLastSessionTimer();
+    const sessionTime = getLastTimer();
 
     sessionLog = getFullSessionLog({
       sessionFeelings,

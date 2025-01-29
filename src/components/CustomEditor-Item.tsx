@@ -4,7 +4,7 @@ import {
   AccordionTrigger,
 } from "@/src/components/ui/accordion";
 import CustomEditorForm from "@/src/components/CustomEditor-Topic-Form";
-import { studySessionDto, Topic } from "@/src/types";
+import { StudySessionDto, Topic } from "@/src/types";
 import { cn } from "../lib/utils";
 
 interface CustomEditorItemProps {
@@ -14,7 +14,7 @@ interface CustomEditorItemProps {
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
   isUpdate: boolean;
   isMarkdownPreviewerVisible: boolean;
-  currentSession?: studySessionDto;
+  currentSession?: StudySessionDto;
 }
 
 const CustomEditorItem: FC<CustomEditorItemProps> = ({

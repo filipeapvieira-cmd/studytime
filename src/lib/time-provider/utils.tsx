@@ -1,117 +1,101 @@
 import { SessionStatusEnum } from "@/src/constants/config";
-import { SessionStatus, SessionTimer, TopicTimer } from "@/src/types";
+import { SessionStatus, Timer, TopicTimer } from "@/src/types";
 
 export const handlePause = (
-  updateSessionTimer: (
-    updateFunction: (prev: SessionTimer) => SessionTimer
-  ) => void
+  updateTimer: (updateFunction: (prev: Timer) => Timer) => void
 ) => {
-  updateSessionTimer((prevSessionTimer) => {
-    const isFirstPause = prevSessionTimer.sessionPauseStartTime === 0;
+  updateTimer((prevTimer) => {
+    const isFirstPause = prevTimer.pauseStartTime === 0;
     if (isFirstPause) {
       return {
-        ...prevSessionTimer,
-        sessionPauseStartTime: Date.now(),
+        ...prevTimer,
+        pauseStartTime: Date.now(),
       };
     }
-    return prevSessionTimer;
+    return prevTimer;
   });
 };
 
 export const handleStop = (
-  updateSessionTimer: (
-    updateFunction: (prev: SessionTimer) => SessionTimer
-  ) => void
+  updateTimer: (updateFunction: (prev: Timer) => Timer) => void
 ) => {
-  handleIfSessionIsPaused(updateSessionTimer);
+  handleIfSessionIsPaused(updateTimer);
 
-  updateSessionTimer((prevSessionTimer) => ({
-    //console.log(prevSessionTimer.effectiveTimeOfStudy);
-    //console.log(Date.now() - (prevSessionTimer.sessionStartTime + prevSessionTimer.totalPauseTime));
-    ...prevSessionTimer,
-    sessionEndTime: Date.now(),
+  updateTimer((prevTimer) => ({
+    //console.log(prevTimer.effectiveTimeOfStudy);
+    //console.log(Date.now() - (prevTimer.startTime + prevTimer.totalPauseTime));
+    ...prevTimer,
+    endTime: Date.now(),
   }));
 };
 
 export const handlePlay = (
-  updateSessionTimer: (
-    updateFunction: (prev: SessionTimer) => SessionTimer
-  ) => void
+  updateTimer: (updateFunction: (prev: Timer) => Timer) => void
 ) => {
-  handleIfStartOfSession(updateSessionTimer);
-  handleIfSessionIsPaused(updateSessionTimer);
+  handleIfStartOfSession(updateTimer);
+  handleIfSessionIsPaused(updateTimer);
 };
 
 export const handleEffectiveTimeOfStudyIncrease = (
-  updateSessionTimer: (
-    updateFunction: (prev: SessionTimer) => SessionTimer
-  ) => void
+  updateTimer: (updateFunction: (prev: Timer) => Timer) => void
 ) => {
-  updateSessionTimer((prevSessionTimer) => {
-    const isSessionInPlay = prevSessionTimer.status === SessionStatusEnum.Play;
+  updateTimer((prevTimer) => {
+    const isSessionInPlay = prevTimer.status === SessionStatusEnum.Play;
     const effectiveTimeOfStudy = getEffectiveTimeOfStudy(
-      prevSessionTimer.sessionStartTime,
-      prevSessionTimer.totalPauseTime
+      prevTimer.startTime,
+      prevTimer.totalPauseTime
     );
     if (isSessionInPlay) {
       return {
-        ...prevSessionTimer,
+        ...prevTimer,
         effectiveTimeOfStudy,
       };
     }
-    return prevSessionTimer;
+    return prevTimer;
   });
 };
 
 export const getEffectiveTimeOfStudy = (
-  sessionStartTime: number,
+  startTime: number,
   totalPauseTime: number
 ) => {
-  return Date.now() - (sessionStartTime + totalPauseTime);
+  return Date.now() - (startTime + totalPauseTime);
 };
 
 const handleIfSessionIsPaused = (
-  updateSessionTimer: (
-    updateFunction: (prev: SessionTimer) => SessionTimer
-  ) => void
+  updateTimer: (updateFunction: (prev: Timer) => Timer) => void
 ) => {
-  updateSessionTimer((prevSessionTimer) => {
-    const isSessionPaused = prevSessionTimer.sessionPauseStartTime !== 0;
+  updateTimer((prevTimer) => {
+    const isSessionPaused = prevTimer.pauseStartTime !== 0;
     const totalPauseTime =
-      prevSessionTimer.totalPauseTime +
-      (Date.now() - prevSessionTimer.sessionPauseStartTime);
+      prevTimer.totalPauseTime + (Date.now() - prevTimer.pauseStartTime);
     if (isSessionPaused) {
       return {
-        ...prevSessionTimer,
+        ...prevTimer,
         totalPauseTime,
-        sessionPauseStartTime: 0,
+        pauseStartTime: 0,
       };
     }
-    return prevSessionTimer;
+    return prevTimer;
   });
 };
 
 const handleIfStartOfSession = (
-  updateSessionTimer: (
-    updateFunction: (prev: SessionTimer) => SessionTimer
-  ) => void
+  updateTimer: (updateFunction: (prev: Timer) => Timer) => void
 ) => {
-  updateSessionTimer((prevSessionTimer) => {
-    const isStartOfSession = prevSessionTimer.sessionStartTime === 0;
+  updateTimer((prevTimer) => {
+    const isStartOfSession = prevTimer.startTime === 0;
     if (isStartOfSession) {
       return {
-        ...prevSessionTimer,
-        sessionStartTime: Date.now(),
+        ...prevTimer,
+        startTime: Date.now(),
       };
     }
-    return prevSessionTimer;
+    return prevTimer;
   });
 };
 
-const sessionTimerStatusTransitionMap: Record<
-  SessionStatusEnum,
-  SessionStatusEnum
-> = {
+const TimerStatusTransitionMap: Record<SessionStatusEnum, SessionStatusEnum> = {
   [SessionStatusEnum.Initial]: SessionStatusEnum.Play,
   [SessionStatusEnum.Play]: SessionStatusEnum.Pause,
   [SessionStatusEnum.Pause]: SessionStatusEnum.Play,
@@ -121,9 +105,9 @@ const sessionTimerStatusTransitionMap: Record<
 // Can update Session and Topic Timer status
 export const updateTimerStatus = (
   status: SessionStatus,
-  updateTimer: (updateFunction: (prev: SessionTimer) => SessionTimer) => void
+  updateTimer: (updateFunction: (prev: Timer) => Timer) => void
 ) => {
-  const nextStatus = sessionTimerStatusTransitionMap[status];
+  const nextStatus = TimerStatusTransitionMap[status];
 
   if (nextStatus) {
     updateTimer((prevState) => ({ ...prevState, status: nextStatus }));
@@ -134,11 +118,7 @@ export const updateTimerStatus = (
 
 export const statusToUpdateHandlerMap: Record<
   SessionStatusEnum,
-  (
-    updateSessionTimer: (
-      updateFunction: (prev: SessionTimer) => SessionTimer
-    ) => void
-  ) => void
+  (updateTimer: (updateFunction: (prev: Timer) => Timer) => void) => void
 > = {
   [SessionStatusEnum.Initial]: () => {},
   [SessionStatusEnum.Pause]: handlePause,

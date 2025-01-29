@@ -7,11 +7,11 @@ import TopicDistributionChart from "./TopicDistributionChart";
 import WeeklyDistributionChart from "./WeeklyDistributionChart";
 import { useMemo } from "react";
 import { getTotalStudiedTimePerDayOfTheWeek } from "@/src/lib/charts/utils";
-import { studySessionDto } from "@/src/types";
+import { StudySessionDto } from "@/src/types";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 type WeeklyAndTopicDistributionProps = {
-  data: studySessionDto[];
+  data: StudySessionDto[];
 };
 
 export const WeeklyAndTopicDistribution = ({
