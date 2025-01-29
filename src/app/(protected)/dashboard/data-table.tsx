@@ -24,16 +24,11 @@ import {
   TableRow,
 } from "@/src/components/ui/table";
 
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
-import { useState, useCallback, useEffect, useContext } from "react";
-import { CalendarDateRangePicker } from "@/src/components/Date-range-picker";
+import { useState, useCallback, useContext } from "react";
 import { DataTablePagination } from "@/src/components/table/data-table-pagination";
 import { globalFilterFn } from "@/src/app/(protected)/dashboard/columns";
-import { Icons } from "@/src/components/icons";
 import TableFilters from "@/src/components/table/Table-filters";
 import EditSession from "@/src/components/EditSession";
-import { set } from "date-fns";
 import { StudySessionDto } from "@/src/types";
 import {
   createNewTopic,
@@ -53,22 +48,6 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const { setSessionFeelingsUpdate } = useContext(FeelingsContext);
   const { setSessionTopicsUpdate } = useContext(TopicsContext);
-  const defaultStudySession = {
-    id: 0,
-    date: "",
-    effectiveTime: "",
-    content: [
-      {
-        topic: "",
-        subtopic: "",
-        text: "",
-      },
-    ],
-    feeling: "",
-    endTime: "",
-    startTime: "",
-    pauseDuration: "",
-  };
 
   const [sorting, setSorting] = useState<SortingState>([
     { id: "date", desc: true },
@@ -79,7 +58,9 @@ export function DataTable<TData, TValue>({
   const [inputGlobalFilter, setInputGlobalFilter] = useState("");
   const [rowSelection, setRowSelection] = useState({});
   const [isEditSessionOpen, setIsEditSessionOpen] = useState(false);
-  const [sessionToEdit, setSessionToEdit] = useState({});
+  const [sessionToEdit, setSessionToEdit] = useState<StudySessionDto | null>(
+    null
+  );
 
   // Only filter if column is visible
   const filterFn = useCallback(
@@ -132,26 +113,11 @@ export function DataTable<TData, TValue>({
       console.log(cell.row.original);
       const sessionData = cell.row.original as StudySessionDto;
       setSessionToEdit(sessionData);
+      setSessionTopicsUpdate(convertListToTopic(sessionData.topics));
+      setSessionFeelingsUpdate(sessionData.feelings || "");
       setIsEditSessionOpen(true);
     }
   };
-
-  // Update ctx with data from the selected session to edit
-  useEffect(() => {
-    if (isEditSessionOpen) {
-      setSessionTopicsUpdate(
-        convertListToTopic((sessionToEdit as StudySessionDto).topics)
-      );
-      setSessionFeelingsUpdate(
-        (sessionToEdit as StudySessionDto).feelings || ""
-      );
-    }
-  }, [
-    isEditSessionOpen,
-    setSessionTopicsUpdate,
-    setSessionFeelingsUpdate,
-    sessionToEdit,
-  ]);
 
   const handleModalClose = (isOpen: boolean) => {
     // Add default data when modal closes
@@ -162,11 +128,11 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      {isEditSessionOpen && (
+      {isEditSessionOpen && sessionToEdit && (
         <EditSession
           isModalOpen={isEditSessionOpen}
           handleModalClose={handleModalClose}
-          selectedStudySession={sessionToEdit as StudySessionDto}
+          selectedStudySession={sessionToEdit}
         />
       )}
       <TableFilters
