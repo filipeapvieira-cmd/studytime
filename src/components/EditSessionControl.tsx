@@ -3,7 +3,7 @@
 import { FC, useContext, useState, useEffect, useRef } from "react";
 import FormField from "@/src/components/FormField";
 import { Button } from "./ui/button";
-import { Icons } from "@/src/components/icons";
+import ReactInputMask from "react-input-mask";
 import UserActionConfirmation from "./UserActionConfirmation";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { FullSessionLogUpdate, StudySessionDto } from "@/src/types";
@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { mutate } from "swr";
 import { getFullSessionLog } from "@/src/lib/session-log/utils";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
+import { Label } from "./ui/label";
 
 interface EditSessionControlProps {
   setIsModalOpen: (isOpen: boolean) => void;
@@ -128,14 +129,19 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           value={startTime}
           onChange={(e) => handleOnChange(e)}
         />
-        <FormField
-          className="max-w-[148px]"
-          name="pauseDuration"
-          label="Pause Time"
-          type="text"
-          value={pauseDuration}
-          onChange={(e) => handleOnChange(e)}
-        />
+        <div>
+          <Label htmlFor={pauseDuration}>Pause Time</Label>
+          <ReactInputMask
+            name="pauseDuration"
+            value={pauseDuration}
+            mask="99:99:99"
+            placeholder="HH:MM:SS"
+            alwaysShowMask
+            onChange={(e) => handleOnChange(e)}
+            defaultValue="00:00:00"
+            className="max-w-[148px] flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+        </div>
         <FormField
           name="endTime"
           label="End Time"
@@ -150,6 +156,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           type="text"
           value={effectiveTime}
           onChange={(e) => handleOnChange(e)}
+          disabled
         />
       </div>
       <div className="flex space-x-2">

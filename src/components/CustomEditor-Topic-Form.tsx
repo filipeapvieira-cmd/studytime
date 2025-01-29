@@ -31,6 +31,7 @@ import {
 } from "@/src/lib/session-log/update-utils";
 import { TopicSelection } from "./ui/topic-selection";
 import HashtagSelection from "./custom-editor/hashtag-selection";
+import ReactInputMask from "react-input-mask";
 
 interface CustomEditorFormProps {
   isUpdate: boolean;
@@ -274,11 +275,15 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
           Delete
         </Button>
         {isUpdate ? (
-          <Input
-            className="max-w-[100px] h-[36px]"
+          <ReactInputMask
             value={userUpdatedEffectiveTimeOfStudy}
+            mask="99:99:99"
+            placeholder="HH:MM:SS"
+            alwaysShowMask
             onChange={(e) => handleManuallyUpdateEffectiveTimeOfStudy(e)}
             onBlur={handleManuallyUpdateEffectiveTimeOfStudyingBlur}
+            defaultValue="00:00:00"
+            className="max-w-[100px] h-[36px] flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           />
         ) : (
           <BtnTimer

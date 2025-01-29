@@ -63,6 +63,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.3",
     "react-icons": "^5.3.0",
+    "react-input-mask": "^2.0.4",
     "react-markdown": "^9.0.1",
     "react-spinners": "^0.14.1",
     "recharts": "^2.13.3",
@@ -82,6 +83,7 @@
     "@tailwindcss/typography": "^0.5.12",
     "@types/bcrypt": "^5.0.0",
     "@types/bcryptjs": "^2.4.6",
+    "@types/react-input-mask": "^3.0.6",
     "@types/uuid": "^9.0.8",
     "@types/validator": "^13.7.17",
     "prisma": "^5.20.0"

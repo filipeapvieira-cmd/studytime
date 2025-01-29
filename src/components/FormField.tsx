@@ -10,6 +10,7 @@ interface FormFieldProps {
   error?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
+  disabled?: boolean;
 }
 
 const FormField: FC<FormFieldProps> = ({
@@ -20,6 +21,7 @@ const FormField: FC<FormFieldProps> = ({
   error,
   onChange,
   className,
+  disabled,
 }) => {
   return (
     <div className={className}>
@@ -32,6 +34,7 @@ const FormField: FC<FormFieldProps> = ({
         name={name}
         value={value}
         onChange={onChange}
+        disabled={disabled}
       />
       {error && <p className="text-destructive text-sm">{error}</p>}
     </div>
