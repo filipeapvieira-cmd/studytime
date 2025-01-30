@@ -9,6 +9,7 @@ import TopicsProvider from "@/src/ctx/session-topics-provider";
 import { ThemeProvider } from "next-themes";
 import { FC } from "react";
 import BeforeUnloadHandler from "@/src/components/layout/BeforeUnloadHandler";
+import { UpdateSessionProvider } from "../ctx/update-session-provider";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -22,7 +23,9 @@ const Providers: FC<ProvidersProps> = ({ children }) => {
           <TimerProvider>
             <ChronoProvider>
               <FeelingsProvider>
-                <UploadImagesProvider>{children}</UploadImagesProvider>
+                <UploadImagesProvider>
+                  <UpdateSessionProvider>{children}</UpdateSessionProvider>
+                </UploadImagesProvider>
               </FeelingsProvider>
             </ChronoProvider>
             <BeforeUnloadHandler />
