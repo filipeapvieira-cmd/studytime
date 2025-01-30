@@ -43,10 +43,7 @@ const EditSession = ({
                   className="hover:cursor-pointer hover:bg-border/50"
                 />
               </div>
-              <EditSessionControl
-                setIsModalOpen={handleModalClose}
-                studySessionToEdit={selectedStudySession}
-              />
+              <EditSessionControl setIsModalOpen={handleModalClose} />
             </>
           </AlertDialogTitle>
           <AlertDialogDescription asChild>

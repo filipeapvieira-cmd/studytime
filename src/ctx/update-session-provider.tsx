@@ -47,7 +47,7 @@ export function UpdateSessionProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useStudySessionContext() {
+export function useUpdateSessionContext() {
   const context = useContext(StudySessionContext);
   if (!context) {
     throw new Error(

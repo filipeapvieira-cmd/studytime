@@ -24,18 +24,15 @@ import {
   TableRow,
 } from "@/src/components/ui/table";
 
-import { useState, useCallback, useContext } from "react";
+import { useState, useCallback } from "react";
 import { DataTablePagination } from "@/src/components/table/data-table-pagination";
 import { globalFilterFn } from "@/src/app/(protected)/dashboard/columns";
 import TableFilters from "@/src/components/table/Table-filters";
 import EditSession from "@/src/components/EditSession";
 import { StudySessionDto } from "@/src/types";
-import {
-  createNewTopic,
-  TopicsContext,
-} from "@/src/ctx/session-topics-provider";
-import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
+import { createNewTopic } from "@/src/ctx/session-topics-provider";
 import { convertListToTopic } from "@/src/lib/hooks/utils";
+import { useUpdateSessionContext } from "@/src/ctx/update-session-provider";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -46,8 +43,12 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const { setSessionFeelingsUpdate } = useContext(FeelingsContext);
-  const { setSessionTopicsUpdate } = useContext(TopicsContext);
+  const {
+    sessionToEdit,
+    setSessionToEdit,
+    setSessionTopicsUpdate,
+    setSessionFeelingsUpdate,
+  } = useUpdateSessionContext();
 
   const [sorting, setSorting] = useState<SortingState>([
     { id: "date", desc: true },
@@ -58,9 +59,6 @@ export function DataTable<TData, TValue>({
   const [inputGlobalFilter, setInputGlobalFilter] = useState("");
   const [rowSelection, setRowSelection] = useState({});
   const [isEditSessionOpen, setIsEditSessionOpen] = useState(false);
-  const [sessionToEdit, setSessionToEdit] = useState<StudySessionDto | null>(
-    null
-  );
 
   // Only filter if column is visible
   const filterFn = useCallback(

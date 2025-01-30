@@ -1,12 +1,11 @@
 "use client";
 
-import { FC, useContext, useState, useEffect, useRef } from "react";
+import { FC, useRef } from "react";
 import FormField from "@/src/components/FormField";
 import { Button } from "./ui/button";
 import ReactInputMask from "react-input-mask";
 import UserActionConfirmation from "./UserActionConfirmation";
-import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
-import { FullSessionLogUpdate, StudySessionDto } from "@/src/types";
+import { FullSessionLogUpdate } from "@/src/types";
 import {
   UPDATE_SESSION_ENDPOINT,
   HTTP_METHOD,
@@ -20,55 +19,40 @@ import {
   convertTimeStringToDate,
   convertTimeStringToMilliseconds,
 } from "@/src/lib/session-log/update-utils";
-import { useRouter } from "next/navigation";
 import { mutate } from "swr";
 import { getFullSessionLog } from "@/src/lib/session-log/utils";
-import { TopicsContext } from "@/src/ctx/session-topics-provider";
 import { Label } from "./ui/label";
+import { useUpdateSessionContext } from "../ctx/update-session-provider";
 
 interface EditSessionControlProps {
   setIsModalOpen: (isOpen: boolean) => void;
-  studySessionToEdit: StudySessionDto;
 }
 
 const EditSessionControl: FC<EditSessionControlProps> = ({
-  studySessionToEdit,
   setIsModalOpen,
 }: EditSessionControlProps) => {
-  const { sessionFeelingsUpdate: sessionFeelings } =
-    useContext(FeelingsContext);
-  const { sessionTopicsUpdate: sessionTopics } = useContext(TopicsContext);
+  const {
+    sessionToEdit,
+    setSessionToEdit,
+    sessionTopicsUpdate: sessionTopics,
+    sessionFeelingsUpdate: sessionFeelings,
+  } = useUpdateSessionContext();
+  const actionType = useRef("");
+  const { isLoading, httpRequestHandler } = usePersistSession();
 
-  const [sessionTiming, setSessionTiming] = useState({
-    id: studySessionToEdit.id,
-    startTime: studySessionToEdit.startTime,
-    pauseDuration: studySessionToEdit.pauseDuration,
-    endTime: studySessionToEdit.endTime,
-    effectiveTime: studySessionToEdit.effectiveTime,
-    date: studySessionToEdit.date,
-  });
+  if (!sessionToEdit) return null;
 
   const { startTime, pauseDuration, endTime, effectiveTime, id, date } =
-    sessionTiming;
+    sessionToEdit;
 
   const sessionTime = {
     startTime: convertTimeStringToDate(startTime, date),
     endTime: convertTimeStringToDate(endTime, date),
     totalPauseTime: convertTimeStringToMilliseconds(pauseDuration),
   };
-
-  useEffect(() => {
-    setSessionTiming({
-      id: studySessionToEdit.id,
-      startTime: studySessionToEdit.startTime,
-      pauseDuration: studySessionToEdit.pauseDuration,
-      endTime: studySessionToEdit.endTime,
-      effectiveTime: studySessionToEdit.effectiveTime,
-      date: studySessionToEdit.date,
-    });
-  }, [studySessionToEdit]);
-
-  const actionType = useRef("");
+  console.log(sessionTime);
+  // Before date modif: {startTime: 1739870460000, endTime: 1739874420000, totalPauseTime: 0}
+  // After date modif: {startTime: NaN, endTime: 1739874420000, totalPauseTime: 0}
 
   const sessionLog: FullSessionLogUpdate = {
     ...getFullSessionLog({
@@ -76,15 +60,13 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
       sessionTopics,
       sessionTime,
     }),
-    id: studySessionToEdit.id,
+    id: sessionToEdit.id,
   };
 
   const onSuccess = () => {
     setIsModalOpen(false);
     mutate(GET_ALL_SESSIONS_ENDPOINT);
   };
-
-  const { isLoading, httpRequestHandler } = usePersistSession();
 
   const handleControl = (action: "update" | "delete") => {
     actionType.current = "";
@@ -111,7 +93,11 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setSessionTiming((preValue) => {
+    console.log(name, value);
+    console.log(typeof value);
+    //TODO: We need to convert the values from starTime and endTime from Date to number
+    setSessionToEdit((preValue) => {
+      if (!preValue) return null;
       return {
         ...preValue,
         [name]: value,
