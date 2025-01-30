@@ -1,27 +1,18 @@
 "use client";
 
-import React, { FC, useState, useContext, useEffect } from "react";
+import React from "react";
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/src/components/ui/alert-dialog";
 import { StudySessionDto } from "@/src/types";
 import ImageUpload from "@/src/components/ImageUpload";
 import EditSessionControl from "./EditSessionControl";
 import { Icons } from "@/src/components/icons";
 import CustomEditor from "@/src/components/CustomEditor";
-import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
-import { TopicsContext } from "@/src/ctx/session-topics-provider";
-import { createNewTopic } from "@/src/ctx/session-topics-provider";
-
-import { convertListToTopic } from "@/src/lib/hooks/utils";
 
 interface EditSessionProps {
   isModalOpen: boolean;
@@ -29,7 +20,7 @@ interface EditSessionProps {
   selectedStudySession: StudySessionDto;
 }
 
-const EditSession: FC<EditSessionProps> = ({
+const EditSession = ({
   isModalOpen,
   handleModalClose,
   selectedStudySession,
