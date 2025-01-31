@@ -16,6 +16,9 @@ import {
   getSaveBtnIcon,
   getDeleteBtnIcon,
   getRequestBody,
+  calculateEffectiveTime,
+  validateEffectiveTime,
+  validatePauseDuration,
 } from "@/src/lib/session-log/update-utils";
 import { mutate } from "swr";
 import { Label } from "./ui/label";
@@ -84,9 +87,31 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
     setSessionToEdit((preValue) => {
       if (!preValue) return null;
-      return {
+
+      const updatedSession = {
         ...preValue,
         [name]: value,
+      };
+
+      const isPauseDurationValid = validatePauseDuration(
+        updatedSession.pauseDuration
+      );
+      if (!isPauseDurationValid) {
+        return { ...updatedSession, pauseDuration: preValue.pauseDuration };
+      }
+
+      const effectiveTime = calculateEffectiveTime({
+        startTime: updatedSession.startTime,
+        endTime: updatedSession.endTime,
+        pauseDuration: updatedSession.pauseDuration,
+      });
+
+      const isEffectiveTimeValid = validateEffectiveTime(effectiveTime);
+      if (!isEffectiveTimeValid) return preValue;
+
+      return {
+        ...updatedSession,
+        effectiveTime,
       };
     });
   };
@@ -127,7 +152,6 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           label="Effective Time"
           type="text"
           value={effectiveTime}
-          onChange={(e) => handleOnChange(e)}
           disabled
         />
       </div>

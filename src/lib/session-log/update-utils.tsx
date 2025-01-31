@@ -147,3 +147,41 @@ export const getRequestBody = ({
   };
   return sessionLog;
 };
+
+export const calculateEffectiveTime = ({
+  startTime,
+  endTime,
+  pauseDuration,
+}: {
+  startTime: string;
+  endTime: string;
+  pauseDuration: string;
+}) => {
+  const startTimeMs = convertTimeStringToMilliseconds(startTime);
+  const endTimeMs = convertTimeStringToMilliseconds(endTime);
+  const pauseDurationMs = convertTimeStringToMilliseconds(pauseDuration);
+
+  const effectiveTime = endTimeMs - (startTimeMs + pauseDurationMs);
+
+  return convertMillisecondsToTimeString(effectiveTime);
+};
+
+export const validateEffectiveTime = (effectiveTime: string) => {
+  const effectiveTimeMs = convertTimeStringToMilliseconds(effectiveTime);
+  if (effectiveTimeMs < 1000) {
+    return false;
+  }
+  return true;
+};
+
+export const validatePauseDuration = (pauseDuration: string) => {
+  try {
+    const pauseDurationMs = convertTimeStringToMilliseconds(pauseDuration);
+    if (pauseDurationMs < 0) {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+  return true;
+};
