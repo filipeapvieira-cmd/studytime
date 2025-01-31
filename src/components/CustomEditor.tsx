@@ -23,12 +23,6 @@ const CustomEditor = () => {
   const [isMarkdownPreviewerVisible, setIsMarkdownPreviewerVisible] =
     useState(true);
 
-  useEffect(() => {
-    setTopicToShow(lastTopic);
-  }, [sessionTopics.length, lastTopic]);
-
-  //console.log(sessionTopics);
-
   const handleOpenPreviewer = () => {
     setIsMarkdownPreviewerVisible((prevValue) => !prevValue);
   };

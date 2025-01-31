@@ -118,7 +118,7 @@ export function DataTable<TData, TValue>({
   };
 
   const handleModalClose = (isOpen: boolean) => {
-    // Add default data when modal closes
+    setSessionToEdit(null);
     setSessionTopicsUpdate([createNewTopic()]);
     setSessionFeelingsUpdate("");
     setIsEditSessionOpen(isOpen);
