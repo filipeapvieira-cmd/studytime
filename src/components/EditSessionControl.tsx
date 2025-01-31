@@ -5,7 +5,6 @@ import FormField from "@/src/components/FormField";
 import { Button } from "./ui/button";
 import ReactInputMask from "react-input-mask";
 import UserActionConfirmation from "./UserActionConfirmation";
-import { FullSessionLogUpdate } from "@/src/types";
 import {
   UPDATE_SESSION_ENDPOINT,
   HTTP_METHOD,
@@ -16,11 +15,9 @@ import { usePersistSession } from "@/src/hooks/usePersistSession";
 import {
   getSaveBtnIcon,
   getDeleteBtnIcon,
-  convertTimeStringToDate,
-  convertTimeStringToMilliseconds,
+  getRequestBody,
 } from "@/src/lib/session-log/update-utils";
 import { mutate } from "swr";
-import { getFullSessionLog } from "@/src/lib/session-log/utils";
 import { Label } from "./ui/label";
 import { useUpdateSessionContext } from "../ctx/update-session-provider";
 
@@ -45,24 +42,6 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   const { startTime, pauseDuration, endTime, effectiveTime, id, date } =
     sessionToEdit;
 
-  const sessionTime = {
-    startTime: convertTimeStringToDate(startTime, date),
-    endTime: convertTimeStringToDate(endTime, date),
-    totalPauseTime: convertTimeStringToMilliseconds(pauseDuration),
-  };
-  console.log(sessionTime);
-  // Before date modif: {startTime: 1739870460000, endTime: 1739874420000, totalPauseTime: 0}
-  // After date modif: {startTime: NaN, endTime: 1739874420000, totalPauseTime: 0}
-
-  const sessionLog: FullSessionLogUpdate = {
-    ...getFullSessionLog({
-      sessionFeelings,
-      sessionTopics,
-      sessionTime,
-    }),
-    id: sessionToEdit.id,
-  };
-
   const onSuccess = () => {
     setIsModalOpen(false);
     mutate(GET_ALL_SESSIONS_ENDPOINT);
@@ -70,8 +49,17 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
   const handleControl = (action: "update" | "delete") => {
     actionType.current = "";
+    const body = getRequestBody({
+      id,
+      sessionFeelings,
+      sessionTopics,
+      date,
+      startTime,
+      endTime,
+      pauseDuration,
+    });
     const updateParameters = {
-      body: sessionLog,
+      body,
       url: `${UPDATE_SESSION_ENDPOINT}${id}`,
       method: HTTP_METHOD.PUT,
       onSuccess,
@@ -93,9 +81,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log(name, value);
-    console.log(typeof value);
-    //TODO: We need to convert the values from starTime and endTime from Date to number
+
     setSessionToEdit((preValue) => {
       if (!preValue) return null;
       return {
