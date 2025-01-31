@@ -49,9 +49,9 @@ export const convertTimeStringToMilliseconds = (
   const durationParts = pauseDuration.split(":").map(Number);
   const [hours, minutes, seconds = 0] = durationParts;
 
-  if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+  /*   if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
     throw new Error("Invalid duration format.");
-  }
+  } */
 
   const totalMilliseconds =
     hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000;
@@ -111,7 +111,7 @@ export const convertSessionTimeFromString = ({
     endTime: convertTimeStringToDate(endTime, date),
     totalPauseTime: convertTimeStringToMilliseconds(pauseDuration),
   };
-  console.log(sessionTime);
+
   return sessionTime;
 };
 
@@ -183,5 +183,39 @@ export const validatePauseDuration = (pauseDuration: string) => {
   } catch (error) {
     return false;
   }
+  return true;
+};
+
+export const validateStudySession = ({
+  startTime,
+  endTime,
+  pauseDuration,
+  sessionTopics,
+}: {
+  startTime: string;
+  endTime: string;
+  pauseDuration: string;
+  sessionTopics: Topic[];
+}) => {
+  const sessionEffectiveTime = calculateEffectiveTime({
+    startTime,
+    endTime,
+    pauseDuration,
+  });
+  const isEffectiveTimeValid = validateEffectiveTime(sessionEffectiveTime);
+  const topicsEffectiveTime = sessionTopics.reduce(
+    (sum, topic) => sum + topic.effectiveTimeOfStudy,
+    0
+  );
+
+  console.log("topicsEffectiveTime", topicsEffectiveTime);
+  console.log("sessionEffectiveTime", sessionEffectiveTime);
+
+  if (
+    topicsEffectiveTime > convertTimeStringToMilliseconds(sessionEffectiveTime)
+  ) {
+    return false;
+  }
+
   return true;
 };

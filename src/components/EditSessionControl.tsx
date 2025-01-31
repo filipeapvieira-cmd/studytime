@@ -19,6 +19,7 @@ import {
   calculateEffectiveTime,
   validateEffectiveTime,
   validatePauseDuration,
+  validateStudySession,
 } from "@/src/lib/session-log/update-utils";
 import { mutate } from "swr";
 import { Label } from "./ui/label";
@@ -52,6 +53,19 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
   const handleControl = (action: "update" | "delete") => {
     actionType.current = "";
+    console.log("sessionTopics", sessionTopics);
+
+    if (action === "update") {
+      const isStudySessionValid = validateStudySession({
+        startTime,
+        endTime,
+        pauseDuration,
+        sessionTopics,
+      });
+      console.log(isStudySessionValid);
+      if (!isStudySessionValid) return;
+    }
+    return;
     const body = getRequestBody({
       id,
       sessionFeelings,

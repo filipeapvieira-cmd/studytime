@@ -30,7 +30,8 @@ export function UpdateSessionProvider({ children }: { children: ReactNode }) {
   const [sessionTopicsUpdate, setSessionTopicsUpdate] = useState<Topic[]>([]);
   const [sessionFeelingsUpdate, setSessionFeelingsUpdate] =
     useState<string>("");
-  console.log("Context:", sessionToEdit);
+  console.log("Context sessionToEdit:", sessionToEdit);
+  console.log("Context sessionTopicsUpdate:", sessionTopicsUpdate);
   return (
     <StudySessionContext.Provider
       value={{
