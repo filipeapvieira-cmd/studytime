@@ -9,9 +9,8 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { StudySessionDto, Topic, TopicTimer } from "@/src/types";
+import { Topic, TopicTimer } from "@/src/types";
 import {
   TopicsContext,
   createNewTopic,
@@ -32,12 +31,12 @@ import {
 import { TopicSelection } from "./ui/topic-selection";
 import HashtagSelection from "./custom-editor/hashtag-selection";
 import ReactInputMask from "react-input-mask";
+import { useUpdateSessionContext } from "../ctx/update-session-provider";
 
 interface CustomEditorFormProps {
   isUpdate: boolean;
   topic: Topic;
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
-  currentSession?: StudySessionDto;
 }
 
 interface CurrentTopic {
@@ -50,8 +49,8 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   isUpdate,
   topic,
   setSessionTopics,
-  currentSession,
 }: CustomEditorFormProps) => {
+  const { sessionToEdit: currentSession } = useUpdateSessionContext();
   const sessionStatus = useSessionStatus();
   const { sessionTopics } = useContext(TopicsContext);
   const {

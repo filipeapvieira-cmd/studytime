@@ -48,10 +48,7 @@ const EditSession = ({
           </AlertDialogTitle>
           <AlertDialogDescription asChild>
             <>
-              <CustomEditor
-                action="update"
-                studySessionToUpdate={selectedStudySession}
-              />
+              <CustomEditor />
               <ImageUpload />
             </>
           </AlertDialogDescription>

@@ -9,24 +9,14 @@ import BtnOpenMkdownPrev from "./ui/BtnOpenMkdownPrev";
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
 import Title from "./custom-editor/title";
 import EditorContainer from "./custom-editor/container";
-interface CustomEditorProps {
-  action?: "update";
-  studySessionToUpdate?: StudySessionDto;
-}
 
-const CustomEditor: FC<CustomEditorProps> = ({
-  action,
-  studySessionToUpdate,
-}) => {
+const CustomEditor = () => {
   const {
     sessionFeelings,
     setSessionFeelings,
     sessionTopics,
     setSessionTopics,
-  } = useFeelingsAndTopics({
-    action,
-    studySessionToUpdate,
-  });
+  } = useFeelingsAndTopics();
 
   const lastTopic = sessionTopics.length - 1;
   const [topicToShow, setTopicToShow] = useState(lastTopic);
@@ -67,9 +57,7 @@ const CustomEditor: FC<CustomEditorProps> = ({
                   topic={topic}
                   openAccordionItem={setTopicToShow}
                   setSessionTopics={setSessionTopics}
-                  isUpdate={!!(action && studySessionToUpdate)}
                   isMarkdownPreviewerVisible={isMarkdownPreviewerVisible}
-                  currentSession={studySessionToUpdate}
                 />
               </AccordionItem>
             ))}
