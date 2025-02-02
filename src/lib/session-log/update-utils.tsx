@@ -174,16 +174,9 @@ export const validateEffectiveTime = (effectiveTime: string) => {
   return true;
 };
 
-export const validatePauseDuration = (pauseDuration: string) => {
-  try {
-    const pauseDurationMs = convertTimeStringToMilliseconds(pauseDuration);
-    if (pauseDurationMs < 0) {
-      return false;
-    }
-  } catch (error) {
-    return false;
-  }
-  return true;
+export const validatePauseDuration = (pauseDuration: string): boolean => {
+  const timeRegex = /^\d{2}:\d{2}:\d{2}$/;
+  return timeRegex.test(pauseDuration);
 };
 
 export const validateStudySession = ({

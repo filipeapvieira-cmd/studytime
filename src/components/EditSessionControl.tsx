@@ -24,6 +24,7 @@ import {
 import { mutate } from "swr";
 import { Label } from "./ui/label";
 import { useUpdateSessionContext } from "../ctx/update-session-provider";
+import { sessionControlFormSchema } from "../lib/schemas/editSessionControlSchema";
 
 interface EditSessionControlProps {
   setIsModalOpen: (isOpen: boolean) => void;
@@ -56,6 +57,20 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
     console.log("sessionTopics", sessionTopics);
 
     if (action === "update") {
+      const parseResult = sessionControlFormSchema.safeParse({
+        startTime,
+        pauseDuration,
+        endTime,
+        effectiveTime,
+      });
+
+      if (!parseResult.success) {
+        const validationErrors = parseResult.error.flatten().fieldErrors;
+        console.log(validationErrors);
+        //setErrors(validationErrors as Record<string, string>);
+        return;
+      }
+
       const isStudySessionValid = validateStudySession({
         startTime,
         endTime,
@@ -98,6 +113,12 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    console.log(name, value);
+    /* if (name === "pauseDuration") {
+      const isPauseDurationValid = validatePauseDuration(value);
+      console.log(isPauseDurationValid);
+      if (!isPauseDurationValid) return;
+    } */
 
     setSessionToEdit((preValue) => {
       if (!preValue) return null;
@@ -110,9 +131,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
       const isPauseDurationValid = validatePauseDuration(
         updatedSession.pauseDuration
       );
-      if (!isPauseDurationValid) {
-        return { ...updatedSession, pauseDuration: preValue.pauseDuration };
-      }
+      if (!isPauseDurationValid) return;
 
       const effectiveTime = calculateEffectiveTime({
         startTime: updatedSession.startTime,
