@@ -4,17 +4,16 @@ import {
   AccordionTrigger,
 } from "@/src/components/ui/accordion";
 import CustomEditorForm from "@/src/components/CustomEditor-Topic-Form";
-import { StudySessionDto, Topic } from "@/src/types";
+import { Topic } from "@/src/types";
 import { cn } from "../lib/utils";
+import { useUpdateSessionContext } from "../ctx/update-session-provider";
 
 interface CustomEditorItemProps {
   position: number;
   topic: Topic;
   openAccordionItem: Dispatch<SetStateAction<number>>;
   setSessionTopics: Dispatch<SetStateAction<Topic[]>>;
-  isUpdate: boolean;
   isMarkdownPreviewerVisible: boolean;
-  currentSession?: StudySessionDto;
 }
 
 const CustomEditorItem: FC<CustomEditorItemProps> = ({
@@ -22,10 +21,11 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
   topic,
   openAccordionItem,
   setSessionTopics,
-  isUpdate,
   isMarkdownPreviewerVisible,
-  currentSession,
 }: CustomEditorItemProps) => {
+  const { sessionToEdit: currentSession } = useUpdateSessionContext();
+  const isUpdate = !!currentSession;
+
   const title = topic.title ? topic.title : `📚 Subject`;
 
   const accordionTriggerSize = isMarkdownPreviewerVisible
@@ -56,7 +56,6 @@ const CustomEditorItem: FC<CustomEditorItemProps> = ({
           topic={topic}
           setSessionTopics={setSessionTopics}
           isUpdate={isUpdate}
-          currentSession={currentSession}
         />
       </AccordionContent>
     </>

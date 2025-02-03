@@ -1,12 +1,10 @@
 "use client";
 
-import { FC, useContext, useState, useEffect, useRef } from "react";
+import { FC, useRef } from "react";
 import FormField from "@/src/components/FormField";
 import { Button } from "./ui/button";
 import ReactInputMask from "react-input-mask";
 import UserActionConfirmation from "./UserActionConfirmation";
-import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
-import { FullSessionLogUpdate, StudySessionDto } from "@/src/types";
 import {
   UPDATE_SESSION_ENDPOINT,
   HTTP_METHOD,
@@ -17,79 +15,105 @@ import { usePersistSession } from "@/src/hooks/usePersistSession";
 import {
   getSaveBtnIcon,
   getDeleteBtnIcon,
-  convertTimeStringToDate,
-  convertTimeStringToMilliseconds,
+  getRequestBody,
+  calculateEffectiveTime,
+  validateEffectiveTime,
+  validatePauseDuration,
+  validateStudySession,
+  isEndTimeEarlierThanStartTime,
 } from "@/src/lib/session-log/update-utils";
-import { useRouter } from "next/navigation";
 import { mutate } from "swr";
-import { getFullSessionLog } from "@/src/lib/session-log/utils";
-import { TopicsContext } from "@/src/ctx/session-topics-provider";
 import { Label } from "./ui/label";
+import { useUpdateSessionContext } from "../ctx/update-session-provider";
+import { sessionControlFormSchema } from "../lib/schemas/editSessionControlSchema";
+import { Input } from "./ui/input";
+import { useCustomToast } from "../hooks/useCustomToast";
 
 interface EditSessionControlProps {
   setIsModalOpen: (isOpen: boolean) => void;
-  studySessionToEdit: StudySessionDto;
 }
 
+const USER_ERROR_MESSAGE =
+  "Invalid time fields provided. Please check start time, end time, and pause duration.";
+
 const EditSessionControl: FC<EditSessionControlProps> = ({
-  studySessionToEdit,
   setIsModalOpen,
 }: EditSessionControlProps) => {
-  const { sessionFeelingsUpdate: sessionFeelings } =
-    useContext(FeelingsContext);
-  const { sessionTopicsUpdate: sessionTopics } = useContext(TopicsContext);
+  const {
+    sessionToEdit,
+    setSessionToEdit,
+    sessionTopicsUpdate: sessionTopics,
+    sessionFeelingsUpdate: sessionFeelings,
+    error,
+    setError,
+  } = useUpdateSessionContext();
+  const actionType = useRef("");
+  const { isLoading, httpRequestHandler } = usePersistSession();
+  const { showToast } = useCustomToast();
 
-  const [sessionTiming, setSessionTiming] = useState({
-    id: studySessionToEdit.id,
-    startTime: studySessionToEdit.startTime,
-    pauseDuration: studySessionToEdit.pauseDuration,
-    endTime: studySessionToEdit.endTime,
-    effectiveTime: studySessionToEdit.effectiveTime,
-    date: studySessionToEdit.date,
-  });
+  if (!sessionToEdit) return null;
 
   const { startTime, pauseDuration, endTime, effectiveTime, id, date } =
-    sessionTiming;
+    sessionToEdit;
 
-  const sessionTime = {
-    startTime: convertTimeStringToDate(startTime, date),
-    endTime: convertTimeStringToDate(endTime, date),
-    totalPauseTime: convertTimeStringToMilliseconds(pauseDuration),
-  };
-
-  useEffect(() => {
-    setSessionTiming({
-      id: studySessionToEdit.id,
-      startTime: studySessionToEdit.startTime,
-      pauseDuration: studySessionToEdit.pauseDuration,
-      endTime: studySessionToEdit.endTime,
-      effectiveTime: studySessionToEdit.effectiveTime,
-      date: studySessionToEdit.date,
-    });
-  }, [studySessionToEdit]);
-
-  const actionType = useRef("");
-
-  const sessionLog: FullSessionLogUpdate = {
-    ...getFullSessionLog({
-      sessionFeelings,
-      sessionTopics,
-      sessionTime,
-    }),
-    id: studySessionToEdit.id,
-  };
+  const hasError =
+    error.startTime ||
+    error.endTime ||
+    error.pauseDuration ||
+    error.effectiveTime;
 
   const onSuccess = () => {
     setIsModalOpen(false);
     mutate(GET_ALL_SESSIONS_ENDPOINT);
   };
 
-  const { isLoading, httpRequestHandler } = usePersistSession();
-
   const handleControl = (action: "update" | "delete") => {
     actionType.current = "";
+    console.log("sessionTopics", sessionTopics);
+
+    if (action === "update") {
+      const parseResult = sessionControlFormSchema.safeParse({
+        startTime,
+        pauseDuration,
+        endTime,
+        effectiveTime,
+      });
+
+      if (!parseResult.success) {
+        showToast({
+          status: "error",
+          message: USER_ERROR_MESSAGE,
+        });
+        return;
+      }
+
+      const studySessionValidation = validateStudySession({
+        startTime,
+        endTime,
+        pauseDuration,
+        sessionTopics,
+      });
+
+      if (studySessionValidation.error) {
+        showToast({
+          status: "error",
+          message: studySessionValidation.error,
+        });
+        return;
+      }
+    }
+
+    const body = getRequestBody({
+      id,
+      sessionFeelings,
+      sessionTopics,
+      date,
+      startTime,
+      endTime,
+      pauseDuration,
+    });
     const updateParameters = {
-      body: sessionLog,
+      body,
       url: `${UPDATE_SESSION_ENDPOINT}${id}`,
       method: HTTP_METHOD.PUT,
       onSuccess,
@@ -111,10 +135,51 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setSessionTiming((preValue) => {
-      return {
+
+    setSessionToEdit((preValue) => {
+      if (!preValue) return null;
+
+      const updatedSession = {
         ...preValue,
         [name]: value,
+      };
+
+      if (
+        isEndTimeEarlierThanStartTime(
+          updatedSession.endTime,
+          updatedSession.startTime
+        )
+      )
+        return preValue;
+
+      const isPauseValid = validatePauseDuration(updatedSession.pauseDuration);
+
+      let effectiveTime = updatedSession.effectiveTime;
+
+      if (isPauseValid) {
+        const calculatedEffectiveTime = calculateEffectiveTime({
+          startTime: updatedSession.startTime,
+          endTime: updatedSession.endTime,
+          pauseDuration: updatedSession.pauseDuration,
+        });
+        if (validateEffectiveTime(calculatedEffectiveTime)) {
+          effectiveTime = calculatedEffectiveTime;
+          setError((prevState) => ({
+            ...prevState,
+            pauseDuration: false,
+            effectiveTime: false,
+          }));
+        } else {
+          setError((prevState) => ({
+            ...prevState,
+            pauseDuration: true,
+          }));
+        }
+      }
+
+      return {
+        ...updatedSession,
+        effectiveTime,
       };
     });
   };
@@ -130,7 +195,12 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           onChange={(e) => handleOnChange(e)}
         />
         <div>
-          <Label htmlFor={pauseDuration}>Pause Time</Label>
+          <Label
+            htmlFor={pauseDuration}
+            className={`${error.pauseDuration && "text-destructive font-bold"}`}
+          >
+            Pause Time
+          </Label>
           <ReactInputMask
             name="pauseDuration"
             value={pauseDuration}
@@ -149,22 +219,29 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           value={endTime}
           onChange={(e) => handleOnChange(e)}
         />
-        <FormField
-          className="max-w-[148px]"
-          name="effectiveTime"
-          label="Effective Time"
-          type="text"
-          value={effectiveTime}
-          onChange={(e) => handleOnChange(e)}
-          disabled
-        />
+        <div>
+          <Label
+            htmlFor={effectiveTime}
+            className={`${error.effectiveTime && "text-destructive font-bold"}`}
+          >
+            Effective Time
+          </Label>
+          <Input
+            value={effectiveTime}
+            type="text"
+            className="max-w-[148px]"
+            name="effectiveTime"
+            onChange={(e) => handleOnChange(e)}
+            disabled={true}
+          />
+        </div>
       </div>
       <div className="flex space-x-2">
         <UserActionConfirmation
           type="updateSession"
           onConfirm={() => handleControl("update")}
         >
-          <Button disabled={isLoading}>
+          <Button disabled={isLoading || hasError}>
             {getSaveBtnIcon(isLoading, actionType)}
           </Button>
         </UserActionConfirmation>

@@ -1,40 +1,35 @@
-import { FC, useContext, useEffect } from "react";
+import { useContext } from "react";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
-import { Topic, TopicFormatted, StudySessionDto } from "@/src/types";
-import { set } from "date-fns";
+import { useUpdateSessionContext } from "../ctx/update-session-provider";
 
-// Used to differentiate between New Session or Edit Session
-// Uses different ctx state depending on the option chosen
-
-interface useFeelingsAndTopicsProps {
-  action?: "update";
-  studySessionToUpdate?: StudySessionDto;
-}
-
-const useFeelingsAndTopics = ({
-  action,
-  studySessionToUpdate,
-}: useFeelingsAndTopicsProps) => {
+const useFeelingsAndTopics = () => {
   const feelingsCtx = useContext(FeelingsContext);
   const topicsCtx = useContext(TopicsContext);
+  const {
+    sessionToEdit,
+    sessionTopicsUpdate,
+    setSessionTopicsUpdate,
+    sessionFeelingsUpdate,
+    setSessionFeelingsUpdate,
+  } = useUpdateSessionContext();
 
-  const isUpdate = action && studySessionToUpdate;
+  const isUpdate = !!sessionToEdit;
 
   const sessionTopics = isUpdate
-    ? topicsCtx.sessionTopicsUpdate
+    ? sessionTopicsUpdate
     : topicsCtx.sessionTopics;
 
   const setSessionTopics = isUpdate
-    ? topicsCtx.setSessionTopicsUpdate
+    ? setSessionTopicsUpdate
     : topicsCtx.setSessionTopics;
 
   const sessionFeelings = isUpdate
-    ? feelingsCtx.sessionFeelingsUpdate
+    ? sessionFeelingsUpdate
     : feelingsCtx.sessionFeelings;
 
   const setSessionFeelings = isUpdate
-    ? feelingsCtx.setSessionFeelingsUpdate
+    ? setSessionFeelingsUpdate
     : feelingsCtx.setSessionFeelings;
 
   return {
