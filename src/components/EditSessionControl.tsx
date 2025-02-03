@@ -26,10 +26,15 @@ import { mutate } from "swr";
 import { Label } from "./ui/label";
 import { useUpdateSessionContext } from "../ctx/update-session-provider";
 import { sessionControlFormSchema } from "../lib/schemas/editSessionControlSchema";
+import { Input } from "./ui/input";
+import { useCustomToast } from "../hooks/useCustomToast";
 
 interface EditSessionControlProps {
   setIsModalOpen: (isOpen: boolean) => void;
 }
+
+const USER_ERROR_MESSAGE =
+  "Invalid time fields provided. Please check start time, end time, and pause duration.";
 
 const EditSessionControl: FC<EditSessionControlProps> = ({
   setIsModalOpen,
@@ -44,6 +49,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   } = useUpdateSessionContext();
   const actionType = useRef("");
   const { isLoading, httpRequestHandler } = usePersistSession();
+  const { showToast } = useCustomToast();
 
   if (!sessionToEdit) return null;
 
@@ -74,22 +80,29 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
       });
 
       if (!parseResult.success) {
-        const validationErrors = parseResult.error.flatten().fieldErrors;
-        // console.log(validationErrors);
+        showToast({
+          status: "error",
+          message: USER_ERROR_MESSAGE,
+        });
         return;
       }
 
-      const isStudySessionValid = validateStudySession({
+      const studySessionValidation = validateStudySession({
         startTime,
         endTime,
         pauseDuration,
         sessionTopics,
       });
 
-      console.log(isStudySessionValid);
-      if (!isStudySessionValid) return;
+      if (studySessionValidation.error) {
+        showToast({
+          status: "error",
+          message: studySessionValidation.error,
+        });
+        return;
+      }
     }
-    return;
+
     const body = getRequestBody({
       id,
       sessionFeelings,
@@ -206,14 +219,22 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           value={endTime}
           onChange={(e) => handleOnChange(e)}
         />
-        <FormField
-          className="max-w-[148px]"
-          name="effectiveTime"
-          label="Effective Time"
-          type="text"
-          value={effectiveTime}
-          disabled
-        />
+        <div>
+          <Label
+            htmlFor={effectiveTime}
+            className={`${error.effectiveTime && "text-destructive font-bold"}`}
+          >
+            Effective Time
+          </Label>
+          <Input
+            value={effectiveTime}
+            type="text"
+            className="max-w-[148px]"
+            name="effectiveTime"
+            onChange={(e) => handleOnChange(e)}
+            disabled={true}
+          />
+        </div>
       </div>
       <div className="flex space-x-2">
         <UserActionConfirmation

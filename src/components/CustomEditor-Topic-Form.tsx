@@ -2,7 +2,6 @@
 
 import {
   FC,
-  useContext,
   ChangeEvent,
   useState,
   useEffect,
@@ -11,10 +10,7 @@ import {
 } from "react";
 import { Button } from "./ui/button";
 import { Topic, TopicTimer } from "@/src/types";
-import {
-  TopicsContext,
-  createNewTopic,
-} from "@/src/ctx/session-topics-provider";
+import { createNewTopic } from "@/src/ctx/session-topics-provider";
 import {
   updateTimerStatus,
   forceSessionStatusOnTopicStatus,
@@ -25,6 +21,8 @@ import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
 import useSessionStatus from "@/src/hooks/useSessionStatus";
 import CustomTextArea from "./ui/CustomTextArea";
 import {
+  calculateEffectiveTime,
+  calculateTotalEffectiveTimeOfOtherTopics,
   convertMillisecondsToTimeString,
   convertTimeStringToMilliseconds,
 } from "@/src/lib/session-log/update-utils";
@@ -50,9 +48,14 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   topic,
   setSessionTopics,
 }: CustomEditorFormProps) => {
-  const { sessionToEdit: currentSession } = useUpdateSessionContext();
+  const {
+    sessionToEdit: currentSession,
+    sessionTopicsUpdate,
+    error,
+    setError,
+  } = useUpdateSessionContext();
   const sessionStatus = useSessionStatus();
-  const { sessionTopics } = useContext(TopicsContext);
+
   const {
     title,
     hashtags,
@@ -82,14 +85,14 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
     totalPauseTime,
   });
 
+  const [userUpdatedEffectiveTimeOfStudy, setUserUpdatedEffectiveTimeOfStudy] =
+    useState(convertMillisecondsToTimeString(topicTimer.effectiveTimeOfStudy));
+
   const updateTopicTimer = (
     updateFunction: (prev: TopicTimer) => TopicTimer
   ) => {
     setTopicTimer((prev) => updateFunction(prev));
   };
-
-  const [userUpdatedEffectiveTimeOfStudy, setUserUpdatedEffectiveTimeOfStudy] =
-    useState(convertMillisecondsToTimeString(topicTimer.effectiveTimeOfStudy));
 
   useEffect(() => {
     forceSessionStatusOnTopicStatus(
@@ -174,41 +177,39 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
   const handleManuallyUpdateEffectiveTimeOfStudy = (
     e: ChangeEvent<HTMLInputElement>
   ) => {
-    setUserUpdatedEffectiveTimeOfStudy(e.target.value);
-  };
+    const newValue = e.target.value;
+    setUserUpdatedEffectiveTimeOfStudy(newValue);
 
-  const handleManuallyUpdateEffectiveTimeOfStudyingBlur = () => {
     if (!currentSession) return;
+
     const { startTime, endTime, pauseDuration, topics } = currentSession;
-    const currentSessionStartTime = convertTimeStringToMilliseconds(startTime);
-    const currentSessionEndTime = convertTimeStringToMilliseconds(endTime);
-    const currentSessionPauseStartTime =
-      convertTimeStringToMilliseconds(pauseDuration);
-    const totalStudySessionTime =
-      currentSessionEndTime -
-      (currentSessionStartTime + currentSessionPauseStartTime);
-
-    const totalCombinedOtherTopicTime = topics
-      .filter((topicInSession) => topicInSession.id !== topic.id)
-      .reduce((sum, topic) => sum + topic.effectiveTimeOfStudy, 0);
-
-    const possibleModification =
-      totalStudySessionTime - totalCombinedOtherTopicTime;
-
-    const manuallyEditedEffectiveTimeOfStudy = convertTimeStringToMilliseconds(
-      userUpdatedEffectiveTimeOfStudy
+    const totalStudySessionTime = calculateEffectiveTime({
+      startTime,
+      endTime,
+      pauseDuration,
+    });
+    const totalStudySessionTimeMs = convertTimeStringToMilliseconds(
+      totalStudySessionTime
     );
 
+    const totalEffectiveTimeOfOtherTopics =
+      calculateTotalEffectiveTimeOfOtherTopics(sessionTopicsUpdate, topic.id);
+
+    const possibleModification =
+      totalStudySessionTimeMs - totalEffectiveTimeOfOtherTopics;
+
+    const manuallyEditedEffectiveTimeOfStudy =
+      convertTimeStringToMilliseconds(newValue);
+
+    setTopicTimer((prevValue) => ({
+      ...prevValue,
+      effectiveTimeOfStudy: manuallyEditedEffectiveTimeOfStudy,
+    }));
+
     if (manuallyEditedEffectiveTimeOfStudy <= possibleModification) {
-      setTopicTimer((prevValue) => ({
-        ...prevValue,
-        effectiveTimeOfStudy: manuallyEditedEffectiveTimeOfStudy,
-      }));
+      setError((prev) => ({ ...prev, effectiveTime: false }));
     } else {
-      // Reset the value to the previous one
-      setUserUpdatedEffectiveTimeOfStudy(
-        convertMillisecondsToTimeString(topicTimer.effectiveTimeOfStudy)
-      );
+      setError((prev) => ({ ...prev, effectiveTime: true }));
     }
   };
 
@@ -280,7 +281,6 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
             placeholder="HH:MM:SS"
             alwaysShowMask
             onChange={(e) => handleManuallyUpdateEffectiveTimeOfStudy(e)}
-            onBlur={handleManuallyUpdateEffectiveTimeOfStudyingBlur}
             defaultValue="00:00:00"
             className="max-w-[100px] h-[36px] flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           />

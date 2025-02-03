@@ -148,6 +148,9 @@ export const getRequestBody = ({
   return sessionLog;
 };
 
+/**
+ * Calculate total study time for the session
+ */
 export const calculateEffectiveTime = ({
   startTime,
   endTime,
@@ -164,6 +167,19 @@ export const calculateEffectiveTime = ({
   const effectiveTime = endTimeMs - (startTimeMs + pauseDurationMs);
 
   return convertMillisecondsToTimeString(effectiveTime);
+};
+
+/**
+ * Sum the effective time of study from all topics except the current one
+ */
+export const calculateTotalEffectiveTimeOfOtherTopics = (
+  topics: Topic[],
+  currentTopicId: number | string
+) => {
+  const totalCombinedOtherTopicTime = topics
+    .filter((topicInSession) => topicInSession.id !== currentTopicId)
+    .reduce((sum, topicItem) => sum + topicItem.effectiveTimeOfStudy, 0);
+  return totalCombinedOtherTopicTime;
 };
 
 export const validateEffectiveTime = (effectiveTime: string) => {
@@ -195,22 +211,30 @@ export const validateStudySession = ({
     endTime,
     pauseDuration,
   });
-  const isEffectiveTimeValid = validateEffectiveTime(sessionEffectiveTime);
+  if (!validateEffectiveTime(sessionEffectiveTime)) {
+    return {
+      error:
+        "Invalid time fields provided. Please check start time, end time, and pause duration.",
+    };
+  }
+
   const topicsEffectiveTime = sessionTopics.reduce(
     (sum, topic) => sum + topic.effectiveTimeOfStudy,
     0
   );
 
-  console.log("topicsEffectiveTime", topicsEffectiveTime);
-  console.log("sessionEffectiveTime", sessionEffectiveTime);
+  const sessionEffectiveTimeMs =
+    convertTimeStringToMilliseconds(sessionEffectiveTime);
+  const topicsTimeFormatted =
+    convertMillisecondsToTimeString(topicsEffectiveTime);
 
-  if (
-    topicsEffectiveTime > convertTimeStringToMilliseconds(sessionEffectiveTime)
-  ) {
-    return false;
+  if (topicsEffectiveTime > sessionEffectiveTimeMs) {
+    return {
+      error: `The total duration of the study session is ${sessionEffectiveTime}, but the combined duration of all topics is ${topicsTimeFormatted}.`,
+    };
   }
 
-  return true;
+  return { error: null };
 };
 
 export const isEndTimeEarlierThanStartTime = (

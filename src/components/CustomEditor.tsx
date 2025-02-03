@@ -19,9 +19,14 @@ const CustomEditor = () => {
   } = useFeelingsAndTopics();
 
   const lastTopic = sessionTopics.length - 1;
+
   const [topicToShow, setTopicToShow] = useState(lastTopic);
   const [isMarkdownPreviewerVisible, setIsMarkdownPreviewerVisible] =
     useState(true);
+  //TODO - Fix this
+  if (topicToShow !== lastTopic) {
+    setTopicToShow(lastTopic);
+  }
 
   const handleOpenPreviewer = () => {
     setIsMarkdownPreviewerVisible((prevValue) => !prevValue);
