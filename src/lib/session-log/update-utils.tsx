@@ -212,3 +212,13 @@ export const validateStudySession = ({
 
   return true;
 };
+
+export const isEndTimeEarlierThanStartTime = (
+  endTime: string,
+  startTime: string
+) => {
+  const endTimeMs = convertTimeStringToMilliseconds(endTime);
+  const startTimeMs = convertTimeStringToMilliseconds(startTime);
+
+  return endTimeMs < startTimeMs;
+};

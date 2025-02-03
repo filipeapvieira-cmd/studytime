@@ -48,6 +48,7 @@ export function DataTable<TData, TValue>({
     setSessionToEdit,
     setSessionTopicsUpdate,
     setSessionFeelingsUpdate,
+    resetUpdateSessionCtxState,
   } = useUpdateSessionContext();
 
   const [sorting, setSorting] = useState<SortingState>([
@@ -118,9 +119,7 @@ export function DataTable<TData, TValue>({
   };
 
   const handleModalClose = (isOpen: boolean) => {
-    setSessionToEdit(null);
-    setSessionTopicsUpdate([createNewTopic()]);
-    setSessionFeelingsUpdate("");
+    resetUpdateSessionCtxState();
     setIsEditSessionOpen(isOpen);
   };
 

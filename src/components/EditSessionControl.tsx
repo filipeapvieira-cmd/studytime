@@ -20,6 +20,7 @@ import {
   validateEffectiveTime,
   validatePauseDuration,
   validateStudySession,
+  isEndTimeEarlierThanStartTime,
 } from "@/src/lib/session-log/update-utils";
 import { mutate } from "swr";
 import { Label } from "./ui/label";
@@ -38,6 +39,8 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
     setSessionToEdit,
     sessionTopicsUpdate: sessionTopics,
     sessionFeelingsUpdate: sessionFeelings,
+    error,
+    setError,
   } = useUpdateSessionContext();
   const actionType = useRef("");
   const { isLoading, httpRequestHandler } = usePersistSession();
@@ -46,6 +49,12 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
   const { startTime, pauseDuration, endTime, effectiveTime, id, date } =
     sessionToEdit;
+
+  const hasError =
+    error.startTime ||
+    error.endTime ||
+    error.pauseDuration ||
+    error.effectiveTime;
 
   const onSuccess = () => {
     setIsModalOpen(false);
@@ -66,8 +75,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
       if (!parseResult.success) {
         const validationErrors = parseResult.error.flatten().fieldErrors;
-        console.log(validationErrors);
-        //setErrors(validationErrors as Record<string, string>);
+        // console.log(validationErrors);
         return;
       }
 
@@ -77,6 +85,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
         pauseDuration,
         sessionTopics,
       });
+
       console.log(isStudySessionValid);
       if (!isStudySessionValid) return;
     }
@@ -113,12 +122,6 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log(name, value);
-    /* if (name === "pauseDuration") {
-      const isPauseDurationValid = validatePauseDuration(value);
-      console.log(isPauseDurationValid);
-      if (!isPauseDurationValid) return;
-    } */
 
     setSessionToEdit((preValue) => {
       if (!preValue) return null;
@@ -128,19 +131,38 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
         [name]: value,
       };
 
-      const isPauseDurationValid = validatePauseDuration(
-        updatedSession.pauseDuration
-      );
-      if (!isPauseDurationValid) return;
+      if (
+        isEndTimeEarlierThanStartTime(
+          updatedSession.endTime,
+          updatedSession.startTime
+        )
+      )
+        return preValue;
 
-      const effectiveTime = calculateEffectiveTime({
-        startTime: updatedSession.startTime,
-        endTime: updatedSession.endTime,
-        pauseDuration: updatedSession.pauseDuration,
-      });
+      const isPauseValid = validatePauseDuration(updatedSession.pauseDuration);
 
-      const isEffectiveTimeValid = validateEffectiveTime(effectiveTime);
-      if (!isEffectiveTimeValid) return preValue;
+      let effectiveTime = updatedSession.effectiveTime;
+
+      if (isPauseValid) {
+        const calculatedEffectiveTime = calculateEffectiveTime({
+          startTime: updatedSession.startTime,
+          endTime: updatedSession.endTime,
+          pauseDuration: updatedSession.pauseDuration,
+        });
+        if (validateEffectiveTime(calculatedEffectiveTime)) {
+          effectiveTime = calculatedEffectiveTime;
+          setError((prevState) => ({
+            ...prevState,
+            pauseDuration: false,
+            effectiveTime: false,
+          }));
+        } else {
+          setError((prevState) => ({
+            ...prevState,
+            pauseDuration: true,
+          }));
+        }
+      }
 
       return {
         ...updatedSession,
@@ -160,7 +182,12 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           onChange={(e) => handleOnChange(e)}
         />
         <div>
-          <Label htmlFor={pauseDuration}>Pause Time</Label>
+          <Label
+            htmlFor={pauseDuration}
+            className={`${error.pauseDuration && "text-destructive font-bold"}`}
+          >
+            Pause Time
+          </Label>
           <ReactInputMask
             name="pauseDuration"
             value={pauseDuration}
@@ -193,7 +220,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           type="updateSession"
           onConfirm={() => handleControl("update")}
         >
-          <Button disabled={isLoading}>
+          <Button disabled={isLoading || hasError}>
             {getSaveBtnIcon(isLoading, actionType)}
           </Button>
         </UserActionConfirmation>

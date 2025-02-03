@@ -9,6 +9,21 @@ import {
   useState,
 } from "react";
 import { StudySessionDto, Topic } from "../types";
+import { createNewTopic } from "./session-topics-provider";
+
+type UpdateSessionError = {
+  startTime: boolean;
+  endTime: boolean;
+  pauseDuration: boolean;
+  effectiveTime: boolean;
+};
+
+const initialErrorState: UpdateSessionError = {
+  startTime: false,
+  endTime: false,
+  pauseDuration: false,
+  effectiveTime: false,
+};
 
 type StudySessionContextType = {
   sessionToEdit: StudySessionDto | null;
@@ -19,6 +34,11 @@ type StudySessionContextType = {
 
   sessionFeelingsUpdate: string;
   setSessionFeelingsUpdate: Dispatch<SetStateAction<string>>;
+
+  error: UpdateSessionError;
+  setError: Dispatch<SetStateAction<UpdateSessionError>>;
+
+  resetUpdateSessionCtxState: () => void;
 };
 
 const StudySessionContext = createContext<StudySessionContextType | null>(null);
@@ -30,8 +50,15 @@ export function UpdateSessionProvider({ children }: { children: ReactNode }) {
   const [sessionTopicsUpdate, setSessionTopicsUpdate] = useState<Topic[]>([]);
   const [sessionFeelingsUpdate, setSessionFeelingsUpdate] =
     useState<string>("");
-  console.log("Context sessionToEdit:", sessionToEdit);
-  console.log("Context sessionTopicsUpdate:", sessionTopicsUpdate);
+  const [error, setError] = useState<UpdateSessionError>(initialErrorState);
+
+  const resetUpdateSessionCtxState = () => {
+    setSessionToEdit(null);
+    setSessionTopicsUpdate([createNewTopic()]);
+    setSessionFeelingsUpdate("");
+    setError(initialErrorState);
+  };
+
   return (
     <StudySessionContext.Provider
       value={{
@@ -41,6 +68,9 @@ export function UpdateSessionProvider({ children }: { children: ReactNode }) {
         setSessionTopicsUpdate,
         sessionFeelingsUpdate,
         setSessionFeelingsUpdate,
+        error,
+        setError,
+        resetUpdateSessionCtxState,
       }}
     >
       {children}
