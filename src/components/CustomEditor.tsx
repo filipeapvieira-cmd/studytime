@@ -23,10 +23,12 @@ const CustomEditor = () => {
   const [topicToShow, setTopicToShow] = useState(lastTopic);
   const [isMarkdownPreviewerVisible, setIsMarkdownPreviewerVisible] =
     useState(true);
-  //TODO - Fix this
-  if (topicToShow !== lastTopic) {
-    setTopicToShow(lastTopic);
-  }
+
+  useEffect(() => {
+    setTopicToShow((currentTopic) => {
+      return currentTopic !== lastTopic ? lastTopic : currentTopic;
+    });
+  }, [sessionTopics.length, lastTopic]);
 
   const handleOpenPreviewer = () => {
     setIsMarkdownPreviewerVisible((prevValue) => !prevValue);
