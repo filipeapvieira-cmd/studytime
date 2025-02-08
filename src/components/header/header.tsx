@@ -5,13 +5,11 @@ import Login from "@/src/components/header/nav-login";
 
 function Header() {
   return (
-    <header className="container flex justify-between items-center py-4 h-header">
-      <div className="flex items-center gap-6">
-        <Link href="/">
-          <Icons.Logo size={50} />
-        </Link>
-        <NavLinks />
-      </div>
+    <header className="container flex justify-between items-center py-4 h-header border-b border-zinc-800">
+      <Link href="/">
+        <Icons.Logo size={50} />
+      </Link>
+      <NavLinks />
       <Login />
     </header>
   );

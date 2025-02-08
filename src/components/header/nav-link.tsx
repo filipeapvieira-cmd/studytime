@@ -3,23 +3,39 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
+import { BarChart2, BookOpen, LayoutDashboard } from "lucide-react";
+
+const iconMapping = {
+  BookOpen,
+  LayoutDashboard,
+  BarChart2,
+};
+
+export type IconKey = keyof typeof iconMapping;
 
 type NavLinkProps = {
   children: string;
   href: string;
+  icon?: IconKey;
 };
 
-const NavLink = ({ children, href }: NavLinkProps) => {
+const NavLink = ({ href, children, icon }: NavLinkProps) => {
   const isActive = href === usePathname();
+  const IconComponent = icon ? iconMapping[icon] : null;
+
   return (
     <Link
       href={href}
-      className={clsx("transition-colors hover:text-foreground/80 text-lg", {
-        "text-foreground/70": !isActive,
-        "text-foreground": isActive,
-      })}
+      className={clsx(
+        " hover:text-white px-3 py-2 rounded-md font-medium flex items-center space-x-2 transition duration-150 ease-in-out",
+        {
+          "text-white": isActive,
+          "text-zinc-400": !isActive,
+        }
+      )}
     >
-      {children}
+      {IconComponent && <IconComponent size={20} />}
+      <span>{children}</span>
     </Link>
   );
 };
