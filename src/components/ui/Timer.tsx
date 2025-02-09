@@ -12,7 +12,7 @@ const Timer = () => {
   return (
     <BtnTimer
       onClick={() => updateTimerStatus(status, updateTimer)}
-      status={status}
+      status={status as SessionStatusEnum}
       effectiveTimeOfStudy={effectiveTimeOfStudy}
       disabled={status === SessionStatusEnum.Stop}
     />
