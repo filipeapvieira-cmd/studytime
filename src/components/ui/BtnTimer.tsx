@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "./tooltip";
 import { SessionStatusEnum } from "@/src/constants/config";
+import { cn } from "@/src/lib/utils";
 
 interface BtnTimerProps {
   onClick: () => void;
@@ -15,6 +16,7 @@ interface BtnTimerProps {
   effectiveTimeOfStudy: number;
   disabled: boolean;
   size?: "default" | "sm" | "lg";
+  className?: string;
 }
 
 const tooltipContent: Record<SessionStatusEnum, string> = {
@@ -30,6 +32,7 @@ const BtnTimer: FC<BtnTimerProps> = ({
   status,
   disabled,
   size,
+  className,
 }) => {
   return (
     <TooltipProvider>
@@ -40,7 +43,10 @@ const BtnTimer: FC<BtnTimerProps> = ({
             onClick={onClick}
             disabled={disabled}
             size={size || "default"}
-            className="bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-white flex-1 flex justify-between items-center"
+            className={cn(
+              "bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-white flex-1 flex justify-between items-center",
+              className
+            )}
           >
             {showIconForState(status)}
             <p className="text-lg w-[82px]">

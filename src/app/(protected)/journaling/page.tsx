@@ -1,7 +1,5 @@
-import CustomEditor from "@/src/components/CustomEditor";
-import Counter from "@/src/components/Control";
-import ImageUpload from "@/src/components/ImageUpload";
 import { Metadata } from "next";
+import { TopicSidebar } from "@/src/components/new-journaling/topic-sidebar";
 
 export const metadata: Metadata = {
   title: "✅ Journaling...",
@@ -9,10 +7,8 @@ export const metadata: Metadata = {
 
 function JournalingPage() {
   return (
-    <div className="container bg-secondary/90 rounded-lg shadow-lg">
-      <Counter />
-      <CustomEditor />
-      <ImageUpload />
+    <div className="mx-auto max-w-7xl px-4 flex-1 overflow-hidden md:min-w-[1000px]">
+      <TopicSidebar />
     </div>
   );
 }

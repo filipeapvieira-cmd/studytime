@@ -13,7 +13,7 @@ interface SessionToolbarProps {
 
 export function SessionToolbar({ className }: SessionToolbarProps) {
   return (
-    <div className={cn("w-full p-4", className)}>
+    <div className={cn("w-full ", className)}>
       <div className="bg-black rounded-lg p-5 shadow-lg">
         <div className="mb-1">
           <p className="text-zinc-500 text-sm">Track your session</p>
