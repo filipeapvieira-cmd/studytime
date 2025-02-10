@@ -11,6 +11,7 @@ import {
 } from "@/src/lib/time-provider/utils";
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
 import useEffectStatusHandling from "@/src/hooks/useEffectStatusHandling";
+import { cn } from "@/src/lib/utils";
 
 type TopicComponentProps = {
   topic: Topic;
@@ -154,15 +155,12 @@ export default function TopicComponent({
   return (
     <div
       key={topic.id}
-      className={`flex flex-col p-3 rounded-xl cursor-pointer w-[232px]
-transition-all duration-200 ease-in-out
-border border-zinc-800/50
-shadow-[0_0_15px_rgba(0,0,0,0.2)]
-${
-  selectedTopicId === topic.id
-    ? "bg-zinc-800 border-zinc-700"
-    : "bg-zinc-900/50 hover:bg-zinc-800/50"
-}`}
+      className={cn(
+        `flex flex-col p-3 rounded-xl cursor-pointer w-[232px] transition-all duration-200 ease-in-out border border-zinc-800/50 shadow-[0_0_15px_rgba(0,0,0,0.2)]`,
+        selectedTopicId === topic.id
+          ? "bg-zinc-800 border-zinc-700"
+          : "bg-zinc-900/50 hover:bg-zinc-800/50"
+      )}
       onClick={() => setSelectedTopicId(topic.id)}
     >
       <div className="flex items-center justify-between mb-3 w-full min-w-0">
@@ -177,18 +175,22 @@ ${
           status={topicTimer.status as SessionStatusEnum}
           effectiveTimeOfStudy={topicTimer.effectiveTimeOfStudy}
           onClick={() => updateTimerStatus(topicTimer.status, setTopicTimer)}
-          className="bg-zinc-800 text-white hover:bg-zinc-700"
+          className={cn(
+            `h-8 px-3 text-xs truncate flex-grow shadow-lg`,
+            selectedTopicId === topic.id
+              ? "bg-zinc-700 text-zinc-200 hover:bg-zinc-600"
+              : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white"
+          )}
         />
         <Button
           variant="secondary"
           size="icon"
-          className={`h-8 w-8 shadow-lg flex-shrink-0
-    ${
-      selectedTopicId === topic.id
-        ? "bg-zinc-700 text-zinc-200 hover:bg-zinc-600"
-        : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white"
-    }
-  `}
+          className={cn(
+            `h-8 w-8 shadow-lg flex-shrink-0`,
+            selectedTopicId === topic.id
+              ? "bg-zinc-700 text-zinc-200 hover:bg-zinc-600"
+              : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white"
+          )}
           onClick={(e) => {
             e.stopPropagation();
             deleteTopic(topic.id);
