@@ -9,10 +9,8 @@ import {
   AlertDialogTitle,
 } from "@/src/components/ui/alert-dialog";
 import { StudySessionDto } from "@/src/types";
-import ImageUpload from "@/src/components/ImageUpload";
-import EditSessionControl from "./EditSessionControl";
 import { Icons } from "@/src/components/icons";
-import CustomEditor from "@/src/components/CustomEditor";
+import { TopicSidebar } from "./new-journaling/topic-sidebar";
 
 interface EditSessionProps {
   isModalOpen: boolean;
@@ -27,30 +25,22 @@ const EditSession = ({
 }: EditSessionProps) => {
   return (
     <AlertDialog open={isModalOpen}>
-      <AlertDialogContent className="max-w-6xl">
+      <AlertDialogContent className="max-w-6xl bg-black">
         <AlertDialogHeader className="max-h-[90vh]">
           <AlertDialogTitle asChild>
-            <>
-              <div className="flex justify-between">
-                <div className="flex space-x-2">
-                  <Icons.calendar />
-                  <p className="text-lg font-bold">
-                    {selectedStudySession.date}
-                  </p>
-                </div>
-                <Icons.closeCross
-                  onClick={() => handleModalClose(false)}
-                  className="hover:cursor-pointer hover:bg-border/50"
-                />
+            <div className="flex justify-between">
+              <div className="flex space-x-2">
+                <Icons.Calendar />
+                <p className="text-lg font-bold">{selectedStudySession.date}</p>
               </div>
-              <EditSessionControl setIsModalOpen={handleModalClose} />
-            </>
+              <Icons.CloseCross
+                onClick={() => handleModalClose(false)}
+                className="hover:cursor-pointer hover:bg-border/50"
+              />
+            </div>
           </AlertDialogTitle>
           <AlertDialogDescription asChild>
-            <>
-              <CustomEditor />
-              <ImageUpload />
-            </>
+            <TopicSidebar onClose={handleModalClose} />
           </AlertDialogDescription>
         </AlertDialogHeader>
       </AlertDialogContent>

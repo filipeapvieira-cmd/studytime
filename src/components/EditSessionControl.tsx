@@ -25,20 +25,20 @@ import {
 import { mutate } from "swr";
 import { Label } from "./ui/label";
 import { useUpdateSessionContext } from "../ctx/update-session-provider";
-import { sessionControlFormSchema } from "../lib/schemas/editSessionControlSchema";
 import { Input } from "./ui/input";
 import { useCustomToast } from "../hooks/useCustomToast";
+import { editSessionToolbarSchema } from "../lib/schemas/editSessionControlSchema";
 
-interface EditSessionControlProps {
+interface EditSessionToolbarProps {
   setIsModalOpen: (isOpen: boolean) => void;
 }
 
 const USER_ERROR_MESSAGE =
   "Invalid time fields provided. Please check start time, end time, and pause duration.";
 
-const EditSessionControl: FC<EditSessionControlProps> = ({
+const EditSessionToolbar: FC<EditSessionToolbarProps> = ({
   setIsModalOpen,
-}: EditSessionControlProps) => {
+}: EditSessionToolbarProps) => {
   const {
     sessionToEdit,
     setSessionToEdit,
@@ -72,7 +72,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
     console.log("sessionTopics", sessionTopics);
 
     if (action === "update") {
-      const parseResult = sessionControlFormSchema.safeParse({
+      const parseResult = editSessionToolbarSchema.safeParse({
         startTime,
         pauseDuration,
         endTime,
@@ -185,8 +185,8 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   };
 
   return (
-    <div className="flex justify-between items-center py-4">
-      <div className="flex space-x-2">
+    <div className="flex flex-col items-center py-4 space-y-4 max-w-[148px] mx-auto">
+      <div className="flex flex-col space-y-2">
         <FormField
           name="startTime"
           label="Start Time"
@@ -209,7 +209,7 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
             alwaysShowMask
             onChange={(e) => handleOnChange(e)}
             defaultValue="00:00:00"
-            className="max-w-[148px] flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           />
         </div>
         <FormField
@@ -229,14 +229,13 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
           <Input
             value={effectiveTime}
             type="text"
-            className="max-w-[148px]"
             name="effectiveTime"
             onChange={(e) => handleOnChange(e)}
             disabled={true}
           />
         </div>
       </div>
-      <div className="flex space-x-2">
+      <div className="flex justify-between w-full">
         <UserActionConfirmation
           type="updateSession"
           onConfirm={() => handleControl("update")}
@@ -259,4 +258,4 @@ const EditSessionControl: FC<EditSessionControlProps> = ({
   );
 };
 
-export default EditSessionControl;
+export default EditSessionToolbar;

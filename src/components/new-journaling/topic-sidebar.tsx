@@ -3,9 +3,6 @@
 import * as React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Trash2, Play, Edit } from "lucide-react";
-import { SubjectSelect } from "./subject-select";
-import { HashtagInput } from "./hashtag-input";
 import {
   Select,
   SelectContent,
@@ -15,20 +12,20 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { SessionToolbar } from "./session-toolbar";
-import { EditModal } from "./edit-modal";
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
 import { createNewTopic } from "@/src/ctx/session-topics-provider";
-import { Topic, TopicTimer } from "@/src/types";
-import BtnTimer from "../ui/BtnTimer";
-import useSessionStatus from "@/src/hooks/useSessionStatus";
-import { updateTimerStatus } from "@/src/lib/time-provider/utils";
+import { Topic } from "@/src/types";
 import TopicComponent from "./topic";
 import SelectedTopic from "./selected-topic";
+import ToolBar from "./toolbar";
 
 const feelingOptions = ["VERY_GOOD", "GOOD", "NEUTRAL", "BAD", "VERY_BAD"];
 
-export function TopicSidebar() {
+type TopicSidebarProps = {
+  onClose?: (isOpen: boolean) => void;
+};
+
+export function TopicSidebar({ onClose }: TopicSidebarProps) {
   const {
     sessionFeelings,
     setSessionFeelings,
@@ -98,7 +95,7 @@ export function TopicSidebar() {
       <div className="flex-1 overflow-hidden">
         <div className="h-full max-w-6xl mx-auto w-full flex">
           <div className="w-64 border-r border-zinc-800/50 flex flex-col mr-4">
-            <SessionToolbar />
+            <ToolBar onClose={onClose} />
             <Separator className="my-2 bg-zinc-800" />
             <div className="px-4 py-2">
               <Button
