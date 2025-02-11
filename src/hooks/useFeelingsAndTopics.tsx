@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
 import { useUpdateSessionContext } from "../ctx/update-session-provider";
+import { is } from "date-fns/locale";
 
 const useFeelingsAndTopics = () => {
   const feelingsCtx = useContext(FeelingsContext);
@@ -37,6 +38,7 @@ const useFeelingsAndTopics = () => {
     setSessionFeelings,
     sessionTopics,
     setSessionTopics,
+    isUpdate,
   };
 };
 

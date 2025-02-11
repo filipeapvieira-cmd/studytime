@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import BtnTimer from "../ui/BtnTimer";
 import { Button } from "../ui/button";
 import { Trash2 } from "lucide-react";
@@ -12,6 +12,14 @@ import {
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
 import useEffectStatusHandling from "@/src/hooks/useEffectStatusHandling";
 import { cn } from "@/src/lib/utils";
+import ReactInputMask from "react-input-mask";
+import { useUpdateSessionContext } from "@/src/ctx/update-session-provider";
+import {
+  calculateEffectiveTime,
+  calculateTotalEffectiveTimeOfOtherTopics,
+  convertMillisecondsToTimeString,
+  convertTimeStringToMilliseconds,
+} from "@/src/lib/session-log/update-utils";
 
 type TopicComponentProps = {
   topic: Topic;
@@ -45,7 +53,13 @@ export default function TopicComponent({
     totalPauseTime,
   } = topic;
 
-  const { setSessionTopics } = useFeelingsAndTopics();
+  const { setSessionTopics, isUpdate } = useFeelingsAndTopics();
+  const {
+    sessionToEdit: currentSession,
+    sessionTopicsUpdate,
+    error,
+    setError,
+  } = useUpdateSessionContext();
   const sessionStatus = useSessionStatus();
 
   const [currentTopic, setCurrentTopic] = useState<CurrentTopic>({
@@ -63,7 +77,10 @@ export default function TopicComponent({
     pauseEndTime,
     totalPauseTime,
   });
-  console.log(topicTimer);
+
+  const [userUpdatedEffectiveTimeOfStudy, setUserUpdatedEffectiveTimeOfStudy] =
+    useState(convertMillisecondsToTimeString(topicTimer.effectiveTimeOfStudy));
+
   useEffect(() => {
     forceSessionStatusOnTopicStatus(
       sessionStatus,
@@ -152,6 +169,45 @@ export default function TopicComponent({
     });
   };
 
+  const handleManuallyUpdateEffectiveTimeOfStudy = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    const newValue = e.target.value;
+    setUserUpdatedEffectiveTimeOfStudy(newValue);
+
+    if (!currentSession) return;
+
+    const { startTime, endTime, pauseDuration, topics } = currentSession;
+    const totalStudySessionTime = calculateEffectiveTime({
+      startTime,
+      endTime,
+      pauseDuration,
+    });
+    const totalStudySessionTimeMs = convertTimeStringToMilliseconds(
+      totalStudySessionTime
+    );
+
+    const totalEffectiveTimeOfOtherTopics =
+      calculateTotalEffectiveTimeOfOtherTopics(sessionTopicsUpdate, topic.id);
+
+    const possibleModification =
+      totalStudySessionTimeMs - totalEffectiveTimeOfOtherTopics;
+
+    const manuallyEditedEffectiveTimeOfStudy =
+      convertTimeStringToMilliseconds(newValue);
+
+    setTopicTimer((prevValue) => ({
+      ...prevValue,
+      effectiveTimeOfStudy: manuallyEditedEffectiveTimeOfStudy,
+    }));
+
+    if (manuallyEditedEffectiveTimeOfStudy <= possibleModification) {
+      setError((prev) => ({ ...prev, effectiveTime: false }));
+    } else {
+      setError((prev) => ({ ...prev, effectiveTime: true }));
+    }
+  };
+
   return (
     <div
       key={topic.id}
@@ -168,20 +224,38 @@ export default function TopicComponent({
           {topic.title || "Untitled"}
         </span>
       </div>
-      <div className="flex items-center gap-2 w-full">
-        <BtnTimer
-          size="sm"
-          disabled={topic.status === "stop" || sessionStatus !== "play"}
-          status={topicTimer.status as SessionStatusEnum}
-          effectiveTimeOfStudy={topicTimer.effectiveTimeOfStudy}
-          onClick={() => updateTimerStatus(topicTimer.status, setTopicTimer)}
-          className={cn(
-            `h-8 px-3 text-xs truncate flex-grow shadow-lg`,
-            selectedTopicId === topic.id
-              ? "bg-zinc-700 text-zinc-200 hover:bg-zinc-600"
-              : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white"
-          )}
-        />
+      <div
+        className={cn(
+          "flex items-center gap-2 w-full",
+          isUpdate && "space-between"
+        )}
+      >
+        {isUpdate ? (
+          <ReactInputMask
+            value={userUpdatedEffectiveTimeOfStudy}
+            mask="99:99:99"
+            placeholder="HH:MM:SS"
+            alwaysShowMask
+            onChange={(e) => handleManuallyUpdateEffectiveTimeOfStudy(e)}
+            defaultValue="00:00:00"
+            className="h-[36px] flex w-full rounded-md border border-input bg-zinc-500 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+        ) : (
+          <BtnTimer
+            size="sm"
+            disabled={topic.status === "stop" || sessionStatus !== "play"}
+            status={topicTimer.status as SessionStatusEnum}
+            effectiveTimeOfStudy={topicTimer.effectiveTimeOfStudy}
+            onClick={() => updateTimerStatus(topicTimer.status, setTopicTimer)}
+            className={cn(
+              `h-8 px-3 text-xs truncate flex-grow shadow-lg`,
+              selectedTopicId === topic.id
+                ? "bg-zinc-700 text-zinc-200 hover:bg-zinc-600"
+                : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white"
+            )}
+          />
+        )}
+
         <Button
           variant="secondary"
           size="icon"
