@@ -19,7 +19,7 @@ import TopicComponent from "./topic";
 import SelectedTopic from "./selected-topic";
 import { SessionToolbar } from "./session-toolbar";
 import { cn } from "@/src/lib/utils";
-import { EditModal } from "./edit-modal";
+import { EditModal } from "../new-update-session/edit-modal";
 
 const feelingOptions = ["VERY_GOOD", "GOOD", "NEUTRAL", "BAD", "VERY_BAD"];
 
@@ -67,27 +67,6 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
-  };
-
-  const handleSaveEditModal = (
-    updatedTopics: string[],
-    updatedHashtags: string[]
-  ) => {
-    /*  setSubjects(updatedTopics);
-    setAllHashtags(updatedHashtags);
-
-    // Update topics with new subjects and hashtags
-    setTopics((prevTopics) =>
-      prevTopics.map((topic) => ({
-        ...topic,
-        subject: updatedTopics.includes(topic.subject) ? topic.subject : "",
-        hashtags: topic.hashtags.filter((hashtag) =>
-          updatedHashtags.includes(hashtag)
-        ),
-      }))
-    );
-
-    setIsEditModalOpen(false); */
   };
 
   const selectedTopic =
@@ -166,11 +145,7 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
           </div>
         </div>
       </div>
-      <EditModal
-        isOpen={isEditModalOpen}
-        onClose={handleCloseEditModal}
-        onSave={handleSaveEditModal}
-      />
+      <EditModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} />
     </div>
   );
 }

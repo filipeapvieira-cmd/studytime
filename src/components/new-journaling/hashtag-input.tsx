@@ -23,9 +23,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import useSWR from "swr";
-import { GET_UNIQUE_HASHTAGS_ENDPOINT } from "@/src/constants/config";
-import { fetcher } from "@/src/lib/swr/utils";
 import { Badge } from "../ui/badge";
 import { useHashtags } from "@/src/hooks/new/useHashtags";
 
@@ -106,6 +103,7 @@ export function HashtagInput({ value, onChange }: HashtagInputProps) {
                             variant="default"
                             key={option}
                             className="rounded-sm px-1 font-normal max-w-[100px] truncate"
+                            onClick={() => handleSelect(option)}
                           >
                             {`#${option}`}
                           </Badge>

@@ -118,3 +118,13 @@ export type StudySessionDto = {
 export type FullSessionLogUpdate = FullSessionLog & {
   id: number;
 };
+
+export type TopicItem = {
+  original: string;
+  current: string;
+};
+
+export type HashtagItem = {
+  original: string;
+  current: string;
+};
