@@ -19,4 +19,12 @@ export enum SessionStatusEnum {
   Stop = "stop",
 }
 
+export const FEELING_OPTIONS = [
+  "VERY_GOOD",
+  "GOOD",
+  "NEUTRAL",
+  "BAD",
+  "VERY_BAD",
+];
+
 export const DOMAIN = process.env.DOMAIN;

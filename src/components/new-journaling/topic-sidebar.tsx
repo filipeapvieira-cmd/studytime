@@ -18,10 +18,9 @@ import { Topic } from "@/src/types";
 import TopicComponent from "./topic";
 import SelectedTopic from "./selected-topic";
 import { SessionToolbar } from "./session-toolbar";
-import { cn } from "@/src/lib/utils";
+import { cn, getFeelingsDisplayName } from "@/src/lib/utils";
 import { EditModal } from "../new-update-session/edit-topics-hashtags-modal";
-
-const feelingOptions = ["VERY_GOOD", "GOOD", "NEUTRAL", "BAD", "VERY_BAD"];
+import { FEELING_OPTIONS } from "@/src/constants/config";
 
 type TopicSidebarProps = {
   className?: string;
@@ -39,7 +38,6 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
   const [selectedTopicId, setSelectedTopicId] = React.useState<
     string | number | null
   >(null);
-  const [feeling, setFeeling] = React.useState<string | undefined>(undefined);
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
 
   const addNewTopic = () => {
@@ -58,7 +56,7 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
   };
 
   const handleFeelingChange = (newFeeling: string) => {
-    setFeeling(newFeeling);
+    setSessionFeelings(newFeeling);
   };
 
   const handleOpenEditModal = () => {
@@ -115,15 +113,17 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
               <Label htmlFor="feeling" className="text-white">
                 Feelings:
               </Label>
-              <Select value={feeling} onValueChange={handleFeelingChange}>
+              <Select
+                value={sessionFeelings || undefined}
+                onValueChange={handleFeelingChange}
+              >
                 <SelectTrigger className="w-full bg-zinc-900/50 text-white border-zinc-800/50">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {feelingOptions.map((feeling) => (
+                  {FEELING_OPTIONS.map((feeling) => (
                     <SelectItem key={feeling} value={feeling}>
-                      {feeling.charAt(0) +
-                        feeling.slice(1).toLowerCase().replace("_", " ")}
+                      {getFeelingsDisplayName(feeling)}
                     </SelectItem>
                   ))}
                 </SelectContent>

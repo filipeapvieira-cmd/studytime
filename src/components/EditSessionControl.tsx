@@ -193,9 +193,9 @@ const EditSessionToolbar: FC<EditSessionToolbarProps> = ({
           type="time"
           value={startTime}
           onChange={(e) => handleOnChange(e)}
-          className="max-w-[150px]"
+          className="w-[150px]"
         />
-        <div className="max-w-[150px]">
+        <div className="w-[150px]">
           <Label
             htmlFor={pauseDuration}
             className={`${error.pauseDuration && "text-destructive font-bold"}`}
@@ -219,9 +219,9 @@ const EditSessionToolbar: FC<EditSessionToolbarProps> = ({
           type="time"
           value={endTime}
           onChange={(e) => handleOnChange(e)}
-          className="max-w-[150px]"
+          className="w-[150px]"
         />
-        <div className="max-w-[150px]">
+        <div className="w-[150px]">
           <Label
             htmlFor={effectiveTime}
             className={`${error.effectiveTime && "text-destructive font-bold"}`}

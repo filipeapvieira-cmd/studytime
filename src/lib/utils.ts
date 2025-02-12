@@ -78,3 +78,7 @@ export const uploadFile = async ({
 export function isValidInteger(value: string | undefined): boolean {
   return value !== undefined && !isNaN(parseInt(value));
 }
+
+export const getFeelingsDisplayName = (feeling: string) => {
+  return feeling.charAt(0) + feeling.slice(1).toLowerCase().replace("_", " ");
+};
