@@ -3,6 +3,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import Header from "@editorjs/header";
 import EditorjsList from "@editorjs/list";
+import { BlockToolConstructable } from "@editorjs/editorjs";
 
 // Remove direct ImageTool import
 export const CustomEditor: React.FC = () => {
@@ -26,7 +27,7 @@ export const CustomEditor: React.FC = () => {
           holder: "editorjs",
           tools: {
             header: {
-              class: Header,
+              class: Header as unknown as BlockToolConstructable,
               config: {
                 placeholder: "Enter a header",
                 levels: [2, 3, 4],
@@ -34,7 +35,7 @@ export const CustomEditor: React.FC = () => {
               },
             },
             list: {
-              class: EditorjsList,
+              class: EditorjsList as unknown as BlockToolConstructable,
               inlineToolbar: true,
               config: {
                 defaultStyle: "unordered",
@@ -90,15 +91,15 @@ export const CustomEditor: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: "0rem" }}>
+    <div className="flex flex-1">
       <div
         id="editorjs"
-        className="w-full flex-1 p-5 rounded-xl border border-zinc-800/50 
+        className="w-full !flex-1 p-16 rounded-xl border border-zinc-800/50 
                   bg-zinc-900/50 text-white placeholder-zinc-500
                   resize-none focus:outline-none focus:ring-2 focus:ring-zinc-700
                   shadow-[0_0_15px_rgba(0,0,0,0.1)]"
       />
-      {/*       <div style={{ marginTop: "1rem" }}>
+      {/*    /*       <div style={{ marginTop: "1rem" }}>
         <button onClick={handleSave} style={{ marginRight: "1rem" }}>
           Save
         </button>

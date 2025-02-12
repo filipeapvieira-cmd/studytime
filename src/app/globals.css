@@ -101,15 +101,15 @@ body,
   right: auto;
 }
 
-.ce-toolbar__settings-btn {
-  color: #ffffff !important;
+.ce-toolbar__plus svg, .ce-toolbar__settings-btn svg {
+  color: white;
 }
 
-.ce-block__plus:hover {
+.ce-toolbar__plus svg:hover {
   color: #000000 !important;
 }
 
-.ce-toolbar__settings-btn:hover {
+.ce-toolbar__settings-btn svg:hover {
   color: #000000 !important;
 }
 
@@ -120,4 +120,9 @@ body,
 /* Because the element has an inline style of color white, to change the color on hover you may need to force the override */
 .ce-toolbar__actions.ce-toolbar__actions--opened:hover {
   color: #000000; /* hover color: black */
+}
+
+::selection {
+  background: #b7e24a !important; /* Change to any color */
+  color: black; /* Text color when selected */
 }
