@@ -10,8 +10,8 @@ import {
 } from "@/src/components/ui/alert-dialog";
 import { StudySessionDto } from "@/src/types";
 import { Icons } from "@/src/components/icons";
-import { TopicSidebar } from "./new-journaling/topic-sidebar";
-import EditSessionToolbar from "./EditSessionControl";
+import { TopicSidebar } from "../new-journaling/topic-sidebar";
+import EditSessionToolbar from "../EditSessionControl";
 
 interface EditSessionProps {
   isModalOpen: boolean;

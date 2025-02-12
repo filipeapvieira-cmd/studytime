@@ -28,9 +28,8 @@ import { useState, useCallback } from "react";
 import { DataTablePagination } from "@/src/components/table/data-table-pagination";
 import { globalFilterFn } from "@/src/app/(protected)/dashboard/columns";
 import TableFilters from "@/src/components/table/Table-filters";
-import EditSession from "@/src/components/EditSession";
+import EditSession from "@/src/components/new-update-session/edit-session-modal";
 import { StudySessionDto } from "@/src/types";
-import { createNewTopic } from "@/src/ctx/session-topics-provider";
 import { convertListToTopic } from "@/src/lib/hooks/utils";
 import { useUpdateSessionContext } from "@/src/ctx/update-session-provider";
 

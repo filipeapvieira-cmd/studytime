@@ -19,7 +19,7 @@ import TopicComponent from "./topic";
 import SelectedTopic from "./selected-topic";
 import { SessionToolbar } from "./session-toolbar";
 import { cn } from "@/src/lib/utils";
-import { EditModal } from "../new-update-session/edit-modal";
+import { EditModal } from "../new-update-session/edit-topics-hashtags-modal";
 
 const feelingOptions = ["VERY_GOOD", "GOOD", "NEUTRAL", "BAD", "VERY_BAD"];
 
