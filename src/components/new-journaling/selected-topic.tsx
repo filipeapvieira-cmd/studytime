@@ -7,9 +7,13 @@ import { HashtagInput } from "./hashtag-input";
 
 type SelectedTopicProps = {
   selectedTopicId: string | number | null;
+  onEditModalBtnClick: () => void;
 };
 
-export default function SelectedTopic({ selectedTopicId }: SelectedTopicProps) {
+export default function SelectedTopic({
+  selectedTopicId,
+  onEditModalBtnClick,
+}: SelectedTopicProps) {
   const { sessionTopics, setSessionTopics } = useFeelingsAndTopics();
 
   const selectedTopic = sessionTopics.find(
@@ -69,7 +73,7 @@ export default function SelectedTopic({ selectedTopicId }: SelectedTopicProps) {
             variant="ghost"
             size="icon"
             className="flex-shrink-0 h-10 w-10 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white"
-            /* onClick={handleOpenEditModal} */
+            onClick={onEditModalBtnClick}
           >
             <Edit className="h-4 w-4" />
           </Button>

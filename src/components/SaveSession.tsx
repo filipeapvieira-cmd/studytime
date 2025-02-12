@@ -46,7 +46,7 @@ export const SaveSessionBtn = () => {
       <Button
         variant="ghost"
         size="icon"
-        className="h-10 w-full bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+        className="h-10 w-full bg-zinc-600 text-zinc-300 hover:bg-zinc-700 hover:text-white"
         disabled={status !== "stop"}
       >
         {isLoading && <Icons.loading className="h-6 w-6 animate-spin" />}

@@ -34,7 +34,7 @@ export const StopSessionBtn = () => {
       <Button
         variant="ghost"
         size="icon"
-        className="h-10 w-full bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+        className="h-10 w-full bg-zinc-600 text-zinc-300 hover:bg-zinc-700 hover:text-white"
         disabled={
           status === SessionStatusEnum.Initial ||
           status === SessionStatusEnum.Stop

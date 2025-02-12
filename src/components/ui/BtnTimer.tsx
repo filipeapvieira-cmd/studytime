@@ -44,7 +44,7 @@ const BtnTimer: FC<BtnTimerProps> = ({
             disabled={disabled}
             size={size || "default"}
             className={cn(
-              "bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-white flex-1 flex justify-between items-center",
+              "bg-zinc-600 text-zinc-300 hover:bg-zinc-700 hover:text-white flex-1 flex justify-between items-center",
               className
             )}
           >

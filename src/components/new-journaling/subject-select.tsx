@@ -26,6 +26,7 @@ import {
 import useSWR from "swr";
 import { GET_UNIQUE_TOPICS_ENDPOINT } from "@/src/constants/config";
 import { fetcher } from "@/src/lib/swr/utils";
+import { useTopicTitle } from "@/src/hooks/new/useTopicTitle";
 
 interface SubjectSelectProps {
   value: string | undefined;
@@ -35,16 +36,7 @@ interface SubjectSelectProps {
 export function SubjectSelect({ value, onChange }: SubjectSelectProps) {
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
-  const [topicsList, setTopicsList] = React.useState<string[]>([]);
-
-  const { data, error } = useSWR(GET_UNIQUE_TOPICS_ENDPOINT, fetcher);
-  const isLoading = !data && !error;
-
-  React.useEffect(() => {
-    if (data) {
-      setTopicsList(data.data);
-    }
-  }, [data]);
+  const { topicsList, isLoading, error } = useTopicTitle();
 
   const handleSelect = (selectedSubject: string) => {
     onChange(selectedSubject === value ? "" : selectedSubject);

@@ -17,26 +17,29 @@ import { createNewTopic } from "@/src/ctx/session-topics-provider";
 import { Topic } from "@/src/types";
 import TopicComponent from "./topic";
 import SelectedTopic from "./selected-topic";
-import ToolBar from "./toolbar";
+import { SessionToolbar } from "./session-toolbar";
+import { cn } from "@/src/lib/utils";
+import { EditModal } from "./edit-modal";
 
 const feelingOptions = ["VERY_GOOD", "GOOD", "NEUTRAL", "BAD", "VERY_BAD"];
 
 type TopicSidebarProps = {
-  onClose?: (isOpen: boolean) => void;
+  className?: string;
 };
 
-export function TopicSidebar({ onClose }: TopicSidebarProps) {
+export function TopicSidebar({ className }: TopicSidebarProps) {
   const {
     sessionFeelings,
     setSessionFeelings,
     sessionTopics,
     setSessionTopics,
+    isUpdate,
   } = useFeelingsAndTopics();
 
   const [selectedTopicId, setSelectedTopicId] = React.useState<
     string | number | null
   >(null);
-  const [feeling, setFeeling] = React.useState<string>("");
+  const [feeling, setFeeling] = React.useState<string | undefined>(undefined);
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
 
   const addNewTopic = () => {
@@ -91,11 +94,16 @@ export function TopicSidebar({ onClose }: TopicSidebarProps) {
     sessionTopics.find((topic) => topic.id === selectedTopicId) || null;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-186px)] overflow-hidden bg-black">
+    <div
+      className={cn(
+        "flex flex-col h-[calc(100vh-186px)] overflow-hidden bg-zinc-900 rounded-xl shadow-lg",
+        isUpdate && className
+      )}
+    >
       <div className="flex-1 overflow-hidden">
         <div className="h-full max-w-6xl mx-auto w-full flex">
-          <div className="w-64 border-r border-zinc-800/50 flex flex-col mr-4">
-            <ToolBar onClose={onClose} />
+          <div className="w-64 border-r flex flex-col mr-4">
+            {!isUpdate && <SessionToolbar />}
             <Separator className="my-2 bg-zinc-800" />
             <div className="px-4 py-2">
               <Button
@@ -146,7 +154,10 @@ export function TopicSidebar({ onClose }: TopicSidebarProps) {
 
           <div className="flex-1 flex flex-col overflow-hidden p-3">
             {selectedTopic ? (
-              <SelectedTopic selectedTopicId={selectedTopicId} />
+              <SelectedTopic
+                selectedTopicId={selectedTopicId}
+                onEditModalBtnClick={handleOpenEditModal}
+              />
             ) : (
               <div className="flex items-center justify-center h-full text-zinc-500">
                 Select a topic or create a new one
@@ -155,13 +166,11 @@ export function TopicSidebar({ onClose }: TopicSidebarProps) {
           </div>
         </div>
       </div>
-      {/*   <EditModal
+      <EditModal
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}
         onSave={handleSaveEditModal}
-        topics={subjects}
-        hashtags={allHashtags}
-      /> */}
+      />
     </div>
   );
 }

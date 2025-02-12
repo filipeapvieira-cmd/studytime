@@ -185,16 +185,17 @@ const EditSessionToolbar: FC<EditSessionToolbarProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center py-4 space-y-4 max-w-[148px] mx-auto">
-      <div className="flex flex-col space-y-2">
+    <div className="flex items-center p-3 space-y-4 justify-between bg-zinc-900 rounded-t-xl">
+      <div className="flex space-x-2 items-center">
         <FormField
           name="startTime"
           label="Start Time"
           type="time"
           value={startTime}
           onChange={(e) => handleOnChange(e)}
+          className="max-w-[150px]"
         />
-        <div>
+        <div className="max-w-[150px]">
           <Label
             htmlFor={pauseDuration}
             className={`${error.pauseDuration && "text-destructive font-bold"}`}
@@ -218,8 +219,9 @@ const EditSessionToolbar: FC<EditSessionToolbarProps> = ({
           type="time"
           value={endTime}
           onChange={(e) => handleOnChange(e)}
+          className="max-w-[150px]"
         />
-        <div>
+        <div className="max-w-[150px]">
           <Label
             htmlFor={effectiveTime}
             className={`${error.effectiveTime && "text-destructive font-bold"}`}
@@ -235,7 +237,7 @@ const EditSessionToolbar: FC<EditSessionToolbarProps> = ({
           />
         </div>
       </div>
-      <div className="flex justify-between w-full">
+      <div className="flex gap-x-3">
         <UserActionConfirmation
           type="updateSession"
           onConfirm={() => handleControl("update")}

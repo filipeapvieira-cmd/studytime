@@ -27,6 +27,7 @@ import useSWR from "swr";
 import { GET_UNIQUE_HASHTAGS_ENDPOINT } from "@/src/constants/config";
 import { fetcher } from "@/src/lib/swr/utils";
 import { Badge } from "../ui/badge";
+import { useHashtags } from "@/src/hooks/new/useHashtags";
 
 interface HashtagInputProps {
   value?: string;
@@ -36,18 +37,9 @@ interface HashtagInputProps {
 export function HashtagInput({ value, onChange }: HashtagInputProps) {
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
-  const [hashtagsList, setHashtagsList] = React.useState<string[]>([]);
-
-  const { data, error } = useSWR(GET_UNIQUE_HASHTAGS_ENDPOINT, fetcher);
-  const isLoading = !data && !error;
+  const { hashtagsList, isLoading, error, setHashtagsList } = useHashtags();
 
   let selectedValues = (value && value?.length > 0 && value?.split(" ")) || [];
-
-  React.useEffect(() => {
-    if (data) {
-      setHashtagsList(data.data);
-    }
-  }, [data]);
 
   const handleSelect = (selectedHashtag: string) => {
     onChange(

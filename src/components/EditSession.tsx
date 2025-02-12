@@ -11,6 +11,7 @@ import {
 import { StudySessionDto } from "@/src/types";
 import { Icons } from "@/src/components/icons";
 import { TopicSidebar } from "./new-journaling/topic-sidebar";
+import EditSessionToolbar from "./EditSessionControl";
 
 interface EditSessionProps {
   isModalOpen: boolean;
@@ -25,8 +26,8 @@ const EditSession = ({
 }: EditSessionProps) => {
   return (
     <AlertDialog open={isModalOpen}>
-      <AlertDialogContent className="max-w-6xl bg-black">
-        <AlertDialogHeader className="max-h-[90vh]">
+      <AlertDialogContent className="max-w-6xl ">
+        <AlertDialogHeader className="h-[90vh]">
           <AlertDialogTitle asChild>
             <div className="flex justify-between">
               <div className="flex space-x-2">
@@ -40,7 +41,10 @@ const EditSession = ({
             </div>
           </AlertDialogTitle>
           <AlertDialogDescription asChild>
-            <TopicSidebar onClose={handleModalClose} />
+            <div className="pt-4">
+              <EditSessionToolbar setIsModalOpen={handleModalClose} />
+              <TopicSidebar className="max-h-[80%] min-h-[80%] rounded-t-none" />
+            </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
       </AlertDialogContent>

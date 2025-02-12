@@ -238,7 +238,7 @@ export default function TopicComponent({
             alwaysShowMask
             onChange={(e) => handleManuallyUpdateEffectiveTimeOfStudy(e)}
             defaultValue="00:00:00"
-            className="h-[36px] flex w-full rounded-md border border-input bg-zinc-500 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-[36px] flex w-full rounded-md border border-input bg-zinc-500 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-white"
           />
         ) : (
           <BtnTimer
@@ -248,7 +248,7 @@ export default function TopicComponent({
             effectiveTimeOfStudy={topicTimer.effectiveTimeOfStudy}
             onClick={() => updateTimerStatus(topicTimer.status, setTopicTimer)}
             className={cn(
-              `h-8 px-3 text-xs truncate flex-grow shadow-lg`,
+              `h-8 px-3 py-2 text-xs truncate flex-grow shadow-lg`,
               selectedTopicId === topic.id
                 ? "bg-zinc-700 text-zinc-200 hover:bg-zinc-600"
                 : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white"
