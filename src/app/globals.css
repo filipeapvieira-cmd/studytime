@@ -92,3 +92,32 @@ body,
     @apply rounded-none focus-visible:ring-0 focus-visible:ring-offset-0;
   }
 }
+
+/* Override Editor.js plus button styles using Tailwind utilities */
+.ce-block__plus {
+  color: #ffffff !important;
+  position: absolute; /* ensure positioning is effective */
+  left: 0.5rem; /* or use @apply if you have a custom utility for this spacing */
+  right: auto;
+}
+
+.ce-toolbar__settings-btn {
+  color: #ffffff !important;
+}
+
+.ce-block__plus:hover {
+  color: #000000 !important;
+}
+
+.ce-toolbar__settings-btn:hover {
+  color: #000000 !important;
+}
+
+/* Override the Editor.js toolbar actions styles */
+.ce-toolbar__actions.ce-toolbar__actions--opened {
+}
+
+/* Because the element has an inline style of color white, to change the color on hover you may need to force the override */
+.ce-toolbar__actions.ce-toolbar__actions--opened:hover {
+  color: #000000; /* hover color: black */
+}

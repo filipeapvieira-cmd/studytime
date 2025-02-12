@@ -23,9 +23,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import useSWR from "swr";
-import { GET_UNIQUE_TOPICS_ENDPOINT } from "@/src/constants/config";
-import { fetcher } from "@/src/lib/swr/utils";
 import { useTopicTitle } from "@/src/hooks/new/useTopicTitle";
 
 interface SubjectSelectProps {

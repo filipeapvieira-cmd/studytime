@@ -2,8 +2,9 @@ import React from "react";
 import { Button } from "../ui/button";
 import { Edit } from "lucide-react";
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
-import { SubjectSelect } from "./subject-select";
+import { SubjectSelect } from "./topic-input";
 import { HashtagInput } from "./hashtag-input";
+import { CustomEditor } from "../new-editor/editor";
 
 type SelectedTopicProps = {
   selectedTopicId: string | number | null;
@@ -79,7 +80,7 @@ export default function SelectedTopic({
           </Button>
         </div>
       </div>
-
+      {/* 
       <textarea
         className="w-full flex-1 p-3 rounded-xl border border-zinc-800/50 
                   bg-zinc-900/50 text-white placeholder-zinc-500
@@ -88,7 +89,8 @@ export default function SelectedTopic({
         value={selectedTopic?.description}
         onChange={(e) => handleOnDescriptionChange(e.target.value)}
         placeholder="Enter description..."
-      />
+      /> */}
+      <CustomEditor />
     </div>
   );
 }
