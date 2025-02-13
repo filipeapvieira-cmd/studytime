@@ -101,7 +101,8 @@ body,
   right: auto;
 }
 
-.ce-toolbar__plus svg, .ce-toolbar__settings-btn svg {
+.ce-toolbar__plus svg,
+.ce-toolbar__settings-btn svg {
   color: white;
 }
 
@@ -122,7 +123,22 @@ body,
   color: #000000; /* hover color: black */
 }
 
-::selection {
-  background: #b7e24a !important; /* Change to any color */
-  color: black; /* Text color when selected */
+.ce-block--selected .ce-paragraph,
+.ce-block--selected h2.ce-header,
+.ce-block--selected h3.ce-header,
+.ce-block--selected h4.ce-header {
+  background-color: #b7e24a;
+  color: black;
+}
+
+h2.ce-header {
+  @apply text-2xl;
+}
+
+h3.ce-header {
+  @apply text-xl;
+}
+
+h4.ce-header {
+  @apply text-lg;
 }

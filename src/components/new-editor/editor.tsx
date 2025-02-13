@@ -94,10 +94,10 @@ export const CustomEditor: React.FC = () => {
     <div className="flex flex-1">
       <div
         id="editorjs"
-        className="w-full !flex-1 p-16 rounded-xl border border-zinc-800/50 
+        className="w-full !flex-1 px-14 py-4 rounded-xl border border-zinc-800/50 
                   bg-zinc-900/50 text-white placeholder-zinc-500
                   resize-none focus:outline-none focus:ring-2 focus:ring-zinc-700
-                  shadow-[0_0_15px_rgba(0,0,0,0.1)]"
+                  shadow-[0_0_15px_rgba(0,0,0,0.1)] selection:bg-lime-400 selection:text-black"
       />
       {/*    /*       <div style={{ marginTop: "1rem" }}>
         <button onClick={handleSave} style={{ marginRight: "1rem" }}>
