@@ -81,25 +81,25 @@ export type FullSessionLog = {
   startTime: Date;
   endTime: Date;
   pauseDuration: number;
-  feelingDescription: string;
+  feelingDescription?: string;
   topics: TopicFormatted[];
 };
 
 export type TopicFormatted = {
   id?: number | string;
   title: string;
-  hashtags: string;
-  description: string;
+  hashtags?: string;
+  description?: string;
   effectiveTimeOfStudy: number;
-  contentJson?: JSONValue;
+  contentJson: JSONValue;
 };
 
 export type Topic = Timer & {
   id: string | number;
   title: string;
-  hashtags: string;
-  description: string;
-  contentJson?: JSONValue;
+  hashtags?: string;
+  description?: string;
+  contentJson: JSONValue;
 };
 
 /* GET ALL SESSIONS */

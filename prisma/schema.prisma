@@ -110,7 +110,7 @@ model StudySession {
 model Topic {
   id          Int      @id @default(autoincrement())
   sessionId   Int
-  description String
+  description String?
   title       String
   hashtags    String?
   timeOfStudy Int

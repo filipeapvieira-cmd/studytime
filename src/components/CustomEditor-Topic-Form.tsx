@@ -59,8 +59,8 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
 
   const {
     title,
-    hashtags,
-    description,
+    hashtags = "",
+    description = "",
     effectiveTimeOfStudy,
     status,
     startTime,

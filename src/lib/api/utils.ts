@@ -25,7 +25,7 @@ export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
         }) => ({
           title,
           hashtags,
-          description,
+          description: description || "",
           contentJson: contentJson || {},
           timeOfStudy: effectiveTimeOfStudy,
         })

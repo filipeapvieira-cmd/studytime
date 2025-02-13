@@ -29,6 +29,7 @@ export const createNewTopic = (): Topic => ({
   pauseStartTime: 0,
   pauseEndTime: 0,
   totalPauseTime: 0,
+  contentJson: {},
 });
 
 export const topicsCtxDefaultValues: TopicsContextProps = {

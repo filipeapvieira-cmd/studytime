@@ -42,8 +42,8 @@ export default function TopicComponent({
 }: TopicComponentProps) {
   const {
     title,
-    hashtags,
-    description,
+    hashtags = "",
+    description = "",
     effectiveTimeOfStudy,
     status,
     startTime,

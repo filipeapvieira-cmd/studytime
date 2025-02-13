@@ -86,7 +86,7 @@ export const getFeelingsDisplayName = (feeling: string) => {
 export function getTopicContent(
   topic:
     | {
-        description: string;
+        description?: string;
         contentJson?: JSONValue;
       }
     | undefined
@@ -97,7 +97,7 @@ export function getTopicContent(
   if (topic.contentJson) {
     return topic.contentJson;
   }
-  return topic.description;
+  return topic.description ?? "";
 }
 
 // Utility function to normalize content for EditorJS

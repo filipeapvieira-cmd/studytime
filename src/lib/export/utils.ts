@@ -40,7 +40,7 @@ const sessionToMarkdown = (studySession: StudySessionDto, index: number) => {
   studySession.topics.forEach((topic, index) => {
     markdownString += `### ${index + 1}. ${topic.title}\n`;
     markdownString += `- **Description:** \n`;
-    markdownString += `${addSpacesToDashes(topic.description)}\n`;
+    markdownString += `${addSpacesToDashes(topic.description || "")}\n`;
     markdownString += `- **Time Spent:** ${convertMillisecondsToTimeString(
       topic.effectiveTimeOfStudy
     )} \n`;
