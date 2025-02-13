@@ -116,6 +116,7 @@ model Topic {
   timeOfStudy Int
   createdAt   DateTime @default(now()) @map(name: "created_at")
   updatedAt   DateTime @default(now()) @map(name: "updated_at")
+  contentJson Json?
 
   studySession StudySession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 

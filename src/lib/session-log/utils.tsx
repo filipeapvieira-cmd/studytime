@@ -41,6 +41,7 @@ const getSessionTopics = (
       title: topic.title,
       hashtags: topic.hashtags,
       description: topic.description,
+      contentJson: topic.contentJson,
       effectiveTimeOfStudy: getTopicTimeOfStudy(topic, endTime),
     };
   });

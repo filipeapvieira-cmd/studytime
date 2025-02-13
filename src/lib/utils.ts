@@ -1,7 +1,7 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import alerts from "@/text/alerts.json";
-import { ControlText, Timer } from "@/src/types";
+import { ControlText, EditorData, JSONValue, Timer } from "@/src/types";
 import axios from "axios";
 
 export function cn(...inputs: ClassValue[]) {
@@ -81,4 +81,47 @@ export function isValidInteger(value: string | undefined): boolean {
 
 export const getFeelingsDisplayName = (feeling: string) => {
   return feeling.charAt(0) + feeling.slice(1).toLowerCase().replace("_", " ");
+};
+
+export function getTopicContent(
+  topic:
+    | {
+        description: string;
+        contentJson?: JSONValue;
+      }
+    | undefined
+): string | JSONValue {
+  if (!topic) {
+    return "";
+  }
+  if (topic.contentJson) {
+    return topic.contentJson;
+  }
+  return topic.description;
+}
+
+// Utility function to normalize content for EditorJS
+export const prepareContent = (value: string | JSONValue): EditorData => {
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return parsed as EditorData;
+    } catch (error) {
+      // Legacy plain text: wrap it in a paragraph block.
+      return {
+        time: Date.now(),
+        blocks: [
+          {
+            type: "paragraph",
+            data: {
+              text: value,
+            },
+          },
+        ],
+        version: "2.22.2",
+      };
+    }
+  } else {
+    return value as EditorData;
+  }
 };

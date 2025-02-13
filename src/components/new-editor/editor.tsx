@@ -4,13 +4,20 @@ import React, { useRef, useEffect, useState } from "react";
 import Header from "@editorjs/header";
 import EditorjsList from "@editorjs/list";
 import { BlockToolConstructable } from "@editorjs/editorjs";
+import { JSONValue } from "@/src/types";
+import { prepareContent } from "@/src/lib/utils";
 
-// Remove direct ImageTool import
-export const CustomEditor: React.FC = () => {
+type CustomEditorProps = {
+  value: string | JSONValue;
+  onBlur: (contentJson: JSONValue) => void;
+};
+
+export const CustomEditor = ({ value, onBlur }: CustomEditorProps) => {
   const editorRef = useRef<any>(null);
   const [isMounted, setIsMounted] = useState(false);
-  const [loadContent, setLoadContent] = useState<string>("");
+  const [editorReady, setEditorReady] = useState(false);
 
+  // Ensures we're in a client-only environment
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -25,6 +32,17 @@ export const CustomEditor: React.FC = () => {
       if (!editorRef.current) {
         editorRef.current = new EditorJS({
           holder: "editorjs",
+          onReady: () => {
+            console.log("Editor.js is ready");
+            setEditorReady(true);
+            // Render initial content once editor is ready
+            const content = prepareContent(value);
+            editorRef.current
+              .render(content)
+              .catch((error: any) =>
+                console.error("Error rendering content:", error)
+              );
+          },
           tools: {
             header: {
               class: Header as unknown as BlockToolConstructable,
@@ -45,7 +63,7 @@ export const CustomEditor: React.FC = () => {
               class: ImageTool,
               config: {
                 endpoints: {
-                  byFile: "/api/uploadImage", // Add your image upload endpoint
+                  byFile: "/api/editor/uploadImage",
                 },
               },
             },
@@ -59,21 +77,10 @@ export const CustomEditor: React.FC = () => {
     return () => {
       if (editorRef.current) {
         editorRef.current.destroy();
+        editorRef.current = null;
       }
     };
   }, [isMounted]);
-
-  const handleLoad = async () => {
-    if (editorRef.current) {
-      try {
-        // Parse the JSON from the textarea.
-        const parsedData = JSON.parse(loadContent);
-        await editorRef.current.render(parsedData);
-      } catch (error) {
-        console.error("Error loading editor content:", error);
-      }
-    }
-  };
 
   if (!isMounted) {
     return null;
@@ -83,7 +90,7 @@ export const CustomEditor: React.FC = () => {
     if (editorRef.current) {
       try {
         const savedData = await editorRef.current.save();
-        console.log("Saved Data:", savedData);
+        onBlur(savedData);
       } catch (error) {
         console.error("Error saving editor content:", error);
       }
@@ -98,22 +105,8 @@ export const CustomEditor: React.FC = () => {
                   bg-zinc-900/50 text-white placeholder-zinc-500
                   resize-none focus:outline-none focus:ring-2 focus:ring-zinc-700
                   shadow-[0_0_15px_rgba(0,0,0,0.1)] selection:bg-lime-400 selection:text-black"
+        onBlur={handleSave}
       />
-      {/*    /*       <div style={{ marginTop: "1rem" }}>
-        <button onClick={handleSave} style={{ marginRight: "1rem" }}>
-          Save
-        </button>
-        <span>Check the console for the saved JSON.</span>
-      </div>
-      <div style={{ marginTop: "1rem" }}>
-        <textarea
-          placeholder="Paste your Editor.js JSON here..."
-          value={loadContent}
-          onChange={(e) => setLoadContent(e.target.value)}
-          style={{ width: "100%", height: "150px", marginBottom: "0.5rem" }}
-        />
-        <button onClick={handleLoad}>Load Content</button>
-      </div> */}
     </div>
   );
 };

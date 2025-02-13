@@ -91,6 +91,7 @@ export type TopicFormatted = {
   hashtags: string;
   description: string;
   effectiveTimeOfStudy: number;
+  contentJson?: JSONValue;
 };
 
 export type Topic = Timer & {
@@ -98,6 +99,7 @@ export type Topic = Timer & {
   title: string;
   hashtags: string;
   description: string;
+  contentJson?: JSONValue;
 };
 
 /* GET ALL SESSIONS */
@@ -127,4 +129,18 @@ export type TopicItem = {
 export type HashtagItem = {
   original: string;
   current: string;
+};
+
+type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: JSONValue }
+  | JSONValue[];
+
+export type EditorData = {
+  time: number;
+  blocks: Array<{ type: string; data: any }>;
+  version: string;
 };

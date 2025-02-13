@@ -142,3 +142,11 @@ h3.ce-header {
 h4.ce-header {
   @apply text-lg;
 }
+
+.cdx-search-field__input {
+  @apply text-black;
+}
+
+.cdx-notify.cdx-notify--error.cdx-notify--bounce-in {
+  @apply text-black;
+}

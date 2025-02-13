@@ -80,6 +80,7 @@ const toDateOnlyISOString = (date: Date) => toDateISOString(date).slice(0, 10);
 const mapTopics = (topic: any) => ({
   id: topic.id,
   description: topic.description,
+  contentJson: topic.contentJson,
   title: topic.title,
   hashtags: topic.hashtags,
   effectiveTimeOfStudy: topic.timeOfStudy,

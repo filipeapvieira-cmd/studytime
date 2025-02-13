@@ -5,6 +5,8 @@ import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
 import { SubjectSelect } from "./topic-input";
 import { HashtagInput } from "./hashtag-input";
 import { CustomEditor } from "../new-editor/editor";
+import { JSONValue } from "@/src/types";
+import { getTopicContent } from "@/src/lib/utils";
 
 type SelectedTopicProps = {
   selectedTopicId: string | number | null;
@@ -20,6 +22,8 @@ export default function SelectedTopic({
   const selectedTopic = sessionTopics.find(
     (topic) => topic.id === selectedTopicId
   );
+
+  const topicContent = getTopicContent(selectedTopic);
 
   const handleOnTopicSelection = (topic: string) => {
     setSessionTopics((prevValue) => {
@@ -43,15 +47,12 @@ export default function SelectedTopic({
     });
   };
 
-  const handleOnDescriptionChange = (description: string) => {
-    setSessionTopics((prevValue) => {
-      return prevValue.map((prevTopic) => {
-        if (prevTopic.id === selectedTopicId) {
-          return { ...prevTopic, description };
-        }
-        return prevTopic;
-      });
-    });
+  const handleContentChange = (contentJson: JSONValue) => {
+    setSessionTopics((prevTopics) =>
+      prevTopics.map((topic) =>
+        topic.id === selectedTopicId ? { ...topic, contentJson } : topic
+      )
+    );
   };
 
   return (
@@ -80,17 +81,7 @@ export default function SelectedTopic({
           </Button>
         </div>
       </div>
-      {/* 
-      <textarea
-        className="w-full flex-1 p-3 rounded-xl border border-zinc-800/50 
-                  bg-zinc-900/50 text-white placeholder-zinc-500
-                  resize-none focus:outline-none focus:ring-2 focus:ring-zinc-700
-                  shadow-[0_0_15px_rgba(0,0,0,0.1)]"
-        value={selectedTopic?.description}
-        onChange={(e) => handleOnDescriptionChange(e.target.value)}
-        placeholder="Enter description..."
-      /> */}
-      <CustomEditor />
+      <CustomEditor value={topicContent} onBlur={handleContentChange} />
     </div>
   );
 }
