@@ -150,3 +150,36 @@ h4.ce-header {
 .cdx-notify.cdx-notify--error.cdx-notify--bounce-in {
   @apply text-black;
 }
+
+/* Scrollbar Styles */
+@layer utilities {
+  /* Webkit browsers (Chrome, Safari, newer versions of Edge) */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground));
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--foreground));
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground)) hsl(var(--background));
+  }
+
+  /* For Internet Explorer and Edge (older versions) */
+  body {
+    -ms-overflow-style: none;
+  }
+}
