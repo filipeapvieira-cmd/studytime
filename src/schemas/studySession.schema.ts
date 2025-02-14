@@ -1,12 +1,28 @@
 import { z } from "zod";
 
+const DEFAULT_MESSAGE = "Did you forget to add content to your journal?";
+
+const ContentJsonSchema = z
+  .object({
+    time: z.number({ required_error: DEFAULT_MESSAGE }),
+    blocks: z.array(z.any()).min(1, {
+      message: DEFAULT_MESSAGE,
+    }),
+    version: z.string({ required_error: DEFAULT_MESSAGE }),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: DEFAULT_MESSAGE,
+  });
+
 const TopicFormattedSchema = z.object({
   id: z.union([z.number(), z.string()]).optional(),
-  title: z.string(),
+  title: z
+    .string()
+    .min(3, { message: "A Topic Subject is required. Please select one." }),
   hashtags: z.string().optional(),
   description: z.string().optional(),
   effectiveTimeOfStudy: z.number(),
-  contentJson: z.any(),
+  contentJson: ContentJsonSchema,
 });
 
 export const FullSessionLogSchema = z.object({

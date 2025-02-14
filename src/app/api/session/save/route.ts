@@ -1,6 +1,6 @@
 import { db } from "@/src/lib/db";
 import { NextResponse } from "next/server";
-import { getSessionData } from "@/src/lib/api/utils";
+import { getFirstErrorMessage, getSessionData } from "@/src/lib/api/utils";
 import { currentUser } from "@/src/lib/authentication";
 import { FullSessionLogSchema } from "@/src/schemas/studySession.schema";
 import { FullSessionLog } from "@/src/types";
@@ -25,10 +25,13 @@ export async function POST(req: Request) {
   const parseResult = FullSessionLogSchema.safeParse(response);
 
   if (!parseResult.success) {
+    const flattened = parseResult.error.flatten();
+    const message = getFirstErrorMessage(flattened);
+
     return NextResponse.json(
       {
         status: "error",
-        message: parseResult.error.flatten(),
+        message,
         data: null,
       },
       { status: 400 }
@@ -36,7 +39,7 @@ export async function POST(req: Request) {
   }
 
   const sessionLog = parseResult.data;
-  const sessionData = getSessionData(sessionLog as FullSessionLog, userId);
+  const sessionData = getSessionData(sessionLog, userId);
 
   try {
     await db.studySession.create({ data: sessionData });

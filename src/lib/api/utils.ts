@@ -1,6 +1,7 @@
 import { FullSessionLog, FullSessionLogUpdate } from "@/src/types";
 import { Prisma } from "@prisma/client";
 import { db } from "@/src/lib/db";
+import { FlattenedError } from "@/src/types/utils.types";
 
 export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
   const { startTime, endTime, pauseDuration, topics, feelingDescription } =
@@ -57,7 +58,14 @@ export const getSessionUpdateData = (
     pauseDuration,
     topic: {
       upsert: topics.map(
-        ({ id, title, hashtags, description, effectiveTimeOfStudy }) => {
+        ({
+          id,
+          title,
+          hashtags,
+          description,
+          effectiveTimeOfStudy,
+          contentJson,
+        }) => {
           if (typeof id !== "number") {
             throw new Error(`Invalid topic ID: ${id}`);
           }
@@ -69,12 +77,14 @@ export const getSessionUpdateData = (
               hashtags,
               description,
               timeOfStudy: effectiveTimeOfStudy,
+              contentJson: contentJson || {},
             },
             update: {
               title,
               hashtags,
               description,
               timeOfStudy: effectiveTimeOfStudy,
+              contentJson: contentJson || {},
             },
           };
         }
@@ -154,3 +164,18 @@ export const getUniqueHashtags = async (userId: number): Promise<string[]> => {
 
   return allHashtags;
 };
+
+export function getFirstErrorMessage(error: FlattenedError): string {
+  if (error.formErrors && error.formErrors.length > 0) {
+    return error.formErrors[0];
+  }
+
+  for (const key in error.fieldErrors) {
+    const messages = error.fieldErrors[key];
+    if (messages && messages.length > 0) {
+      return messages[0];
+    }
+  }
+
+  return "An unknown error occurred.";
+}
