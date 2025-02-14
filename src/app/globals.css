@@ -155,7 +155,7 @@ h4.ce-header {
 @layer utilities {
   /* Webkit browsers (Chrome, Safari, newer versions of Edge) */
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
   }
 
   ::-webkit-scrollbar-track {

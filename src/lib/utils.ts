@@ -92,7 +92,7 @@ export function getTopicContent(
     | undefined
 ): string | JSONValue {
   if (!topic) {
-    return "";
+    throw new Error("Topic not found");
   }
   if (topic.contentJson) {
     return topic.contentJson;

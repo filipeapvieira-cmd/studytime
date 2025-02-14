@@ -8,7 +8,7 @@ import {
   useEffect,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Topic, StudySessionDto } from "@/src/types";
+import { Topic } from "@/src/types";
 
 interface TopicsContextProps {
   sessionTopics: Topic[];
@@ -29,7 +29,7 @@ export const createNewTopic = (): Topic => ({
   pauseStartTime: 0,
   pauseEndTime: 0,
   totalPauseTime: 0,
-  contentJson: {},
+  contentJson: { blocks: [] },
 });
 
 export const topicsCtxDefaultValues: TopicsContextProps = {
@@ -54,8 +54,6 @@ export default function TopicsProvider({ children }: SaveSessionProvider) {
   );
 
   useEffect(() => {
-    console.log("TopicsProvider State changed:");
-    console.log(sessionTopics);
     if (sessionTopics.length === 0) {
       setSessionTopics(topicsCtxDefaultValues.sessionTopics);
     }

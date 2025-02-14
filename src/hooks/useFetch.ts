@@ -14,8 +14,6 @@ type CallAPIParams = {
 };
 
 export const useFetch = () => {
-  console.log("useFetch rendering");
-
   const { showToast } = useCustomToast();
 
   const [isLoading, setIsLoading] = useState(false);

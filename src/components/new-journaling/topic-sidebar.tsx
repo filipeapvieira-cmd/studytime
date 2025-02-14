@@ -37,7 +37,8 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
 
   const [selectedTopicId, setSelectedTopicId] = React.useState<
     string | number | null
-  >(null);
+  >(() => (sessionTopics.length > 0 ? sessionTopics[0].id : null));
+
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
 
   const addNewTopic = () => {

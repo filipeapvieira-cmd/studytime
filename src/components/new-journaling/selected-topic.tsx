@@ -81,7 +81,11 @@ export default function SelectedTopic({
           </Button>
         </div>
       </div>
-      <CustomEditor value={topicContent} onBlur={handleContentChange} />
+      <CustomEditor
+        value={topicContent}
+        onBlur={handleContentChange}
+        key={selectedTopicId}
+      />
     </div>
   );
 }

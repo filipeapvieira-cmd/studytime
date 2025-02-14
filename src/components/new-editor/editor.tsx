@@ -33,12 +33,21 @@ export const CustomEditor = ({ value, onBlur }: CustomEditorProps) => {
         editorRef.current = new EditorJS({
           holder: "editorjs",
           onReady: () => {
-            console.log("Editor.js is ready");
             setEditorReady(true);
-            // Render initial content once editor is ready
             const content = prepareContent(value);
+
             editorRef.current
               .render(content)
+              .then(() => {
+                // Focus the editor to have the blinking cursor
+                if (typeof editorRef.current.focus === "function") {
+                  editorRef.current.focus();
+                } else {
+                  // Fallback: Focus the editor container (if focus() isn't available)
+                  const holder = document.getElementById("editorjs");
+                  holder?.focus();
+                }
+              })
               .catch((error: any) =>
                 console.error("Error rendering content:", error)
               );
@@ -75,7 +84,10 @@ export const CustomEditor = ({ value, onBlur }: CustomEditorProps) => {
     initializeEditor();
 
     return () => {
-      if (editorRef.current) {
+      if (
+        editorRef.current &&
+        typeof editorRef.current.destroy === "function"
+      ) {
         editorRef.current.destroy();
         editorRef.current = null;
       }
