@@ -27,7 +27,7 @@ import {
 export type Icon = LucideIcon;
 export const Icons = {
   Logo: GraduationCap,
-  login: LogIn,
+  Login: LogIn,
   play: Play,
   pause: PauseCircle,
   chrono: TimerReset,
@@ -38,7 +38,7 @@ export const Icons = {
   CloseCross: X,
   copy: Clipboard,
   loading: Loader2,
-  user: User,
+  User: User,
   sun: Sun,
   moon: Moon,
   filter: Filter,
