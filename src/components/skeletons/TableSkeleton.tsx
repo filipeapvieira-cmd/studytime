@@ -15,7 +15,7 @@ const ColumnSkeleton = () => {
 
 const TableSkeleton = () => {
   return (
-    <div className="container mt-10 pt-2">
+    <div className="max-w-6xl md:min-w-[1000px] w-4/5 mx-auto mt-10 pt-2 px-4">
       <div className="flex items-center justify-between space-x-4 ">
         {Array.from({ length: 8 }).map((_, i) => (
           <ColumnSkeleton key={i} />

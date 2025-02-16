@@ -19,7 +19,6 @@ import TopicComponent from "./topic";
 import SelectedTopic from "./selected-topic";
 import { SessionToolbar } from "./session-toolbar";
 import { cn, getFeelingsDisplayName } from "@/src/lib/utils";
-import { EditModal } from "../new-update-session/edit-topics-hashtags-modal";
 import { FEELING_OPTIONS } from "@/src/constants/config";
 
 type TopicSidebarProps = {
@@ -37,7 +36,7 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
 
   const [selectedTopicId, setSelectedTopicId] = React.useState<
     string | number | null
-  >(() => (sessionTopics.length > 0 ? sessionTopics[0].id : null));
+  >(sessionTopics.length > 0 ? sessionTopics[0].id : null);
 
   const addNewTopic = () => {
     const newTopic = createNewTopic();
