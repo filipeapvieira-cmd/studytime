@@ -39,8 +39,6 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
     string | number | null
   >(() => (sessionTopics.length > 0 ? sessionTopics[0].id : null));
 
-  const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
-
   const addNewTopic = () => {
     const newTopic = createNewTopic();
     setSessionTopics((prevValue: Topic[]) => [...prevValue, newTopic]);
@@ -58,14 +56,6 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
 
   const handleFeelingChange = (newFeeling: string) => {
     setSessionFeelings(newFeeling);
-  };
-
-  const handleOpenEditModal = () => {
-    setIsEditModalOpen(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
   };
 
   const selectedTopic =
@@ -134,10 +124,7 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
 
           <div className="flex-1 flex flex-col overflow-hidden p-3">
             {selectedTopic ? (
-              <SelectedTopic
-                selectedTopicId={selectedTopicId}
-                onEditModalBtnClick={handleOpenEditModal}
-              />
+              <SelectedTopic selectedTopicId={selectedTopicId} />
             ) : (
               <div className="flex items-center justify-center h-full text-zinc-500">
                 Select a topic or create a new one
@@ -146,7 +133,6 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
           </div>
         </div>
       </div>
-      <EditModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} />
     </div>
   );
 }
