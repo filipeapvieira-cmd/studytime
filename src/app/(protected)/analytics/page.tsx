@@ -30,7 +30,7 @@ const AnalyticsPage = () => {
   if (isLoading) return <BarChartSkeleton />;
 
   return (
-    <div className="container mx-auto">
+    <div className="max-w-6xl md:min-w-[1000px] w-4/5 mx-auto">
       <ChartDashboard
         studySessions={userStudySessions || []}
         communityData={communityData || {}}

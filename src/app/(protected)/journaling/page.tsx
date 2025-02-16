@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 function JournalingPage() {
   return (
-    <div className="px-4 flex-1 overflow-hidden max-w-7xl md:min-w-[1000px] w-4/5 mx-auto">
+    <div className="px-4 flex-1 overflow-hidden max-w-6xl md:min-w-[1000px] w-4/5 mx-auto">
       <TopicSidebar />
     </div>
   );
