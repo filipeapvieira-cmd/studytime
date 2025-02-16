@@ -12,6 +12,7 @@ import {
 import { Button } from "./ui/button";
 import { Icons } from "@/src/components/icons";
 import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 
 const UserNav = () => {
   const { data: session } = useSession();
@@ -35,7 +36,9 @@ const UserNav = () => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile Settings</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/settings">Profile Settings</Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>
           <Icons.Login className="mr-2 h-4 w-4" />

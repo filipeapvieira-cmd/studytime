@@ -144,3 +144,9 @@ export type EditorData = {
   blocks: Array<{ type: string; data: any }>;
   version: string;
 };
+
+export type ImageUploadFormState = {
+  cloudName: string;
+  apiKey: string;
+  apiSecret: string;
+};
