@@ -1,17 +1,65 @@
 "use client";
 
 import imageUploadSettings from "@/src/actions/image-upload";
-import { useState, useActionState } from "react";
+import { ImageUploadSettingsActionState } from "@/src/types";
+import { FormEvent, useEffect, useState, useTransition } from "react";
+import { useCustomToast } from "@/src/hooks/useCustomToast";
+import { useImgUploadConfig } from "@/src/hooks/new/useImageUploadConfig";
 
 export default function CloudinaryConfigForm() {
-  const [cloudName, setCloudName] = useState("my-cloud");
-  const [apiKey, setApiKey] = useState("1234567890");
-  const [apiSecret, setApiSecret] = useState("a1b2c3d4e5f6g7h8i9j0");
+  const { showToast } = useCustomToast();
+  const { userConfig, isLoading, error } = useImgUploadConfig();
+  const [cloudName, setCloudName] = useState("");
+  const [apiKey, setApiKey] = useState("");
+  const [apiSecret, setApiSecret] = useState("");
 
-  const [state, formAction, pending] = useActionState(imageUploadSettings, {});
+  const [isPending, startTransition] = useTransition();
+  const [formState, setFormState] = useState<ImageUploadSettingsActionState>(
+    {}
+  );
+
+  useEffect(() => {
+    if (userConfig) {
+      setCloudName(userConfig.cloudName);
+      setApiKey(userConfig.apiKey);
+    }
+  }, [userConfig]);
+
+  const handleResponse = (response: ImageUploadSettingsActionState) => {
+    if (response.errors) {
+      setFormState(response);
+    }
+    if (response.generalError) {
+      showToast({ status: "error", message: response.generalError });
+    }
+    if (response.success) {
+      showToast({ status: "success", message: response.success });
+    }
+  };
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormState({});
+
+    startTransition(async () => {
+      const formData = new FormData();
+      formData.append("cloudName", cloudName);
+      formData.append("apiKey", apiKey);
+      formData.append("apiSecret", apiSecret);
+
+      try {
+        const response = await imageUploadSettings(formData);
+        handleResponse(response);
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        showToast({ status: "error", message: errorMessage });
+      }
+    });
+  };
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form onSubmit={onSubmit} className="space-y-4">
       <div>
         <label htmlFor="cloudName">Cloud Name</label>
         <input
@@ -22,8 +70,10 @@ export default function CloudinaryConfigForm() {
           required
           className="border rounded p-2 w-full"
         />
-        {state.errors?.cloudName && (
-          <p className="text-sm text-red-500">{state.errors.cloudName[0]}</p>
+        {formState.errors?.cloudName && (
+          <p className="text-sm text-red-500">
+            {formState.errors.cloudName[0]}
+          </p>
         )}
       </div>
       <div>
@@ -36,8 +86,8 @@ export default function CloudinaryConfigForm() {
           required
           className="border rounded p-2 w-full"
         />
-        {state.errors?.apiKey && (
-          <p className="text-sm text-red-500">{state.errors.apiKey[0]}</p>
+        {formState.errors?.apiKey && (
+          <p className="text-sm text-red-500">{formState.errors.apiKey[0]}</p>
         )}
       </div>
       <div>
@@ -50,16 +100,18 @@ export default function CloudinaryConfigForm() {
           required
           className="border rounded p-2 w-full"
         />
-        {state.errors?.apiSecret && (
-          <p className="text-sm text-red-500">{state.errors.apiSecret[0]}</p>
+        {formState.errors?.apiSecret && (
+          <p className="text-sm text-red-500">
+            {formState.errors.apiSecret[0]}
+          </p>
         )}
       </div>
       <button
         type="submit"
-        disabled={pending}
+        disabled={isPending}
         className="bg-blue-500 text-white px-4 py-2 rounded"
       >
-        {pending ? "Saving..." : "Save Configuration"}
+        {isPending ? "Saving..." : "Save Configuration"}
       </button>
     </form>
   );

@@ -2,22 +2,13 @@
 
 import { currentUser } from "@/src/lib/authentication";
 import { CloudinaryConfigSchema } from "../schemas/imageUploadForm.schema";
-
-type ImageUploadSettingsActionState = {
-  success?: string;
-  errors?: {
-    cloudName?: string[];
-    apiKey?: string[];
-    apiSecret?: string[];
-  };
-  generalError?: string;
-};
+import { ImageUploadSettingsActionState } from "../types";
+import bcrypt from "bcryptjs";
+import { createUserImageConfiguration } from "../data/image-upload";
 
 export default async function imageUploadSettings(
-  _prevState: ImageUploadSettingsActionState,
   formData: FormData
 ): Promise<ImageUploadSettingsActionState> {
-  console.log("formData", formData);
   const user = await currentUser();
   const userId = user?.id;
 
@@ -39,18 +30,14 @@ export default async function imageUploadSettings(
   }
 
   const { cloudName, apiKey, apiSecret } = validatedFields.data;
+  const hashedApiSecret = await bcrypt.hash(apiSecret, 10);
 
   try {
-    /*     const cloudinaryConfig = await db.cloudinaryConfig.upsert({
-      where: { userId: +userId },
-      update: { cloudName, apiKey, apiSecret },
-      create: {
-        cloudName,
-        apiKey,
-        apiSecret,
-        user: { connect: { id: +userId } },
-      },
-    }); */
+    await createUserImageConfiguration(userId, {
+      cloudName,
+      apiKey,
+      apiSecret: hashedApiSecret,
+    });
     return { success: "Image upload settings saved!" };
   } catch (error) {
     return {

@@ -150,3 +150,13 @@ export type ImageUploadFormState = {
   apiKey: string;
   apiSecret: string;
 };
+
+export type ImageUploadSettingsActionState = {
+  success?: string;
+  errors?: {
+    cloudName?: string[];
+    apiKey?: string[];
+    apiSecret?: string[];
+  };
+  generalError?: string;
+};
