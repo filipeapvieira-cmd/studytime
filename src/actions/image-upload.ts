@@ -5,6 +5,7 @@ import { CloudinaryConfigSchema } from "../schemas/imageUploadForm.schema";
 import { ImageUploadSettingsActionState } from "../types";
 import bcrypt from "bcryptjs";
 import { createUserImageConfiguration } from "../data/image-upload";
+import { handleEncryption } from "../lib/crypto";
 
 export default async function imageUploadSettings(
   formData: FormData
@@ -30,14 +31,18 @@ export default async function imageUploadSettings(
   }
 
   const { cloudName, apiKey, apiSecret } = validatedFields.data;
-  const hashedApiSecret = await bcrypt.hash(apiSecret, 10);
+  const { encryptedData, initVector } = await handleEncryption(apiSecret);
 
   try {
-    await createUserImageConfiguration(userId, {
-      cloudName,
-      apiKey,
-      apiSecret: hashedApiSecret,
-    });
+    await createUserImageConfiguration(
+      userId,
+      {
+        cloudName,
+        apiKey,
+        apiSecret: encryptedData,
+      },
+      initVector
+    );
     return { success: "Image upload settings saved!" };
   } catch (error) {
     return {

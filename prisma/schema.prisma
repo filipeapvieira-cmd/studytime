@@ -141,6 +141,7 @@ model CloudinaryConfig {
   cloudName String
   apiKey    String
   apiSecret String
+  iv        String // Base64 encoded initialization vector for the encryption
   userId    Int      @unique
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())

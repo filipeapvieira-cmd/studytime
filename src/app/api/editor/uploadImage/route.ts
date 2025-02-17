@@ -1,17 +1,57 @@
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
+import { currentUser } from "@/src/lib/authentication";
+import { getUserImageConfigurationById } from "@/src/data/image-upload";
+import { CloudinaryConfigSchema } from "@/src/schemas/imageUploadForm.schema";
+import { handleDecryption } from "@/src/lib/crypto";
 
 // Force the Node.js runtime (required for packages like Cloudinary)
 export const runtime = "nodejs";
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
-  api_key: process.env.CLOUDINARY_API_KEY!,
-  api_secret: process.env.CLOUDINARY_API_SECRET!,
-});
-
 export async function POST(req: Request) {
+  const user = await currentUser();
+  const userId = user?.id;
+
+  if (!userId) {
+    return NextResponse.json(
+      {
+        status: "error",
+        message: "Unauthorized access. Please log in.",
+        data: null,
+      },
+      { status: 401 }
+    );
+  }
+
   try {
+    // Get user current configuration
+    const userConfiguration = await getUserImageConfigurationById(userId);
+
+    const validatedFields = CloudinaryConfigSchema.safeParse(userConfiguration);
+
+    if (!validatedFields.success || !userConfiguration.initVector) {
+      return NextResponse.json(
+        {
+          status: "error",
+          message: "Kindly update your image upload settings in your Profile.",
+          data: null,
+        },
+        { status: 401 }
+      );
+    }
+
+    const { cloudName, apiKey, apiSecret } = validatedFields.data;
+    const decryptedData = await handleDecryption({
+      encryptedData: apiSecret,
+      initVector: userConfiguration.initVector,
+    });
+
+    cloudinary.config({
+      cloud_name: cloudName,
+      api_key: apiKey,
+      api_secret: decryptedData,
+    });
+
     // Parse the incoming form data. Editor.js sends the file under the "image" field by default.
     const formData = await req.formData();
     const fileField = formData.get("image");
@@ -27,7 +67,7 @@ export async function POST(req: Request) {
     const streamUpload = (buffer: Buffer): Promise<any> => {
       return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
-          { folder: "Study Time Images" }, // Optional: specify a folder in your Cloudinary account
+          { folder: "Study_Time_Images" }, // Optional: specify a folder in your Cloudinary account
           (error, result) => {
             if (result) resolve(result);
             else reject(error);
