@@ -23,7 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Badge } from "../ui/badge";
+import { Badge } from "../../ui/badge";
 import { useHashtags } from "@/src/hooks/new/useHashtags";
 
 interface HashtagInputProps {
