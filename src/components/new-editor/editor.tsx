@@ -6,6 +6,7 @@ import EditorjsList from "@editorjs/list";
 import { BlockToolConstructable } from "@editorjs/editorjs";
 import { JSONValue } from "@/src/types";
 import { prepareContent } from "@/src/lib/utils";
+import { useCustomToast } from "@/src/hooks/useCustomToast";
 
 type CustomEditorProps = {
   value: string | JSONValue;
@@ -13,6 +14,7 @@ type CustomEditorProps = {
 };
 
 export const CustomEditor = ({ value, onBlur }: CustomEditorProps) => {
+  const { showToast } = useCustomToast();
   const editorRef = useRef<any>(null);
   const [isMounted, setIsMounted] = useState(false);
   const [editorReady, setEditorReady] = useState(false);
@@ -71,9 +73,27 @@ export const CustomEditor = ({ value, onBlur }: CustomEditorProps) => {
             image: {
               class: ImageTool,
               config: {
-                endpoints: {
-                  byFile: "/api/editor/uploadImage",
+                uploader: {
+                  async uploadByFile(file: File) {
+                    try {
+                      return await customUpload(file);
+                    } catch (error) {
+                      console.error("Error uploading image:", error);
+                      showToast({
+                        status: "error",
+                        message:
+                          (error as any)?.message ?? "Failed to upload image",
+                      });
+                      return {
+                        success: 0,
+                        message: "Failed to upload image",
+                      };
+                    }
+                  },
                 },
+                /*           endpoints: {
+                  byFile: "/api/editor/uploadImage",
+                }, */
               },
             },
           },
@@ -122,3 +142,34 @@ export const CustomEditor = ({ value, onBlur }: CustomEditorProps) => {
     </div>
   );
 };
+
+async function customUpload(file: File) {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const response = await fetch("/api/editor/uploadImage", {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Have you configured the Image Upload settings in your profile?`
+    );
+  }
+
+  const result = await response.json();
+
+  const imgUrl = result.file.url;
+
+  if (!imgUrl) {
+    throw new Error("Image URL missing from response");
+  }
+
+  return {
+    success: 1,
+    file: {
+      url: imgUrl,
+    },
+  };
+}

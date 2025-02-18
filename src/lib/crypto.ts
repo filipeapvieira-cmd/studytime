@@ -1,4 +1,8 @@
 const encryptData = async (plainData: string, encryptionKey: string) => {
+  if (!encryptionKey) {
+    throw new Error("ENCRYPTION_KEY environment variable is required");
+  }
+
   // Generate a random 96-bit initialization vector (IV)
   const initVector = crypto.getRandomValues(new Uint8Array(12));
 

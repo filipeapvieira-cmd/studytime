@@ -148,7 +148,7 @@ h4.ce-header {
 }
 
 .cdx-notify.cdx-notify--error.cdx-notify--bounce-in {
-  @apply text-black;
+  @apply hidden;
 }
 
 /* Scrollbar Styles */
