@@ -1,22 +1,12 @@
 "use client";
 
-import { ColumnDef, FilterFn, FilterMeta, Row } from "@tanstack/react-table";
-import { Badge } from "@/src/components/ui/badge";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ColumnDef, FilterFn } from "@tanstack/react-table";
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu";
-import { Checkbox } from "@/src/components/ui/checkbox";
 import SessionTopic from "@/src/components/SessionTopic";
 import { RankAndValue } from "@/src/types/tanstack-table";
 import Highlight from "@/src/components/Highlight";
-import { StudySessionDto } from "@/src/types/index";
+import { EditorData, StudySessionDto } from "@/src/types/index";
 import { getFeelingsDisplayName } from "@/src/lib/utils";
 
 /*
@@ -66,26 +56,42 @@ export const globalFilterFn: FilterFn<any> = (
   value,
   addMeta
 ) => {
-  /*   // Ignore filtering if the column is not visible
-  const columnIsVisible = columnVisibility[columnId];
-  if (columnIsVisible === false) {
-    return false;
-  } */
+  // Helper function to extract text from contentJson
+  const extractTextFromContentJson = (contentJson: EditorData): string => {
+    if (
+      !contentJson ||
+      !contentJson.blocks ||
+      !Array.isArray(contentJson.blocks)
+    )
+      return "";
+    return contentJson.blocks
+      .map((block: any) => block.data?.text || "")
+      .join(" ");
+  };
 
   let itemRank;
 
   if (columnId === "topics") {
     // The 'topics' column is an array of objects.
-    // Search both 'title', 'hashtags' and 'description' fields.
-    const rawTopics: [
-      { title: string; hashtags: string; description: string }
-    ] = row.getValue(columnId);
-    itemRank = rankItem(
-      `${rawTopics.map((topic) => topic.title).join(" ")} ${rawTopics
-        .map((topic) => topic.hashtags)
-        .join(" ")} ${rawTopics.map((topic) => topic.description).join(" ")}`,
-      value
-    );
+    // For each topic, search the title, hashtags, description, and text extracted from contentJson.
+    const rawTopics: {
+      title: string;
+      hashtags: string;
+      description: string;
+      contentJson: any;
+    }[] = row.getValue(columnId);
+
+    const combinedText = rawTopics
+      .map((topic) => {
+        const title = topic.title || "";
+        const hashtags = topic.hashtags || "";
+        const description = topic.description || "";
+        const content = extractTextFromContentJson(topic.contentJson);
+        return `${title} ${hashtags} ${description} ${content}`;
+      })
+      .join(" ");
+
+    itemRank = rankItem(combinedText, value);
   } else {
     itemRank = rankItem(row.getValue(columnId), value);
   }
@@ -136,7 +142,7 @@ export const columns: ColumnDef<StudySessionDto>[] = [
       const searchInput =
         (row.columnFiltersMeta.feeling as RankAndValue)?.value || "";
       return (
-        <div className="">
+        <div className="text-center">
           <Highlight searchInput={searchInput} text={formattedText} />
         </div>
       );
