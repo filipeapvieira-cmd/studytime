@@ -1,6 +1,13 @@
-import { StudySessionDto } from "@/src/types";
+import { EditorData, JSONValue, StudySessionDto } from "@/src/types";
 import { Table } from "@tanstack/table-core";
 import { convertMillisecondsToTimeString } from "../session-log/update-utils";
+import EditorJsHtml from "editorjs-html";
+import TurndownService from "turndown";
+
+// Initialize the Editor.js to HTML parser
+const edjsParser = EditorJsHtml();
+// Initialize the Turndown service to convert HTML to Markdown
+const turndownService = new TurndownService();
 
 const convertSessionsToMarkdown = (sessionsToExport: StudySessionDto[]) => {
   let markdownString = "";
@@ -137,7 +144,114 @@ export const exportFile = <TData>(table: Table<TData>) => {
   const sessionsToExport: StudySessionDto[] = filteredRows.map(
     (row: any) => row.original
   );
-  const markdown = convertSessionsToMarkdown(sessionsToExport);
-  downloadMarkdownFile(markdown);
+  console.log(sessionsToExport);
+  console.log(filterSessionsWithValidJson(sessionsToExport));
+
+  const validContentJson: EditorData[] =
+    extractValidContentJson(sessionsToExport);
+
+  // Download the Editor.js content as an HTML file.
+  downloadMultipleEditorJsContentAsHtml(validContentJson);
+  /* const markdown = convertSessionsToMarkdown(sessionsToExport);
+  downloadMarkdownFile(markdown); */
   //console.log(markdown);
 };
+
+/**
+ * Validates a StudySessionDto.
+ * Returns `false` if any topic does not have a valid `contentJson`.
+ * Otherwise, returns `true`.
+ */
+export function validateStudySession(session: StudySessionDto): boolean {
+  return session.topics.every(
+    (topic) => topic.contentJson !== undefined && topic.contentJson !== null
+  );
+}
+
+/**
+ * Filters an array of StudySessionDto objects,
+ * returning only those sessions where every topic has a valid `contentJson`.
+ */
+export function filterSessionsWithValidJson(
+  sessions: StudySessionDto[]
+): StudySessionDto[] {
+  return sessions.filter(validateStudySession);
+}
+
+/**
+ * Converts Editor.js output to an HTML string.
+ */
+export function convertEditorJsToHtml(editorJsOutput: EditorData): string {
+  // Parse the Editor.js output into an array of HTML strings
+  const parsedOutput = edjsParser.parse(editorJsOutput) as string | string[];
+  // Join the HTML segments with newline characters to form a complete HTML string
+  if (Array.isArray(parsedOutput)) {
+    return parsedOutput.join("\n");
+  }
+  return parsedOutput;
+}
+
+/**
+ * Converts Editor.js output to a Markdown string.
+ */
+export function convertEditorJsToMarkdown(editorJsOutput: EditorData): string {
+  // First, convert the Editor.js output to HTML
+  const htmlOutput: string = convertEditorJsToHtml(editorJsOutput);
+  // Then, convert the HTML output to Markdown using TurndownService
+  return turndownService.turndown(htmlOutput);
+}
+
+/**
+ * Creates a downloadable HTML file from the provided HTML content.
+ */
+export function downloadHtmlFile(
+  content: string,
+  filename = "content.html"
+): void {
+  // Create a Blob from the HTML content
+  const blob = new Blob([content], { type: "text/html" });
+  // Create a URL for the Blob
+  const url = window.URL.createObjectURL(blob);
+  // Create a temporary anchor element to trigger the download
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  // Clean up
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+
+/**
+ * Converts Editor.js output to HTML and downloads it as an HTML file.
+ */
+export function downloadEditorJsContentAsHtml(
+  editorJsOutput: EditorData,
+  filename = "content.html"
+): void {
+  const htmlContent = convertEditorJsToHtml(editorJsOutput);
+  downloadHtmlFile(htmlContent, filename);
+}
+
+/**
+ * Converts an array of Editor.js outputs to a single HTML string with separators
+ * between each session, and downloads it as an HTML file.
+ */
+export function downloadMultipleEditorJsContentAsHtml(
+  editorJsOutputs: EditorData[],
+  filename = "combined-content.html"
+): void {
+  // Define a separator to distinguish between sessions
+  const separator = "\n<hr/>\n";
+
+  // Convert each EditorData object to HTML and join them with the separator
+  const combinedHtml = editorJsOutputs
+    .map((editorData) => convertEditorJsToHtml(editorData))
+    .join(separator);
+
+  // Download the combined HTML content as a file
+  downloadHtmlFile(combinedHtml, filename);
+}
+
+// We need to receive an StudySessionDto object to create the HTML string.
