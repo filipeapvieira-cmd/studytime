@@ -3,6 +3,7 @@ import { Table } from "@tanstack/table-core";
 import { convertMillisecondsToTimeString } from "../session-log/update-utils";
 import EditorJsHtml from "editorjs-html";
 import TurndownService from "turndown";
+import { OutputData } from "@editorjs/editorjs";
 
 // Initialize the Editor.js to HTML parser
 const edjsParser = EditorJsHtml();
@@ -144,14 +145,14 @@ export const exportFile = <TData>(table: Table<TData>) => {
   const sessionsToExport: StudySessionDto[] = filteredRows.map(
     (row: any) => row.original
   );
-  console.log(sessionsToExport);
-  console.log(filterSessionsWithValidJson(sessionsToExport));
 
-  const validContentJson: EditorData[] =
-    extractValidContentJson(sessionsToExport);
+  /* console.log(sessionsToExport);
+  console.log(filterSessionsWithValidJson(sessionsToExport)); */
+
+  const htmlString = exportStudySessionsToHtml(sessionsToExport);
 
   // Download the Editor.js content as an HTML file.
-  downloadMultipleEditorJsContentAsHtml(validContentJson);
+  downloadMultipleEditorJsContentAsHtml(htmlString);
   /* const markdown = convertSessionsToMarkdown(sessionsToExport);
   downloadMarkdownFile(markdown); */
   //console.log(markdown);
@@ -239,19 +240,107 @@ export function downloadEditorJsContentAsHtml(
  * between each session, and downloads it as an HTML file.
  */
 export function downloadMultipleEditorJsContentAsHtml(
-  editorJsOutputs: EditorData[],
+  combinedHtml: string,
   filename = "combined-content.html"
 ): void {
-  // Define a separator to distinguish between sessions
-  const separator = "\n<hr/>\n";
-
-  // Convert each EditorData object to HTML and join them with the separator
-  const combinedHtml = editorJsOutputs
-    .map((editorData) => convertEditorJsToHtml(editorData))
-    .join(separator);
-
   // Download the combined HTML content as a file
   downloadHtmlFile(combinedHtml, filename);
 }
 
-// We need to receive an StudySessionDto object to create the HTML string.
+/**
+ * Converts an array of Editor.js outputs to a single HTML string with separators
+ * between each session, and downloads it as an HTML file.
+ */
+export function exportStudySessionsToHtml(sessions: StudySessionDto[]): string {
+  // Start the base HTML document with the provided template's styling.
+  // A style block is added to ensure images do not overflow the container.
+  let htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+    <title>Study Sessions</title>
+    <style>
+      /* Ensure images do not overflow their container */
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    </style>
+</head>
+<body style="font-family: system-ui, -apple-system, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; background-color: #f8f9fa;">
+`;
+
+  // Process each study session.
+  sessions.forEach((session) => {
+    htmlContent += `
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="color: #1a1a1a; font-size: 2.5rem; margin-bottom: 0.5rem;">Study Sessions</h1>
+        <h2 style="color: #4a5568; font-size: 1.5rem; font-weight: normal; margin-top: 0;">Session on ${session.date}</h2>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 2rem;">
+        <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; width: 150px;">
+            <h3 style="color: #4a5568; font-size: 0.875rem; margin: 0 0 0.25rem 0;">Start Time</h3>
+            <p style="color: #1a1a1a; font-size: 1rem; margin: 0; font-weight: 500;">${session.startTime}</p>
+        </div>
+
+        <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; width: 150px;">
+            <h3 style="color: #4a5568; font-size: 0.875rem; margin: 0 0 0.25rem 0;">End Time</h3>
+            <p style="color: #1a1a1a; font-size: 1rem; margin: 0; font-weight: 500;">${session.endTime}</p>
+        </div>
+
+        <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; width: 150px;">
+            <h3 style="color: #4a5568; font-size: 0.875rem; margin: 0 0 0.25rem 0;">Pause Duration</h3>
+            <p style="color: #1a1a1a; font-size: 1rem; margin: 0; font-weight: 500;">${session.pauseDuration}</p>
+        </div>
+
+        <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; width: 150px;">
+            <h3 style="color: #4a5568; font-size: 0.875rem; margin: 0 0 0.25rem 0;">Effective Time</h3>
+            <p style="color: #1a1a1a; font-size: 1rem; margin: 0; font-weight: 500;">${session.effectiveTime}</p>
+        </div>
+    </div>
+`;
+
+    // Process each topic within the session.
+    if (session.topics && session.topics.length > 0) {
+      session.topics.forEach((topic) => {
+        let topicHtml = "";
+
+        try {
+          // Convert the Editor.js JSON to HTML.
+          const parsedBlocks = edjsParser.parse(
+            topic.contentJson as unknown as OutputData
+          );
+          topicHtml = Array.isArray(parsedBlocks)
+            ? parsedBlocks.join("")
+            : parsedBlocks;
+        } catch (error) {
+          console.error(
+            `Error parsing content for topic "${topic.title}":`,
+            error
+          );
+          topicHtml = `<p>Error rendering content.</p>`;
+        }
+
+        htmlContent += `
+    <div style="margin: 2rem auto; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 800px;">
+        <h3 style="color: #1a1a1a; font-size: 1.5rem; margin-bottom: 1rem;">${topic.title}</h3>
+        ${topicHtml}
+    </div>
+`;
+      });
+    }
+
+    // Add a horizontal rule to visually separate sessions.
+    htmlContent += `
+    <hr style="margin-top: 2rem; border: none; border-top: 2px solid #ccc;">
+`;
+  });
+
+  // Close the HTML document.
+  htmlContent += `
+</body>
+</html>
+`;
+
+  return htmlContent;
+}
