@@ -10,10 +10,10 @@ import { useCustomToast } from "@/src/hooks/useCustomToast";
 
 type CustomEditorProps = {
   value: string | JSONValue;
-  onBlur: (contentJson: JSONValue) => void;
+  onSave: (contentJson: JSONValue) => void;
 };
 
-export const CustomEditor = ({ value, onBlur }: CustomEditorProps) => {
+export const CustomEditor = ({ value, onSave }: CustomEditorProps) => {
   const { showToast } = useCustomToast();
   const editorRef = useRef<any>(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -53,6 +53,9 @@ export const CustomEditor = ({ value, onBlur }: CustomEditorProps) => {
               .catch((error: any) =>
                 console.error("Error rendering content:", error)
               );
+          },
+          onChange: async () => {
+            await handleSave();
           },
           tools: {
             header: {
@@ -122,7 +125,7 @@ export const CustomEditor = ({ value, onBlur }: CustomEditorProps) => {
     if (editorRef.current) {
       try {
         const savedData = await editorRef.current.save();
-        onBlur(savedData);
+        onSave(savedData);
       } catch (error) {
         console.error("Error saving editor content:", error);
       }

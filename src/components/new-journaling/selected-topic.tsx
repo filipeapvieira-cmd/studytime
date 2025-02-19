@@ -68,7 +68,7 @@ export default function SelectedTopic({ selectedTopicId }: SelectedTopicProps) {
       </div>
       <CustomEditor
         value={topicContent}
-        onBlur={handleContentChange}
+        onSave={handleContentChange}
         key={selectedTopicId}
       />
     </div>
