@@ -15,6 +15,7 @@ const DashboardPage = () => {
   );
 
   if (isLoading) return <TableSkeleton />;
+  /*   console.log(data); */
 
   return (
     <div className="max-w-6xl md:min-w-[1000px] w-4/5 mx-auto py-10 px-4">

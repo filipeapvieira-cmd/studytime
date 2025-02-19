@@ -17,6 +17,7 @@ import SessionTopic from "@/src/components/SessionTopic";
 import { RankAndValue } from "@/src/types/tanstack-table";
 import Highlight from "@/src/components/Highlight";
 import { StudySessionDto } from "@/src/types/index";
+import { getFeelingsDisplayName } from "@/src/lib/utils";
 
 /*
 Columns are where you define the core of what your table will look like. 
@@ -95,29 +96,6 @@ export const globalFilterFn: FilterFn<any> = (
 
 export const columns: ColumnDef<StudySessionDto>[] = [
   {
-    id: "select",
-    header: ({ table }) => {
-      return (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      );
-    },
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
     accessorKey: "topics",
     header: "Content",
     cell: ({ row }) => {
@@ -141,22 +119,25 @@ export const columns: ColumnDef<StudySessionDto>[] = [
     accessorKey: "feelings",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Feelings
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex justify-center">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Feelings
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => {
       const text: string = row.getValue("feelings");
+      const formattedText = text && getFeelingsDisplayName(text);
       const searchInput =
         (row.columnFiltersMeta.feeling as RankAndValue)?.value || "";
       return (
-        <div className="w-96 flex-grow-0">
-          <Highlight searchInput={searchInput} text={text} />
+        <div className="">
+          <Highlight searchInput={searchInput} text={formattedText} />
         </div>
       );
     },
@@ -165,13 +146,15 @@ export const columns: ColumnDef<StudySessionDto>[] = [
     accessorKey: "date",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex justify-center">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Date
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => {
@@ -179,7 +162,7 @@ export const columns: ColumnDef<StudySessionDto>[] = [
       const searchInput =
         (row.columnFiltersMeta.date as RankAndValue)?.value || "";
       return (
-        <div className="max-w-md">
+        <div className="text-center">
           <Highlight searchInput={searchInput} text={text} />
         </div>
       );
@@ -190,13 +173,15 @@ export const columns: ColumnDef<StudySessionDto>[] = [
     accessorKey: "effectiveTime",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Session Duration
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex justify-center">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Session Duration
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => {
@@ -204,45 +189,9 @@ export const columns: ColumnDef<StudySessionDto>[] = [
       const searchInput =
         (row.columnFiltersMeta.effectiveTime as RankAndValue)?.value || "";
       return (
-        <div className="max-w-md text-center">
+        <div className="text-center">
           <Highlight searchInput={searchInput} text={text} />
         </div>
-      );
-    },
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      /*
-      Access the row data using row.original in the cell function. 
-      Use this to handle actions for your row eg. use the id to make a DELETE call to your API.
-
-      The row.original expression directly accesses the data of the row as it was 
-      provided to the table. 
-      It doesn't apply any data processing transformations that you might have defined 
-      in your column definitions.
-      */
-      const session = row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(String(session.id))}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       );
     },
   },
