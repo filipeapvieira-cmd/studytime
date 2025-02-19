@@ -7,7 +7,6 @@ import { Settings, User, Shield, Bell } from "lucide-react";
 const navItems = [
   { href: "/settings/profile", icon: User, label: "Profile" },
   { href: "/settings/security", icon: Shield, label: "Security" },
-  { href: "/settings/notifications", icon: Bell, label: "Notifications" },
   {
     href: "/settings/image-upload",
     icon: Settings,
@@ -19,7 +18,7 @@ export function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <div className="w-64 border-r border-zinc-800 bg-black p-6">
+    <div className="w-64 border-r border-zinc-800 p-6">
       <nav className="space-y-4">
         {navItems.map((item) => {
           const isActive = pathname === item.href;

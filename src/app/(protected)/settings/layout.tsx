@@ -7,7 +7,7 @@ export default function SettingsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="dark flex min-h-screen bg-black">
+    <div className="px-4 flex flex-1 max-w-6xl md:min-w-[1000px] w-4/5 mx-auto">
       <SidebarNav />
       <div className="flex-1 p-6 lg:p-8">
         <div className="mx-auto max-w-2xl">{children}</div>
