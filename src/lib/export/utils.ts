@@ -1,77 +1,32 @@
-import { EditorData, JSONValue, StudySessionDto } from "@/src/types";
+import { StudySessionDto } from "@/src/types";
 import { Table } from "@tanstack/table-core";
-import { convertMillisecondsToTimeString } from "../session-log/update-utils";
 import EditorJsHtml from "editorjs-html";
-import TurndownService from "turndown";
 import { OutputData } from "@editorjs/editorjs";
 
 // Initialize the Editor.js to HTML parser
-const edjsParser = EditorJsHtml();
-// Initialize the Turndown service to convert HTML to Markdown
-const turndownService = new TurndownService();
+const edjsParser = EditorJsHtml({
+  list: (block) => {
+    const { style, items } = block.data;
 
-const convertSessionsToMarkdown = (sessionsToExport: StudySessionDto[]) => {
-  let markdownString = "";
+    // Handle checklist style
+    if (style === "checklist") {
+      const htmlItems = items
+        .map((item: any) => {
+          const checkedAttr = item.meta.checked ? " checked" : "";
+          return `<div><input type="checkbox"${checkedAttr} disabled> ${item.content}</div>`;
+        })
+        .join("");
+      return htmlItems;
+    }
 
-  const orderedAscByDate = [...sessionsToExport].sort(
-    (a, b) =>
-      convertStringDateToDate(a.date).getTime() -
-      convertStringDateToDate(b.date).getTime()
-  );
-
-  markdownString += getIntroduction(orderedAscByDate);
-  orderedAscByDate.forEach(
-    (session, index) => (markdownString += sessionToMarkdown(session, index))
-  );
-  return markdownString;
-};
-
-const sessionToMarkdown = (studySession: StudySessionDto, index: number) => {
-  let markdownString = "";
-
-  markdownString += `\n# Session Number: ${index + 1}\n\n`;
-
-  // Create a table for date, effectiveTime, and endTime
-  markdownString +=
-    "| Date | Start Time | End Time | Pause Duration | Effective Time |\n";
-  markdownString += "|-------|------|----------------|----------|----------|\n";
-  markdownString += `| ${studySession.date} (${getDayOfTheWeek(
-    studySession.date
-  )}) | ${studySession.startTime} | ${studySession.endTime} |${
-    studySession.pauseDuration
-  }|${studySession.effectiveTime}  |\n`;
-
-  markdownString += "\n"; // New line after table
-
-  // Add topics
-  markdownString += "## Topics\n\n";
-  studySession.topics.forEach((topic, index) => {
-    markdownString += `### ${index + 1}. ${topic.title}\n`;
-    markdownString += `- **Description:** \n`;
-    markdownString += `${addSpacesToDashes(topic.description || "")}\n`;
-    markdownString += `- **Time Spent:** ${convertMillisecondsToTimeString(
-      topic.effectiveTimeOfStudy
-    )} \n`;
-    markdownString += `- **Hashtags:** ${topic.hashtags}\n`;
-    markdownString += "\n"; // New line between topics
-  });
-
-  // Add feelings
-  markdownString += addFeelings(studySession);
-
-  return markdownString;
-};
-
-const addFeelings = (studySession: StudySessionDto) => {
-  if (studySession.feelings && studySession.feelings !== "") {
-    return `## Feelings\n${studySession.feelings}\n\n`;
-  }
-  return "";
-};
-
-const addSpacesToDashes = (inputString: string) => {
-  return inputString.replace(/(^|[\s\n])-/g, "$1    -");
-};
+    // Handle standard ordered/unordered lists
+    const tag = style === "ordered" ? "ol" : "ul";
+    const htmlItems = items
+      .map((item: any) => `<li>${item.content}</li>`)
+      .join("");
+    return `<${tag}>${htmlItems}</${tag}>`;
+  },
+});
 
 const getDayOfTheWeek = (date: string) => {
   const days = [
@@ -114,93 +69,32 @@ const getIntroduction = (studySessions: StudySessionDto[]) => {
     getEarliestAndLatestDates(studySessions);
   const message = `This document, generated on ${getDayOfTheWeek(
     today
-  )}, ${today}, contains the logs spanning from **${getDayOfTheWeek(
+  )}, ${today}, contains the logs spanning from <b>${getDayOfTheWeek(
     earliestDateString
-  )}, ${earliestDateString}**, to **${getDayOfTheWeek(
+  )}, ${earliestDateString}</b>, to <b>${getDayOfTheWeek(
     latestDateString
-  )}, ${latestDateString}**.\n`;
+  )}, ${latestDateString}</b>.`;
   return message;
 };
 
-const downloadMarkdownFile = (markdown: string) => {
-  const blob = new Blob([markdown], { type: "text/markdown" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-
-  const now = new Date();
-  const fileName = `session-export-${now.toISOString().slice(0, 10)}.md`;
-  a.download = fileName;
-
-  document.body.appendChild(a);
-  a.click();
-
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-};
-
-export const exportFile = <TData>(table: Table<TData>) => {
+function getSortedSessions(table: any): StudySessionDto[] {
   const filteredRows = table.getFilteredRowModel().rows;
   const sessionsToExport: StudySessionDto[] = filteredRows.map(
     (row: any) => row.original
   );
 
-  /* console.log(sessionsToExport);
-  console.log(filterSessionsWithValidJson(sessionsToExport)); */
+  sessionsToExport.sort((a, b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
 
-  const htmlString = exportStudySessionsToHtml(sessionsToExport);
+  return sessionsToExport;
+}
 
-  // Download the Editor.js content as an HTML file.
-  downloadMultipleEditorJsContentAsHtml(htmlString);
-  /* const markdown = convertSessionsToMarkdown(sessionsToExport);
-  downloadMarkdownFile(markdown); */
-  //console.log(markdown);
+export const exportFile = <TData>(table: Table<TData>) => {
+  const filteredRows = getSortedSessions(table);
+  const htmlString = exportStudySessionsToHtml(filteredRows);
+  downloadHtmlFile(htmlString, "study-sessions.html");
 };
-
-/**
- * Validates a StudySessionDto.
- * Returns `false` if any topic does not have a valid `contentJson`.
- * Otherwise, returns `true`.
- */
-export function validateStudySession(session: StudySessionDto): boolean {
-  return session.topics.every(
-    (topic) => topic.contentJson !== undefined && topic.contentJson !== null
-  );
-}
-
-/**
- * Filters an array of StudySessionDto objects,
- * returning only those sessions where every topic has a valid `contentJson`.
- */
-export function filterSessionsWithValidJson(
-  sessions: StudySessionDto[]
-): StudySessionDto[] {
-  return sessions.filter(validateStudySession);
-}
-
-/**
- * Converts Editor.js output to an HTML string.
- */
-export function convertEditorJsToHtml(editorJsOutput: EditorData): string {
-  // Parse the Editor.js output into an array of HTML strings
-  const parsedOutput = edjsParser.parse(editorJsOutput) as string | string[];
-  // Join the HTML segments with newline characters to form a complete HTML string
-  if (Array.isArray(parsedOutput)) {
-    return parsedOutput.join("\n");
-  }
-  return parsedOutput;
-}
-
-/**
- * Converts Editor.js output to a Markdown string.
- */
-export function convertEditorJsToMarkdown(editorJsOutput: EditorData): string {
-  // First, convert the Editor.js output to HTML
-  const htmlOutput: string = convertEditorJsToHtml(editorJsOutput);
-  // Then, convert the HTML output to Markdown using TurndownService
-  return turndownService.turndown(htmlOutput);
-}
 
 /**
  * Creates a downloadable HTML file from the provided HTML content.
@@ -209,51 +103,21 @@ export function downloadHtmlFile(
   content: string,
   filename = "content.html"
 ): void {
-  // Create a Blob from the HTML content
   const blob = new Blob([content], { type: "text/html" });
-  // Create a URL for the Blob
   const url = window.URL.createObjectURL(blob);
-  // Create a temporary anchor element to trigger the download
   const link = document.createElement("a");
   link.href = url;
   link.download = filename;
   document.body.appendChild(link);
   link.click();
-  // Clean up
   document.body.removeChild(link);
   window.URL.revokeObjectURL(url);
 }
 
 /**
- * Converts Editor.js output to HTML and downloads it as an HTML file.
- */
-export function downloadEditorJsContentAsHtml(
-  editorJsOutput: EditorData,
-  filename = "content.html"
-): void {
-  const htmlContent = convertEditorJsToHtml(editorJsOutput);
-  downloadHtmlFile(htmlContent, filename);
-}
-
-/**
- * Converts an array of Editor.js outputs to a single HTML string with separators
- * between each session, and downloads it as an HTML file.
- */
-export function downloadMultipleEditorJsContentAsHtml(
-  combinedHtml: string,
-  filename = "combined-content.html"
-): void {
-  // Download the combined HTML content as a file
-  downloadHtmlFile(combinedHtml, filename);
-}
-
-/**
- * Converts an array of Editor.js outputs to a single HTML string with separators
- * between each session, and downloads it as an HTML file.
+ * Converts an array of Editor.js outputs to a single HTML string
  */
 export function exportStudySessionsToHtml(sessions: StudySessionDto[]): string {
-  // Start the base HTML document with the provided template's styling.
-  // A style block is added to ensure images do not overflow the container.
   let htmlContent = `<!DOCTYPE html>
 <html>
 <head>
@@ -267,13 +131,42 @@ export function exportStudySessionsToHtml(sessions: StudySessionDto[]): string {
     </style>
 </head>
 <body style="font-family: system-ui, -apple-system, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; background-color: #f8f9fa;">
+<div style="
+    text-align: center; 
+    margin-bottom: 3rem; 
+    font-family: 'Georgia', serif; 
+    background-color: #f8f9fa; 
+    padding: 1rem; 
+    border-left: 4px solid #343a40; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+">
+    <h1 style="
+        color: #343a40; 
+        font-size: 2.8rem; 
+        margin-bottom: 0.5rem; 
+        font-weight: normal; 
+        letter-spacing: -1px;
+    ">
+        Study Sessions
+    </h1>
+    
+    <div style="
+        width: 50px; 
+        height: 1px; 
+        background-color: #343a40; 
+        margin: 1.5rem auto;
+    "></div>  
+    
+      <p style="color: #495057; font-size: 1rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+${getIntroduction(sessions)}
+</p>
+</div>
 `;
 
   // Process each study session.
   sessions.forEach((session) => {
-    htmlContent += `
+    htmlContent += `    
     <div style="text-align: center; margin-bottom: 2rem;">
-        <h1 style="color: #1a1a1a; font-size: 2.5rem; margin-bottom: 0.5rem;">Study Sessions</h1>
         <h2 style="color: #4a5568; font-size: 1.5rem; font-weight: normal; margin-top: 0;">Session on ${session.date}</h2>
     </div>
 
@@ -336,7 +229,6 @@ export function exportStudySessionsToHtml(sessions: StudySessionDto[]): string {
 `;
   });
 
-  // Close the HTML document.
   htmlContent += `
 </body>
 </html>
