@@ -144,7 +144,7 @@ export const CustomEditor = ({ value, onSave }: CustomEditorProps) => {
       <div
         id="editorjs"
         className={cn(
-          `w-full flex-1 overflow-y-auto px-14 py-4 rounded-xl border border-zinc-800/50 
+          `w-full flex flex-1 overflow-y-auto px-14 py-4 rounded-xl border border-zinc-800/50 
           bg-zinc-900/50 text-white placeholder-zinc-500
           resize-none focus:outline-none focus:ring-2 focus:ring-zinc-700
           shadow-[0_0_15px_rgba(0,0,0,0.1)] selection:bg-lime-400 selection:text-black`,
