@@ -7,6 +7,7 @@ import { BlockToolConstructable } from "@editorjs/editorjs";
 import { JSONValue } from "@/src/types";
 import { prepareContent } from "@/src/lib/utils";
 import { useCustomToast } from "@/src/hooks/useCustomToast";
+import { BeatLoader } from "react-spinners";
 
 type CustomEditorProps = {
   value: string | JSONValue;
@@ -134,12 +135,19 @@ export const CustomEditor = ({ value, onSave }: CustomEditorProps) => {
 
   return (
     <div className="flex flex-1">
+      {!editorReady && (
+        <div className="flex-1 justify-center pt-20 flex ">
+          <BeatLoader color="#ffffff" />
+        </div>
+      )}
+
       <div
         id="editorjs"
         className="w-full flex-1 overflow-y-auto px-14 py-4 rounded-xl border border-zinc-800/50 
                   bg-zinc-900/50 text-white placeholder-zinc-500
                   resize-none focus:outline-none focus:ring-2 focus:ring-zinc-700
                   shadow-[0_0_15px_rgba(0,0,0,0.1)] selection:bg-lime-400 selection:text-black"
+        style={{ display: editorReady ? "block" : "none" }}
         onBlur={handleSave}
       />
     </div>

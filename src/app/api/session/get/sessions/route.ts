@@ -26,6 +26,9 @@ export async function GET() {
       },
       include: {
         StudySession: {
+          orderBy: {
+            startTime: "desc",
+          },
           include: {
             topic: true,
             feeling: true,
@@ -88,9 +91,6 @@ const mapTopics = (topic: any) => ({
 
 const mapStudySession = (studySessions: any): StudySessionDto[] => {
   const { StudySession: sessions } = studySessions ?? {};
-
-  //console.log(sessions);
-  //sessions.forEach((sessions) => console.log(sessions.topic));
 
   const StudySessionDto = sessions?.map((session: any) => {
     const effectiveTime =

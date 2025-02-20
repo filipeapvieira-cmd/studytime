@@ -42,7 +42,10 @@ export default function TopicHashtagSelection({
   };
 
   const handleOnAddingNewTag = () => {
-    if (customValue.trim() === "") return;
+    const isTagAlreadyExist = hashtagsList.includes(customValue.trim());
+    const isTagEmpty = customValue.trim() === "";
+    if (isTagAlreadyExist || isTagEmpty) return;
+
     selectedValues = [...selectedValues, customValue.trim()];
     setHashtagsList((prev) => [...prev, customValue.trim()].sort());
     onChange(selectedValues.join(" "));

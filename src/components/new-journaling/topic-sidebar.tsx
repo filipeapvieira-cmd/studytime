@@ -104,6 +104,7 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
                 Feelings:
               </Label>
               <Select
+                key={sessionFeelings || "empty"}
                 value={sessionFeelings || undefined}
                 onValueChange={handleFeelingChange}
               >
