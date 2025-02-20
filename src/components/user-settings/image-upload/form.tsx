@@ -86,7 +86,6 @@ export default function CloudinaryConfigForm() {
               value={cloudName}
               onChange={(e) => setCloudName(e.target.value)}
               required
-              placeholder="your-cloud-name"
               className="border-zinc-800 bg-zinc-950"
             />
             {formState.errors?.cloudName && (
