@@ -116,7 +116,6 @@ export function CommunityMonthlyDistributionChart({
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <YAxis
-              dataKey="user"
               label={{
                 value: "Hours",
                 angle: -90,

@@ -57,7 +57,7 @@ export const WeeklyAndTopicDistribution = ({
         <CardTitle className="text-xl md:text-3xl bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text">
           Weekly & Topic Time Distribution
         </CardTitle>
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-col gap-y-2 lg:gap-y-0 lg:items-center lg:flex-row justify-between">
           <DateRangeSelector
             range={range}
             selectedPredefinedRange={selectedPredefinedRange}
@@ -75,7 +75,7 @@ export const WeeklyAndTopicDistribution = ({
       </CardHeader>
       <CardContent>
         {filteredStudySessions.length > 0 ? (
-          <div className="flex flex-col md:flex-row w-full">
+          <div className="flex flex-col lg:flex-row w-full">
             <WeeklyDistributionChart chartData={barChartData} />
             <TopicDistributionChart chartData={topicDistributionData} />
           </div>
