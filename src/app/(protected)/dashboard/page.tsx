@@ -17,7 +17,7 @@ const DashboardPage = () => {
   if (isLoading) return <TableSkeleton />;
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="max-w-6xl md:min-w-[1000px] w-4/5 mx-auto py-10 px-4">
       <DataTable columns={columns} data={data || []} />
     </div>
   );

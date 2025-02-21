@@ -13,7 +13,7 @@ export default async function Login() {
         <UserNav />
       ) : (
         <Btnlink>
-          <Icons.login />
+          <Icons.Login />
         </Btnlink>
       )}
     </nav>

@@ -1,4 +1,5 @@
 "use client";
+
 import { FC } from "react";
 import {
   DropdownMenu,
@@ -10,19 +11,17 @@ import {
 } from "@/src/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { Icons } from "@/src/components/icons";
-import { useSession } from "next-auth/react";
-import { signOut } from "next-auth/react";
-import { useTheme } from "next-themes";
-interface UserNavProps {}
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 
-const UserNav: FC<UserNavProps> = ({}) => {
-  const { data: session, status } = useSession();
+const UserNav = () => {
+  const { data: session } = useSession();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant={"default"} className="rounded-full h-9 w-9 p-1">
-          <Icons.user />
+          <Icons.User />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -37,12 +36,12 @@ const UserNav: FC<UserNavProps> = ({}) => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Team</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/settings/profile">Profile Settings</Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>
-          <Icons.login className="mr-2 h-4 w-4" />
+          <Icons.Login className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

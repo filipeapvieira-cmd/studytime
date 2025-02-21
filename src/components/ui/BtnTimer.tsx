@@ -1,14 +1,30 @@
 import { FC } from "react";
 import { Button } from "./button";
 import { Icons } from "@/src/components/icons";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./tooltip";
+import { SessionStatusEnum } from "@/src/constants/config";
+import { cn } from "@/src/lib/utils";
 
 interface BtnTimerProps {
   onClick: () => void;
-  status: string;
+  status: SessionStatusEnum;
   effectiveTimeOfStudy: number;
   disabled: boolean;
   size?: "default" | "sm" | "lg";
+  className?: string;
 }
+
+const tooltipContent: Record<SessionStatusEnum, string> = {
+  [SessionStatusEnum.Initial]: "Start your session",
+  [SessionStatusEnum.Play]: "Pause your session",
+  [SessionStatusEnum.Pause]: "Resume your session",
+  [SessionStatusEnum.Stop]: "Your session has been stopped",
+};
 
 const BtnTimer: FC<BtnTimerProps> = ({
   onClick,
@@ -16,19 +32,33 @@ const BtnTimer: FC<BtnTimerProps> = ({
   status,
   disabled,
   size,
+  className,
 }) => {
   return (
-    <Button
-      variant="default"
-      onClick={onClick}
-      disabled={disabled}
-      size={size || "default"}
-    >
-      {showIconForState(status)}
-      <p className="text-lg w-[82px]">
-        {new Date(effectiveTimeOfStudy).toISOString().slice(11, 19)}
-      </p>
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="default"
+            onClick={onClick}
+            disabled={disabled}
+            size={size || "default"}
+            className={cn(
+              "bg-zinc-600 text-zinc-300 hover:bg-zinc-700 hover:text-white flex-1 flex justify-between items-center",
+              className
+            )}
+          >
+            {showIconForState(status)}
+            <p className="text-lg w-[82px]">
+              {new Date(effectiveTimeOfStudy).toISOString().slice(11, 19)}
+            </p>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          <p>{tooltipContent[status]}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 

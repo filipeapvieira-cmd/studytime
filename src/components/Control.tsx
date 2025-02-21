@@ -1,10 +1,9 @@
 import { FC } from "react";
 import Timer from "./ui/Timer";
-import { Icons } from "@/src/components/icons";
 import Chrono from "./Chrono";
-import NewSession from "./NewSession";
-import StopSession from "./StopSession";
-import SaveSession from "./SaveSession";
+import { NewSessionBtn } from "./NewSession";
+import { StopSessionBtn } from "./StopSession";
+import { SaveSessionBtn } from "./SaveSession";
 
 interface CounterProps {}
 
@@ -19,9 +18,9 @@ const Counter: FC<CounterProps> = ({}) => {
         <Chrono />
       </div>
       <div className="flex space-x-2">
-        <NewSession />
-        <StopSession />
-        <SaveSession />
+        <NewSessionBtn />
+        <StopSessionBtn />
+        <SaveSessionBtn />
       </div>
     </div>
   );

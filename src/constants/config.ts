@@ -6,6 +6,8 @@ export const GET_UNIQUE_TOPICS_ENDPOINT = "/api/session/get/unique-topics";
 export const GET_UNIQUE_HASHTAGS_ENDPOINT = "/api/session/get/unique-hashtags";
 export const GET_COMMUNITY_SESSIONS_ENDPOINT =
   "/api/session/get/communityVsUser";
+export const GET_USER_IMG_UPLOAD_CONFIG_ENDPOINT = "/api/user/img-config";
+
 export const HTTP_METHOD = {
   POST: "POST",
   PUT: "PUT",
@@ -18,5 +20,13 @@ export enum SessionStatusEnum {
   Pause = "pause",
   Stop = "stop",
 }
+
+export const FEELING_OPTIONS = [
+  "VERY_GOOD",
+  "GOOD",
+  "NEUTRAL",
+  "BAD",
+  "VERY_BAD",
+];
 
 export const DOMAIN = process.env.DOMAIN;

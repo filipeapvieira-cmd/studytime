@@ -27,6 +27,7 @@ model User {
   StudySession          StudySession[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+  CloudinaryConfig      CloudinaryConfig?
 
   @@map(name: "users")
 }
@@ -110,12 +111,13 @@ model StudySession {
 model Topic {
   id          Int      @id @default(autoincrement())
   sessionId   Int
-  description String
+  description String?
   title       String
   hashtags    String?
   timeOfStudy Int
   createdAt   DateTime @default(now()) @map(name: "created_at")
   updatedAt   DateTime @default(now()) @map(name: "updated_at")
+  contentJson Json?
 
   studySession StudySession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
@@ -132,4 +134,18 @@ model Feeling {
   studySession StudySession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@map(name: "feelings")
+}
+
+model CloudinaryConfig {
+  id        Int      @id @default(autoincrement())
+  cloudName String
+  apiKey    String
+  apiSecret String
+  iv        String // Base64 encoded initialization vector for the encryption
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map(name: "cloudinary_configs")
 }

@@ -1,69 +1,32 @@
 import { StudySessionDto } from "@/src/types";
 import { Table } from "@tanstack/table-core";
-import { convertMillisecondsToTimeString } from "../session-log/update-utils";
+import EditorJsHtml from "editorjs-html";
+import { OutputData } from "@editorjs/editorjs";
 
-const convertSessionsToMarkdown = (sessionsToExport: StudySessionDto[]) => {
-  let markdownString = "";
+// Initialize the Editor.js to HTML parser
+const edjsParser = EditorJsHtml({
+  list: (block) => {
+    const { style, items } = block.data;
 
-  const orderedAscByDate = [...sessionsToExport].sort(
-    (a, b) =>
-      convertStringDateToDate(a.date).getTime() -
-      convertStringDateToDate(b.date).getTime()
-  );
+    // Handle checklist style
+    if (style === "checklist") {
+      const htmlItems = items
+        .map((item: any) => {
+          const checkedAttr = item.meta.checked ? " checked" : "";
+          return `<div><input type="checkbox"${checkedAttr} disabled> ${item.content}</div>`;
+        })
+        .join("");
+      return htmlItems;
+    }
 
-  markdownString += getIntroduction(orderedAscByDate);
-  orderedAscByDate.forEach(
-    (session, index) => (markdownString += sessionToMarkdown(session, index))
-  );
-  return markdownString;
-};
-
-const sessionToMarkdown = (studySession: StudySessionDto, index: number) => {
-  let markdownString = "";
-
-  markdownString += `\n# Session Number: ${index + 1}\n\n`;
-
-  // Create a table for date, effectiveTime, and endTime
-  markdownString +=
-    "| Date | Start Time | End Time | Pause Duration | Effective Time |\n";
-  markdownString += "|-------|------|----------------|----------|----------|\n";
-  markdownString += `| ${studySession.date} (${getDayOfTheWeek(
-    studySession.date
-  )}) | ${studySession.startTime} | ${studySession.endTime} |${
-    studySession.pauseDuration
-  }|${studySession.effectiveTime}  |\n`;
-
-  markdownString += "\n"; // New line after table
-
-  // Add topics
-  markdownString += "## Topics\n\n";
-  studySession.topics.forEach((topic, index) => {
-    markdownString += `### ${index + 1}. ${topic.title}\n`;
-    markdownString += `- **Description:** \n`;
-    markdownString += `${addSpacesToDashes(topic.description)}\n`;
-    markdownString += `- **Time Spent:** ${convertMillisecondsToTimeString(
-      topic.effectiveTimeOfStudy
-    )} \n`;
-    markdownString += `- **Hashtags:** ${topic.hashtags}\n`;
-    markdownString += "\n"; // New line between topics
-  });
-
-  // Add feelings
-  markdownString += addFeelings(studySession);
-
-  return markdownString;
-};
-
-const addFeelings = (studySession: StudySessionDto) => {
-  if (studySession.feelings && studySession.feelings !== "") {
-    return `## Feelings\n${studySession.feelings}\n\n`;
-  }
-  return "";
-};
-
-const addSpacesToDashes = (inputString: string) => {
-  return inputString.replace(/(^|[\s\n])-/g, "$1    -");
-};
+    // Handle standard ordered/unordered lists
+    const tag = style === "ordered" ? "ol" : "ul";
+    const htmlItems = items
+      .map((item: any) => `<li>${item.content}</li>`)
+      .join("");
+    return `<${tag}>${htmlItems}</${tag}>`;
+  },
+});
 
 const getDayOfTheWeek = (date: string) => {
   const days = [
@@ -106,38 +69,170 @@ const getIntroduction = (studySessions: StudySessionDto[]) => {
     getEarliestAndLatestDates(studySessions);
   const message = `This document, generated on ${getDayOfTheWeek(
     today
-  )}, ${today}, contains the logs spanning from **${getDayOfTheWeek(
+  )}, ${today}, contains the logs spanning from <b>${getDayOfTheWeek(
     earliestDateString
-  )}, ${earliestDateString}**, to **${getDayOfTheWeek(
+  )}, ${earliestDateString}</b>, to <b>${getDayOfTheWeek(
     latestDateString
-  )}, ${latestDateString}**.\n`;
+  )}, ${latestDateString}</b>.`;
   return message;
 };
 
-const downloadMarkdownFile = (markdown: string) => {
-  const blob = new Blob([markdown], { type: "text/markdown" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-
-  const now = new Date();
-  const fileName = `session-export-${now.toISOString().slice(0, 10)}.md`;
-  a.download = fileName;
-
-  document.body.appendChild(a);
-  a.click();
-
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-};
-
-export const exportFile = <TData>(table: Table<TData>) => {
+function getSortedSessions(table: any): StudySessionDto[] {
   const filteredRows = table.getFilteredRowModel().rows;
   const sessionsToExport: StudySessionDto[] = filteredRows.map(
     (row: any) => row.original
   );
-  const markdown = convertSessionsToMarkdown(sessionsToExport);
-  downloadMarkdownFile(markdown);
-  //console.log(markdown);
+
+  sessionsToExport.sort((a, b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
+
+  return sessionsToExport;
+}
+
+export const exportFile = <TData>(table: Table<TData>) => {
+  const filteredRows = getSortedSessions(table);
+  const htmlString = exportStudySessionsToHtml(filteredRows);
+  downloadHtmlFile(htmlString, "study-sessions.html");
 };
+
+/**
+ * Creates a downloadable HTML file from the provided HTML content.
+ */
+export function downloadHtmlFile(
+  content: string,
+  filename = "content.html"
+): void {
+  const blob = new Blob([content], { type: "text/html" });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+
+/**
+ * Converts an array of Editor.js outputs to a single HTML string
+ */
+export function exportStudySessionsToHtml(sessions: StudySessionDto[]): string {
+  let htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+    <title>Study Sessions</title>
+    <style>
+      /* Ensure images do not overflow their container */
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    </style>
+</head>
+<body style="font-family: system-ui, -apple-system, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; background-color: #f8f9fa;">
+<div style="
+    text-align: center; 
+    margin-bottom: 3rem; 
+    font-family: 'Georgia', serif; 
+    background-color: #f8f9fa; 
+    padding: 1rem; 
+    border-left: 4px solid #343a40; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+">
+    <h1 style="
+        color: #343a40; 
+        font-size: 2.8rem; 
+        margin-bottom: 0.5rem; 
+        font-weight: normal; 
+        letter-spacing: -1px;
+    ">
+        Study Sessions
+    </h1>
+    
+    <div style="
+        width: 50px; 
+        height: 1px; 
+        background-color: #343a40; 
+        margin: 1.5rem auto;
+    "></div>  
+    
+      <p style="color: #495057; font-size: 1rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+${getIntroduction(sessions)}
+</p>
+</div>
+`;
+
+  // Process each study session.
+  sessions.forEach((session) => {
+    htmlContent += `    
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="color: #4a5568; font-size: 1.5rem; font-weight: normal; margin-top: 0;">Session on ${session.date}</h2>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 2rem;">
+        <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; width: 150px;">
+            <h3 style="color: #4a5568; font-size: 0.875rem; margin: 0 0 0.25rem 0;">Start Time</h3>
+            <p style="color: #1a1a1a; font-size: 1rem; margin: 0; font-weight: 500;">${session.startTime}</p>
+        </div>
+
+        <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; width: 150px;">
+            <h3 style="color: #4a5568; font-size: 0.875rem; margin: 0 0 0.25rem 0;">End Time</h3>
+            <p style="color: #1a1a1a; font-size: 1rem; margin: 0; font-weight: 500;">${session.endTime}</p>
+        </div>
+
+        <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; width: 150px;">
+            <h3 style="color: #4a5568; font-size: 0.875rem; margin: 0 0 0.25rem 0;">Pause Duration</h3>
+            <p style="color: #1a1a1a; font-size: 1rem; margin: 0; font-weight: 500;">${session.pauseDuration}</p>
+        </div>
+
+        <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; width: 150px;">
+            <h3 style="color: #4a5568; font-size: 0.875rem; margin: 0 0 0.25rem 0;">Effective Time</h3>
+            <p style="color: #1a1a1a; font-size: 1rem; margin: 0; font-weight: 500;">${session.effectiveTime}</p>
+        </div>
+    </div>
+`;
+
+    // Process each topic within the session.
+    if (session.topics && session.topics.length > 0) {
+      session.topics.forEach((topic) => {
+        let topicHtml = "";
+
+        try {
+          // Convert the Editor.js JSON to HTML.
+          const parsedBlocks = edjsParser.parse(
+            topic.contentJson as unknown as OutputData
+          );
+          topicHtml = Array.isArray(parsedBlocks)
+            ? parsedBlocks.join("")
+            : parsedBlocks;
+        } catch (error) {
+          console.error(
+            `Error parsing content for topic "${topic.title}":`,
+            error
+          );
+          topicHtml = `<p>Error rendering content.</p>`;
+        }
+
+        htmlContent += `
+    <div style="margin: 2rem auto; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 800px;">
+        <h3 style="color: #1a1a1a; font-size: 1.5rem; margin-bottom: 1rem;">${topic.title}</h3>
+        ${topicHtml}
+    </div>
+`;
+      });
+    }
+
+    // Add a horizontal rule to visually separate sessions.
+    htmlContent += `
+    <hr style="margin-top: 2rem; border: none; border-top: 2px solid #ccc;">
+`;
+  });
+
+  htmlContent += `
+</body>
+</html>
+`;
+
+  return htmlContent;
+}

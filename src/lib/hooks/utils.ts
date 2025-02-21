@@ -1,7 +1,14 @@
 import { Topic, TopicFormatted } from "@/src/types";
 
 const convertTopicFormattedToTopic = (topic: TopicFormatted): Topic => {
-  const { id, title, hashtags, description, effectiveTimeOfStudy } = topic;
+  const {
+    id,
+    title,
+    hashtags,
+    description,
+    effectiveTimeOfStudy,
+    contentJson,
+  } = topic;
 
   //TODO: handle error
   if (!id) {
@@ -14,6 +21,7 @@ const convertTopicFormattedToTopic = (topic: TopicFormatted): Topic => {
     hashtags,
     description,
     effectiveTimeOfStudy,
+    contentJson,
     status: "stop",
     startTime: 0,
     endTime: 0,

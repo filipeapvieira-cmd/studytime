@@ -5,7 +5,7 @@ interface EditorSkeletonProps {}
 
 const EditorSkeleton: FC<EditorSkeletonProps> = ({}) => {
   return (
-    <div className="container h-[500px] mt-10 pt-2">
+    <div className="max-w-6xl md:min-w-[1000px] w-4/5 mx-auto h-[500px] mt-10 pt-2">
       <Skeleton className="h-6 w-full bg-primary" />
       <div className="flex w-full mt-12">
         <div className="w-full space-y-5">

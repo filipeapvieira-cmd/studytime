@@ -26,6 +26,9 @@ export async function GET() {
       },
       include: {
         StudySession: {
+          orderBy: {
+            startTime: "desc",
+          },
           include: {
             topic: true,
             feeling: true,
@@ -80,6 +83,7 @@ const toDateOnlyISOString = (date: Date) => toDateISOString(date).slice(0, 10);
 const mapTopics = (topic: any) => ({
   id: topic.id,
   description: topic.description,
+  contentJson: topic.contentJson,
   title: topic.title,
   hashtags: topic.hashtags,
   effectiveTimeOfStudy: topic.timeOfStudy,
@@ -87,9 +91,6 @@ const mapTopics = (topic: any) => ({
 
 const mapStudySession = (studySessions: any): StudySessionDto[] => {
   const { StudySession: sessions } = studySessions ?? {};
-
-  //console.log(sessions);
-  //sessions.forEach((sessions) => console.log(sessions.topic));
 
   const StudySessionDto = sessions?.map((session: any) => {
     const effectiveTime =

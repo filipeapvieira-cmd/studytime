@@ -81,23 +81,25 @@ export type FullSessionLog = {
   startTime: Date;
   endTime: Date;
   pauseDuration: number;
-  feelingDescription: string;
+  feelingDescription?: string;
   topics: TopicFormatted[];
 };
 
 export type TopicFormatted = {
   id?: number | string;
   title: string;
-  hashtags: string;
-  description: string;
+  hashtags?: string;
+  description?: string;
   effectiveTimeOfStudy: number;
+  contentJson: JSONValue;
 };
 
 export type Topic = Timer & {
   id: string | number;
   title: string;
-  hashtags: string;
-  description: string;
+  hashtags?: string;
+  description?: string;
+  contentJson: JSONValue;
 };
 
 /* GET ALL SESSIONS */
@@ -117,4 +119,44 @@ export type StudySessionDto = {
 
 export type FullSessionLogUpdate = FullSessionLog & {
   id: number;
+};
+
+export type TopicItem = {
+  original: string;
+  current: string;
+};
+
+export type HashtagItem = {
+  original: string;
+  current: string;
+};
+
+type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: JSONValue }
+  | JSONValue[];
+
+export type EditorData = {
+  time: number;
+  blocks: Array<{ type: string; data: any }>;
+  version: string;
+};
+
+export type ImageUploadFormState = {
+  cloudName: string;
+  apiKey: string;
+  apiSecret: string;
+};
+
+export type ImageUploadSettingsActionState = {
+  success?: string;
+  errors?: {
+    cloudName?: string[];
+    apiKey?: string[];
+    apiSecret?: string[];
+  };
+  generalError?: string;
 };

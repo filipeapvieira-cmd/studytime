@@ -30,6 +30,7 @@ import { TopicSelection } from "./ui/topic-selection";
 import HashtagSelection from "./custom-editor/hashtag-selection";
 import ReactInputMask from "react-input-mask";
 import { useUpdateSessionContext } from "../ctx/update-session-provider";
+import { SessionStatusEnum } from "../constants/config";
 
 interface CustomEditorFormProps {
   isUpdate: boolean;
@@ -58,8 +59,8 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
 
   const {
     title,
-    hashtags,
-    description,
+    hashtags = "",
+    description = "",
     effectiveTimeOfStudy,
     status,
     startTime,
@@ -288,7 +289,7 @@ const CustomEditorForm: FC<CustomEditorFormProps> = ({
           <BtnTimer
             size="sm"
             disabled={status === "stop" || sessionStatus !== "play"}
-            status={topicTimer.status}
+            status={topicTimer.status as SessionStatusEnum}
             effectiveTimeOfStudy={topicTimer.effectiveTimeOfStudy}
             onClick={() => updateTimerStatus(topicTimer.status, setTopicTimer)}
           />
