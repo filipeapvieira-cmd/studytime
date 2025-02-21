@@ -116,8 +116,6 @@ body,
 
 /* Override the Editor.js toolbar actions styles */
 .ce-toolbar__actions.ce-toolbar__actions--opened {
-  position: absolute !important;
-  right: 100% !important;
 }
 
 /* Because the element has an inline style of color white, to change the color on hover you may need to force the override */
