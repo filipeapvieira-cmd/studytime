@@ -1,6 +1,5 @@
 import React from "react";
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
-import { HashtagInput } from "./to-delete/hashtag-input";
 import { CustomEditor } from "../new-editor/editor";
 import { JSONValue } from "@/src/types";
 import { getTopicContent } from "@/src/lib/utils";

@@ -59,7 +59,7 @@ export function TopicSubjectSelection({
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             <>
-              {value || "Subject"}
+              {value || "📚 Subject"}
               <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </>
           )}
