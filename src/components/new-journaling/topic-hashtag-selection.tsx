@@ -35,19 +35,21 @@ export default function TopicHashtagSelection({
   const { hashtagsList, isLoading, error, setHashtagsList } = useHashtags();
 
   let selectedValues = (value && value?.length > 0 && value?.split(" ")) || [];
-  const title = "#Hashtags";
+  const title = "#️⃣ Hashtags";
 
   const handleOnChange = (text: string) => {
     setCustomValue(text);
   };
 
   const handleOnAddingNewTag = () => {
-    const isTagAlreadyExist = hashtagsList.includes(customValue.trim());
-    const isTagEmpty = customValue.trim() === "";
-    if (isTagAlreadyExist || isTagEmpty) return;
+    const trimmedValues = customValue.trim().split(" ").filter(Boolean);
+    if (trimmedValues.length === 0) return;
 
-    selectedValues = [...selectedValues, customValue.trim()];
-    setHashtagsList((prev) => [...prev, customValue.trim()].sort());
+    const newTags = trimmedValues.filter((tag) => !hashtagsList.includes(tag));
+    if (newTags.length === 0) return;
+
+    selectedValues = [...selectedValues, ...newTags];
+    setHashtagsList((prev) => [...prev, ...newTags].sort());
     onChange(selectedValues.join(" "));
   };
 
@@ -103,7 +105,7 @@ export default function TopicHashtagSelection({
       >
         <Command className="bg-transparent">
           <CommandInput
-            placeholder={title}
+            placeholder="Hashtag"
             onValueChange={handleOnChange}
             onAddingNewTopic={handleOnAddingNewTag}
           />
