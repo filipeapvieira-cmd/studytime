@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Rocket, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+const VIDEO_URL = "https://www.youtube.com/watch?v=65Ic3AZkqKI";
+
 function CallToActionSection() {
   return (
     <div className="relative overflow-hidden rounded-3xl mt-7">
@@ -32,9 +34,12 @@ function CallToActionSection() {
             size="lg"
             variant="outline"
             className="border-purple-400 text-purple-400 hover:bg-purple-400/10 px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105"
+            asChild
           >
-            Watch Demo
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <Link href={VIDEO_URL} target="_blank">
+              Watch Demo
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
         </div>
       </div>
