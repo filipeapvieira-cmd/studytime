@@ -1,6 +1,6 @@
 ## 📚 StudyTime Logger
 
-An intuitive application designed for students to efficiently log, retrieve, and analyze their study sessions.
+An intuitive application designed for students to efficiently log, retrieve, and analyze their study sessions..
 
 ## 🎯 Objective
 
