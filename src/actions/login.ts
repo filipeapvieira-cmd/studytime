@@ -1,5 +1,7 @@
 "use server";
 
+import { getRateLimit } from "@/src/lib/rate-limit";
+import { headers } from "next/headers";
 import { LoginSchema } from "@/src/schemas/index";
 import { z } from "zod";
 import { signIn } from "@/src/auth";
@@ -24,6 +26,13 @@ export type FormState = {
 export async function login(
   data: z.infer<typeof LoginSchema>
 ): Promise<FormState> {
+  const ip = headers().get("x-forwarded-for") ?? "127.0.0.1";
+  const isAllowed = await getRateLimit(ip);
+
+  if (!isAllowed) {
+    return { error: "Too many attempts. Please try again later." };
+  }
+
   // Server-side validation
   const validatedFields = LoginSchema.safeParse(data);
 

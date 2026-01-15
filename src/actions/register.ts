@@ -1,5 +1,7 @@
 "use server";
 
+import { getRateLimit } from "@/src/lib/rate-limit";
+import { headers } from "next/headers";
 import { RegisterSchema } from "@/src/schemas/index";
 import { z } from "zod";
 import { signIn } from "@/src/auth";
@@ -19,6 +21,13 @@ export type FormState = {
 export async function register(
   data: z.infer<typeof RegisterSchema>
 ): Promise<FormState> {
+  const ip = headers().get("x-forwarded-for") ?? "127.0.0.1";
+  const isAllowed = await getRateLimit(ip);
+
+  if (!isAllowed) {
+    return { error: "Too many attempts. Please try again later." };
+  }
+
   const validatedFields = RegisterSchema.safeParse(data);
 
   if (!validatedFields.success) {
