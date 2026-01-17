@@ -8,6 +8,9 @@ test.describe('Authentication E2E Tests', () => {
         await expect(page).toHaveURL('/');
 
         // Check that essential content is present (hero section)
-        await expect(page.locator('main')).toBeVisible();
+        // await expect(page.locator('main')).toBeVisible();
+
+        // Intentionally failing this test to verify the CI pipeline
+        await expect(page.getByRole('heading', { name: 'Non-existent Heading for CI Failure' })).toBeVisible({ timeout: 5000 });
     });
 });
