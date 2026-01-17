@@ -1,0 +1,71 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: studytime_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      POSTGRES_PRISMA_URL: postgresql://postgres:postgres@localhost:5432/studytime_test
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      # Fallback AUTH_SECRET for testing if not set in secrets
+      AUTH_SECRET_FALLBACK: test-secret-for-e2e-testing-only
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Generate Prisma Client
+      run: npx prisma generate
+    
+    - name: Run database migrations
+      run: npx prisma db push
+      env:
+        POSTGRES_PRISMA_URL: postgresql://postgres:postgres@localhost:5432/studytime_test
+    
+    - name: Seed test database
+      run: npx ts-node prisma/seed.ts
+      env:
+        POSTGRES_PRISMA_URL: postgresql://postgres:postgres@localhost:5432/studytime_test
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps chromium
+    
+    - name: Run Playwright tests
+      run: npx playwright test
+      env:
+        AUTH_SECRET: ${{ secrets.AUTH_SECRET || 'test-secret-for-e2e-testing-only' }}
+    
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
