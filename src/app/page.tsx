@@ -4,7 +4,7 @@ import CallToActionSection from "@/components/landing-page/call-to-action-sectio
 
 export default async function HomePage() {
   return (
-    <main className="max-w-6xl md:min-w-[1000px] w-4/5 mx-auto px-4 py-16 md:py-24 flex flex-col justify-center flex-1">
+    <main className="max-w-4xl mx-auto px-6 py-4 md:py-6 flex flex-col justify-center flex-1 overflow-hidden">
       <HeroSection />
       <FeaturesSection />
       <CallToActionSection />
