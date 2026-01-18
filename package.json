@@ -12,7 +12,7 @@
     "lint": "next lint",
     "postinstall": "prisma generate",
     "db:studio": "prisma studio",
-    "lint:biome": "biome check src",
+    "lint:biome": "node scripts/check-biome-baseline.mjs",
     "format": "biome format src --write",
     "fix": "biome check --write src"
   },
