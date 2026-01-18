@@ -10,8 +10,6 @@ import { generateVerificationToken } from "@/lib/tokens";
 import { getRateLimit } from "@/src/lib/rate-limit";
 import { RegisterSchema } from "@/src/schemas/index";
 import { createUser, getUserByEmail } from "../data/user";
-import { db } from "../lib/db";
-import { DEFAULT_LOGIN_REDIRECT } from "../routes";
 
 export type FormState = {
   error?: string;

@@ -14,7 +14,7 @@
     "db:studio": "prisma studio",
     "lint:biome": "biome check src",
     "format": "biome format src --write",
-    "check": "biome check --write src"
+    "fix": "biome check --write src"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
