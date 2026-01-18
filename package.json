@@ -101,6 +101,7 @@
     "@types/turndown": "^5.0.5",
     "@types/uuid": "^9.0.8",
     "@types/validator": "^13.7.17",
+    "dotenv": "^17.2.3",
     "prisma": "^5.20.0"
   },
   "overrides": {
