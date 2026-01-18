@@ -11,7 +11,10 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "lint:biome": "biome check src",
+    "format": "biome format src --write",
+    "check": "biome check --write src"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -93,6 +96,7 @@
     "zod": "^3.22.5"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.3.11",
     "@playwright/test": "^1.57.0",
     "@tailwindcss/typography": "^0.5.16",
     "@types/bcrypt": "^5.0.0",
