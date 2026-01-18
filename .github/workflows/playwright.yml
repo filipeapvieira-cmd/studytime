@@ -28,8 +28,6 @@ jobs:
     env:
       POSTGRES_PRISMA_URL: postgresql://postgres:postgres@localhost:5432/studytime_test
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
-      # Fallback AUTH_SECRET for testing if not set in secrets
-      AUTH_SECRET_FALLBACK: test-secret-for-e2e-testing-only
 
     steps:
     - uses: actions/checkout@v4
@@ -61,7 +59,9 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test
       env:
-        AUTH_SECRET: ${{ secrets.AUTH_SECRET || 'test-secret-for-e2e-testing-only' }}
+        AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
     
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
