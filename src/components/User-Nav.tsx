@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { Icons } from "@/src/components/icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,9 +12,6 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { Icons } from "@/src/components/icons";
-import { signOut } from "next-auth/react";
-import Link from "next/link";
 
 type UserNavProps = {
   data: {

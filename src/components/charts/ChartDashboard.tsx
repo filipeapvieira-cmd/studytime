@@ -1,16 +1,16 @@
 "use client";
 
-import { useMemo } from "react";
-import { StudySessionDto } from "@/src/types";
-import { Tabs, TabsTrigger, TabsContent, TabsList } from "@/components/ui/tabs";
-import { MonthlyDistributionChart } from "./MonthlyDistributionChart";
-import { groupSessionsByAcademicYear } from "@/src/lib/charts/monthlyDistributionChart.utils";
-import { WeeklyAndTopicDistribution } from "./WeeklyAndTopicDistribution";
-import { CommunityMonthlyDistributionChart } from "./Community-Monthly";
-import { CommunityDataStructure } from "@/src/types/charts";
-import { isEmpty } from "@/src/lib/charts/utils";
-import UnexpectedEvent from "../Unexpected-Event";
 import { Clock, Users } from "lucide-react";
+import { useMemo } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { groupSessionsByAcademicYear } from "@/src/lib/charts/monthlyDistributionChart.utils";
+import { isEmpty } from "@/src/lib/charts/utils";
+import type { StudySessionDto } from "@/src/types";
+import type { CommunityDataStructure } from "@/src/types/charts";
+import UnexpectedEvent from "../Unexpected-Event";
+import { CommunityMonthlyDistributionChart } from "./Community-Monthly";
+import { MonthlyDistributionChart } from "./MonthlyDistributionChart";
+import { WeeklyAndTopicDistribution } from "./WeeklyAndTopicDistribution";
 
 interface ChartDashboardProps {
   studySessions: StudySessionDto[];

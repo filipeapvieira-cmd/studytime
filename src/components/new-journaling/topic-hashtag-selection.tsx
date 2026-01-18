@@ -1,9 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { CheckIcon, ChevronDown, Hash, Loader2 } from "lucide-react";
-
-import { cn } from "@/lib/utils";
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -19,8 +17,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Badge } from "../ui/badge";
+import { cn } from "@/lib/utils";
 import { useHashtags } from "@/src/hooks/new/useHashtags";
+import { Badge } from "../ui/badge";
 
 type TopicHashtagSelectionProps = {
   value?: string;
@@ -61,7 +60,7 @@ export default function TopicHashtagSelection({
           size="default"
           className={cn(
             "w-full bg-zinc-900/50 text-white border-zinc-800/50 hover:bg-zinc-800/50 hover:text-white rounded-xl p-3 h-auto              shadow-[0_0_15px_rgba(0,0,0,0.1)] overflow-hidden",
-            isLoading ? "justify-center" : "justify-between"
+            isLoading ? "justify-center" : "justify-between",
           )}
         >
           {isLoading ? (
@@ -120,7 +119,7 @@ export default function TopicHashtagSelection({
                     onSelect={() => {
                       if (isSelected) {
                         const updatedValues = selectedValues?.filter(
-                          (value) => value !== option
+                          (value) => value !== option,
                         );
                         onChange(updatedValues.join(" "));
                       } else {
@@ -134,7 +133,7 @@ export default function TopicHashtagSelection({
                         "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
                         isSelected
                           ? "bg-primary text-primary-foreground"
-                          : "opacity-50 [&_svg]:invisible"
+                          : "opacity-50 [&_svg]:invisible",
                       )}
                     >
                       <CheckIcon className={cn("h-4 w-4")} />

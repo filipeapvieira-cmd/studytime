@@ -1,9 +1,8 @@
 "use client";
 
-import * as React from "react";
 import { Check, ChevronDown, Loader2 } from "lucide-react";
-
-import { cn } from "@/src/lib/utils";
+import * as React from "react";
+import useSWR from "swr";
 import { Button } from "@/src/components/ui/button";
 import {
   Command,
@@ -20,7 +19,7 @@ import {
 } from "@/src/components/ui/popover";
 import { GET_UNIQUE_TOPICS_ENDPOINT } from "@/src/constants/config";
 import { fetcher } from "@/src/lib/swr/utils";
-import useSWR from "swr";
+import { cn } from "@/src/lib/utils";
 
 type TopicSelectionProps = {
   currentTopic: string;
@@ -63,7 +62,7 @@ export function TopicSelection({
           aria-expanded={open}
           className={cn(
             "w-[200px] rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-secondary",
-            isLoading ? "justify-center" : "justify-between"
+            isLoading ? "justify-center" : "justify-between",
           )}
         >
           {isLoading ? (
@@ -98,7 +97,7 @@ export function TopicSelection({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      currentTopic === topic ? "opacity-100" : "opacity-0"
+                      currentTopic === topic ? "opacity-100" : "opacity-0",
                     )}
                   />
                   {topic}

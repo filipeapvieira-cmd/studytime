@@ -1,6 +1,6 @@
-import { FC } from "react";
-import { Button } from "./button";
+import type { FC } from "react";
 import { Icons } from "../icons";
+import { Button } from "./button";
 
 interface BtnCloseProps {
   visible: any;

@@ -1,7 +1,7 @@
 "use server";
 
-import { HashtagItem, TopicItem } from "../types";
 import { db } from "@/lib/db";
+import type { HashtagItem, TopicItem } from "../types";
 
 interface RequestBody {
   topicUpdates: TopicItem[];

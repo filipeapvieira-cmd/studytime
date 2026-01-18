@@ -1,10 +1,11 @@
 "use client";
 
+import { type FormEvent, useEffect, useState, useTransition } from "react";
 import imageUploadSettings from "@/src/actions/image-upload";
-import { ImageUploadSettingsActionState } from "@/src/types";
-import { FormEvent, useEffect, useState, useTransition } from "react";
-import { useCustomToast } from "@/src/hooks/useCustomToast";
 import { useImgUploadConfig } from "@/src/hooks/new/useImageUploadConfig";
+import { useCustomToast } from "@/src/hooks/useCustomToast";
+import type { ImageUploadSettingsActionState } from "@/src/types";
+import { Button } from "../../ui/button";
 import {
   Card,
   CardContent,
@@ -12,9 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../ui/card";
-import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
-import { Button } from "../../ui/button";
+import { Label } from "../../ui/label";
 
 export default function CloudinaryConfigForm() {
   const { showToast } = useCustomToast();
@@ -25,7 +25,7 @@ export default function CloudinaryConfigForm() {
 
   const [isPending, startTransition] = useTransition();
   const [formState, setFormState] = useState<ImageUploadSettingsActionState>(
-    {}
+    {},
   );
 
   useEffect(() => {

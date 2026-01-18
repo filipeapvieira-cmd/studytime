@@ -1,7 +1,7 @@
-import { db } from "@/src/lib/db";
 import { NextResponse } from "next/server";
 import { getFirstErrorMessage, getSessionData } from "@/src/lib/api/utils";
 import { currentUser } from "@/src/lib/authentication";
+import { db } from "@/src/lib/db";
 import { FullSessionLogSchema } from "@/src/schemas/studySession.schema";
 import { FullSessionLog } from "@/src/types";
 
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
         message: "Unauthorized access. Please log in.",
         data: null,
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         message,
         data: null,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
         message: "Session saved successfully",
         data: null,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     let message = "Something went wrong. Unable to save session...";
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
         message,
         data: null,
       },
-      { status: 400 }
+      { status: 400 },
     );
   } finally {
     await db.$disconnect();

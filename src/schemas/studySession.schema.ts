@@ -29,12 +29,12 @@ export const FullSessionLogSchema = z.object({
   startTime: z.preprocess(
     (arg) =>
       typeof arg === "string" || arg instanceof Date ? new Date(arg) : arg,
-    z.date()
+    z.date(),
   ),
   endTime: z.preprocess(
     (arg) =>
       typeof arg === "string" || arg instanceof Date ? new Date(arg) : arg,
-    z.date()
+    z.date(),
   ),
   pauseDuration: z.number(),
   feelingDescription: z.string().optional(),

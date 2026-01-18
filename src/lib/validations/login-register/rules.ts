@@ -1,10 +1,10 @@
-import { ValidationRules } from "@/src/types";
 import {
   validateEmail,
   validatePassword,
   validatePasswordEquality,
   validateUsername,
 } from "@/src/lib/validations/login-register/validators";
+import type { ValidationRules } from "@/src/types";
 
 const loginFormRules: ValidationRules = {
   email: validateEmail,

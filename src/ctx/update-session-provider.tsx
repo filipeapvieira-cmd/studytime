@@ -2,13 +2,13 @@
 
 import {
   createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
   useContext,
   useState,
 } from "react";
-import { StudySessionDto, Topic } from "../types";
+import type { StudySessionDto, Topic } from "../types";
 import { createNewTopic } from "./session-topics-provider";
 
 type UpdateSessionError = {
@@ -45,7 +45,7 @@ const StudySessionContext = createContext<StudySessionContextType | null>(null);
 
 export function UpdateSessionProvider({ children }: { children: ReactNode }) {
   const [sessionToEdit, setSessionToEdit] = useState<StudySessionDto | null>(
-    null
+    null,
   );
   const [sessionTopicsUpdate, setSessionTopicsUpdate] = useState<Topic[]>([]);
   const [sessionFeelingsUpdate, setSessionFeelingsUpdate] =
@@ -82,7 +82,7 @@ export function useUpdateSessionContext() {
   const context = useContext(StudySessionContext);
   if (!context) {
     throw new Error(
-      "useStudySessionContext must be used within a UpdateSessionProvider."
+      "useStudySessionContext must be used within a UpdateSessionProvider.",
     );
   }
   return context;

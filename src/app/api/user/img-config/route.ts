@@ -1,6 +1,6 @@
+import { NextResponse } from "next/server";
 import { currentUser } from "@/src/lib/authentication";
 import { db } from "@/src/lib/db";
-import { NextResponse } from "next/server";
 
 export async function GET() {
   const user = await currentUser();
@@ -13,7 +13,7 @@ export async function GET() {
         message: "Unauthorized access. Please log in.",
         data: null,
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 

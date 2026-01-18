@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import Timer from "../ui/Timer";
 import { NewSessionBtn } from "../NewSession";
-import { StopSessionBtn } from "../StopSession";
 import { SaveSessionBtn } from "../SaveSession";
+import { StopSessionBtn } from "../StopSession";
+import Timer from "../ui/Timer";
 
 interface SessionToolbarProps {
   className?: string;

@@ -1,7 +1,7 @@
 "use client";
 
-import UnexpectedEvent from "@/src/components/Unexpected-Event";
 import { useEffect } from "react";
+import UnexpectedEvent from "@/src/components/Unexpected-Event";
 
 export default function Error({
   error,

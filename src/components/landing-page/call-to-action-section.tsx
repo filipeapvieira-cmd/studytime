@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const VIDEO_URL = "https://www.youtube.com/watch?v=65Ic3AZkqKI";
 
@@ -21,9 +21,7 @@ function CallToActionSection() {
           className="bg-white text-black hover:bg-neutral-200 px-5 md:px-6 md:h-10 md:text-sm transition-all duration-300"
           asChild
         >
-          <Link href="/auth/register">
-            Start Free Trial
-          </Link>
+          <Link href="/auth/register">Start Free Trial</Link>
         </Button>
 
         <Button

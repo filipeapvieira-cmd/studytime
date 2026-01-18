@@ -1,5 +1,5 @@
 import React from "react";
-import NavLink, { IconKey } from "@/components/header/nav-link";
+import NavLink, { type IconKey } from "@/components/header/nav-link";
 import { currentRole, currentUser } from "@/src/lib/authentication";
 
 interface NavItem {
@@ -41,7 +41,7 @@ export default async function NavLinks() {
   if (!user || !userRole) return null;
 
   const accessibleNavItems = navItems.filter((item) =>
-    item.roles.includes(userRole)
+    item.roles.includes(userRole),
   );
 
   if (accessibleNavItems.length === 0) return null;

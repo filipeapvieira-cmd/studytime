@@ -1,33 +1,33 @@
 "use client";
 
-import { FC, useRef } from "react";
-import FormField from "@/src/components/FormField";
-import { Button } from "./ui/button";
+import { type FC, useRef } from "react";
 import ReactInputMask from "react-input-mask";
-import UserActionConfirmation from "./UserActionConfirmation";
+import { mutate } from "swr";
+import FormField from "@/src/components/FormField";
 import {
-  UPDATE_SESSION_ENDPOINT,
-  HTTP_METHOD,
   DELETE_SESSION_ENDPOINT,
   GET_ALL_SESSIONS_ENDPOINT,
+  HTTP_METHOD,
+  UPDATE_SESSION_ENDPOINT,
 } from "@/src/constants/config";
 import { usePersistSession } from "@/src/hooks/usePersistSession";
 import {
-  getSaveBtnIcon,
+  calculateEffectiveTime,
   getDeleteBtnIcon,
   getRequestBody,
-  calculateEffectiveTime,
+  getSaveBtnIcon,
+  isEndTimeEarlierThanStartTime,
   validateEffectiveTime,
   validatePauseDuration,
   validateStudySession,
-  isEndTimeEarlierThanStartTime,
 } from "@/src/lib/session-log/update-utils";
-import { mutate } from "swr";
-import { Label } from "./ui/label";
 import { useUpdateSessionContext } from "../ctx/update-session-provider";
-import { Input } from "./ui/input";
 import { useCustomToast } from "../hooks/useCustomToast";
 import { editSessionToolbarSchema } from "../lib/schemas/editSessionControlSchema";
+import UserActionConfirmation from "./UserActionConfirmation";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
 interface EditSessionToolbarProps {
   setIsModalOpen: (isOpen: boolean) => void;
@@ -147,7 +147,7 @@ const EditSessionToolbar: FC<EditSessionToolbarProps> = ({
       if (
         isEndTimeEarlierThanStartTime(
           updatedSession.endTime,
-          updatedSession.startTime
+          updatedSession.startTime,
         )
       )
         return preValue;

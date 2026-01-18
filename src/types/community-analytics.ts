@@ -1,4 +1,4 @@
-import { MonthlyTotals } from "./study-sessions";
+import type { MonthlyTotals } from "./study-sessions";
 
 export type CommunityData =
   | {

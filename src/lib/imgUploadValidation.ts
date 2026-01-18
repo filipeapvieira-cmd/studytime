@@ -35,14 +35,14 @@ export const useValidation = (validFile: File[]) => {
       showToast(
         `${
           fileSize === 0 ? "File size is 0" : "File size is greater than 30MB"
-        }`
+        }`,
       );
       return false;
     }
     return true;
   };
 
-  const duplicateNameValidation = (fileName: String) => {
+  const duplicateNameValidation = (fileName: string) => {
     const isDuplicate = validFile.find((file) => file.name === fileName);
     if (isDuplicate) {
       showToast("Duplicate file name!");

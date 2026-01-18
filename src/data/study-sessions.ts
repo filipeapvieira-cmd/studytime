@@ -1,7 +1,7 @@
 import { db } from "@/src/lib/db";
-import { StudySessionDto } from "@/src/types";
+import type { StudySessionDto } from "@/src/types";
 import { currentUser } from "../lib/authentication";
-import { StudySessionsResponse } from "../types/study-sessions";
+import type { StudySessionsResponse } from "../types/study-sessions";
 
 export const getStudySessionsByUserId =
   async (): Promise<StudySessionsResponse> => {

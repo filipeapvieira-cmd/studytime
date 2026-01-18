@@ -1,6 +1,6 @@
-import { MutableRefObject } from "react";
+import type { MutableRefObject } from "react";
 import { Icons } from "@/src/components/icons";
-import { FullSessionLogUpdate, Topic } from "@/src/types";
+import type { FullSessionLogUpdate, Topic } from "@/src/types";
 import { getFullSessionLog } from "./utils";
 
 /**
@@ -13,7 +13,7 @@ import { getFullSessionLog } from "./utils";
  */
 export const convertTimeStringToDate = (
   sessionTime: string,
-  sessionDate: string
+  sessionDate: string,
 ): number => {
   const [year, month, day] = sessionDate.split("-").map(Number);
 
@@ -44,7 +44,7 @@ export const convertTimeStringToDate = (
  * @returns The total duration in milliseconds.
  */
 export const convertTimeStringToMilliseconds = (
-  pauseDuration: string
+  pauseDuration: string,
 ): number => {
   const durationParts = pauseDuration.split(":").map(Number);
   const [hours, minutes, seconds = 0] = durationParts;
@@ -60,7 +60,7 @@ export const convertTimeStringToMilliseconds = (
 };
 
 export const convertMillisecondsToTimeString = (
-  milliseconds: number
+  milliseconds: number,
 ): string => {
   const hours = Math.floor(milliseconds / (60 * 60 * 1000));
   const minutes = Math.floor((milliseconds % (60 * 60 * 1000)) / (60 * 1000));
@@ -73,7 +73,7 @@ export const convertMillisecondsToTimeString = (
 
 export const getSaveBtnIcon = (
   isLoading: boolean,
-  actionType: MutableRefObject<string>
+  actionType: MutableRefObject<string>,
 ) => {
   if (isLoading && actionType.current === "update") {
     return <Icons.loading className="h-6 w-6 animate-spin" />;
@@ -83,7 +83,7 @@ export const getSaveBtnIcon = (
 
 export const getDeleteBtnIcon = (
   isLoading: boolean,
-  actionType: MutableRefObject<string>
+  actionType: MutableRefObject<string>,
 ) => {
   if (isLoading && actionType.current === "delete") {
     return <Icons.loading className="h-6 w-6 animate-spin" />;
@@ -174,7 +174,7 @@ export const calculateEffectiveTime = ({
  */
 export const calculateTotalEffectiveTimeOfOtherTopics = (
   topics: Topic[],
-  currentTopicId: number | string
+  currentTopicId: number | string,
 ) => {
   const totalCombinedOtherTopicTime = topics
     .filter((topicInSession) => topicInSession.id !== currentTopicId)
@@ -220,7 +220,7 @@ export const validateStudySession = ({
 
   const topicsEffectiveTime = sessionTopics.reduce(
     (sum, topic) => sum + topic.effectiveTimeOfStudy,
-    0
+    0,
   );
 
   const sessionEffectiveTimeMs =
@@ -239,7 +239,7 @@ export const validateStudySession = ({
 
 export const isEndTimeEarlierThanStartTime = (
   endTime: string,
-  startTime: string
+  startTime: string,
 ) => {
   const endTimeMs = convertTimeStringToMilliseconds(endTime);
   const startTimeMs = convertTimeStringToMilliseconds(startTime);

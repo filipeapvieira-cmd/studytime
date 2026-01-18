@@ -1,5 +1,5 @@
-import { StudySessionDto } from "@/src/types";
-import { AcademicYearData } from "@/src/types/charts";
+import type { StudySessionDto } from "@/src/types";
+import type { AcademicYearData } from "@/src/types/charts";
 
 const allMonths = [
   "September",
@@ -83,7 +83,7 @@ export function getAcademicYear(yearMonthKey: string): string {
  */
 export function getAcademicYearData(
   userTotals: Record<string, number>,
-  communityTotals: Record<string, number>
+  communityTotals: Record<string, number>,
 ): Record<string, { month: string; user: number; community: number }[]> {
   // This will hold something like:
   // {
@@ -162,7 +162,7 @@ export function getAcademicYearData(
  * to the total hours studied in that month.
  */
 export function groupSessionsByAcademicYear(
-  sessions: StudySessionDto[]
+  sessions: StudySessionDto[],
 ): AcademicYearData {
   const result: AcademicYearData = {};
 

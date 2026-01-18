@@ -13,7 +13,7 @@ export const uploadImagesCtxDefaultValues: ContextProps = {
 };
 
 export const UploadImagesContext = createContext<ContextProps>(
-  uploadImagesCtxDefaultValues
+  uploadImagesCtxDefaultValues,
 );
 
 export default function UploadImagesProvider({
@@ -22,7 +22,7 @@ export default function UploadImagesProvider({
   children: React.ReactNode;
 }) {
   const [validFile, setValidFile] = useState<File[]>(
-    uploadImagesCtxDefaultValues.validFile
+    uploadImagesCtxDefaultValues.validFile,
   );
 
   return (

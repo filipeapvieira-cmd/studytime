@@ -1,4 +1,4 @@
-import { StudySessionDto } from ".";
+import type { StudySessionDto } from ".";
 
 export type StudySessionsResponse = {
   status: "error" | "success";

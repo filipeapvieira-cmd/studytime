@@ -1,14 +1,13 @@
 "use server";
 
 import { currentUser } from "@/src/lib/authentication";
-import { CloudinaryConfigSchema } from "../schemas/imageUploadForm.schema";
-import { ImageUploadSettingsActionState } from "../types";
-import bcrypt from "bcryptjs";
 import { createUserImageConfiguration } from "../data/image-upload";
 import { handleEncryption } from "../lib/crypto";
+import { CloudinaryConfigSchema } from "../schemas/imageUploadForm.schema";
+import type { ImageUploadSettingsActionState } from "../types";
 
 export default async function imageUploadSettings(
-  formData: FormData
+  formData: FormData,
 ): Promise<ImageUploadSettingsActionState> {
   const user = await currentUser();
   const userId = user?.id;
@@ -41,10 +40,10 @@ export default async function imageUploadSettings(
         apiKey,
         apiSecret: encryptedData,
       },
-      initVector
+      initVector,
     );
     return { success: "Image upload settings saved!" };
-  } catch (error) {
+  } catch (_) {
     return {
       generalError:
         "Unfortunately, we could not save your settings. Please try again later.",

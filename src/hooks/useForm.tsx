@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { defaultErrorState } from "@/src/lib/validations/login-register/rules";
-import { FormState, ErrorState, ValidationRules } from "@/src/types";
+import type { ErrorState, FormState, ValidationRules } from "@/src/types";
 
 interface useFormProps {
   initialFormState: FormState;
@@ -49,7 +49,7 @@ export const useForm = ({
       if (field === "confirmPassword") {
         errorObj[errorObjKey] = validationMethod(
           form[formObjKey] || "",
-          form.password || ""
+          form.password || "",
         );
       } else {
         errorObj[errorObjKey] = validationMethod(form[formObjKey] || "");

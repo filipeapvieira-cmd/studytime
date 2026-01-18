@@ -1,26 +1,26 @@
 {
-    "restartSession": {
-      "title": "Restart Study Session",
-      "description": "Please note that by restarting the session, all unsaved progress and entered data will be lost. All fields will be re-initialized to their default values."
-    },
-    "stopSession": {
-      "title": "Stop Study Session",
-      "description": "Please note that by stopping the session, you won't be able to continue the study session time counter."
-    },
-    "saveSession": {
-      "title": "Save Study Session",
-      "description": ""
-    },
-    "test": {
-      "title": "",
-      "description": ""
-    },
-    "updateSession": {
-      "title": "Update Session",
-      "description": "Are you sure that you want to proceed ?"
-    },
-    "deleteSession": {
-      "title": "DELETE Session",
-      "description": "This process is irreversible!"
-    }
+  "restartSession": {
+    "title": "Restart Study Session",
+    "description": "Please note that by restarting the session, all unsaved progress and entered data will be lost. All fields will be re-initialized to their default values."
+  },
+  "stopSession": {
+    "title": "Stop Study Session",
+    "description": "Please note that by stopping the session, you won't be able to continue the study session time counter."
+  },
+  "saveSession": {
+    "title": "Save Study Session",
+    "description": ""
+  },
+  "test": {
+    "title": "",
+    "description": ""
+  },
+  "updateSession": {
+    "title": "Update Session",
+    "description": "Are you sure that you want to proceed ?"
+  },
+  "deleteSession": {
+    "title": "DELETE Session",
+    "description": "This process is irreversible!"
   }
+}

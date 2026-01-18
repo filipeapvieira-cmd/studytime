@@ -1,6 +1,6 @@
-import { FC } from "react";
-import { Button } from "@/src/components/ui/button";
+import type { FC } from "react";
 import { Icons } from "@/src/components/icons";
+import { Button } from "@/src/components/ui/button";
 
 interface BtnOpenMkdownPrevProps {
   handleOpenPreviewer: () => void;

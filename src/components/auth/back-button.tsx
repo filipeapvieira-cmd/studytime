@@ -1,7 +1,7 @@
 "use client";
+import Link from "next/link";
 import React from "react";
 import { Button } from "../ui/button";
-import Link from "next/link";
 
 type BackButtonProps = {
   label: string;

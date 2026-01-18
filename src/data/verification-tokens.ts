@@ -42,7 +42,7 @@ export const deleteVerificationTokenById = async (id: string) => {
 export const createVerificationToken = async (
   email: string,
   token: string,
-  expires: Date
+  expires: Date,
 ) => {
   try {
     const verificationToken = await db.verificationToken.create({

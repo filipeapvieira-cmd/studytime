@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { db } from "@/src/lib/db";
 import { currentUser } from "@/src/lib/authentication";
+import { getAcademicYearData } from "@/src/lib/charts/monthlyDistributionChart.utils";
+import { db } from "@/src/lib/db";
 import {
   accumulateMonthlyEffectiveTimes,
   convertMsMonthlyTotalsToHours,
 } from "@/src/lib/study-session-manipulation-utils";
-import { getAcademicYearData } from "@/src/lib/charts/monthlyDistributionChart.utils";
 
 export async function GET() {
   const user = await currentUser();
@@ -17,7 +17,7 @@ export async function GET() {
         message: "Unauthorized access. Please log in.",
         data: null,
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -44,7 +44,7 @@ export async function GET() {
 
     // 3) Accumulate monthly totals for the logged-in user
     const userMonthlyTotalsMs = accumulateMonthlyEffectiveTimes(
-      loggedInUser?.StudySession || []
+      loggedInUser?.StudySession || [],
     );
 
     const userMonthlyTotalsInHours =
@@ -62,13 +62,13 @@ export async function GET() {
       accumulateMonthlyEffectiveTimes(allCommunitySessions);
 
     const communityMonthlyTotalsInHours = convertMsMonthlyTotalsToHours(
-      communityMonthlyTotalsMs
+      communityMonthlyTotalsMs,
     );
 
     // 5) Group by academic year and months (September to August)
     const academicYearData = getAcademicYearData(
       userMonthlyTotalsInHours,
-      communityMonthlyTotalsInHours
+      communityMonthlyTotalsInHours,
     );
 
     return NextResponse.json(
@@ -78,7 +78,7 @@ export async function GET() {
           academicYearData,
         },
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     let message = "Something went wrong. Unable to retrieve data.";
@@ -93,7 +93,7 @@ export async function GET() {
         message,
         data: null,
       },
-      { status: 500 }
+      { status: 500 },
     );
   } finally {
     await db.$disconnect();

@@ -1,7 +1,7 @@
-import { GET_USER_IMG_UPLOAD_CONFIG_ENDPOINT } from "@/src/constants/config";
-import { fetcher } from "@/src/lib/swr/utils";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
+import { GET_USER_IMG_UPLOAD_CONFIG_ENDPOINT } from "@/src/constants/config";
+import { fetcher } from "@/src/lib/swr/utils";
 
 export interface CloudinaryConfig {
   cloudName: string;
@@ -11,7 +11,7 @@ export interface CloudinaryConfig {
 export function useImgUploadConfig() {
   const { data, error } = useSWR<CloudinaryConfig>(
     GET_USER_IMG_UPLOAD_CONFIG_ENDPOINT,
-    fetcher
+    fetcher,
   );
   const [userConfig, setUserConfig] = useState<CloudinaryConfig>({
     cloudName: "",

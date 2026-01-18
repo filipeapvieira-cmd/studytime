@@ -1,10 +1,10 @@
 "use client";
 
 import ChartDashboard from "@/src/components/charts/ChartDashboard";
-import { useUserStudySessions } from "@/src/hooks/new/useUserStudySessions";
-import { useErrorToast } from "@/src/hooks/new/useErrorToast";
 import BarChartSkeleton from "@/src/components/skeletons/BarChartSkeleton";
 import { useCommunityAnalytics } from "@/src/hooks/new/useCommunityAnalytics";
+import { useErrorToast } from "@/src/hooks/new/useErrorToast";
+import { useUserStudySessions } from "@/src/hooks/new/useUserStudySessions";
 
 const AnalyticsPage = () => {
   const {
@@ -24,7 +24,7 @@ const AnalyticsPage = () => {
 
   useErrorToast(
     error,
-    "Unable to fetch data for charts. Please try again later."
+    "Unable to fetch data for charts. Please try again later.",
   );
 
   if (isLoading) return <BarChartSkeleton />;

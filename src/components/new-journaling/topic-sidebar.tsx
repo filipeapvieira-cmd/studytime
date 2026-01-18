@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -10,16 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
+import { FEELING_OPTIONS } from "@/src/constants/config";
 import { createNewTopic } from "@/src/ctx/session-topics-provider";
-import { Topic } from "@/src/types";
-import TopicComponent from "./topic";
+import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
+import { cn, getFeelingsDisplayName } from "@/src/lib/utils";
+import type { Topic } from "@/src/types";
 import SelectedTopic from "./selected-topic";
 import { SessionToolbar } from "./session-toolbar";
-import { cn, getFeelingsDisplayName } from "@/src/lib/utils";
-import { FEELING_OPTIONS } from "@/src/constants/config";
+import TopicComponent from "./topic";
 
 type TopicSidebarProps = {
   className?: string;
@@ -46,7 +46,7 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
 
   const deleteTopic = (id: string | number) => {
     setSessionTopics((prevValue: Topic[]) =>
-      prevValue.filter((currentTopic) => currentTopic.id !== id)
+      prevValue.filter((currentTopic) => currentTopic.id !== id),
     );
     if (selectedTopicId === id) {
       setSelectedTopicId(null);
@@ -64,7 +64,7 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
     <div
       className={cn(
         "flex flex-col h-[calc(100vh-186px)] overflow-hidden bg-zinc-900 rounded-xl shadow-lg",
-        isUpdate && className
+        isUpdate && className,
       )}
     >
       <div className="flex-1 overflow-hidden">

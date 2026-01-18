@@ -1,17 +1,16 @@
 "use client";
 
-import { useState, ChangeEvent, useEffect } from "react";
+import type { Table } from "@tanstack/table-core";
+import { type ChangeEvent, useEffect, useState, useTransition } from "react";
+import type { DateRange } from "react-day-picker";
+import { CalendarDateRangePicker } from "@/src/components/Date-range-picker";
+import { Icons } from "@/src/components/icons";
+import ColumnVisibility from "@/src/components/table/Column-visibility";
+import BtnClose from "@/src/components/ui/BtnClose";
+import { exportFile } from "@/src/lib/export/utils";
+import { StudySessionDto } from "@/src/types";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Icons } from "@/src/components/icons";
-import { CalendarDateRangePicker } from "@/src/components/Date-range-picker";
-import ColumnVisibility from "@/src/components/table/Column-visibility";
-import { DateRange } from "react-day-picker";
-import BtnClose from "@/src/components/ui/BtnClose";
-import { useTransition } from "react";
-import { StudySessionDto } from "@/src/types";
-import { exportFile } from "@/src/lib/export/utils";
-import { Table } from "@tanstack/table-core";
 
 interface TableFiltersProps<TData> {
   inputGlobalFilter: string;
@@ -24,13 +23,13 @@ interface TableFiltersProps<TData> {
 }
 
 const endOfDay = (date: Date) => {
-  let end = new Date(date);
+  const end = new Date(date);
   end.setHours(23, 59, 59, 999);
   return end;
 };
 
 const startOfDay = (date: Date) => {
-  let start = new Date(date);
+  const start = new Date(date);
   start.setHours(0, 0, 0, 0);
   return start;
 };

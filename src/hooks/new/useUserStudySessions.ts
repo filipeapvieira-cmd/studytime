@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { GET_ALL_SESSIONS_ENDPOINT } from "@/src/constants/config";
 import { fetcher } from "@/src/lib/swr/utils";
-import { StudySessionDto } from "@/src/types";
+import type { StudySessionDto } from "@/src/types";
 
 interface UseStudySessionsResult {
   data: StudySessionDto[] | undefined;
@@ -12,7 +12,7 @@ interface UseStudySessionsResult {
 export const useUserStudySessions = (): UseStudySessionsResult => {
   const { data, error } = useSWR<{ data: StudySessionDto[] }>(
     GET_ALL_SESSIONS_ENDPOINT,
-    fetcher
+    fetcher,
   );
 
   return {

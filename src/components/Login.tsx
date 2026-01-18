@@ -1,16 +1,16 @@
 "use client";
 
-import { FC, useState } from "react";
-import { Icons } from "@/src/components/icons";
-import FormField from "./FormField";
-import { useForm } from "@/src/hooks/useForm";
-import { Button } from "./ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { type FC, useState } from "react";
+import { Icons } from "@/src/components/icons";
 import { buttonVariants } from "@/src/components/ui/button";
 import { useCustomToast } from "@/src/hooks/useCustomToast";
-import { useRouter } from "next/navigation";
-import { formFieldsAndRules } from "@/src/lib/validations/login-register/rules";
+import { useForm } from "@/src/hooks/useForm";
 import { formLogic } from "@/src/lib/login-register/utils";
+import { formFieldsAndRules } from "@/src/lib/validations/login-register/rules";
+import FormField from "./FormField";
+import { Button } from "./ui/button";
 
 interface LoginProps {
   type: "login" | "register";

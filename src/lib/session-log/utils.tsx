@@ -1,9 +1,9 @@
-import {
+import type {
+  FullSessionLog,
+  FullSessionLogUpdate,
   SessionTimeAndDate,
   Topic,
-  FullSessionLog,
   TopicFormatted,
-  FullSessionLogUpdate,
 } from "@/src/types";
 
 interface getFullSessionLogProps {
@@ -32,10 +32,10 @@ export const getFullSessionLog = ({
 
 const getSessionTopics = (
   sessionTopics: Topic[],
-  endTime: number
+  endTime: number,
 ): TopicFormatted[] => {
   return sessionTopics.map((topic) => {
-    let topicId = typeof topic.id === "number" ? topic.id : 0;
+    const topicId = typeof topic.id === "number" ? topic.id : 0;
     return {
       id: topicId,
       title: topic.title,
@@ -67,7 +67,7 @@ const getTopicTimeOfStudy = (topic: Topic, endTime: number) => {
 const formatSessionTime = (
   startTime: number,
   endTime: number,
-  totalPauseTime: number
+  totalPauseTime: number,
 ): SessionTimeAndDate => {
   return {
     date: new Date(),
@@ -81,7 +81,7 @@ const formatSessionTime = (
 export const persistSession = async (
   sessionLog: FullSessionLog | FullSessionLogUpdate,
   url: string,
-  method: string
+  method: string,
 ): Promise<void> => {
   const response = await fetch(url, {
     method,

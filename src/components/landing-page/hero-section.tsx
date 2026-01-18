@@ -1,6 +1,6 @@
-import { buttonVariants } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 
 function HeroSection() {
   return (
@@ -9,8 +9,7 @@ function HeroSection() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
       <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-5 tracking-tight text-white">
-        Unlock Better{" "}
-        <span className="text-blue-400">Study Habits</span>
+        Unlock Better <span className="text-blue-400">Study Habits</span>
       </h1>
 
       <p className="text-base md:text-lg lg:text-xl text-neutral-400 mb-6 md:mb-8 max-w-xl mx-auto leading-relaxed">

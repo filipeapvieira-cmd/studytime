@@ -1,7 +1,7 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { Skeleton } from "@/src/components/ui/skeleton";
 
-interface EditorSkeletonProps {}
+type EditorSkeletonProps = {};
 
 const EditorSkeleton: FC<EditorSkeletonProps> = ({}) => {
   return (

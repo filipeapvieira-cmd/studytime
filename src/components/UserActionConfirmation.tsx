@@ -1,12 +1,12 @@
+import type React from "react";
+import type { FC } from "react";
+import { Icons } from "@/src/components/icons";
+import { Button } from "@/src/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/src/components/ui/popover";
-
-import React, { FC } from "react";
-import { Button } from "@/src/components/ui/button";
-import { Icons } from "@/src/components/icons";
 import { retrieveTextFromJson } from "@/src/lib/utils";
 
 interface UserActionConfirmationProps {

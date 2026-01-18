@@ -1,6 +1,6 @@
-import { db } from "@/src/lib/db";
 import { NextResponse } from "next/server";
 import { currentUser } from "@/src/lib/authentication";
+import { db } from "@/src/lib/db";
 
 export async function DELETE(req: Request, context: any) {
   const { params } = context;
@@ -14,7 +14,7 @@ export async function DELETE(req: Request, context: any) {
         message: "Unauthorized access. Please log in.",
         data: null,
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -35,7 +35,7 @@ export async function DELETE(req: Request, context: any) {
         message: "Session deleted successfully",
         data: deletedSession,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     let message = "Something went wrong. Unable to delete session...";
@@ -50,7 +50,7 @@ export async function DELETE(req: Request, context: any) {
         message,
         data: null,
       },
-      { status: 400 }
+      { status: 400 },
     );
   } finally {
     await db.$disconnect();

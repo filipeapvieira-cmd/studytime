@@ -1,12 +1,12 @@
-import { useState, useCallback, useMemo } from "react";
-import { StudySessionDto } from "@/src/types";
-import { DateRange } from "react-day-picker";
+import { endOfDay, startOfDay } from "date-fns";
+import { useCallback, useMemo, useState } from "react";
+import type { DateRange } from "react-day-picker";
+import { CUSTOM_RANGE, THIS_WEEK } from "@/src/constants/constants.charts";
 import {
   getPredefinedDateRanges,
-  PredefinedDateRangeKey,
+  type PredefinedDateRangeKey,
 } from "@/src/lib/charts/utils";
-import { CUSTOM_RANGE, THIS_WEEK } from "@/src/constants/constants.charts";
-import { endOfDay, startOfDay } from "date-fns";
+import type { StudySessionDto } from "@/src/types";
 
 interface UseStudySessionFilterProps {
   studySessions: StudySessionDto[];
@@ -17,16 +17,16 @@ const useStudySessionFilter = ({
 }: UseStudySessionFilterProps) => {
   const studySessionsDates = useMemo(
     () => studySessions.map((session) => new Date(session.date)),
-    [studySessions]
+    [studySessions],
   );
 
   const predefinedDateRanges = useMemo(
     () => getPredefinedDateRanges(studySessionsDates),
-    [studySessionsDates]
+    [studySessionsDates],
   );
 
   const [range, setRange] = useState<DateRange | undefined>(
-    predefinedDateRanges[THIS_WEEK]
+    predefinedDateRanges[THIS_WEEK],
   );
 
   const [selectedPredefinedRange, setSelectedPredefinedRange] =
@@ -79,7 +79,7 @@ const useStudySessionFilter = ({
 
   const filteredStudySessions = useMemo(
     () => filterStudySessions(),
-    [filterStudySessions]
+    [filterStudySessions],
   );
 
   return {

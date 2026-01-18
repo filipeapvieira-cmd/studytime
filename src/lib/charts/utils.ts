@@ -1,12 +1,12 @@
+import { addDays, endOfWeek, startOfWeek, subWeeks } from "date-fns";
 import {
+  ALL,
+  LAST_30_DAYS,
+  LAST_WEEK,
   THIS_WEEK,
   WEEK_START_DAY,
-  LAST_WEEK,
-  LAST_30_DAYS,
-  ALL,
 } from "@/src/constants/constants.charts";
-import { StudySessionDto } from "@/src/types";
-import { addDays, endOfWeek, startOfWeek, subWeeks } from "date-fns";
+import type { StudySessionDto } from "@/src/types";
 
 function addTimesInSeconds(time1: number, time2: string): number {
   const [hours, minutes, seconds] = time2.split(":").map(Number);
@@ -14,7 +14,7 @@ function addTimesInSeconds(time1: number, time2: string): number {
 }
 
 export const getTotalStudiedTimePerDayOfTheWeek = (
-  studySessions: StudySessionDto[]
+  studySessions: StudySessionDto[],
 ) => {
   if (!studySessions || studySessions.length === 0) {
     return null;
@@ -44,7 +44,7 @@ export const getTotalStudiedTimePerDayOfTheWeek = (
     const dayName = daysOfWeek[day];
     dayTimeMap[dayName] = addTimesInSeconds(
       dayTimeMap[dayName],
-      session.effectiveTime
+      session.effectiveTime,
     );
   });
 
@@ -56,7 +56,7 @@ export const getTotalStudiedTimePerDayOfTheWeek = (
 };
 
 export const getYAxisUpperBound = (
-  chartData: { name: string; total: number }[] | null
+  chartData: { name: string; total: number }[] | null,
 ) => {
   if (chartData) {
     const maxValue = Math.max(...chartData.map((item) => item.total));

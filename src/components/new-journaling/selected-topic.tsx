@@ -1,10 +1,10 @@
 import React from "react";
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
-import { CustomEditor } from "../new-editor/editor";
-import { JSONValue } from "@/src/types";
 import { getTopicContent } from "@/src/lib/utils";
-import { TopicSubjectSelection } from "./topic-subject-selection";
+import type { JSONValue } from "@/src/types";
+import { CustomEditor } from "../new-editor/editor";
 import TopicHashtagSelection from "./topic-hashtag-selection";
+import { TopicSubjectSelection } from "./topic-subject-selection";
 
 type SelectedTopicProps = {
   selectedTopicId: string | number | null;
@@ -14,7 +14,7 @@ export default function SelectedTopic({ selectedTopicId }: SelectedTopicProps) {
   const { sessionTopics, setSessionTopics } = useFeelingsAndTopics();
 
   const selectedTopic = sessionTopics.find(
-    (topic) => topic.id === selectedTopicId
+    (topic) => topic.id === selectedTopicId,
   );
 
   const topicContent = getTopicContent(selectedTopic);
@@ -44,8 +44,8 @@ export default function SelectedTopic({ selectedTopicId }: SelectedTopicProps) {
   const handleContentChange = (contentJson: JSONValue) => {
     setSessionTopics((prevTopics) =>
       prevTopics.map((topic) =>
-        topic.id === selectedTopicId ? { ...topic, contentJson } : topic
-      )
+        topic.id === selectedTopicId ? { ...topic, contentJson } : topic,
+      ),
     );
   };
 

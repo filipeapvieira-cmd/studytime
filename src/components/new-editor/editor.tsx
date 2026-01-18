@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import type { BlockToolConstructable } from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import EditorjsList from "@editorjs/list";
-import { BlockToolConstructable } from "@editorjs/editorjs";
-import { JSONValue } from "@/src/types";
-import { cn, prepareContent } from "@/src/lib/utils";
-import { useCustomToast } from "@/src/hooks/useCustomToast";
+import React, { useEffect, useRef, useState } from "react";
 import { BeatLoader } from "react-spinners";
+import { useCustomToast } from "@/src/hooks/useCustomToast";
+import { cn, prepareContent } from "@/src/lib/utils";
+import type { JSONValue } from "@/src/types";
 
 type CustomEditorProps = {
   value: string | JSONValue;
@@ -52,7 +52,7 @@ export const CustomEditor = ({ value, onSave }: CustomEditorProps) => {
                 }
               })
               .catch((error: any) =>
-                console.error("Error rendering content:", error)
+                console.error("Error rendering content:", error),
               );
           },
           onChange: async () => {
@@ -147,7 +147,7 @@ export const CustomEditor = ({ value, onSave }: CustomEditorProps) => {
           bg-zinc-900/50 text-white placeholder-zinc-500
           resize-none focus:outline-none focus:ring-2 focus:ring-zinc-700
           shadow-[0_0_15px_rgba(0,0,0,0.1)] selection:bg-lime-400 selection:text-black transition-opacity duration-300`,
-          !editorReady ? "opacity-0" : "opacity-100"
+          !editorReady ? "opacity-0" : "opacity-100",
         )}
         onBlur={handleSave}
       />
@@ -166,7 +166,7 @@ async function customUpload(file: File) {
 
   if (!response.ok) {
     throw new Error(
-      `Have you configured the Image Upload settings in your profile?`
+      `Have you configured the Image Upload settings in your profile?`,
     );
   }
 

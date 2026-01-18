@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { BarChart2, BookOpen, LayoutDashboard } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const iconMapping = {
   BookOpen,
@@ -31,7 +31,7 @@ const NavLink = ({ href, children, icon }: NavLinkProps) => {
         {
           "text-white": isActive,
           "text-zinc-400": !isActive,
-        }
+        },
       )}
     >
       {IconComponent && <IconComponent size={20} />}

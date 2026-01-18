@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Icons } from "@/src/components/icons";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -8,10 +9,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/src/components/ui/alert-dialog";
-import { StudySessionDto } from "@/src/types";
-import { Icons } from "@/src/components/icons";
-import { TopicSidebar } from "../new-journaling/topic-sidebar";
+import type { StudySessionDto } from "@/src/types";
 import EditSessionToolbar from "../EditSessionControl";
+import { TopicSidebar } from "../new-journaling/topic-sidebar";
 
 interface EditSessionProps {
   isModalOpen: boolean;

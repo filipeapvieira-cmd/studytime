@@ -1,7 +1,7 @@
 "use client";
 
-import { useTimeContext } from "@/src/ctx/time-provider";
 import { useEffect } from "react";
+import { useTimeContext } from "@/src/ctx/time-provider";
 
 const BeforeUnloadHandler: React.FC = () => {
   const { status } = useTimeContext();

@@ -1,5 +1,5 @@
+import { BarChart2, BookOpen, Clock } from "lucide-react";
 import FeatureCard from "./feature-card";
-import { Clock, BookOpen, BarChart2 } from "lucide-react";
 
 function FeaturesSection() {
   const features = [
@@ -12,14 +12,12 @@ function FeaturesSection() {
     {
       icon: BookOpen,
       title: "Smart Journaling",
-      description:
-        "Find notes and information without sifting through files",
+      description: "Find notes and information without sifting through files",
     },
     {
       icon: BarChart2,
       title: "Insightful Analytics",
-      description:
-        "Gain valuable insights into your study patterns",
+      description: "Gain valuable insights into your study patterns",
     },
   ];
 

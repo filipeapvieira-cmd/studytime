@@ -2,13 +2,13 @@
 
 import {
   createContext,
-  useState,
-  Dispatch,
-  SetStateAction,
+  type Dispatch,
+  type SetStateAction,
   useEffect,
+  useState,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Topic } from "@/src/types";
+import type { Topic } from "@/src/types";
 
 interface TopicsContextProps {
   sessionTopics: Topic[];
@@ -47,10 +47,10 @@ interface SaveSessionProvider {
 
 export default function TopicsProvider({ children }: SaveSessionProvider) {
   const [sessionTopics, setSessionTopics] = useState<Topic[]>(
-    topicsCtxDefaultValues.sessionTopics
+    topicsCtxDefaultValues.sessionTopics,
   );
   const [sessionTopicsUpdate, setSessionTopicsUpdate] = useState<Topic[]>(
-    topicsCtxDefaultValues.sessionTopics
+    topicsCtxDefaultValues.sessionTopics,
   );
 
   useEffect(() => {

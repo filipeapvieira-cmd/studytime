@@ -1,13 +1,13 @@
 "use client";
 
-import { ColumnDef, FilterFn } from "@tanstack/react-table";
+import type { ColumnDef, FilterFn } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { Button } from "@/src/components/ui/button";
-import SessionTopic from "@/src/components/SessionTopic";
-import { RankAndValue } from "@/src/types/tanstack-table";
 import Highlight from "@/src/components/Highlight";
-import { EditorData, StudySessionDto } from "@/src/types/index";
+import SessionTopic from "@/src/components/SessionTopic";
+import { Button } from "@/src/components/ui/button";
 import { getFeelingsDisplayName } from "@/src/lib/utils";
+import type { EditorData, StudySessionDto } from "@/src/types/index";
+import type { RankAndValue } from "@/src/types/tanstack-table";
 
 /*
 Columns are where you define the core of what your table will look like. 
@@ -17,21 +17,21 @@ They define the data that will be displayed, how it will be formatted, sorted an
 export const contentFilterFn: FilterFn<StudySessionDto> = (
   row,
   id,
-  filterValue
+  filterValue,
 ) => {
   const rawContent: [{ topic: string; subtopic: string; text: string }] =
     row.getValue("content");
   return rawContent.some(
     (content) =>
       content.topic.toLowerCase().includes(filterValue.toLowerCase()) ||
-      content.subtopic.toLowerCase().includes(filterValue.toLowerCase())
+      content.subtopic.toLowerCase().includes(filterValue.toLowerCase()),
   );
 };
 
 export const dateFilterFn: FilterFn<StudySessionDto> = (
   row,
   id,
-  filterValue
+  filterValue,
 ) => {
   // Parse the date from the row
   const rowDate = new Date(row.getValue("date"));
@@ -39,7 +39,7 @@ export const dateFilterFn: FilterFn<StudySessionDto> = (
 };
 
 const rankItem = (itemValue: any, filterValue: any) => {
-  let itemRank = { passed: false };
+  const itemRank = { passed: false };
   if (itemValue && filterValue) {
     // Convert both itemValue and filterValue to lowercase for case insensitive comparison
     itemValue = itemValue.toLowerCase();
@@ -54,7 +54,7 @@ export const globalFilterFn: FilterFn<any> = (
   row,
   columnId,
   value,
-  addMeta
+  addMeta,
 ) => {
   // Helper function to extract text from contentJson
   const extractTextFromContentJson = (contentJson: EditorData): string => {
@@ -106,7 +106,7 @@ export const columns: ColumnDef<StudySessionDto>[] = [
     header: "Content",
     cell: ({ row }) => {
       const rawContent: [
-        { title: string; hashtags: string; description: string }
+        { title: string; hashtags: string; description: string },
       ] = row.getValue("topics");
       const topics = rawContent.map((topic, index) => (
         <SessionTopic

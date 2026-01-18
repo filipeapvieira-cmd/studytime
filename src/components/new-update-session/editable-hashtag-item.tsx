@@ -1,10 +1,10 @@
 "use client";
 
+import { Check, Edit, Trash2, X } from "lucide-react";
 import * as React from "react";
-import { Trash2, Edit, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { HashtagItem } from "@/src/types";
+import type { HashtagItem } from "@/src/types";
 
 interface EditableHashtagItemProps {
   item: HashtagItem;

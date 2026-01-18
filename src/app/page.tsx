@@ -1,6 +1,6 @@
-import HeroSection from "@/components/landing-page/hero-section";
-import FeaturesSection from "@/components/landing-page/features-sections";
 import CallToActionSection from "@/components/landing-page/call-to-action-section";
+import FeaturesSection from "@/components/landing-page/features-sections";
+import HeroSection from "@/components/landing-page/hero-section";
 
 export default async function HomePage() {
   return (

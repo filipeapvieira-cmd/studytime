@@ -1,26 +1,26 @@
 "use client";
 
 import * as React from "react";
+import { mutate } from "swr";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { EditableTopicItem } from "./editable-topic-item";
-import { EditableHashtagItem } from "./editable-hashtag-item";
-import { useTopicTitle } from "@/src/hooks/new/useTopicTitle";
-import { useHashtags } from "@/src/hooks/new/useHashtags";
-import { HashtagItem, TopicItem } from "@/src/types";
 import { updateTopicsAndHashtags } from "@/src/actions/update-topics-and-hashtags";
-import { mutate } from "swr";
 import {
   GET_UNIQUE_HASHTAGS_ENDPOINT,
   GET_UNIQUE_TOPICS_ENDPOINT,
 } from "@/src/constants/config";
+import { useHashtags } from "@/src/hooks/new/useHashtags";
+import { useTopicTitle } from "@/src/hooks/new/useTopicTitle";
+import type { HashtagItem, TopicItem } from "@/src/types";
+import { EditableHashtagItem } from "./editable-hashtag-item";
+import { EditableTopicItem } from "./editable-topic-item";
 
 interface EditModalProps {
   isOpen: boolean;
@@ -34,10 +34,10 @@ export function EditModal({ isOpen, onClose }: EditModalProps) {
 
   // When the modal opens, convert the plain arrays into objects
   const [localTopics, setLocalTopics] = React.useState<TopicItem[]>(() =>
-    topics.map((t) => ({ original: t, current: t }))
+    topics.map((t) => ({ original: t, current: t })),
   );
   const [localHashtags, setLocalHashtags] = React.useState<HashtagItem[]>(() =>
-    hashtags.map((h) => ({ original: h, current: h }))
+    hashtags.map((h) => ({ original: h, current: h })),
   );
   const [newHashtag, setNewHashtag] = React.useState("");
 
@@ -53,7 +53,7 @@ export function EditModal({ isOpen, onClose }: EditModalProps) {
   const saveUpdates = async (
     topicUpdates: TopicItem[],
     hashtagUpdates: HashtagItem[],
-    deletedHashtags: string[]
+    deletedHashtags: string[],
   ) => {
     startTransition(async () => {
       try {
@@ -75,13 +75,13 @@ export function EditModal({ isOpen, onClose }: EditModalProps) {
   const handleSave = async () => {
     // Compute only the updates (i.e. items that have been changed)
     const topicUpdates = localTopics.filter(
-      (item) => item.original !== item.current
+      (item) => item.original !== item.current,
     );
     const hashtagUpdates = localHashtags.filter(
-      (item) => item.original !== item.current
+      (item) => item.original !== item.current,
     );
     const deletedHashtags = hashtags.filter(
-      (h) => !localHashtags.some((lh) => lh.original === h)
+      (h) => !localHashtags.some((lh) => lh.original === h),
     );
 
     await saveUpdates(topicUpdates, hashtagUpdates, deletedHashtags);
@@ -128,8 +128,8 @@ export function EditModal({ isOpen, onClose }: EditModalProps) {
                     onUpdate={(updatedItem) =>
                       setLocalTopics((prev) =>
                         prev.map((t) =>
-                          t.original === updatedItem.original ? updatedItem : t
-                        )
+                          t.original === updatedItem.original ? updatedItem : t,
+                        ),
                       )
                     }
                   />
@@ -160,13 +160,13 @@ export function EditModal({ isOpen, onClose }: EditModalProps) {
                   onUpdate={(updatedItem) =>
                     setLocalHashtags((prev) =>
                       prev.map((h) =>
-                        h.original === updatedItem.original ? updatedItem : h
-                      )
+                        h.original === updatedItem.original ? updatedItem : h,
+                      ),
                     )
                   }
                   onDelete={(itemToDelete) =>
                     setLocalHashtags((prev) =>
-                      prev.filter((h) => h.original !== itemToDelete.original)
+                      prev.filter((h) => h.original !== itemToDelete.original),
                     )
                   }
                 />

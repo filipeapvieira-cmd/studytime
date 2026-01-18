@@ -1,16 +1,16 @@
 "use client";
 
 import {
-  BarChart,
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
+  LabelList,
   Legend,
   ResponsiveContainer,
-  LabelList,
+  XAxis,
+  YAxis,
 } from "recharts";
-import { getYAxisUpperBound, formatHSL } from "@/src/lib/charts/utils";
+import { formatHSL, getYAxisUpperBound } from "@/src/lib/charts/utils";
 
 interface BarChartProps {
   chartData:

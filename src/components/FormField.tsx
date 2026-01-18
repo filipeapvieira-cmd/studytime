@@ -1,6 +1,6 @@
-import { FC } from "react";
-import { Label } from "./ui/label";
+import type { FC } from "react";
 import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
 interface FormFieldProps {
   name: string;

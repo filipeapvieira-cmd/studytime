@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { TopicSidebar } from "@/src/components/new-journaling/topic-sidebar";
 
 export const metadata: Metadata = {

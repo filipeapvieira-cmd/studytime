@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export const useDragAndDrop = () => {
-    const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleDragIn = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -13,7 +13,10 @@ export const useDragAndDrop = () => {
     setIsHovered(false);
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, callback: Function) => {
+  const handleDrop = (
+    e: React.DragEvent<HTMLDivElement>,
+    callback: Function,
+  ) => {
     e.preventDefault();
     setIsHovered(false);
     callback(e.dataTransfer.files);
@@ -25,4 +28,4 @@ export const useDragAndDrop = () => {
     handleDragOut,
     handleDrop,
   };
-}
+};

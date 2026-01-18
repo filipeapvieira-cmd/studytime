@@ -1,5 +1,9 @@
 import { useContext } from "react";
 import {
+  ChronoContext,
+  chronoCtxDefaultValues,
+} from "@/src/ctx/chrono-provider";
+import {
   FeelingsContext,
   feelingsCtxDefaultValues,
 } from "@/src/ctx/session-feelings-provider";
@@ -8,10 +12,6 @@ import {
   timeCtxDefaultValues,
   useTimeContext,
 } from "@/src/ctx/time-provider";
-import {
-  ChronoContext,
-  chronoCtxDefaultValues,
-} from "@/src/ctx/chrono-provider";
 import {
   UploadImagesContext,
   uploadImagesCtxDefaultValues,

@@ -25,10 +25,10 @@ export default function FeelingsProvider({
   children: React.ReactNode;
 }) {
   const [sessionFeelings, setSessionFeelings] = React.useState(
-    feelingsCtxDefaultValues.sessionFeelings
+    feelingsCtxDefaultValues.sessionFeelings,
   );
   const [sessionFeelingsUpdate, setSessionFeelingsUpdate] = React.useState(
-    feelingsCtxDefaultValues.sessionFeelings
+    feelingsCtxDefaultValues.sessionFeelings,
   );
 
   return (

@@ -18,7 +18,7 @@ const encryptData = async (plainData: string, encryptionKey: string) => {
       length: 256,
     },
     true,
-    ["encrypt", "decrypt"]
+    ["encrypt", "decrypt"],
   );
 
   // Encrypt the encoded data with the key
@@ -28,7 +28,7 @@ const encryptData = async (plainData: string, encryptionKey: string) => {
       iv: initVector,
     },
     cryptoKey,
-    encodedData
+    encodedData,
   );
 
   // Return the encrypted data and the IV, both in base64 format
@@ -41,7 +41,7 @@ const encryptData = async (plainData: string, encryptionKey: string) => {
 const decryptData = async (
   encryptedData: string,
   initVector: string,
-  encryptionKey: string
+  encryptionKey: string,
 ) => {
   // Prepare the decryption key
   const cryptoKey = await crypto.subtle.importKey(
@@ -52,7 +52,7 @@ const decryptData = async (
       length: 256,
     },
     true,
-    ["encrypt", "decrypt"]
+    ["encrypt", "decrypt"],
   );
 
   try {
@@ -63,7 +63,7 @@ const decryptData = async (
         iv: Buffer.from(initVector, "base64"),
       },
       cryptoKey,
-      Buffer.from(encryptedData, "base64")
+      Buffer.from(encryptedData, "base64"),
     );
 
     // Decode and return the decrypted data
@@ -80,7 +80,7 @@ const handleDecryption = async ({
   const decryptedString = await decryptData(
     encryptedData,
     initVector,
-    process.env.ENCRYPTION_KEY!
+    process.env.ENCRYPTION_KEY!,
   );
 
   const responseData = JSON.parse(decryptedString)?.data;
@@ -90,7 +90,7 @@ const handleDecryption = async ({
 const handleEncryption = async (data: any) => {
   return await encryptData(
     JSON.stringify({ data }),
-    process.env.ENCRYPTION_KEY!
+    process.env.ENCRYPTION_KEY!,
   );
 };
 

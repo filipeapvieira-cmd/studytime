@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import type React from "react";
+import { cn } from "@/src/lib/utils";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
+import BackButton from "./back-button";
 import Header from "./header";
 import Social from "./social";
-import BackButton from "./back-button";
-import { cn } from "@/src/lib/utils";
 
 type CardWrapperProps = {
   children: React.ReactNode;
@@ -28,7 +28,7 @@ export default function CardWrapper({
     <Card
       className={cn(
         "flex flex-col w-[400px] shadow-md shadow-gray-600",
-        className
+        className,
       )}
     >
       <CardHeader>

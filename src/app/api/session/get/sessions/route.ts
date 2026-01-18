@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { db } from "@/src/lib/db";
-import { Topic, StudySessionDto, TopicFormatted } from "@/src/types";
 import { currentUser } from "@/src/lib/authentication";
+import { db } from "@/src/lib/db";
+import { type StudySessionDto, Topic, TopicFormatted } from "@/src/types";
 
 export async function GET() {
   const user = await currentUser();
@@ -13,7 +13,7 @@ export async function GET() {
         message: "Unauthorized access. Please log in.",
         data: null,
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -44,7 +44,7 @@ export async function GET() {
           message: "No study sessions found for this user.",
           data: [],
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -54,7 +54,7 @@ export async function GET() {
         message: "Study sessions retrieved successfully.",
         data: mapStudySession(studySessions),
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     let message = "Something went wrong. Unable to retrieve sessions...";
@@ -69,7 +69,7 @@ export async function GET() {
         message,
         data: [],
       },
-      { status: 500 }
+      { status: 500 },
     );
   } finally {
     await db.$disconnect();

@@ -1,17 +1,17 @@
 "use server";
 
-import { getRateLimit } from "@/src/lib/rate-limit";
-import { headers } from "next/headers";
-import { RegisterSchema } from "@/src/schemas/index";
-import { z } from "zod";
-import { signIn } from "@/src/auth";
-import { DEFAULT_LOGIN_REDIRECT } from "../routes";
-import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
+import { headers } from "next/headers";
+
+import type { z } from "zod";
+import { sendVerificationEmail } from "@/lib/mail";
+import { generateVerificationToken } from "@/lib/tokens";
+
+import { getRateLimit } from "@/src/lib/rate-limit";
+import { RegisterSchema } from "@/src/schemas/index";
 import { createUser, getUserByEmail } from "../data/user";
 import { db } from "../lib/db";
-import { generateVerificationToken } from "@/lib/tokens";
-import { sendVerificationEmail } from "@/lib/mail";
+import { DEFAULT_LOGIN_REDIRECT } from "../routes";
 
 export type FormState = {
   error?: string;
@@ -19,7 +19,7 @@ export type FormState = {
 };
 
 export async function register(
-  data: z.infer<typeof RegisterSchema>
+  data: z.infer<typeof RegisterSchema>,
 ): Promise<FormState> {
   const ip = headers().get("x-forwarded-for") ?? "127.0.0.1";
   const isAllowed = await getRateLimit(ip);
@@ -49,7 +49,7 @@ export async function register(
   if (!verificationToken) return { error: "Something went wrong!" };
   await sendVerificationEmail(
     verificationToken?.email,
-    verificationToken?.token
+    verificationToken?.token,
   );
 
   return { success: "Confirmation email sent!" };

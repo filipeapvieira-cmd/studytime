@@ -1,11 +1,11 @@
-import NextAuth, { DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import type { UserRole } from "@prisma/client";
+import NextAuth, { type DefaultSession } from "next-auth";
 import authConfig from "./auth.config";
-import { db } from "./lib/db";
-import { getUserById } from "./data/user";
-import { UserRole } from "@prisma/client";
-import { isValidInteger } from "./lib/utils";
 import { getTwoFactorConfirmationByUserId } from "./data/two-factor-confirmation";
+import { getUserById } from "./data/user";
+import { db } from "./lib/db";
+import { isValidInteger } from "./lib/utils";
 
 declare module "next-auth" {
   /**
@@ -65,7 +65,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (existingUser?.isTwoFactorEnabled) {
         // Verify if we have the two factor confirmation
         const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
-          existingUser.id
+          existingUser.id,
         );
 
         // Id we don't have the confirmation, we return false

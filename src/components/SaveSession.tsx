@@ -1,18 +1,18 @@
 "use client";
 
 import { useContext } from "react";
-import { Button } from "@/src/components/ui/button";
-import { Icons } from "@/src/components/icons";
 import Alert from "@/src/components/Alert";
-import { retrieveTextFromJson } from "@/src/lib/utils";
-import { useTimeContext } from "@/src/ctx/time-provider";
+import { Icons } from "@/src/components/icons";
+import { Button } from "@/src/components/ui/button";
+import { HTTP_METHOD, SAVE_SESSION_ENDPOINT } from "@/src/constants/config";
 import { FeelingsContext } from "@/src/ctx/session-feelings-provider";
-import { getFullSessionLog } from "@/src/lib/session-log/utils";
-import { FullSessionLog } from "@/src/types";
-import { useStudySession } from "@/src/hooks/useStudySession";
-import { SAVE_SESSION_ENDPOINT, HTTP_METHOD } from "@/src/constants/config";
 import { TopicsContext } from "@/src/ctx/session-topics-provider";
+import { useTimeContext } from "@/src/ctx/time-provider";
 import { useFetch } from "@/src/hooks/useFetch";
+import { useStudySession } from "@/src/hooks/useStudySession";
+import { getFullSessionLog } from "@/src/lib/session-log/utils";
+import { retrieveTextFromJson } from "@/src/lib/utils";
+import type { FullSessionLog } from "@/src/types";
 
 export const SaveSessionBtn = () => {
   const { getLastTimer, status } = useTimeContext();
@@ -20,7 +20,7 @@ export const SaveSessionBtn = () => {
   const { resetStudySession } = useStudySession();
   const { title, description } = retrieveTextFromJson("saveSession");
   const { sessionTopics } = useContext(TopicsContext);
-  let sessionLog: FullSessionLog | undefined = undefined;
+  let sessionLog: FullSessionLog | undefined;
 
   const { isLoading, callAPI } = useFetch();
 

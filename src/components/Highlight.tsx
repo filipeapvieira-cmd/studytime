@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 
 interface HighlightProps {
   text: string;
@@ -25,7 +25,7 @@ const Highlight: FC<HighlightProps> = ({ text, searchInput }) => {
           </span>
         ) : (
           part
-        )
+        ),
       )}
     </p>
   );

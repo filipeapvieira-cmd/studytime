@@ -1,8 +1,8 @@
-import { db } from "@/src/lib/db";
 import { NextResponse } from "next/server";
-import { FullSessionLogUpdate } from "@/src/types";
 import { getSessionUpdateData, topicsToDelete } from "@/src/lib/api/utils";
 import { currentUser } from "@/src/lib/authentication";
+import { db } from "@/src/lib/db";
+import type { FullSessionLogUpdate } from "@/src/types";
 
 export async function PUT(req: Request, context: any) {
   const { params } = context;
@@ -16,7 +16,7 @@ export async function PUT(req: Request, context: any) {
         message: "Unauthorized access. Please log in.",
         data: null,
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -57,7 +57,7 @@ export async function PUT(req: Request, context: any) {
         message: "Session updated successfully",
         data: null,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     let message = "Something went wrong. Unable to update session...";
@@ -72,7 +72,7 @@ export async function PUT(req: Request, context: any) {
         message,
         data: null,
       },
-      { status: 400 }
+      { status: 400 },
     );
   } finally {
     await db.$disconnect();

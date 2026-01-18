@@ -1,10 +1,10 @@
 "use client";
 
-import * as z from "zod";
-import React, { useState, useTransition } from "react";
-import CardWrapper from "./card-wrapper";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import React, { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import type * as z from "zod";
 import {
   Form,
   FormControl,
@@ -13,14 +13,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { login } from "@/src/actions/login";
+import { reset } from "@/src/actions/reset";
 import { LoginSchema, ResetSchema } from "@/src/schemas";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import FormError from "../form-error";
 import FormSuccess from "../form-success";
-import { login } from "@/src/actions/login";
-import Link from "next/link";
-import { reset } from "@/src/actions/reset";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import CardWrapper from "./card-wrapper";
 
 export default function ResetForm() {
   const [error, setError] = useState<string | undefined>("");

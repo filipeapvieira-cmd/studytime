@@ -1,8 +1,7 @@
-import { FC } from "react";
-import { useRef, useEffect } from "react";
+import { type FC, useEffect, useRef } from "react";
+import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
-import { Button } from "@/src/components/ui/button";
 
 interface ChronoMenuProps {
   closeBtnRef: React.RefObject<HTMLButtonElement>;

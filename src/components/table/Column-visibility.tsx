@@ -1,12 +1,12 @@
-import { FC } from "react";
+import type { FC } from "react";
+import { Icons } from "@/src/components/icons";
+import { Button } from "@/src/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { Button } from "@/src/components/ui/button";
-import { Icons } from "@/src/components/icons";
 
 interface ColumnVisibility {
   table: any;

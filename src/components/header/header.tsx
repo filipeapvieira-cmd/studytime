@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Icons } from "@/src/components/icons";
 import NavLinks from "@/src/components/header/nav-links";
 import Login from "@/src/components/header/nav-login";
+import { Icons } from "@/src/components/icons";
 
 function Header() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useState, useEffect } from "react";
-import { ChronoContextType } from "@/src/types";
+import { createContext, useEffect, useState } from "react";
+import type { ChronoContextType } from "@/src/types";
 
 export const chronoCtxDefaultValues: ChronoContextType = {
   sessionChrono: {
@@ -12,7 +12,7 @@ export const chronoCtxDefaultValues: ChronoContextType = {
 };
 
 export const ChronoContext = createContext<ChronoContextType>(
-  chronoCtxDefaultValues
+  chronoCtxDefaultValues,
 );
 
 export default function ChronoProvider({
@@ -21,7 +21,7 @@ export default function ChronoProvider({
   children: React.ReactNode;
 }) {
   const [sessionChrono, setSessionChrono] = useState(
-    chronoCtxDefaultValues.sessionChrono
+    chronoCtxDefaultValues.sessionChrono,
   );
 
   // TODO: Needs improvement

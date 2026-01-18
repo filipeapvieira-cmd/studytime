@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, useState, useContext } from "react";
-import { Timer, TimeContextType, SessionStatus } from "@/src/types";
+import { createContext, useContext, useState } from "react";
 import useEffectStatusHandling from "@/hooks/useEffectStatusHandling";
+import { SessionStatus, type TimeContextType, type Timer } from "@/src/types";
 
 export const timeCtxDefaultValues: TimeContextType = {
   Timer: {

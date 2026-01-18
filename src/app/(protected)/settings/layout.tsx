@@ -1,5 +1,5 @@
-import { SidebarNav } from "@/src/components/user-settings/sidebar-nav";
 import type React from "react";
+import { SidebarNav } from "@/src/components/user-settings/sidebar-nav";
 
 export default function SettingsLayout({
   children,

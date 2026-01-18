@@ -1,6 +1,6 @@
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import React from "react";
 import CardWrapper from "./card-wrapper";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 export default function NotAuthorizedCard() {
   return (

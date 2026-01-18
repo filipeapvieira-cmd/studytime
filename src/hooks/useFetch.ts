@@ -1,8 +1,8 @@
-import { useCallback, useState } from "react";
-import { FullSessionLog } from "@/src/types";
-import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
-import { useCustomToast } from "./useCustomToast";
 import { set } from "date-fns";
+import { useCallback, useState } from "react";
+import { useFetchStatusToastHandling } from "@/src/hooks/useFetchStatusToastHandling";
+import type { FullSessionLog } from "@/src/types";
+import { useCustomToast } from "./useCustomToast";
 
 type CallAPIParams = {
   body?: FullSessionLog | object;
@@ -45,7 +45,7 @@ export const useFetch = () => {
         if (!response.ok) {
           throw new Error(
             data.message ||
-              `Something went wrong. Server response with status ${response.status}`
+              `Something went wrong. Server response with status ${response.status}`,
           );
         }
 
@@ -67,7 +67,7 @@ export const useFetch = () => {
         setIsLoading(false);
       }
     },
-    [showToast]
+    [showToast],
   );
 
   return { isLoading, callAPI };

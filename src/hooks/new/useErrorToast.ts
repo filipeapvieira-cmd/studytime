@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { useToast } from "@/src/components/ui/use-toast";
 
-export const useErrorToast = (error: any, message: string = "Something went wrong") => {
+export const useErrorToast = (
+  error: any,
+  message: string = "Something went wrong",
+) => {
   const { toast } = useToast();
 
   useEffect(() => {

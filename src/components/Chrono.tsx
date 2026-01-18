@@ -1,7 +1,7 @@
 "use client";
 
-import { FC, useContext } from "react";
-import { useState, useRef, useEffect } from "react";
+import { type FC, useContext, useEffect, useRef, useState } from "react";
+import { Icons } from "@/src/components/icons";
 import { Button } from "@/src/components/ui/button";
 import {
   Popover,
@@ -13,10 +13,9 @@ import {
   chronoCtxDefaultValues,
 } from "@/src/ctx/chrono-provider";
 import { useTimeContext } from "@/src/ctx/time-provider";
-import { Icons } from "@/src/components/icons";
 import ChronoMenu from "./Chrono-menu";
 
-interface ChronoProps {}
+type ChronoProps = {};
 
 const Chrono: FC<ChronoProps> = ({}) => {
   const { sessionChrono, setSessionChrono } = useContext(ChronoContext);

@@ -1,7 +1,7 @@
-import { FC } from "react";
-import { Badge } from "./ui/badge";
-import Highlight from "./Highlight";
 import { sub } from "date-fns";
+import type { FC } from "react";
+import Highlight from "./Highlight";
+import { Badge } from "./ui/badge";
 
 interface SessionTopicProps {
   title: string;

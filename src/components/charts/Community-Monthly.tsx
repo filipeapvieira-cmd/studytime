@@ -11,12 +11,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
+import type { CommunityDataStructure } from "@/src/types/charts";
 import {
   Select,
   SelectContent,
@@ -25,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { CommunityDataStructure } from "@/src/types/charts";
 
 const chartConfig = {
   user: {
@@ -48,7 +47,7 @@ export function CommunityMonthlyDistributionChart({
   const { academicYearData } = data;
   const academicYearKeys = React.useMemo(
     () => Object.keys(academicYearData),
-    [data]
+    [data],
   );
   const lastAcademicYear = academicYearKeys[academicYearKeys.length - 1];
 

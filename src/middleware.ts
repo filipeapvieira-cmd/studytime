@@ -1,5 +1,6 @@
-import authConfig from "./auth.config";
 import NextAuth from "next-auth";
+import authConfig from "./auth.config";
+import { currentRole } from "./lib/authentication";
 import {
   apiAuthPrefix,
   authorizationRoutes,
@@ -7,7 +8,6 @@ import {
   DEFAULT_LOGIN_REDIRECT,
   publicRoutes,
 } from "./routes";
-import { currentRole } from "./lib/authentication";
 
 const { auth } = NextAuth(authConfig);
 
@@ -22,7 +22,7 @@ export default auth(async (req) => {
   const authorizationRoute = authorizationRoutes.find(
     (route) =>
       nextUrl.pathname === route.path ||
-      nextUrl.pathname.startsWith(`${route.path}/`)
+      nextUrl.pathname.startsWith(`${route.path}/`),
   );
 
   if (isApiAuthRoute) {

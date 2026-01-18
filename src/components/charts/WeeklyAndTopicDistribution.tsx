@@ -1,14 +1,14 @@
 "use client";
 
 import { format } from "date-fns";
+import { useMemo } from "react";
 import useStudySessionFilter from "@/src/hooks/useStudySessionFilter";
+import { getTotalStudiedTimePerDayOfTheWeek } from "@/src/lib/charts/utils";
+import type { StudySessionDto } from "@/src/types";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { DateRangeSelector } from "./DateRangeSelector";
 import TopicDistributionChart from "./TopicDistributionChart";
 import WeeklyDistributionChart from "./WeeklyDistributionChart";
-import { useMemo } from "react";
-import { getTotalStudiedTimePerDayOfTheWeek } from "@/src/lib/charts/utils";
-import { StudySessionDto } from "@/src/types";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 type WeeklyAndTopicDistributionProps = {
   data: StudySessionDto[];

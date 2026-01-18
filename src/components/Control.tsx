@@ -1,11 +1,11 @@
-import { FC } from "react";
-import Timer from "./ui/Timer";
+import type { FC } from "react";
 import Chrono from "./Chrono";
 import { NewSessionBtn } from "./NewSession";
-import { StopSessionBtn } from "./StopSession";
 import { SaveSessionBtn } from "./SaveSession";
+import { StopSessionBtn } from "./StopSession";
+import Timer from "./ui/Timer";
 
-interface CounterProps {}
+type CounterProps = {};
 
 const Counter: FC<CounterProps> = ({}) => {
   return (

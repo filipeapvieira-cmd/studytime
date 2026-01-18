@@ -1,7 +1,7 @@
-import { StudySessionDto } from "@/src/types";
-import { Table } from "@tanstack/table-core";
+import type { OutputData } from "@editorjs/editorjs";
+import type { Table } from "@tanstack/table-core";
 import EditorJsHtml from "editorjs-html";
-import { OutputData } from "@editorjs/editorjs";
+import type { StudySessionDto } from "@/src/types";
 
 // Initialize the Editor.js to HTML parser
 const edjsParser = EditorJsHtml({
@@ -68,11 +68,11 @@ const getIntroduction = (studySessions: StudySessionDto[]) => {
   const { earliestDateString, latestDateString } =
     getEarliestAndLatestDates(studySessions);
   const message = `This document, generated on ${getDayOfTheWeek(
-    today
+    today,
   )}, ${today}, contains the logs spanning from <b>${getDayOfTheWeek(
-    earliestDateString
+    earliestDateString,
   )}, ${earliestDateString}</b>, to <b>${getDayOfTheWeek(
-    latestDateString
+    latestDateString,
   )}, ${latestDateString}</b>.`;
   return message;
 };
@@ -80,7 +80,7 @@ const getIntroduction = (studySessions: StudySessionDto[]) => {
 function getSortedSessions(table: any): StudySessionDto[] {
   const filteredRows = table.getFilteredRowModel().rows;
   const sessionsToExport: StudySessionDto[] = filteredRows.map(
-    (row: any) => row.original
+    (row: any) => row.original,
   );
 
   sessionsToExport.sort((a, b) => {
@@ -101,7 +101,7 @@ export const exportFile = <TData>(table: Table<TData>) => {
  */
 export function downloadHtmlFile(
   content: string,
-  filename = "content.html"
+  filename = "content.html",
 ): void {
   const blob = new Blob([content], { type: "text/html" });
   const url = window.URL.createObjectURL(blob);
@@ -201,7 +201,7 @@ ${getIntroduction(sessions)}
         try {
           // Convert the Editor.js JSON to HTML.
           const parsedBlocks = edjsParser.parse(
-            topic.contentJson as unknown as OutputData
+            topic.contentJson as unknown as OutputData,
           );
           topicHtml = Array.isArray(parsedBlocks)
             ? parsedBlocks.join("")
@@ -209,7 +209,7 @@ ${getIntroduction(sessions)}
         } catch (error) {
           console.error(
             `Error parsing content for topic "${topic.title}":`,
-            error
+            error,
           );
           topicHtml = `<p>Error rendering content.</p>`;
         }

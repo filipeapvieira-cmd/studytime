@@ -1,11 +1,11 @@
-import { cn } from "@/src/lib/utils";
 import {
-  FC,
-  TextareaHTMLAttributes,
-  KeyboardEvent,
-  ChangeEventHandler,
   ChangeEvent,
+  type ChangeEventHandler,
+  type FC,
+  type KeyboardEvent,
+  type TextareaHTMLAttributes,
 } from "react";
+import { cn } from "@/src/lib/utils";
 
 interface CustomTextAreaProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -49,7 +49,7 @@ const CustomTextArea: FC<CustomTextAreaProps> = ({
       rows={rows || 10}
       className={cn(
         "w-full outline-0 p-1 bg-secondary caret-foreground border-input border rounded-lg",
-        className
+        className,
       )}
     />
   );

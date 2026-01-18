@@ -1,15 +1,15 @@
 "use client";
 
 import { useContext } from "react";
-import { useTimeContext } from "@/src/ctx/time-provider";
-import { ChronoContext } from "@/src/ctx/chrono-provider";
-import { Button } from "@/src/components/ui/button";
-import { Icons } from "@/src/components/icons";
 import Alert from "@/src/components/Alert";
-import { retrieveTextFromJson } from "@/src/lib/utils";
-import { Timer } from "@/src/types";
+import { Icons } from "@/src/components/icons";
+import { Button } from "@/src/components/ui/button";
 import { SessionStatusEnum } from "@/src/constants/config";
+import { ChronoContext } from "@/src/ctx/chrono-provider";
+import { useTimeContext } from "@/src/ctx/time-provider";
 import { updateTimerStatus } from "@/src/lib/time-provider/utils";
+import { retrieveTextFromJson } from "@/src/lib/utils";
+import type { Timer } from "@/src/types";
 
 export const StopSessionBtn = () => {
   const {

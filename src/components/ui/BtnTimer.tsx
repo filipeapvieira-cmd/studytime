@@ -1,14 +1,14 @@
-import { FC } from "react";
-import { Button } from "./button";
+import type { FC } from "react";
 import { Icons } from "@/src/components/icons";
+import { SessionStatusEnum } from "@/src/constants/config";
+import { cn } from "@/src/lib/utils";
+import { Button } from "./button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "./tooltip";
-import { SessionStatusEnum } from "@/src/constants/config";
-import { cn } from "@/src/lib/utils";
 
 interface BtnTimerProps {
   onClick: () => void;
@@ -45,7 +45,7 @@ const BtnTimer: FC<BtnTimerProps> = ({
             size={size || "default"}
             className={cn(
               "bg-zinc-600 text-zinc-300 hover:bg-zinc-700 hover:text-white flex-1 flex justify-between items-center",
-              className
+              className,
             )}
           >
             {showIconForState(status)}

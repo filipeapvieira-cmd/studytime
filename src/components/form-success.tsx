@@ -1,5 +1,5 @@
-import React from "react";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
+import React from "react";
 
 type FormSuccessProps = {
   message?: string;

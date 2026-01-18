@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
-import { currentUser } from "@/src/lib/authentication";
+import { NextResponse } from "next/server";
 import { getUserImageConfigurationById } from "@/src/data/image-upload";
-import { CloudinaryConfigSchema } from "@/src/schemas/imageUploadForm.schema";
+import { currentUser } from "@/src/lib/authentication";
 import { handleDecryption } from "@/src/lib/crypto";
+import { CloudinaryConfigSchema } from "@/src/schemas/imageUploadForm.schema";
 
 // Force the Node.js runtime (required for packages like Cloudinary)
 export const runtime = "nodejs";
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
         message: "Unauthorized access. Please log in.",
         data: null,
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
           message: "Kindly update your image upload settings in your Profile.",
           data: null,
         },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
           (error, result) => {
             if (result) resolve(result);
             else reject(error);
-          }
+          },
         );
         stream.end(buffer);
       });
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
     console.error("Upload error:", error);
     return NextResponse.json(
       { error: "Error uploading file to Cloudinary" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

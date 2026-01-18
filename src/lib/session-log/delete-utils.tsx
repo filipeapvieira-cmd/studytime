@@ -1,11 +1,11 @@
-import { persistSession, deleteSession } from "@/src/lib/session-log/utils";
-import { FullSessionLog } from "@/src/types";
 import { HTTP_METHOD } from "@/src/constants/config";
+import { deleteSession, persistSession } from "@/src/lib/session-log/utils";
+import type { FullSessionLog } from "@/src/types";
 
 export const getRequestHandler = (
   body: FullSessionLog | undefined,
   url: string,
-  method: string
+  method: string,
 ) => {
   let requestHandler;
   switch (method) {
@@ -16,7 +16,7 @@ export const getRequestHandler = (
           null,
           body as FullSessionLog,
           url,
-          method
+          method,
         );
       }
       break;

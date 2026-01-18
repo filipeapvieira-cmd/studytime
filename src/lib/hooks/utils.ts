@@ -1,4 +1,4 @@
-import { Topic, TopicFormatted } from "@/src/types";
+import type { Topic, TopicFormatted } from "@/src/types";
 
 const convertTopicFormattedToTopic = (topic: TopicFormatted): Topic => {
   const {

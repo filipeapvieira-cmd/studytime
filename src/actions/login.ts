@@ -1,21 +1,21 @@
 "use server";
 
-import { getRateLimit } from "@/src/lib/rate-limit";
 import { headers } from "next/headers";
-import { LoginSchema } from "@/src/schemas/index";
-import { z } from "zod";
-import { signIn } from "@/src/auth";
-import { DEFAULT_LOGIN_REDIRECT } from "../routes";
 import { AuthError } from "next-auth";
-import { getUserByEmail } from "../data/user";
+import type { z } from "zod";
 import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail";
 import {
   generateTwoFactorToken,
   generateVerificationToken,
 } from "@/lib/tokens";
-import { getTwoFactorTokenByEmail } from "../data/two-factor-token";
-import { db } from "../lib/db";
+import { signIn } from "@/src/auth";
+import { getRateLimit } from "@/src/lib/rate-limit";
+import { LoginSchema } from "@/src/schemas/index";
 import { getTwoFactorConfirmationByUserId } from "../data/two-factor-confirmation";
+import { getTwoFactorTokenByEmail } from "../data/two-factor-token";
+import { getUserByEmail } from "../data/user";
+import { db } from "../lib/db";
+import { DEFAULT_LOGIN_REDIRECT } from "../routes";
 
 export type FormState = {
   error?: string;
@@ -24,7 +24,7 @@ export type FormState = {
 };
 
 export async function login(
-  data: z.infer<typeof LoginSchema>
+  data: z.infer<typeof LoginSchema>,
 ): Promise<FormState> {
   const ip = headers().get("x-forwarded-for") ?? "127.0.0.1";
   const isAllowed = await getRateLimit(ip);
@@ -50,14 +50,14 @@ export async function login(
   // If the user has not verified their email, send a new verification email
   if (!existingUser.emailVerified) {
     const verificationToken = await generateVerificationToken(
-      existingUser.email
+      existingUser.email,
     );
 
     if (!verificationToken) return { error: "Something went wrong!" };
 
     await sendVerificationEmail(
       verificationToken?.email,
-      verificationToken?.token
+      verificationToken?.token,
     );
     return {
       success: "Please check your inbox and verify your Email address!",

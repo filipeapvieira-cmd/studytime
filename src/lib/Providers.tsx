@@ -1,14 +1,14 @@
 "use client";
 
 import { SessionProvider } from "next-auth/react";
-import TimerProvider from "@/src/ctx/time-provider";
+import { ThemeProvider } from "next-themes";
+import type { FC } from "react";
+import BeforeUnloadHandler from "@/src/components/layout/BeforeUnloadHandler";
 import ChronoProvider from "@/src/ctx/chrono-provider";
 import FeelingsProvider from "@/src/ctx/session-feelings-provider";
-import UploadImagesProvider from "@/src/ctx/upload-images-provider";
 import TopicsProvider from "@/src/ctx/session-topics-provider";
-import { ThemeProvider } from "next-themes";
-import { FC } from "react";
-import BeforeUnloadHandler from "@/src/components/layout/BeforeUnloadHandler";
+import TimerProvider from "@/src/ctx/time-provider";
+import UploadImagesProvider from "@/src/ctx/upload-images-provider";
 import { UpdateSessionProvider } from "../ctx/update-session-provider";
 
 interface ProvidersProps {

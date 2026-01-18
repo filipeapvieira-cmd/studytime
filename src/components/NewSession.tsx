@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
-import { Icons } from "@/src/components/icons";
 import Alert from "@/src/components/Alert";
-import { retrieveTextFromJson } from "@/src/lib/utils";
+import { Icons } from "@/src/components/icons";
+import { Button } from "@/src/components/ui/button";
 import { useStudySession } from "@/src/hooks/useStudySession";
+import { retrieveTextFromJson } from "@/src/lib/utils";
 
 export const NewSessionBtn = () => {
   const { resetStudySession } = useStudySession();

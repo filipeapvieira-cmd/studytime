@@ -1,14 +1,19 @@
-import { ClassValue, clsx } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import {
+  type ControlText,
+  type EditorData,
+  type JSONValue,
+  Timer,
+} from "@/src/types";
 import alerts from "@/text/alerts.json";
-import { ControlText, EditorData, JSONValue, Timer } from "@/src/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export const retrieveTextFromJson = (
-  keyName: ControlText["action"]
+  keyName: ControlText["action"],
 ): { title: string; description: string } => {
   const text = alerts[keyName];
   return { title: text.title, description: text.description };
@@ -26,10 +31,10 @@ export const getFeelingsDisplayName = (feeling: string) => {
 export function getTopicContent(
   topic:
     | {
-      description?: string;
-      contentJson?: JSONValue;
-    }
-    | undefined
+        description?: string;
+        contentJson?: JSONValue;
+      }
+    | undefined,
 ): string | JSONValue {
   if (!topic) {
     throw new Error("Topic not found");

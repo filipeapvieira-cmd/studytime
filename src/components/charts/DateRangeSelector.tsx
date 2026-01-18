@@ -1,4 +1,9 @@
-import { DateRange } from "react-day-picker";
+import type { DateRange } from "react-day-picker";
+import { CUSTOM_RANGE } from "@/src/constants/constants.charts";
+import type {
+  PredefinedDateRangeKey,
+  PredefinedDateRanges,
+} from "@/src/lib/charts/utils";
 import { CalendarDateRangePicker } from "../Date-range-picker";
 import {
   Select,
@@ -7,11 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import {
-  PredefinedDateRangeKey,
-  PredefinedDateRanges,
-} from "@/src/lib/charts/utils";
-import { CUSTOM_RANGE } from "@/src/constants/constants.charts";
 
 interface DateRangeSelectorProps {
   range: DateRange | undefined;

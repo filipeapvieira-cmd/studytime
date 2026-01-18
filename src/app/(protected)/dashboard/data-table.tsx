@@ -1,20 +1,24 @@
 "use client";
 
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  getFilteredRowModel,
+  type Cell,
+  type ColumnDef,
+  type ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
-  useReactTable,
-  SortingState,
   getSortedRowModel,
-  VisibilityState,
-  Row,
-  Cell,
+  type Row,
+  type SortingState,
+  useReactTable,
+  type VisibilityState,
 } from "@tanstack/react-table";
-
+import { useCallback, useState } from "react";
+import { globalFilterFn } from "@/src/app/(protected)/dashboard/columns";
+import EditSession from "@/src/components/new-update-session/edit-session-modal";
+import { DataTablePagination } from "@/src/components/table/data-table-pagination";
+import TableFilters from "@/src/components/table/Table-filters";
 import {
   Table,
   TableBody,
@@ -23,15 +27,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table";
-
-import { useState, useCallback } from "react";
-import { DataTablePagination } from "@/src/components/table/data-table-pagination";
-import { globalFilterFn } from "@/src/app/(protected)/dashboard/columns";
-import TableFilters from "@/src/components/table/Table-filters";
-import EditSession from "@/src/components/new-update-session/edit-session-modal";
-import { StudySessionDto } from "@/src/types";
-import { convertListToTopic } from "@/src/lib/hooks/utils";
 import { useUpdateSessionContext } from "@/src/ctx/update-session-provider";
+import { convertListToTopic } from "@/src/lib/hooks/utils";
+import type { StudySessionDto } from "@/src/types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -68,7 +66,7 @@ export function DataTable<TData, TValue>({
         row: Row<TData>,
         columnId: string,
         value: string,
-        addMeta: any
+        addMeta: any,
       ) => {
         // Check if the column is visible before applying the filter
         if (columnVisibility[columnId] !== false) {
@@ -80,7 +78,7 @@ export function DataTable<TData, TValue>({
 
       return globalFilterFnWithVisibility(row, columnId, value, addMeta);
     },
-    [columnVisibility] // Recreate the function whenever columnVisibility changes
+    [columnVisibility], // Recreate the function whenever columnVisibility changes
   );
 
   const table = useReactTable({
@@ -154,7 +152,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -178,10 +176,9 @@ export function DataTable<TData, TValue>({
                       key={cell.id}
                       onClick={() => handleCellClick(cell)}
                     >
-                      <>{}</>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

@@ -1,5 +1,5 @@
-import { FormState, UserDetails } from "@/src/types";
 import { signIn } from "next-auth/react";
+import type { FormState, UserDetails } from "@/src/types";
 
 export const formLogic = (type: "login" | "register", form: FormState) => {
   const userDetails =
@@ -19,7 +19,7 @@ const registerUser = async (userDetails: UserDetails) => {
 
   if (!response.ok) {
     throw new Error(
-      data.message || "Unable to connect, please try again later"
+      data.message || "Unable to connect, please try again later",
     );
   }
 

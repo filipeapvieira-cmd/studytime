@@ -1,10 +1,10 @@
 "use client";
 
-import * as z from "zod";
-import React, { useState, useTransition } from "react";
-import CardWrapper from "./card-wrapper";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams } from "next/navigation";
+import React, { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import type * as z from "zod";
 import {
   Form,
   FormControl,
@@ -13,14 +13,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { newPasswordRequest } from "@/src/actions/new-password";
+import { reset } from "@/src/actions/reset";
 import { NewPasswordSchema } from "@/src/schemas";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import FormError from "../form-error";
 import FormSuccess from "../form-success";
-import { reset } from "@/src/actions/reset";
-import { useSearchParams } from "next/navigation";
-import { newPasswordRequest } from "@/src/actions/new-password";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import CardWrapper from "./card-wrapper";
 
 export default function NewPasswordForm() {
   const [error, setError] = useState<string | undefined>("");

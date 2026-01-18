@@ -1,8 +1,8 @@
 "use client";
 
+import { Bell, Settings, Shield, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Settings, User, Shield, Bell } from "lucide-react";
 
 const navItems = [
   { href: "/settings/profile", icon: User, label: "Profile" },

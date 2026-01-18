@@ -1,9 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { Check, ChevronDown, Loader2 } from "lucide-react";
-
-import { cn } from "@/src/lib/utils";
+import * as React from "react";
 import { Button } from "@/src/components/ui/button";
 import {
   Command,
@@ -19,6 +17,7 @@ import {
   PopoverTrigger,
 } from "@/src/components/ui/popover";
 import { useTopicTitle } from "@/src/hooks/new/useTopicTitle";
+import { cn } from "@/src/lib/utils";
 
 type TopicSubjectSelectionProps = {
   value: string | undefined;
@@ -52,7 +51,7 @@ export function TopicSubjectSelection({
           aria-expanded={open}
           className={cn(
             "w-full  bg-zinc-900/50 text-white border-zinc-800/50 hover:bg-zinc-800/50 hover:text-white rounded-xl p-3 h-auto shadow-[0_0_15px_rgba(0,0,0,0.1)] overflow-hidden",
-            isLoading ? "justify-center" : "justify-between"
+            isLoading ? "justify-center" : "justify-between",
           )}
         >
           {isLoading ? (
@@ -87,7 +86,7 @@ export function TopicSubjectSelection({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === topic ? "opacity-100" : "opacity-0"
+                      value === topic ? "opacity-100" : "opacity-0",
                     )}
                   />
                   {topic}

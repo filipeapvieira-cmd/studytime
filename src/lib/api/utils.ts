@@ -1,7 +1,7 @@
-import { FullSessionLog, FullSessionLogUpdate } from "@/src/types";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { db } from "@/src/lib/db";
-import { FlattenedError } from "@/src/types/utils.types";
+import type { FullSessionLog, FullSessionLogUpdate } from "@/src/types";
+import type { FlattenedError } from "@/src/types/utils.types";
 
 export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
   const { startTime, endTime, pauseDuration, topics, feelingDescription } =
@@ -29,7 +29,7 @@ export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
           description: description || "",
           contentJson: contentJson || {},
           timeOfStudy: effectiveTimeOfStudy,
-        })
+        }),
       ),
     },
   };
@@ -47,7 +47,7 @@ export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
 
 export const getSessionUpdateData = (
   sessionLog: FullSessionLogUpdate,
-  userId: number
+  userId: number,
 ) => {
   const { startTime, endTime, pauseDuration, topics, feelingDescription } =
     sessionLog;
@@ -87,7 +87,7 @@ export const getSessionUpdateData = (
               contentJson: contentJson || {},
             },
           };
-        }
+        },
       ),
     },
   };
@@ -115,13 +115,13 @@ export const topicsToDelete = async (sessionToUpdate: FullSessionLogUpdate) => {
   const currentTopicsIds = currentTopics.map((t) => t.id);
   const topicIdsInSessionToUpdate = sessionToUpdate.topics.map((t) => t.id);
   const topicsToDelete = currentTopicsIds.filter(
-    (t) => !topicIdsInSessionToUpdate.includes(t)
+    (t) => !topicIdsInSessionToUpdate.includes(t),
   );
   return topicsToDelete;
 };
 
 export const getUniqueTopicTitles = async (
-  userId: number
+  userId: number,
 ): Promise<string[]> => {
   const topics = await db.topic.findMany({
     where: {

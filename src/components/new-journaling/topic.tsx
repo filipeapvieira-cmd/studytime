@@ -1,25 +1,25 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import BtnTimer from "../ui/BtnTimer";
-import { Button } from "../ui/button";
 import { Trash2 } from "lucide-react";
-import { Timer, Topic, TopicTimer } from "@/src/types";
-import useSessionStatus from "@/src/hooks/useSessionStatus";
-import { SessionStatusEnum } from "@/src/constants/config";
-import {
-  forceSessionStatusOnTopicStatus,
-  updateTimerStatus,
-} from "@/src/lib/time-provider/utils";
-import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
-import useEffectStatusHandling from "@/src/hooks/useEffectStatusHandling";
-import { cn } from "@/src/lib/utils";
+import React, { type ChangeEvent, useEffect, useState } from "react";
 import ReactInputMask from "react-input-mask";
+import type { SessionStatusEnum } from "@/src/constants/config";
 import { useUpdateSessionContext } from "@/src/ctx/update-session-provider";
+import useEffectStatusHandling from "@/src/hooks/useEffectStatusHandling";
+import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
+import useSessionStatus from "@/src/hooks/useSessionStatus";
 import {
   calculateEffectiveTime,
   calculateTotalEffectiveTimeOfOtherTopics,
   convertMillisecondsToTimeString,
   convertTimeStringToMilliseconds,
 } from "@/src/lib/session-log/update-utils";
+import {
+  forceSessionStatusOnTopicStatus,
+  updateTimerStatus,
+} from "@/src/lib/time-provider/utils";
+import { cn } from "@/src/lib/utils";
+import type { Timer, Topic, TopicTimer } from "@/src/types";
+import BtnTimer from "../ui/BtnTimer";
+import { Button } from "../ui/button";
 
 type TopicComponentProps = {
   topic: Topic;
@@ -85,27 +85,27 @@ export default function TopicComponent({
     forceSessionStatusOnTopicStatus(
       sessionStatus,
       topicTimer.status,
-      updateTopicTimer
+      updateTopicTimer,
     );
   }, [sessionStatus]);
 
   useEffect(() => {
     setSessionTopics((prevValue: Topic[]) =>
-      handleTimerChange(prevValue, topicTimer)
+      handleTimerChange(prevValue, topicTimer),
     );
   }, [topicTimer]);
 
   useEffect(() => {
     const delay = setTimeout(() => {
       setSessionTopics((prevValue: Topic[]) =>
-        handleTopicUpdate(prevValue, currentTopic)
+        handleTopicUpdate(prevValue, currentTopic),
       );
     }, 1000);
     return () => clearTimeout(delay);
   }, [currentTopic, setSessionTopics]);
 
   const updateTopicTimer = (
-    updateFunction: (prev: TopicTimer) => TopicTimer
+    updateFunction: (prev: TopicTimer) => TopicTimer,
   ) => {
     setTopicTimer((prev) => updateFunction(prev));
   };
@@ -114,7 +114,7 @@ export default function TopicComponent({
 
   const handleTimerChange = (allTopics: Topic[], componentTimeState: Timer) => {
     const topicToUpdate: Topic = allTopics.find(
-      (currentTopic) => currentTopic.id === topic.id
+      (currentTopic) => currentTopic.id === topic.id,
     ) as Topic;
 
     const {
@@ -149,10 +149,10 @@ export default function TopicComponent({
 
   const handleTopicUpdate = (
     allTopics: Topic[],
-    updatedTopicInformation: CurrentTopic
+    updatedTopicInformation: CurrentTopic,
   ) => {
     const topicToUpdate: Topic = allTopics.find(
-      (currentTopic) => currentTopic.id === topic.id
+      (currentTopic) => currentTopic.id === topic.id,
     ) as Topic;
 
     const { title, description } = updatedTopicInformation;
@@ -170,7 +170,7 @@ export default function TopicComponent({
   };
 
   const handleManuallyUpdateEffectiveTimeOfStudy = (
-    e: ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement>,
   ) => {
     const newValue = e.target.value;
     setUserUpdatedEffectiveTimeOfStudy(newValue);
@@ -184,7 +184,7 @@ export default function TopicComponent({
       pauseDuration,
     });
     const totalStudySessionTimeMs = convertTimeStringToMilliseconds(
-      totalStudySessionTime
+      totalStudySessionTime,
     );
 
     const totalEffectiveTimeOfOtherTopics =
@@ -215,7 +215,7 @@ export default function TopicComponent({
         `flex flex-col p-3 rounded-xl cursor-pointer w-[232px] transition-all duration-200 ease-in-out border border-zinc-800/50 shadow-[0_0_15px_rgba(0,0,0,0.2)]`,
         selectedTopicId === topic.id
           ? "bg-zinc-800 border-zinc-700"
-          : "bg-zinc-900/50 hover:bg-zinc-800/50"
+          : "bg-zinc-900/50 hover:bg-zinc-800/50",
       )}
       onClick={() => setSelectedTopicId(topic.id)}
     >
@@ -227,7 +227,7 @@ export default function TopicComponent({
       <div
         className={cn(
           "flex items-center gap-2 w-full",
-          isUpdate && "space-between"
+          isUpdate && "space-between",
         )}
       >
         {isUpdate ? (
@@ -251,7 +251,7 @@ export default function TopicComponent({
               `h-8 px-3 py-2 text-xs truncate flex-grow shadow-lg`,
               selectedTopicId === topic.id
                 ? "bg-zinc-700 text-zinc-200 hover:bg-zinc-600"
-                : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white"
+                : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white",
             )}
           />
         )}
@@ -263,7 +263,7 @@ export default function TopicComponent({
             `h-8 w-8 shadow-lg flex-shrink-0`,
             selectedTopicId === topic.id
               ? "bg-zinc-700 text-zinc-200 hover:bg-zinc-600"
-              : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white"
+              : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white",
           )}
           onClick={(e) => {
             e.stopPropagation();

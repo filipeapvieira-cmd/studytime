@@ -1,8 +1,8 @@
 import React from "react";
+import { currentUser } from "@/src/lib/authentication";
+import { Icons } from "../icons";
 import UserNav from "../User-Nav";
 import Btnlink from "../ui/Btnlink";
-import { Icons } from "../icons";
-import { currentUser } from "@/src/lib/authentication";
 
 export default async function Login() {
   const user = await currentUser();

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Bar,
   BarChart,
@@ -10,16 +11,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { useState } from "react";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-} from "@/components/ui/select";
-import { AcademicYearData, ChartItem } from "@/src/types/charts";
 import {
   Card,
   CardContent,
@@ -27,6 +18,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { AcademicYearData, ChartItem } from "@/src/types/charts";
 
 const fontSize = 15;
 
@@ -49,7 +49,7 @@ export function MonthlyDistributionChart({
   const lastAcademicYear = academicYearKeys[academicYearKeys.length - 1];
   const [selectedYear, setSelectedYear] = useState<string>(lastAcademicYear);
   const [data, setData] = useState<ChartItem[]>(
-    transformData(chartData[lastAcademicYear])
+    transformData(chartData[lastAcademicYear]),
   );
 
   if (!chartData) {

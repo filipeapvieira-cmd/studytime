@@ -1,9 +1,9 @@
 "use client";
 
-import { useTimeContext } from "@/src/ctx/time-provider";
-import BtnTimer from "./BtnTimer";
-import { updateTimerStatus } from "@/src/lib/time-provider/utils";
 import { SessionStatusEnum } from "@/src/constants/config";
+import { useTimeContext } from "@/src/ctx/time-provider";
+import { updateTimerStatus } from "@/src/lib/time-provider/utils";
+import BtnTimer from "./BtnTimer";
 
 const Timer = () => {
   const { Timer, updateTimer } = useTimeContext();

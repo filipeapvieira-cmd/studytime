@@ -6,7 +6,7 @@ import { MonthlyTotals } from "../types/study-sessions";
 export function getYearMonthString(date: Date): string {
   return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(
     2,
-    "0"
+    "0",
   )}`;
 }
 
@@ -36,7 +36,7 @@ export function msToHHMMSS(ms: number): string {
 export function calculateEffectiveTimeMs(
   startTime: Date,
   endTime: Date,
-  pauseDuration: number
+  pauseDuration: number,
 ): number {
   return endTime.getTime() - (startTime.getTime() + pauseDuration);
 }
@@ -46,7 +46,7 @@ export function calculateEffectiveTimeMs(
  * Optionally we track user IDs or do other grouping as needed.
  */
 export function accumulateMonthlyEffectiveTimes(
-  sessions: any[]
+  sessions: any[],
 ): Record<string, number> {
   const monthlyTotals: Record<string, number> = {};
 
@@ -55,7 +55,7 @@ export function accumulateMonthlyEffectiveTimes(
     const effectiveTimeMs = calculateEffectiveTimeMs(
       startTime,
       endTime,
-      pauseDuration
+      pauseDuration,
     );
     const ym = getYearMonthString(startTime);
 
@@ -69,7 +69,7 @@ export function accumulateMonthlyEffectiveTimes(
 }
 
 export const convertMsMonthlyTotalsToHours = (
-  monthlyTotalsMs: Record<string, number>
+  monthlyTotalsMs: Record<string, number>,
 ): Record<string, number> => {
   const userMonthlyTotals: Record<string, number> = {};
   for (const [ym, ms] of Object.entries(monthlyTotalsMs)) {

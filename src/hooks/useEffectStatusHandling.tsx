@@ -3,12 +3,12 @@ import {
   handleEffectiveTimeOfStudyIncrease,
   statusToUpdateHandlerMap,
 } from "@/src/lib/time-provider/utils";
-import { SessionStatus, Timer } from "@/src/types";
+import type { SessionStatus, Timer } from "@/src/types";
 
 // Used to handle the status update of Sessions and Topics
 const useEffectStatusHandling = (
   status: SessionStatus,
-  updateTimer: (updateFunction: (prev: Timer) => Timer) => void
+  updateTimer: (updateFunction: (prev: Timer) => Timer) => void,
 ) => {
   useEffect(() => {
     let interval: NodeJS.Timer;

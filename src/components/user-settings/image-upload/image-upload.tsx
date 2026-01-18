@@ -1,5 +1,5 @@
-import { SetupInstructions } from "./instructions";
 import CloudinaryConfigForm from "./form";
+import { SetupInstructions } from "./instructions";
 
 export const ImageUploadSettings = () => {
   return (

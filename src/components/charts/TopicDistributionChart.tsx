@@ -2,13 +2,13 @@
 
 import React from "react";
 import {
-  PieChart,
-  Pie,
   Cell,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
   Label,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
 } from "recharts";
 import CustomTooltip from "./CustomTooltip";
 
@@ -43,7 +43,7 @@ const TopicDistributionChart = ({ chartData }: TopicDistributionChartProps) => {
   const totalTimeStudied = React.useMemo(() => {
     const totalSeconds = chartData.reduce(
       (acc, curr) => acc + curr.value / 1000, // Convert milliseconds to seconds
-      0
+      0,
     );
 
     const hours = Math.floor(totalSeconds / 3600);
