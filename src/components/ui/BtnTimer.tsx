@@ -47,6 +47,7 @@ const BtnTimer: FC<BtnTimerProps> = ({
               "bg-zinc-600 text-zinc-300 hover:bg-zinc-700 hover:text-white flex-1 flex justify-between items-center",
               className,
             )}
+            data-testid="btn-timer"
           >
             {showIconForState(status)}
             <p className="text-lg w-[82px]">
