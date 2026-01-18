@@ -1,4 +1,4 @@
-## 📚 StudyTime Logger_
+## 📚 StudyTime Logger
 
 An intuitive application designed for students to efficiently log, retrieve, and analyze their study sessions.
 
