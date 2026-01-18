@@ -17,7 +17,8 @@ test.describe('Authentication E2E Tests', () => {
         await page.goto('/');
 
         // Verify the page loads successfully by checking for content
-        await expect(page).toHaveURL('/');
+        // await expect(page).toHaveURL('/');
+        await expect(page).toHaveURL('/fail'); // Intentional failure for testing deployment blockage
 
         // Check that essential content is present (hero section)
         await expect(page.locator('main')).toBeVisible();
