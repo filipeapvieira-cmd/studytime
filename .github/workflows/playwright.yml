@@ -62,6 +62,7 @@ jobs:
         AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
         TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
     
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
