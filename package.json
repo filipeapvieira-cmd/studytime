@@ -109,6 +109,8 @@
     "prisma": "^5.20.0"
   },
   "overrides": {
-    "diff": "^8.0.3"
+    "diff": "^8.0.3",
+    "react": "$react",
+    "react-dom": "$react-dom"
   }
 }
