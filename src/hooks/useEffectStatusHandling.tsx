@@ -11,7 +11,7 @@ const useEffectStatusHandling = (
   updateTimer: (updateFunction: (prev: Timer) => Timer) => void,
 ) => {
   useEffect(() => {
-    let interval: NodeJS.Timer;
+    let interval: NodeJS.Timeout;
 
     const handleStatusUpdate = statusToUpdateHandlerMap[status];
     handleStatusUpdate(updateTimer);

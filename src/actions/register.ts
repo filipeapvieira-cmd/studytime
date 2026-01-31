@@ -19,7 +19,7 @@ export type FormState = {
 export async function register(
   data: z.infer<typeof RegisterSchema>,
 ): Promise<FormState> {
-  const ip = headers().get("x-forwarded-for") ?? "127.0.0.1";
+  const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
   const isAllowed = await getRateLimit(ip);
 
   if (!isAllowed) {

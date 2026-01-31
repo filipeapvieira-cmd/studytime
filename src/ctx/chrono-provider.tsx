@@ -8,7 +8,7 @@ export const chronoCtxDefaultValues: ChronoContextType = {
     seconds: 0,
     isActive: false,
   },
-  setSessionChrono: () => {},
+  setSessionChrono: () => { },
 };
 
 export const ChronoContext = createContext<ChronoContextType>(
@@ -30,7 +30,7 @@ export default function ChronoProvider({
   };
 
   useEffect(() => {
-    let interval: NodeJS.Timer;
+    let interval: NodeJS.Timeout;
     if (sessionChrono.isActive) {
       interval = setInterval(() => {
         setSessionChrono((prevSessionChrono) => {

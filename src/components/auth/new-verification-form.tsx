@@ -1,14 +1,14 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { newVerification } from "@/src/actions/new-verification";
 import FormError from "../form-error";
 import FormSuccess from "../form-success";
 import CardWrapper from "./card-wrapper";
 
-export const NewVerificationForm = () => {
+function VerificationContent() {
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
   const searchParams = useSearchParams();
@@ -34,6 +34,16 @@ export const NewVerificationForm = () => {
   }, [onSubmit]);
 
   return (
+    <>
+      {!success && !error && <BeatLoader />}
+      <FormSuccess message={success}></FormSuccess>
+      <FormError message={error}></FormError>
+    </>
+  );
+}
+
+export function NewVerificationForm() {
+  return (
     <div className="flex justify-center items-center flex-1">
       <CardWrapper
         headerLabel="Confirming your verification"
@@ -42,11 +52,13 @@ export const NewVerificationForm = () => {
         className="min-h-[400px]"
       >
         <div className="flex items-center justify-center w-full flex-1">
-          {!success && !error && <BeatLoader />}
-          <FormSuccess message={success}></FormSuccess>
-          <FormError message={error}></FormError>
+          <Suspense fallback={<BeatLoader />}>
+            <VerificationContent />
+          </Suspense>
         </div>
       </CardWrapper>
     </div>
   );
-};
+}
+
+

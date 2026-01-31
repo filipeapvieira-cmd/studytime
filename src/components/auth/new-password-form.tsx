@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
-import React, { useState, useTransition } from "react";
+import { Suspense, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
 import {
@@ -14,15 +14,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { newPasswordRequest } from "@/src/actions/new-password";
-import { reset } from "@/src/actions/reset";
 import { NewPasswordSchema } from "@/src/schemas";
 import FormError from "../form-error";
 import FormSuccess from "../form-success";
+import { Icons } from "../icons";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import CardWrapper from "./card-wrapper";
 
-export default function NewPasswordForm() {
+function PasswordFormContent() {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -52,42 +52,58 @@ export default function NewPasswordForm() {
   };
 
   return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="space-y-4">
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Password"
+                    type="password"
+                    disabled={isPending}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <FormError message={error} />
+        <FormSuccess message={success} />
+        <Button type="submit" className="w-full" disabled={isPending}>
+          Reset Password
+        </Button>
+      </form>
+    </Form>
+  );
+}
+
+export default function NewPasswordForm() {
+  return (
     <div className="flex justify-center items-center flex-1">
       <CardWrapper
         headerLabel="Enter a new password"
         backButtonLabel="Back to login"
         backButtonHref="/auth/login"
       >
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Password"
-                        type="password"
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center py-8">
+              <Icons.loading className="h-6 w-6 animate-spin" />
             </div>
-            <FormError message={error} />
-            <FormSuccess message={success} />
-            <Button type="submit" className="w-full" disabled={isPending}>
-              Reset Password
-            </Button>
-          </form>
-        </Form>
+          }
+        >
+          <PasswordFormContent />
+        </Suspense>
       </CardWrapper>
     </div>
   );
 }
+
+

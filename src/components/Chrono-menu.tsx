@@ -4,7 +4,7 @@ import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 
 interface ChronoMenuProps {
-  closeBtnRef: React.RefObject<HTMLButtonElement>;
+  closeBtnRef: React.RefObject<HTMLButtonElement | null>;
   start: (minutes: number) => void;
 }
 
