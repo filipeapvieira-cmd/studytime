@@ -61,6 +61,24 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 | `npm run format` | Formats code using Biome. |
 | `npm run fix` | Fixes linting and formatting issues using Biome. |
 
+## 🧪 Testing
+
+We use Playwright for end-to-end and security testing.
+
+### Running Tests
+- **All tests**: `npx playwright test`
+- **Specific test file**: `npx playwright test tests/example.spec.ts`
+
+### Execution Modes
+- **Default (Headless)**: `npx playwright test` (Background execution)
+- **Headed mode**: `npx playwright test --headed` (Visible browser window)
+- **UI mode**: `npx playwright test --ui` (Interactive test runner)
+
+### Example: Authorization Security Tests
+- **Default**: `npx playwright test tests/authorization.spec.ts`
+- **Headed mode**: `npx playwright test tests/authorization.spec.ts --headed`
+- **UI mode**: `npx playwright test tests/authorization.spec.ts --ui`
+
 ## 🎯 Objective
 
 StudyTime Logger simplifies the student's journey by offering:
