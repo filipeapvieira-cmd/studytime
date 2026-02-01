@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { db } from "@/src/lib/db";
 
-export async function GET(req: Request, context: any) {
-  const { params } = context;
-  const id = params.sessionId;
+export async function GET(req: Request, context: { params: Promise<{ sessionId: string }> }) {
+  const { sessionId: sessionIdStr } = await context.params;
+  const id = sessionIdStr;
 
   const [feelings, topics] = await db.$transaction([
     db.feeling.findUnique({
