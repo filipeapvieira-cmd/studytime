@@ -25,11 +25,13 @@ export async function PUT(req: Request, context: { params: Promise<{ sessionId: 
 
   const sessionData = getSessionUpdateData(sessionToUpdate, userId);
 
+  const idsToDelete = await topicsToDelete(sessionToUpdate);
+
   const updateSession = async () => {
     return await db.$transaction(async (tx) => {
       await tx.topic.deleteMany({
         where: {
-          id: { in: await topicsToDelete(sessionToUpdate) },
+          id: { in: idsToDelete },
         },
       });
       await tx.studySession.update({
