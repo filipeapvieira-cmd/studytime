@@ -236,7 +236,7 @@ export default function TopicComponent({
             mask="00:00:00"
             placeholder="HH:MM:SS"
             lazy={false}
-            onAccept={(value) =>
+            onAccept={(value: string) =>
               handleManuallyUpdateEffectiveTimeOfStudy({
                 target: { value },
               } as React.ChangeEvent<HTMLInputElement>)

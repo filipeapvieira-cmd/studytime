@@ -208,7 +208,7 @@ const EditSessionToolbar: FC<EditSessionToolbarProps> = ({
             mask="00:00:00"
             placeholder="HH:MM:SS"
             lazy={false}
-            onAccept={(value) =>
+            onAccept={(value: string) =>
               handleOnChange({
                 target: { name: "pauseDuration", value },
               } as React.ChangeEvent<HTMLInputElement>)
