@@ -87,9 +87,8 @@ Implemented in [`src/auth.ts`](file:///c:/Repos/studytime/src/auth.ts), [`src/au
         *   Not logged in → allow
     *   **Protected routes** (anything not public/auth)
         *   Not logged in → redirect to `/auth/login`
-    *   **Role‑gated routes** (currently `/admin`)
-        *   If role exists and not allowed → redirect to `/auth/not-authorized`
-        *   If role is missing, no block occurs
+    *   **Role-gated routes** (currently `/admin`)
+        *   If role is missing or not allowed -> redirect to `/auth/not-authorized`
 5. **If not redirected**, the request reaches the route handler / server component.
 
 ### Authentication Providers
@@ -225,15 +224,15 @@ Implemented in [`src/middleware.ts`](file:///c:/Repos/studytime/src/middleware.t
 | **Public Pages** | View | Yes | Yes | Yes | Yes |
 | **Auth Pages** | View | Yes | Redirect | Redirect | Redirect |
 | **Admin Pages** | View | Redirect | No (403) | No (403) | Yes |
-| **Study Session** | Create | No (401) | Yes | N/A | Yes |
-| **Study Session** | Read | No (401) | Yes | No (403) | Yes |
-| **Study Session** | Update | No (401) | Yes | No (403) | Yes |
-| **Study Session** | Delete | No (401) | Yes | No (403) | Yes |
-| **Topic** | Create | No (401) | Yes | No (403) | Yes |
-| **Topic** | Read | No (401) | Yes | No (403) | Yes |
-| **Topic** | Update | No (401) | Yes | No (403) | Yes |
-| **Cloudinary Config** | Manage | No (401) | Yes | No (403) | Yes |
-| **Image Upload** | Create | No (401) | Yes | N/A | Yes |
+| **Study Session** | Create | No (401) | Yes | N/A | Yes (own only) |
+| **Study Session** | Read | No (401) | Yes | No (403) | Yes (own only) |
+| **Study Session** | Update | No (401) | Yes | No (403) | Yes (own only) |
+| **Study Session** | Delete | No (401) | Yes | No (403) | Yes (own only) |
+| **Topic** | Create | No (401) | Yes | No (403) | Yes (own only) |
+| **Topic** | Read | No (401) | Yes | No (403) | Yes (own only) |
+| **Topic** | Update | No (401) | Yes | No (403) | Yes (own only) |
+| **Cloudinary Config** | Manage | No (401) | Yes | No (403) | Yes (own only) |
+| **Image Upload** | Create | No (401) | Yes | N/A | Yes (own only) |
 
 ---
 
@@ -241,6 +240,7 @@ Implemented in [`src/middleware.ts`](file:///c:/Repos/studytime/src/middleware.t
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
+| 1.3 | 2026-02-01 | Filipe Vieira | Align docs with current middleware role-gate behavior; clarify ADMIN data access as "own only". |
 | 1.2 | 2026-02-01 | Filipe Vieira | Security Hardening: Remediated "MISSING" auth and ownership checks in API routes and server actions. |
-| 1.1 | 2026-01-31 | Filipe Vieira | Corrections based on code review (Middleware logic, library versions, missing server actions, corrected ownership checks) |
-| 1.0 | 2026-01-31 | Filipe Vieira | Initial authorization documentation |
+| 1.1 | 2026-01-31 | Filipe Vieira | Corrections based on code review (Middleware logic, library versions, missing server actions, corrected ownership checks). |
+| 1.0 | 2026-01-31 | Filipe Vieira | Initial authorization documentation. |
