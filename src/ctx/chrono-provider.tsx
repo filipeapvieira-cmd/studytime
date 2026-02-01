@@ -8,7 +8,7 @@ export const chronoCtxDefaultValues: ChronoContextType = {
     seconds: 0,
     isActive: false,
   },
-  setSessionChrono: () => { },
+  setSessionChrono: () => {},
 };
 
 export const ChronoContext = createContext<ChronoContextType>(

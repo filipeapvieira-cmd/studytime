@@ -151,9 +151,7 @@ function LoginFormContent() {
           type="submit"
           disabled={!isValid || isPending}
         >
-          {isPending && (
-            <Icons.loading className="mr-2 h-4 w-4 animate-spin" />
-          )}
+          {isPending && <Icons.loading className="mr-2 h-4 w-4 animate-spin" />}
           {!isPending && showTwoFactor ? "Confirm" : "Login"}
         </Button>
       </form>
@@ -181,5 +179,3 @@ export default function LoginForm() {
     </CardWrapper>
   );
 }
-
-
