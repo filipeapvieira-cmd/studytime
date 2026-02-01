@@ -165,17 +165,14 @@ Implemented in [`src/middleware.ts`](file:///c:/Repos/studytime/src/middleware.t
 
 ### API Route Authorization
 
-> [!WARNING]
-> "Authenticated" in the table below means the **Middleware** enforces login. The Handlers themselves currently often lack explicit `currentUser()` checks or role validation, relying on middleware.
-
 | Endpoint | Method | Middleware Auth | Role Required (Code) | Ownership Check | Notes |
 |----------|--------|:---------------:|:--------------------:|:---------------:|-------|
 | `/api/auth/*` | ALL | Yes | - | - | Handled by NextAuth framework |
 | `/api/session/save` | POST | Yes | Authenticated | N/A | Creates new session binded to userId |
 | `/api/session/get/sessions` | GET | Yes | Authenticated | Yes | User scoped query |
-| `/api/session/get/[sessionId]` | GET | Yes | - | **MISSING** | Vulnerable to IDOR. No handler auth check. |
-| `/api/session/delete/[sessionId]` | DELETE | Yes | Authenticated | **MISSING** | Vulnerable to IDOR. Checks `user` existence but not ownership. |
-| `/api/session/update/[sessionId]` | PUT | Yes | Authenticated | **MISSING** | Vulnerable to IDOR. Only updates by ID. |
+| `/api/session/get/[sessionId]` | GET | Yes | Authenticated | Yes | Verified in handler via `currentUser()` |
+| `/api/session/delete/[sessionId]` | DELETE | Yes | Authenticated | Yes | Verified in handler via `currentUser()` |
+| `/api/session/update/[sessionId]` | PUT | Yes | Authenticated | Yes | Verified in handler via `currentUser()` |
 | `/api/session/get/unique-topics` | GET | Yes | Authenticated | Yes | Uses `getUniqueTopicTitles(userId)` |
 | `/api/session/get/unique-hashtags` | GET | Yes | Authenticated | Yes | Uses `getUniqueHashtags(userId)` |
 | `/api/session/get/communityVsUser` | GET | Yes | Authenticated | Aggregation | Aggregated community totals, no per-user data leak. |
@@ -187,7 +184,7 @@ Implemented in [`src/middleware.ts`](file:///c:/Repos/studytime/src/middleware.t
 | Action | Location | Auth Check | Notes |
 |--------|----------|:----------:|-------|
 | `imageUploadSettings` | `image-upload.ts` | Yes | Proper user validation |
-| `updateTopicsAndHashtags` | `update-topics-and-hashtags.ts` | **MISSING** | No auth, affects global data table |
+| `updateTopicsAndHashtags` | `update-topics-and-hashtags.ts` | Yes | Authenticated & scoped to user sessions |
 | `login` | `login.ts` | N/A | Public action |
 | `register` | `register.ts` | N/A | Public action |
 | `reset` | `reset.ts` | N/A | Public action |
@@ -244,5 +241,6 @@ Implemented in [`src/middleware.ts`](file:///c:/Repos/studytime/src/middleware.t
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
+| 1.2 | 2026-02-01 | Filipe Vieira | Security Hardening: Remediated "MISSING" auth and ownership checks in API routes and server actions. |
 | 1.1 | 2026-01-31 | Filipe Vieira | Corrections based on code review (Middleware logic, library versions, missing server actions, corrected ownership checks) |
 | 1.0 | 2026-01-31 | Filipe Vieira | Initial authorization documentation |
