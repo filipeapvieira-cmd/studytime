@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { db } from "@/src/lib/db";
 
-export async function GET(req: Request, context: { params: Promise<{ sessionId: string }> }) {
+export async function GET(
+  req: Request,
+  context: { params: Promise<{ sessionId: string }> },
+) {
   const { sessionId: sessionIdStr } = await context.params;
   const id = sessionIdStr;
 

@@ -4,7 +4,10 @@ import { currentUser } from "@/src/lib/authentication";
 import { db } from "@/src/lib/db";
 import type { FullSessionLogUpdate } from "@/src/types";
 
-export async function PUT(req: Request, context: { params: Promise<{ sessionId: string }> }) {
+export async function PUT(
+  req: Request,
+  context: { params: Promise<{ sessionId: string }> },
+) {
   const { sessionId: sessionIdStr } = await context.params;
   const id: number = Number(sessionIdStr);
   const user = await currentUser();

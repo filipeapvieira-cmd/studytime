@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { currentUser } from "@/src/lib/authentication";
 import { db } from "@/src/lib/db";
 
-export async function DELETE(req: Request, context: { params: Promise<{ sessionId: string }> }) {
+export async function DELETE(
+  req: Request,
+  context: { params: Promise<{ sessionId: string }> },
+) {
   const { sessionId: sessionIdStr } = await context.params;
   const sessionId: number = Number(sessionIdStr);
   const user = await currentUser();
