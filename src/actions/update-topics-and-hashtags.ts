@@ -1,5 +1,6 @@
 "use server";
 
+import { currentUser } from "@/src/lib/authentication";
 import { db } from "@/lib/db";
 import type { HashtagItem, TopicItem } from "../types";
 
@@ -14,9 +15,12 @@ export const updateTopicsAndHashtags = async ({
   hashtagUpdates,
   deletedHashtags,
 }: RequestBody) => {
-  console.log("topicUpdates", topicUpdates);
-  console.log("hashtagUpdates", hashtagUpdates);
-  console.log("deletedHashtags", deletedHashtags);
+  const user = await currentUser();
+
+  if (!user?.id) {
+    return { error: "Unauthorized access. Please log in." };
+  }
+
   try {
     // 1. Update Topics
     for (const update of topicUpdates) {
