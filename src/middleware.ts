@@ -40,8 +40,8 @@ export default auth(async (req) => {
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
 
-  if (authorizationRoute && role) {
-    if (!authorizationRoute.roles.includes(role)) {
+  if (authorizationRoute) {
+    if (!role || !authorizationRoute.roles.includes(role)) {
       return Response.redirect(new URL("/auth/not-authorized", req.url));
     }
   }

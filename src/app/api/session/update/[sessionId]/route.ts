@@ -45,13 +45,36 @@ export async function PUT(
 
   const sessionData = getSessionUpdateData(sessionToUpdate, userId);
 
-  const idsToDelete = await topicsToDelete(sessionToUpdate, id);
+  const idsToDelete = await topicsToDelete(sessionToUpdate, id, userId);
+
+  // Validate that any topic with an ID provided in the update belongs to this session
+  const currentSessionTopics = await db.topic.findMany({
+    where: { sessionId: id },
+    select: { id: true },
+  });
+  const currentTopicIds = new Set(currentSessionTopics.map((t) => t.id));
+
+  for (const topic of sessionToUpdate.topics) {
+    if (topic.id && typeof topic.id === "number") {
+      if (!currentTopicIds.has(topic.id)) {
+        return NextResponse.json(
+          {
+            status: "error",
+            message: `Unauthorized: Topic with ID ${topic.id} does not belong to this session.`,
+            data: null,
+          },
+          { status: 403 },
+        );
+      }
+    }
+  }
 
   const updateSession = async () => {
     return await db.$transaction(async (tx) => {
       await tx.topic.deleteMany({
         where: {
           id: { in: idsToDelete },
+          studySession: { userId },
         },
       });
       await tx.studySession.update({
@@ -61,14 +84,6 @@ export async function PUT(
     });
   };
 
-  /*   const updateSession = async () => {
-    return await db.$transaction(async (tx) => {
-      await tx.studySession.delete({
-        where: { id },
-      });
-      await tx.studySession.create({ data: sessionData });
-    });
-  }; */
   await updateSession();
   try {
     // await updateSession();
