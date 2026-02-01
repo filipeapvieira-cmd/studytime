@@ -62,7 +62,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 | `npm run fix` | Fixes linting and formatting issues using Biome. |
 | `npm run test` | Runs all Playwright tests (headless). |
 | `npm run test:ui` | Opens the Playwright interactive UI. |
-| `npm run prepare` | Performs lint, test, and build in sequence. |
+| `npm run check-all` | Performs lint, test, and build in sequence. |
 
 ## 🧪 Testing
 
