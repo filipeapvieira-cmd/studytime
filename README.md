@@ -60,24 +60,33 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 | `npm run lint` | Runs Next.js linting. |
 | `npm run format` | Formats code using Biome. |
 | `npm run fix` | Fixes linting and formatting issues using Biome. |
+| `npm run test` | Runs all Playwright tests (headless). |
+| `npm run test:ui` | Opens the Playwright interactive UI. |
 
 ## 🧪 Testing
 
 We use Playwright for end-to-end and security testing.
 
 ### Running Tests
-- **All tests**: `npx playwright test`
-- **Specific test file**: `npx playwright test tests/example.spec.ts`
+- **All tests**: `npm run test`
+- **Specific test file**: `npx playwright test tests/auth.spec.ts`
 
 ### Execution Modes
-- **Default (Headless)**: `npx playwright test` (Background execution)
+- **Default (Headless)**: `npm run test` (Background execution)
 - **Headed mode**: `npx playwright test --headed` (Visible browser window)
-- **UI mode**: `npx playwright test --ui` (Interactive test runner)
+- **UI mode**: `npm run test:ui` (Interactive test runner)
 
 ### Example: Authorization Security Tests
 - **Default**: `npx playwright test tests/authorization.spec.ts`
 - **Headed mode**: `npx playwright test tests/authorization.spec.ts --headed`
 - **UI mode**: `npx playwright test tests/authorization.spec.ts --ui`
+
+## 🛡️ Security Compliance (OWASP ASVS)
+
+This application is designed to meet key security requirements from the **OWASP ASVS (Application Security Verification Standard)**:
+
+- **ASVS 8.2.1**: Verified that function‑level access is restricted to consumers with explicit permissions. All sensitive API routes and server actions enforce `currentUser()` validation.
+- **ASVS 8.2.2**: Verified that data‑specific access is restricted via ownership checks. Endpoints are protected against **BOLA (Broken Object Level Authorization)** and **IDOR** by verifying that the requesting user owns the specific resource being accessed.
 
 ## 🎯 Objective
 
