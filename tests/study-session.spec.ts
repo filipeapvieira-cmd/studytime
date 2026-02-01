@@ -53,8 +53,20 @@ test.describe('Study Session E2E Tests', () => {
 
         // Wait for dropdown to open and select first subject
         const firstSubject = page.locator('[role="option"]').first();
-        await expect(firstSubject).toBeVisible({ timeout: 5000 });
-        await firstSubject.click();
+        try {
+            await firstSubject.waitFor({ state: 'visible', timeout: 2000 });
+            await firstSubject.click();
+        } catch (e) {
+            // No subject exists, create a new one
+            const subjectInput = page.getByPlaceholder('Subject');
+            await expect(subjectInput).toBeVisible();
+            await subjectInput.fill('Test Subject');
+
+            const addSubjectButton = page.locator('button').filter({
+                has: page.locator('svg rect[width="18"]')
+            }).first();
+            await addSubjectButton.click();
+        }
 
         // 4. Write something in the editor
         const editorBlock = page.locator('.ce-paragraph[contenteditable="true"]').first();
