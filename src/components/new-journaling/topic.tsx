@@ -1,6 +1,6 @@
 import { Trash2 } from "lucide-react";
 import React, { type ChangeEvent, useEffect, useState } from "react";
-import ReactInputMask from "react-input-mask";
+import { IMaskInput } from "react-imask";
 import type { SessionStatusEnum } from "@/src/constants/config";
 import { useUpdateSessionContext } from "@/src/ctx/update-session-provider";
 import useEffectStatusHandling from "@/src/hooks/useEffectStatusHandling";
@@ -231,13 +231,16 @@ export default function TopicComponent({
         )}
       >
         {isUpdate ? (
-          <ReactInputMask
+          <IMaskInput
             value={userUpdatedEffectiveTimeOfStudy}
-            mask="99:99:99"
+            mask="00:00:00"
             placeholder="HH:MM:SS"
-            alwaysShowMask
-            onChange={(e) => handleManuallyUpdateEffectiveTimeOfStudy(e)}
-            defaultValue="00:00:00"
+            lazy={false}
+            onAccept={(value) =>
+              handleManuallyUpdateEffectiveTimeOfStudy({
+                target: { value },
+              } as React.ChangeEvent<HTMLInputElement>)
+            }
             className="h-[36px] flex w-full rounded-md border border-input bg-zinc-700 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-white"
           />
         ) : (

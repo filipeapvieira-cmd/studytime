@@ -1,7 +1,7 @@
 "use client";
 
 import { type FC, useRef } from "react";
-import ReactInputMask from "react-input-mask";
+import { IMaskInput } from "react-imask";
 import { mutate } from "swr";
 import FormField from "@/src/components/FormField";
 import {
@@ -202,14 +202,17 @@ const EditSessionToolbar: FC<EditSessionToolbarProps> = ({
           >
             Pause Time
           </Label>
-          <ReactInputMask
+          <IMaskInput
             name="pauseDuration"
             value={pauseDuration}
-            mask="99:99:99"
+            mask="00:00:00"
             placeholder="HH:MM:SS"
-            alwaysShowMask
-            onChange={(e) => handleOnChange(e)}
-            defaultValue="00:00:00"
+            lazy={false}
+            onAccept={(value) =>
+              handleOnChange({
+                target: { name: "pauseDuration", value },
+              } as React.ChangeEvent<HTMLInputElement>)
+            }
             className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           />
         </div>
