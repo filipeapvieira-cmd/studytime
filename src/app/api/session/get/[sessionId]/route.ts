@@ -20,17 +20,34 @@ export async function GET(
   }
 
   const { sessionId: sessionIdStr } = await context.params;
-  const id = sessionIdStr;
+  const id = Number(sessionIdStr);
+  const userId = Number(user.id);
+
+  // Verify ownership before returning data
+  const session = await db.studySession.findFirst({
+    where: { id, userId },
+  });
+
+  if (!session) {
+    return NextResponse.json(
+      {
+        status: "error",
+        message: "Session not found or access denied.",
+        data: null,
+      },
+      { status: 404 },
+    );
+  }
 
   const [feelings, topics] = await db.$transaction([
     db.feeling.findUnique({
       where: {
-        sessionId: Number(id),
+        sessionId: id,
       },
     }),
     db.topic.findMany({
       where: {
-        sessionId: Number(id),
+        sessionId: id,
       },
     }),
   ]);

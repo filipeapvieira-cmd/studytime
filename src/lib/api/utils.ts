@@ -108,9 +108,12 @@ export const getSessionUpdateData = (
   return sessionData;
 };
 
-export const topicsToDelete = async (sessionToUpdate: FullSessionLogUpdate) => {
+export const topicsToDelete = async (
+  sessionToUpdate: FullSessionLogUpdate,
+  sessionId: number,
+) => {
   const currentTopics = await db.topic.findMany({
-    where: { sessionId: sessionToUpdate.id },
+    where: { sessionId },
   });
   const currentTopicsIds = currentTopics.map((t) => t.id);
   const topicIdsInSessionToUpdate = sessionToUpdate.topics.map((t) => t.id);

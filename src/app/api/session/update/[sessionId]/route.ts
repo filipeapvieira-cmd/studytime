@@ -24,11 +24,28 @@ export async function PUT(
   }
 
   const userId: number = +user?.id;
+
+  // Verify ownership before update
+  const existingSession = await db.studySession.findFirst({
+    where: { id, userId },
+  });
+
+  if (!existingSession) {
+    return NextResponse.json(
+      {
+        status: "error",
+        message: "Session not found or access denied.",
+        data: null,
+      },
+      { status: 404 },
+    );
+  }
+
   const sessionToUpdate: FullSessionLogUpdate = await req.json();
 
   const sessionData = getSessionUpdateData(sessionToUpdate, userId);
 
-  const idsToDelete = await topicsToDelete(sessionToUpdate);
+  const idsToDelete = await topicsToDelete(sessionToUpdate, id);
 
   const updateSession = async () => {
     return await db.$transaction(async (tx) => {

@@ -10,7 +10,7 @@ export async function DELETE(
   const sessionId: number = Number(sessionIdStr);
   const user = await currentUser();
 
-  if (!user) {
+  if (!user?.id) {
     return NextResponse.json(
       {
         status: "error",
@@ -18,6 +18,24 @@ export async function DELETE(
         data: null,
       },
       { status: 401 },
+    );
+  }
+
+  const userId = Number(user.id);
+
+  // BOLA Fix: Verify ownership before deletion
+  const session = await db.studySession.findFirst({
+    where: { id: sessionId, userId },
+  });
+
+  if (!session) {
+    return NextResponse.json(
+      {
+        status: "error",
+        message: "Session not found or access denied.",
+        data: null,
+      },
+      { status: 404 },
     );
   }
 

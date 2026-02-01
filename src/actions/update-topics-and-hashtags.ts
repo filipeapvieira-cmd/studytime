@@ -1,7 +1,7 @@
 "use server";
 
-import { currentUser } from "@/src/lib/authentication";
 import { db } from "@/lib/db";
+import { currentUser } from "@/src/lib/authentication";
 import type { HashtagItem, TopicItem } from "../types";
 
 interface RequestBody {
@@ -22,17 +22,32 @@ export const updateTopicsAndHashtags = async ({
   }
 
   try {
-    // 1. Update Topics
+    const userId = Number(user.id);
+
+    // Get user's session IDs for scoping updates
+    const userSessions = await db.studySession.findMany({
+      where: { userId },
+      select: { id: true },
+    });
+    const userSessionIds = userSessions.map((s) => s.id);
+
+    // 1. Update Topics - Only update user's own topics
     for (const update of topicUpdates) {
       await db.topic.updateMany({
-        where: { title: update.original },
+        where: {
+          title: update.original,
+          sessionId: { in: userSessionIds },
+        },
         data: { title: update.current },
       });
     }
 
-    // 2. Update Hashtags
+    // 2. Update Hashtags - Only update user's own topics
     const topicsWithHashtags = await db.topic.findMany({
-      where: { hashtags: { not: null } },
+      where: {
+        hashtags: { not: null },
+        sessionId: { in: userSessionIds },
+      },
       select: { id: true, hashtags: true },
     });
 
