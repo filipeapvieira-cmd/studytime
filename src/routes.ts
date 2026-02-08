@@ -6,6 +6,7 @@ export const publicRoutes = [
   "/",
   // This route is here because it can be accessed by both logged in and logged out users
   "/auth/new-verification",
+  "/privacy",
 ];
 
 /**
