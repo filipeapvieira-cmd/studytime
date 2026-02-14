@@ -1,6 +1,6 @@
 import React from "react";
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
-import { getTopicContent } from "@/src/lib/utils";
+import { cn, getTopicContent } from "@/src/lib/utils";
 import type { JSONValue } from "@/src/types";
 import { CustomEditor } from "../new-editor/editor";
 import TopicHashtagSelection from "./topic-hashtag-selection";
@@ -69,7 +69,12 @@ export default function SelectedTopic({
           />
         </div>
       </div>
-      <div className={!consentEnabled ? "pointer-events-none opacity-50" : ""}>
+      <div
+        className={cn(
+          "flex-1 flex flex-col min-h-0",
+          !consentEnabled && "pointer-events-none opacity-50",
+        )}
+      >
         <CustomEditor
           value={topicContent}
           onSave={handleContentChange}
