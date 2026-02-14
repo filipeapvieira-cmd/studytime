@@ -69,18 +69,15 @@ export default function SelectedTopic({
           />
         </div>
       </div>
-      <div
-        className={cn(
-          "flex-1 flex flex-col min-h-0",
-          !consentEnabled && "pointer-events-none opacity-50",
-        )}
-      >
-        <CustomEditor
-          value={topicContent}
-          onSave={handleContentChange}
-          key={selectedTopicId}
-        />
-      </div>
+      {consentEnabled && (
+        <div className="flex-1 flex flex-col min-h-0">
+          <CustomEditor
+            value={topicContent}
+            onSave={handleContentChange}
+            key={selectedTopicId}
+          />
+        </div>
+      )}
     </div>
   );
 }
