@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -15,6 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { FEELING_OPTIONS } from "@/src/constants/config";
 import { createNewTopic } from "@/src/ctx/session-topics-provider";
 import useFeelingsAndTopics from "@/src/hooks/useFeelingsAndTopics";
+import { useJournalingConsent } from "@/src/hooks/useJournalingConsent";
 import { cn, getFeelingsDisplayName } from "@/src/lib/utils";
 import type { Topic } from "@/src/types";
 import SelectedTopic from "./selected-topic";
@@ -33,6 +35,7 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
     setSessionTopics,
     isUpdate,
   } = useFeelingsAndTopics();
+  const { consentEnabled, isLoading: consentLoading } = useJournalingConsent();
 
   const [selectedTopicId, setSelectedTopicId] = React.useState<
     string | number | null
@@ -107,6 +110,7 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
                 key={sessionFeelings || "empty"}
                 value={sessionFeelings || undefined}
                 onValueChange={handleFeelingChange}
+                disabled={!consentEnabled || consentLoading}
               >
                 <SelectTrigger className="w-full bg-zinc-900/50 text-white border-zinc-800/50">
                   <SelectValue placeholder="Select..." />
@@ -119,12 +123,38 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
                   ))}
                 </SelectContent>
               </Select>
+              {!consentEnabled && !consentLoading && (
+                <div className="mt-2 rounded-md border border-amber-800/50 bg-amber-950/30 px-3 py-2 text-xs text-amber-300">
+                  <Link
+                    href="/settings/privacy"
+                    className="underline hover:text-amber-100"
+                  >
+                    Enable consent in Settings
+                  </Link>{" "}
+                  to use this optional feelings feature.
+                </div>
+              )}
             </div>
           </div>
 
           <div className="flex-1 flex flex-col overflow-hidden p-3">
+            {!consentEnabled && !consentLoading && (
+              <div className="mb-3 rounded-md border border-amber-800/50 bg-amber-950/30 px-4 py-2 text-sm text-amber-300">
+                Journaling is disabled.{" "}
+                <Link
+                  href="/settings/privacy"
+                  className="underline hover:text-amber-100"
+                >
+                  Enable consent in Settings
+                </Link>{" "}
+                to record reflections.
+              </div>
+            )}
             {selectedTopic ? (
-              <SelectedTopic selectedTopicId={selectedTopicId} />
+              <SelectedTopic
+                selectedTopicId={selectedTopicId}
+                consentEnabled={consentEnabled}
+              />
             ) : (
               <div className="flex items-center justify-center h-full text-zinc-500">
                 Select a topic or create a new one

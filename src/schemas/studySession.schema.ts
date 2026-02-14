@@ -1,18 +1,8 @@
 import { z } from "zod";
 
-const DEFAULT_MESSAGE = "Did you forget to add content to your journal?";
 
-const ContentJsonSchema = z
-  .object({
-    time: z.number({ required_error: DEFAULT_MESSAGE }),
-    blocks: z.array(z.any()).min(1, {
-      message: DEFAULT_MESSAGE,
-    }),
-    version: z.string({ required_error: DEFAULT_MESSAGE }),
-  })
-  .refine((data) => Object.keys(data).length > 0, {
-    message: DEFAULT_MESSAGE,
-  });
+// contentJson stores arbitrary editor JSON; structure is enforced by the editor itself
+const ContentJsonSchema = z.unknown();
 
 const TopicFormattedSchema = z.object({
   id: z.union([z.number(), z.string()]).optional(),

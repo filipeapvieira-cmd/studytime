@@ -10,6 +10,7 @@ import { TopicsContext } from "@/src/ctx/session-topics-provider";
 import { useTimeContext } from "@/src/ctx/time-provider";
 import { useFetch } from "@/src/hooks/useFetch";
 import { useStudySession } from "@/src/hooks/useStudySession";
+import { useJournalingConsent } from "@/src/hooks/useJournalingConsent";
 import { getFullSessionLog } from "@/src/lib/session-log/utils";
 import { retrieveTextFromJson } from "@/src/lib/utils";
 import type { FullSessionLog } from "@/src/types";
@@ -20,6 +21,7 @@ export const SaveSessionBtn = () => {
   const { resetStudySession } = useStudySession();
   const { title, description } = retrieveTextFromJson("saveSession");
   const { sessionTopics } = useContext(TopicsContext);
+  const { consentEnabled } = useJournalingConsent();
   let sessionLog: FullSessionLog | undefined;
 
   const { isLoading, callAPI } = useFetch();
@@ -31,6 +33,7 @@ export const SaveSessionBtn = () => {
       sessionFeelings,
       sessionTopics,
       sessionTime,
+      consentEnabled,
     });
 
     await callAPI({

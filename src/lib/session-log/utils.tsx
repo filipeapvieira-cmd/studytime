@@ -14,25 +14,32 @@ interface getFullSessionLogProps {
     endTime: number;
     totalPauseTime: number;
   };
+  consentEnabled: boolean;
 }
 
 export const getFullSessionLog = ({
   sessionFeelings,
   sessionTopics,
   sessionTime,
+  consentEnabled,
 }: getFullSessionLogProps) => {
   return {
     startTime: adaptTimeZone(sessionTime.startTime),
     endTime: adaptTimeZone(sessionTime.endTime),
     pauseDuration: sessionTime.totalPauseTime,
-    feelingDescription: sessionFeelings,
-    topics: getSessionTopics(sessionTopics, sessionTime.endTime),
+    feelingDescription: consentEnabled ? sessionFeelings : undefined,
+    topics: getSessionTopics(
+      sessionTopics,
+      sessionTime.endTime,
+      consentEnabled,
+    ),
   };
 };
 
 const getSessionTopics = (
   sessionTopics: Topic[],
   endTime: number,
+  consentEnabled: boolean,
 ): TopicFormatted[] => {
   return sessionTopics.map((topic) => {
     const topicId = typeof topic.id === "number" ? topic.id : 0;
@@ -40,8 +47,8 @@ const getSessionTopics = (
       id: topicId,
       title: topic.title,
       hashtags: topic.hashtags,
-      description: topic.description,
-      contentJson: topic.contentJson,
+      description: consentEnabled ? topic.description : "",
+      contentJson: topic.contentJson || [{ type: "paragraph", children: [{ text: "" }] }], // Fallback to safe empty state
       effectiveTimeOfStudy: getTopicTimeOfStudy(topic, endTime),
     };
   });

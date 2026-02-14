@@ -43,6 +43,33 @@ export async function PUT(
 
   const sessionToUpdate: FullSessionLogUpdate = await req.json();
 
+  // Consent gating: reject optional journaling fields when consent is off
+  const hasJournalingFields =
+    (sessionToUpdate.feelingDescription &&
+      sessionToUpdate.feelingDescription.trim() !== "") ||
+    sessionToUpdate.topics.some(
+      (t) => t.description && t.description.trim() !== "",
+    );
+
+  if (hasJournalingFields) {
+    const dbUser = await db.user.findUnique({
+      where: { id: userId },
+      select: { journalingConsentEnabled: true },
+    });
+
+    if (!dbUser?.journalingConsentEnabled) {
+      return NextResponse.json(
+        {
+          status: "error",
+          code: "CONSENT_REQUIRED",
+          message: "Consent required to store optional journaling fields.",
+          data: null,
+        },
+        { status: 403 },
+      );
+    }
+  }
+
   const sessionData = getSessionUpdateData(sessionToUpdate, userId);
 
   const idsToDelete = await topicsToDelete(sessionToUpdate, id, userId);

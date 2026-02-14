@@ -38,7 +38,33 @@ export async function POST(req: Request) {
     );
   }
 
-  const sessionLog = parseResult.data;
+  const sessionLog = parseResult.data as FullSessionLog;
+
+  // Consent gating: reject optional journaling fields when consent is off
+  const hasJournalingFields =
+    (sessionLog.feelingDescription &&
+      sessionLog.feelingDescription.trim() !== "") ||
+    sessionLog.topics.some((t) => t.description && t.description.trim() !== "");
+
+  if (hasJournalingFields) {
+    const dbUser = await db.user.findUnique({
+      where: { id: userId },
+      select: { journalingConsentEnabled: true },
+    });
+
+    if (!dbUser?.journalingConsentEnabled) {
+      return NextResponse.json(
+        {
+          status: "error",
+          code: "CONSENT_REQUIRED",
+          message: "Consent required to store optional journaling fields.",
+          data: null,
+        },
+        { status: 403 },
+      );
+    }
+  }
+
   const sessionData = getSessionData(sessionLog, userId);
 
   try {

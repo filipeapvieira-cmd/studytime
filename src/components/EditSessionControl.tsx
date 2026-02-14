@@ -23,6 +23,7 @@ import {
 } from "@/src/lib/session-log/update-utils";
 import { useUpdateSessionContext } from "../ctx/update-session-provider";
 import { useCustomToast } from "../hooks/useCustomToast";
+import { useJournalingConsent } from "../hooks/useJournalingConsent";
 import { editSessionToolbarSchema } from "../lib/schemas/editSessionControlSchema";
 import UserActionConfirmation from "./UserActionConfirmation";
 import { Button } from "./ui/button";
@@ -50,6 +51,7 @@ const EditSessionToolbar: FC<EditSessionToolbarProps> = ({
   const actionType = useRef("");
   const { isLoading, httpRequestHandler } = usePersistSession();
   const { showToast } = useCustomToast();
+  const { consentEnabled } = useJournalingConsent();
 
   if (!sessionToEdit) return null;
 
@@ -111,6 +113,7 @@ const EditSessionToolbar: FC<EditSessionToolbarProps> = ({
       startTime,
       endTime,
       pauseDuration,
+      consentEnabled,
     });
     const updateParameters = {
       body,

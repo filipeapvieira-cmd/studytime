@@ -8,9 +8,13 @@ import { TopicSubjectSelection } from "./topic-subject-selection";
 
 type SelectedTopicProps = {
   selectedTopicId: string | number | null;
+  consentEnabled: boolean;
 };
 
-export default function SelectedTopic({ selectedTopicId }: SelectedTopicProps) {
+export default function SelectedTopic({
+  selectedTopicId,
+  consentEnabled,
+}: SelectedTopicProps) {
   const { sessionTopics, setSessionTopics } = useFeelingsAndTopics();
 
   const selectedTopic = sessionTopics.find(
@@ -65,11 +69,13 @@ export default function SelectedTopic({ selectedTopicId }: SelectedTopicProps) {
           />
         </div>
       </div>
-      <CustomEditor
-        value={topicContent}
-        onSave={handleContentChange}
-        key={selectedTopicId}
-      />
+      <div className={!consentEnabled ? "pointer-events-none opacity-50" : ""}>
+        <CustomEditor
+          value={topicContent}
+          onSave={handleContentChange}
+          key={selectedTopicId}
+        />
+      </div>
     </div>
   );
 }

@@ -123,6 +123,7 @@ export const getRequestBody = ({
   startTime,
   endTime,
   pauseDuration,
+  consentEnabled,
 }: {
   id: number;
   sessionFeelings: string;
@@ -131,6 +132,7 @@ export const getRequestBody = ({
   startTime: string;
   endTime: string;
   pauseDuration: string;
+  consentEnabled: boolean;
 }) => {
   const sessionLog: FullSessionLogUpdate = {
     ...getFullSessionLog({
@@ -142,6 +144,7 @@ export const getRequestBody = ({
         endTime,
         pauseDuration,
       }),
+      consentEnabled,
     }),
     id,
   };

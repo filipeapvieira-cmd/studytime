@@ -7,6 +7,7 @@ export const GET_UNIQUE_HASHTAGS_ENDPOINT = "/api/session/get/unique-hashtags";
 export const GET_COMMUNITY_SESSIONS_ENDPOINT =
   "/api/session/get/communityVsUser";
 export const GET_USER_IMG_UPLOAD_CONFIG_ENDPOINT = "/api/user/img-config";
+export const CONSENT_ENDPOINT = "/api/user/consent";
 
 export const HTTP_METHOD = {
   POST: "POST",
