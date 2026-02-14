@@ -245,14 +245,25 @@ async function main() {
   for (const [uIndex, userData] of users.entries()) {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-    const newUser = await prismaClient.user.create({
-      data: {
+    const newUser = await prismaClient.user.upsert({
+      where: { email: userData.email },
+      update: {},
+      create: {
         name: userData.name,
         email: userData.email,
         emailVerified: new Date(),
         isTwoFactorEnabled: userData.isTwoFactorEnabled,
         password: hashedPassword,
+        journalingConsentEnabled: true,
+        journalingConsentAt: new Date(),
+        journalingConsentVersion: "privacy-notice-v1",
+        journalingConsentSource: "seed",
       },
+    });
+
+    // Clean up existing data for this seed user to make it idempotent
+    await prismaClient.studySession.deleteMany({
+      where: { userId: newUser.id },
     });
 
     // Each user gets between 8 and 15 sessions
@@ -280,8 +291,8 @@ async function main() {
         },
         feeling: maybeFeeling
           ? {
-              create: maybeFeeling,
-            }
+            create: maybeFeeling,
+          }
           : undefined,
       });
     }

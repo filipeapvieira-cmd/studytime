@@ -28,6 +28,10 @@ model User {
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
   CloudinaryConfig      CloudinaryConfig?
+  journalingConsentEnabled  Boolean   @default(false)
+  journalingConsentAt       DateTime?
+  journalingConsentVersion  String?
+  journalingConsentSource   String?
 
   @@map(name: "users")
 }
