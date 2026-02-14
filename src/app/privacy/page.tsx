@@ -92,12 +92,15 @@ export default function PrivacyPage() {
           What information we collect, use, and why
         </h2>
         <p>
-          We collect or use the following information for student education and
-          welfare:
+          We collect or use the following information to provide the Study Time service (account management and study tracking):
+
         </p>
         <ul className="list-disc pl-6 space-y-2 text-neutral-300">
-          <li>Names and contact details for students/children</li>
+          <li>Names and contact details for users</li>
           <li>Account access information</li>
+          <li>Study session records (subjects/topics, hashtags, duration, start/end timestamps)</li>
+          <li>Journaling entries (free-text reflections, optional)</li>
+          <li>Feelings (optional)</li>
           <li>Progress reports</li>
         </ul>
       </section>
@@ -241,8 +244,8 @@ export default function PrivacyPage() {
           Our lawful bases for the collection and use of your data
         </h3>
         <p>
-          Our lawful bases for collecting or using personal information for
-          student education and welfare are:
+          Our lawful bases for collecting or using personal information to provide the Study Time service (account management and study tracking) are:
+
         </p>
         <ul className="list-disc pl-6 space-y-2">
           <li>
@@ -250,6 +253,12 @@ export default function PrivacyPage() {
             collect or use the information so we can enter into or carry out a
             contract with you. All of your data protection rights may apply
             except the right to object.
+          </li>
+          <li>
+            <strong className="text-white">Consent</strong> - we use consent for
+            optional journaling fields (feelings and free-text reflections). You can
+            withdraw your consent at any time in Settings. Withdrawal does not
+            affect processing already carried out before withdrawal.
           </li>
         </ul>
       </section>
