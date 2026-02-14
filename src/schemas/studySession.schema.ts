@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 // contentJson stores arbitrary editor JSON; structure is enforced by the editor itself
 const ContentJsonSchema = z.unknown();
 

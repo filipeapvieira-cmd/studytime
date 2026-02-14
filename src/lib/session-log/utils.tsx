@@ -48,7 +48,9 @@ const getSessionTopics = (
       title: topic.title,
       hashtags: topic.hashtags,
       description: consentEnabled ? topic.description : "",
-      contentJson: topic.contentJson || [{ type: "paragraph", children: [{ text: "" }] }], // Fallback to safe empty state
+      contentJson: topic.contentJson || [
+        { type: "paragraph", children: [{ text: "" }] },
+      ], // Fallback to safe empty state
       effectiveTimeOfStudy: getTopicTimeOfStudy(topic, endTime),
     };
   });

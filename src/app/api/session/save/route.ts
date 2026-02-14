@@ -3,7 +3,7 @@ import { getFirstErrorMessage, getSessionData } from "@/src/lib/api/utils";
 import { currentUser } from "@/src/lib/authentication";
 import { db } from "@/src/lib/db";
 import { FullSessionLogSchema } from "@/src/schemas/studySession.schema";
-import { FullSessionLog } from "@/src/types";
+import type { FullSessionLog } from "@/src/types";
 
 export async function POST(req: Request) {
   const user = await currentUser();
