@@ -43,7 +43,10 @@ const EditSession = ({
           <AlertDialogDescription asChild>
             <div className="pt-4">
               <EditSessionToolbar setIsModalOpen={handleModalClose} />
-              <TopicSidebar className="max-h-[80%] min-h-[80%] rounded-t-none" />
+              <TopicSidebar
+                className="max-h-[80%] min-h-[80%] rounded-t-none"
+                noPortal={true}
+              />
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>

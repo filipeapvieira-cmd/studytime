@@ -25,9 +25,13 @@ import TopicComponent from "./topic";
 
 type TopicSidebarProps = {
   className?: string;
+  noPortal?: boolean;
 };
 
-export function TopicSidebar({ className }: TopicSidebarProps) {
+export function TopicSidebar({
+  className,
+  noPortal = false,
+}: TopicSidebarProps) {
   const {
     sessionFeelings,
     setSessionFeelings,
@@ -115,7 +119,7 @@ export function TopicSidebar({ className }: TopicSidebarProps) {
                 <SelectTrigger className="w-full bg-zinc-900/50 text-white border-zinc-800/50">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent noPortal={noPortal}>
                   {FEELING_OPTIONS.map((feeling) => (
                     <SelectItem key={feeling} value={feeling}>
                       {getFeelingsDisplayName(feeling)}
