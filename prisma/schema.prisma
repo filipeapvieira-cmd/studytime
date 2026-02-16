@@ -13,6 +13,13 @@ enum UserRole {
   ADMIN
 }
 
+enum DataRetentionPolicy {
+  MONTHS_6
+  MONTHS_12
+  MONTHS_24
+  UNTIL_DELETED
+}
+
 model User {
   id                    Int                    @id @default(autoincrement())
   name                  String
@@ -32,6 +39,8 @@ model User {
   journalingConsentAt       DateTime?
   journalingConsentVersion  String?
   journalingConsentSource   String?
+  dataRetentionPolicy       DataRetentionPolicy @default(UNTIL_DELETED)
+  dataRetentionSetAt        DateTime?
 
   @@map(name: "users")
 }
