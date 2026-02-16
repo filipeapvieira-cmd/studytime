@@ -1,6 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DeleteAccount } from "./delete-account";
-import { ExportData } from "./export-data";
 import { UserStatsDisplay } from "./user-stats-display";
 
 export function ProfileSettings() {
@@ -14,10 +12,6 @@ export function ProfileSettings() {
           <UserStatsDisplay />
         </CardContent>
       </Card>
-
-      <ExportData />
-
-      <DeleteAccount />
     </div>
   );
 }

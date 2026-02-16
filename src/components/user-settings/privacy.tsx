@@ -6,6 +6,8 @@ import { Toggle } from "@/components/ui/toggle";
 import { CONSENT_ENDPOINT } from "@/src/constants/config";
 import { useCustomToast } from "@/src/hooks/useCustomToast";
 import { useJournalingConsent } from "@/src/hooks/useJournalingConsent";
+import { DeleteAccount } from "./delete-account";
+import { ExportData } from "./export-data";
 
 const CONSENT_TEXT =
   "Optional feature. When enabled, you can record feelings and add free-text reflections. These entries are stored on our servers and may include sensitive information if you choose to write it. You can disable this at any time to stop saving new entries, and you can delete existing entries in your journal.";
@@ -79,6 +81,10 @@ export function PrivacySettings() {
 
         <p className="text-sm text-zinc-400 leading-relaxed">{CONSENT_TEXT}</p>
       </div>
+
+      <ExportData />
+
+      <DeleteAccount />
     </div>
   );
 }
