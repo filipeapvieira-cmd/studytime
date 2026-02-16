@@ -88,6 +88,40 @@ export async function GET(req: Request) {
       }
     }
 
+    // --- Metrics Snapshot Logic ---
+    const end = new Date();
+    // 1. Get counts
+    const [usersCount, sessionsCount, consentEnabledCount] = await Promise.all([
+      db.user.count(),
+      db.studySession.count(),
+      db.user.count({ where: { journalingConsentEnabled: true } }),
+    ]);
+
+    // 2. Get DB size
+    // Note: pg_database_size returns a BigInt, we need to cast or handle it.
+    // querying raw SQL
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const dbSizeResult: any =
+      await db.$queryRaw`SELECT pg_database_size(current_database()) as size`;
+    const dbSizeBytes = dbSizeResult[0]?.size
+      ? BigInt(dbSizeResult[0].size)
+      : BigInt(0);
+
+    // 3. Create Snapshot
+    await db.metricsSnapshot.create({
+      data: {
+        usersCount,
+        sessionsCount,
+        consentEnabledCount,
+        retentionPurgedSessionsCount: totalSessionsDeleted,
+        dbSizeBytes,
+        metadata: {
+          retentionExecutionTimeMs: end.getTime() - now.getTime(),
+          usersProcessed,
+        },
+      },
+    });
+
     return NextResponse.json({
       status: "success",
       data: {

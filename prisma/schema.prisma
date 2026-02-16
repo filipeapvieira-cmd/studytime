@@ -162,3 +162,16 @@ model CloudinaryConfig {
 
   @@map(name: "cloudinary_configs")
 }
+
+model MetricsSnapshot {
+  id                           String   @id @default(uuid())
+  createdAt                    DateTime @default(now()) @map(name: "created_at")
+  dbSizeBytes                  BigInt   @map(name: "db_size_bytes")
+  usersCount                   Int      @map(name: "users_count")
+  sessionsCount                Int      @map(name: "sessions_count")
+  consentEnabledCount          Int      @map(name: "consent_enabled_count")
+  retentionPurgedSessionsCount Int      @map(name: "retention_purged_sessions_count")
+  metadata                     Json?
+
+  @@map(name: "metrics_snapshots")
+}
