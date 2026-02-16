@@ -4,7 +4,7 @@ import HeroSection from "@/components/landing-page/hero-section";
 
 export default async function HomePage() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-4 md:py-6 flex flex-col justify-center flex-1 overflow-hidden">
+    <main className="max-w-4xl mx-auto px-6 py-4 md:py-6 flex flex-col justify-center flex-1">
       <HeroSection />
       <FeaturesSection />
       <CallToActionSection />
