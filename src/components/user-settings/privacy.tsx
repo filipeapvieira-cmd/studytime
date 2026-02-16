@@ -7,6 +7,7 @@ import { CONSENT_ENDPOINT } from "@/src/constants/config";
 import { useCustomToast } from "@/src/hooks/useCustomToast";
 import { useJournalingConsent } from "@/src/hooks/useJournalingConsent";
 import { DeleteAccount } from "./delete-account";
+import { DataRetention } from "./data-retention";
 import { ExportData } from "./export-data";
 
 const CONSENT_TEXT =
@@ -81,6 +82,8 @@ export function PrivacySettings() {
 
         <p className="text-sm text-zinc-400 leading-relaxed">{CONSENT_TEXT}</p>
       </div>
+
+      <DataRetention />
 
       <ExportData />
 
