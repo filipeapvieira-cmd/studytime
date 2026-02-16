@@ -2,6 +2,16 @@
 
 import { useState } from "react";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -15,21 +25,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { RETENTION_ENDPOINT } from "@/src/constants/config";
 import { useCustomToast } from "@/src/hooks/useCustomToast";
 import {
-  useDataRetention,
   type DataRetentionPolicy,
+  useDataRetention,
 } from "@/src/hooks/useDataRetention";
 
 const POLICY_OPTIONS: { value: DataRetentionPolicy; label: string }[] = [

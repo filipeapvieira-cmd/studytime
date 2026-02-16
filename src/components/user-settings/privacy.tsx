@@ -6,8 +6,8 @@ import { Toggle } from "@/components/ui/toggle";
 import { CONSENT_ENDPOINT } from "@/src/constants/config";
 import { useCustomToast } from "@/src/hooks/useCustomToast";
 import { useJournalingConsent } from "@/src/hooks/useJournalingConsent";
-import { DeleteAccount } from "./delete-account";
 import { DataRetention } from "./data-retention";
+import { DeleteAccount } from "./delete-account";
 import { ExportData } from "./export-data";
 
 const CONSENT_TEXT =

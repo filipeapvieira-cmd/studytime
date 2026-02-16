@@ -13,8 +13,7 @@ type PolicyValue = (typeof VALID_POLICIES)[number];
 
 function isValidPolicy(value: unknown): value is PolicyValue {
   return (
-    typeof value === "string" &&
-    VALID_POLICIES.includes(value as PolicyValue)
+    typeof value === "string" && VALID_POLICIES.includes(value as PolicyValue)
   );
 }
 
