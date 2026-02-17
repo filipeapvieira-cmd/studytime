@@ -57,6 +57,6 @@ export async function GET(request: Request) {
   await signIn("email-verification", {
     email: existingToken.email,
     verificationSecret: process.env.VERIFICATION_SIGN_IN_SECRET,
-    redirectTo: "/dashboard",
+    redirectTo: "/journaling",
   });
 }
