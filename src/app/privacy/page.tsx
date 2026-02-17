@@ -2,6 +2,8 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 
+const LAST_UPDATED = "17 February 2026";
+
 export default function PrivacyPage() {
   return (
     <main className="max-w-4xl mx-auto px-6 py-8 md:py-12 flex flex-col gap-8 text-neutral-300">
@@ -100,10 +102,18 @@ export default function PrivacyPage() {
           <li>Account access information</li>
           <li>
             Study session records (subjects/topics, hashtags, duration,
-            start/end timestamps)
+            start/end timestamps, and creation timestamp used for retention)
           </li>
           <li>Journaling entries (free-text reflections, optional)</li>
           <li>Feelings (optional)</li>
+          <li>
+            Consent audit metadata for optional journaling (consent status, when
+            consent was recorded, consent notice version, and consent source)
+          </li>
+          <li>
+            Data retention preference records (selected retention policy and
+            when it was set)
+          </li>
           <li>Progress reports</li>
         </ul>
       </section>
@@ -113,7 +123,7 @@ export default function PrivacyPage() {
           Lawful bases and data protection rights
         </h2>
         <p>
-          Under UK data protection law, we must have a “lawful basis” for
+          Under UK data protection law, we must have a "lawful basis" for
           collecting and using your personal information. There is a list of
           possible lawful bases in the UK GDPR. You can find out more about
           lawful bases on the{" "}
@@ -122,14 +132,14 @@ export default function PrivacyPage() {
             target="_blank"
             className="text-blue-400 hover:underline"
           >
-            ICO’s website
+            ICO's website
           </Link>
           .
         </p>
         <p>
           Which lawful basis we rely on may affect your data protection rights
           which are set out in brief below. You can find out more about your
-          data protection rights and the exemptions which may apply on the ICO’s
+          data protection rights and the exemptions which may apply on the ICO's
           website:
         </p>
         <div className="space-y-4 mt-4">
@@ -262,7 +272,9 @@ export default function PrivacyPage() {
             <strong className="text-white">Consent</strong> - we use consent for
             optional journaling fields (feelings and free-text reflections). You
             can withdraw your consent at any time in Settings. Withdrawal does
-            not affect processing already carried out before withdrawal.
+            not affect processing already carried out before withdrawal. We keep
+            consent audit metadata (status, timestamp, notice version, and
+            source) to evidence your consent choices.
           </li>
         </ul>
       </section>
@@ -281,14 +293,39 @@ export default function PrivacyPage() {
           How long we keep information
         </h2>
         <p>
-          Personal information stored in the Study Time database (including user
-          account details and study session records such as duration, topics,
-          and reflective notes) is kept only for as long as the user maintains
-          an active account and the information is needed to provide the
-          service. When an account is deleted, or when the service is retired,
-          the associated database records are deleted or permanently anonymised
-          within a reasonable period, unless a longer retention period is
-          required for security, troubleshooting, or legal compliance.
+          You can choose a per-user retention policy for study sessions and
+          optional journaling content in Settings:
+        </p>
+        <ul className="list-disc pl-6 space-y-2 text-neutral-300">
+          <li>6 months</li>
+          <li>12 months</li>
+          <li>24 months</li>
+          <li>Keep until I delete</li>
+        </ul>
+        <p>
+          For time-bound policies (6/12/24 months), a scheduled cleanup job runs
+          daily and automatically deletes sessions older than your selected
+          window, measured from each session's creation timestamp. Deleting a
+          session also deletes its related topics and feelings.
+        </p>
+        <p>
+          If you choose "Keep until I delete", session records remain until you
+          delete them manually or delete your account.
+        </p>
+        <p>
+          Account profile data and account-level settings are kept while your
+          account is active. When your account is deleted, associated records
+          are deleted within a reasonable period, unless a longer retention
+          period is required for security, troubleshooting, or legal compliance.
+        </p>
+        <p>
+          Deleted data may remain in backups for a limited period before those
+          backups are rotated out.
+        </p>
+        <p>
+          Retention preference metadata (policy and timestamp) and consent audit
+          metadata (status, timestamp, notice version, and source) are retained
+          to demonstrate compliance with your choices.
         </p>
       </section>
 
@@ -405,14 +442,14 @@ export default function PrivacyPage() {
           privacy notice.
         </p>
         <p>
-          If you remain unhappy with how we’ve used your data after raising a
+          If you remain unhappy with how we've used your data after raising a
           complaint with us, you can also complain to the ICO.
         </p>
 
         <div className="bg-neutral-900/30 p-6 rounded-lg border border-neutral-800 mt-4">
-          <h3 className="font-semibold text-white mb-2">The ICO’s address:</h3>
+          <h3 className="font-semibold text-white mb-2">The ICO's address:</h3>
           <address className="not-italic text-neutral-300 mb-4">
-            Information Commissioner’s Office
+            Information Commissioner's Office
             <br />
             Wycliffe House
             <br />
@@ -448,12 +485,7 @@ export default function PrivacyPage() {
       </section>
 
       <div className="text-sm text-neutral-500 pt-8 border-t border-neutral-800">
-        Last updated:{" "}
-        {new Date().toLocaleDateString("en-GB", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })}
+        Last updated: {LAST_UPDATED}
       </div>
     </main>
   );
