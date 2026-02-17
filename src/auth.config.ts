@@ -28,5 +28,22 @@ export default {
         return null;
       },
     }),
+    Credentials({
+      id: "email-verification",
+      name: "Email Verification",
+      credentials: {
+        email: {},
+        verificationSecret: {},
+      },
+      async authorize(credentials) {
+        const secret = process.env.VERIFICATION_SIGN_IN_SECRET;
+        if (!secret || credentials.verificationSecret !== secret) return null;
+
+        const user = await getUserByEmail(credentials.email as string);
+        if (!user || !user.emailVerified) return null;
+
+        return { ...user, id: user.id.toString() };
+      },
+    }),
   ],
 } satisfies NextAuthConfig;

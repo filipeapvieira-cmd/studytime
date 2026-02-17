@@ -1,42 +1,23 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense } from "react";
 import { BeatLoader } from "react-spinners";
-import { newVerification } from "@/src/actions/new-verification";
 import FormError from "../form-error";
-import FormSuccess from "../form-success";
 import CardWrapper from "./card-wrapper";
 
 function VerificationContent() {
-  const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const error = searchParams.get("error");
 
-  const onSubmit = useCallback(() => {
-    if (!token) {
-      setError("Token not found");
-      return;
-    }
-    newVerification(token)
-      .then((data) => {
-        setSuccess(data.success);
-        setError(data.error);
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  }, [token]);
-
-  useEffect(() => {
-    onSubmit();
-  }, [onSubmit]);
+  // If there is no error, the API route is still processing or will redirect.
+  // Show a loader while the user waits.
+  if (!error) {
+    return <BeatLoader />;
+  }
 
   return (
     <>
-      {!success && !error && <BeatLoader />}
-      <FormSuccess message={success}></FormSuccess>
       <FormError message={error}></FormError>
     </>
   );

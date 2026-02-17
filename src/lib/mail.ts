@@ -4,7 +4,7 @@ import { DOMAIN } from "../constants/config";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendVerificationEmail = async (email: string, token: string) => {
-  const confirmLink = `${DOMAIN}/auth/new-verification?token=${token}`;
+  const confirmLink = `${DOMAIN}/api/auth/verify-email?token=${token}`;
 
   await resend.emails.send({
     from: "mail@studytime.biz",
