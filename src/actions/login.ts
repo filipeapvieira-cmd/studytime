@@ -129,11 +129,20 @@ export async function login(
           return { error: "Invalid credentials!" };
         }
         default: {
+          console.error("Login error:", error);
           return { error: "Something went wrong!" };
         }
       }
     }
-    // If you use this inside a server actions and don't throw Error you will not be redirected
+    if (
+      !(
+        error instanceof Error &&
+        (error.message.includes("NEXT_REDIRECT") ||
+          (error as any).digest?.includes("NEXT_REDIRECT"))
+      )
+    ) {
+      console.error("Login error (re-throwing):", error);
+    }
     throw error;
   }
 

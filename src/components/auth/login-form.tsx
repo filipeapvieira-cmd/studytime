@@ -61,6 +61,15 @@ function LoginFormContent() {
           setShowTwoFactor(true);
         }
       } catch (error) {
+        console.error("Login error:", error);
+        // If it's a Next.js redirect error, we should ignore it and let it redirect
+        if (
+          error instanceof Error &&
+          (error.message.includes("NEXT_REDIRECT") ||
+            (error as any).digest?.includes("NEXT_REDIRECT"))
+        ) {
+          return;
+        }
         setError("Something went wrong!");
       }
     });
