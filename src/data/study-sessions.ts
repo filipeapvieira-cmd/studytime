@@ -1,3 +1,4 @@
+import { decryptJournalingText } from "@/src/lib/crypto";
 import { db } from "@/src/lib/db";
 import type { StudySessionDto } from "@/src/types";
 import { currentUser } from "../lib/authentication";
@@ -42,7 +43,7 @@ export const getStudySessionsByUserId =
       return {
         status: "success",
         message: "Study sessions retrieved successfully.",
-        data: mapStudySession(studySessions),
+        data: await mapStudySession(studySessions),
       };
     } catch (error) {
       let message = "Something went wrong. Unable to retrieve sessions...";
@@ -65,35 +66,41 @@ const toDateISOString = (date: Date) => new Date(date).toISOString();
 const toTimeISOString = (date: Date) => toDateISOString(date).slice(11, 19);
 const toDateOnlyISOString = (date: Date) => toDateISOString(date).slice(0, 10);
 
-const mapTopics = (topic: any) => ({
+const mapTopics = async (topic: any) => ({
   id: topic.id,
-  description: topic.description,
+  description: await decryptJournalingText(topic.description),
   title: topic.title,
   hashtags: topic.hashtags,
   effectiveTimeOfStudy: topic.timeOfStudy,
 });
 
-const mapStudySession = (studySessions: any): StudySessionDto[] => {
+const mapStudySession = async (
+  studySessions: any,
+): Promise<StudySessionDto[]> => {
   const { StudySession: sessions } = studySessions ?? {};
 
-  //console.log(sessions);
-  //sessions.forEach((sessions) => console.log(sessions.topic));
+  if (!sessions) {
+    return [];
+  }
 
-  const StudySessionDto = sessions?.map((session: any) => {
-    const effectiveTime =
-      session.endTime.getTime() -
-      (session.startTime.getTime() + session.pauseDuration);
-    return {
-      id: session.id,
-      date: toDateOnlyISOString(session.startTime),
-      startTime: toTimeISOString(session.startTime),
-      endTime: toTimeISOString(session.endTime),
-      pauseDuration: toTimeISOString(new Date(session.pauseDuration)),
-      effectiveTime: toTimeISOString(new Date(effectiveTime)),
-      topics: session.topic.map((topic: any) => mapTopics(topic)),
-      feelings: session.feeling?.description,
-    };
-  });
+  return await Promise.all(
+    sessions.map(async (session: any) => {
+      const effectiveTime =
+        session.endTime.getTime() -
+        (session.startTime.getTime() + session.pauseDuration);
 
-  return StudySessionDto;
+      return {
+        id: session.id,
+        date: toDateOnlyISOString(session.startTime),
+        startTime: toTimeISOString(session.startTime),
+        endTime: toTimeISOString(session.endTime),
+        pauseDuration: toTimeISOString(new Date(session.pauseDuration)),
+        effectiveTime: toTimeISOString(new Date(effectiveTime)),
+        topics: await Promise.all(
+          session.topic.map((topic: any) => mapTopics(topic)),
+        ),
+        feelings: await decryptJournalingText(session.feeling?.description),
+      };
+    }),
+  );
 };

@@ -70,7 +70,7 @@ export async function PUT(
     }
   }
 
-  const sessionData = getSessionUpdateData(sessionToUpdate, userId);
+  const sessionData = await getSessionUpdateData(sessionToUpdate);
 
   const idsToDelete = await topicsToDelete(sessionToUpdate, id, userId);
 

@@ -1,4 +1,5 @@
 import type { Feeling, StudySession, Topic, User } from "@prisma/client";
+import { decryptJournalingText } from "@/src/lib/crypto";
 
 // Define strict types for the input data from Prisma
 type UserWithRecords = User & {
@@ -8,7 +9,9 @@ type UserWithRecords = User & {
   })[];
 };
 
-export function serializeToCsv(userWithRecords: UserWithRecords): string {
+export async function serializeToCsv(
+  userWithRecords: UserWithRecords,
+): Promise<string> {
   const headers = [
     "Session ID",
     "Start Time",
@@ -19,24 +22,28 @@ export function serializeToCsv(userWithRecords: UserWithRecords): string {
     "Feeling",
   ];
 
-  const rows = userWithRecords.StudySession.map((session) => {
-    // Format topics as a single string: "Math | 30m; Science | 45m"
-    const topicsString = session.topic
-      .map((t) => `${t.title} (${t.timeOfStudy}ms)`)
-      .join("; ");
+  const rows = await Promise.all(
+    userWithRecords.StudySession.map(async (session) => {
+      // Format topics as a single string: "Math | 30m; Science | 45m"
+      const topicsString = session.topic
+        .map((t) => `${t.title} (${t.timeOfStudy}ms)`)
+        .join("; ");
 
-    const feelingString = session.feeling ? session.feeling.description : "";
+      const feelingString = session.feeling
+        ? await decryptJournalingText(session.feeling.description)
+        : "";
 
-    return [
-      session.id,
-      session.startTime.toISOString(),
-      session.endTime.toISOString(),
-      session.pauseDuration,
-      session.createdAt.toISOString(),
-      topicsString,
-      feelingString,
-    ];
-  });
+      return [
+        session.id,
+        session.startTime.toISOString(),
+        session.endTime.toISOString(),
+        session.pauseDuration,
+        session.createdAt.toISOString(),
+        topicsString,
+        feelingString,
+      ];
+    }),
+  );
 
   // Combine headers and rows
   const csvContent = [

@@ -65,7 +65,7 @@ export async function POST(req: Request) {
     }
   }
 
-  const sessionData = getSessionData(sessionLog, userId);
+  const sessionData = await getSessionData(sessionLog, userId);
 
   try {
     await db.studySession.create({ data: sessionData });

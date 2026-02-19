@@ -45,10 +45,10 @@ export async function GET(req: NextRequest) {
     let contentType = "";
 
     if (format === "json") {
-      content = serializeToJson(userWithRecords);
+      content = await serializeToJson(userWithRecords);
       contentType = "application/json; charset=utf-8";
     } else {
-      content = serializeToCsv(userWithRecords);
+      content = await serializeToCsv(userWithRecords);
       contentType = "text/csv; charset=utf-8";
     }
 

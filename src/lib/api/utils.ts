@@ -1,11 +1,34 @@
 import type { Prisma } from "@prisma/client";
+import { encryptJournalingText } from "@/src/lib/crypto";
 import { db } from "@/src/lib/db";
 import type { FullSessionLog, FullSessionLogUpdate } from "@/src/types";
 import type { FlattenedError } from "@/src/types/utils.types";
 
-export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
+export const getSessionData = async (
+  sessionLog: FullSessionLog,
+  id: number,
+): Promise<Prisma.StudySessionCreateInput> => {
   const { startTime, endTime, pauseDuration, topics, feelingDescription } =
     sessionLog;
+
+  const encryptedTopics = await Promise.all(
+    topics.map(
+      async ({
+        title,
+        hashtags,
+        description,
+        effectiveTimeOfStudy,
+        contentJson,
+      }) => ({
+        title,
+        hashtags,
+        description: (await encryptJournalingText(description || "")) || "",
+        contentJson: contentJson || {},
+        timeOfStudy: effectiveTimeOfStudy,
+      }),
+    ),
+  );
+
   const sessionData: Prisma.StudySessionCreateInput = {
     startTime,
     endTime,
@@ -16,28 +39,17 @@ export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
     },
     pauseDuration,
     topic: {
-      create: topics.map(
-        ({
-          title,
-          hashtags,
-          description,
-          effectiveTimeOfStudy,
-          contentJson,
-        }) => ({
-          title,
-          hashtags,
-          description: description || "",
-          contentJson: contentJson || {},
-          timeOfStudy: effectiveTimeOfStudy,
-        }),
-      ),
+      create: encryptedTopics,
     },
   };
 
   if (feelingDescription && feelingDescription.trim() !== "") {
+    const encryptedFeeling =
+      (await encryptJournalingText(feelingDescription)) || feelingDescription;
+
     sessionData.feeling = {
       create: {
-        description: feelingDescription,
+        description: encryptedFeeling,
       },
     };
   }
@@ -45,61 +57,71 @@ export const getSessionData = (sessionLog: FullSessionLog, id: number) => {
   return sessionData;
 };
 
-export const getSessionUpdateData = (
+export const getSessionUpdateData = async (
   sessionLog: FullSessionLogUpdate,
-  userId: number,
-) => {
+): Promise<Prisma.StudySessionUpdateInput> => {
   const { startTime, endTime, pauseDuration, topics, feelingDescription } =
     sessionLog;
+
+  const encryptedTopics = await Promise.all(
+    topics.map(
+      async ({
+        id,
+        title,
+        hashtags,
+        description,
+        effectiveTimeOfStudy,
+        contentJson,
+      }) => {
+        if (typeof id !== "number") {
+          throw new Error(`Invalid topic ID: ${id}`);
+        }
+
+        const encryptedDescription = await encryptJournalingText(
+          description || "",
+        );
+
+        return {
+          where: { id },
+          create: {
+            title,
+            hashtags,
+            description: encryptedDescription || "",
+            timeOfStudy: effectiveTimeOfStudy,
+            contentJson: contentJson || {},
+          },
+          update: {
+            title,
+            hashtags,
+            description: encryptedDescription || "",
+            timeOfStudy: effectiveTimeOfStudy,
+            contentJson: contentJson || {},
+          },
+        };
+      },
+    ),
+  );
 
   const sessionData: Prisma.StudySessionUpdateInput = {
     startTime,
     endTime,
     pauseDuration,
     topic: {
-      upsert: topics.map(
-        ({
-          id,
-          title,
-          hashtags,
-          description,
-          effectiveTimeOfStudy,
-          contentJson,
-        }) => {
-          if (typeof id !== "number") {
-            throw new Error(`Invalid topic ID: ${id}`);
-          }
-
-          return {
-            where: { id },
-            create: {
-              title,
-              hashtags,
-              description,
-              timeOfStudy: effectiveTimeOfStudy,
-              contentJson: contentJson || {},
-            },
-            update: {
-              title,
-              hashtags,
-              description,
-              timeOfStudy: effectiveTimeOfStudy,
-              contentJson: contentJson || {},
-            },
-          };
-        },
-      ),
+      upsert: encryptedTopics,
     },
   };
 
   if (feelingDescription && feelingDescription.trim() !== "") {
+    const encryptedFeeling =
+      (await encryptJournalingText(feelingDescription)) || feelingDescription;
+
     sessionData.feeling = {
       upsert: {
         create: {
-          description: feelingDescription,
+          description: encryptedFeeling,
         },
         update: {
-          description: feelingDescription,
+          description: encryptedFeeling,
         },
       },
     };

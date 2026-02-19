@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { currentUser } from "@/src/lib/authentication";
+import { decryptJournalingText } from "@/src/lib/crypto";
 import { db } from "@/src/lib/db";
 
 export async function GET(
@@ -52,5 +53,24 @@ export async function GET(
     }),
   ]);
 
-  return NextResponse.json({ topics, feelings });
+  const decryptedTopics = await Promise.all(
+    topics.map(async (topic) => ({
+      ...topic,
+      description: await decryptJournalingText(topic.description),
+    })),
+  );
+
+  const decryptedFeelings = feelings
+    ? {
+        ...feelings,
+        description:
+          (await decryptJournalingText(feelings.description)) ||
+          feelings.description,
+      }
+    : null;
+
+  return NextResponse.json({
+    topics: decryptedTopics,
+    feelings: decryptedFeelings,
+  });
 }
