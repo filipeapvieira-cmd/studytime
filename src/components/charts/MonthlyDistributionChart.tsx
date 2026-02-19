@@ -72,8 +72,8 @@ export function MonthlyDistributionChart({
   return (
     <Card>
       <CardHeader className="flex-col gap-y-2 lg:gap-y-0 lg:flex-row justify-between mb-6">
-        <CardTitle className="text-xl md:text-3xl bg-gradient-to-r from-primary to-yellow-500 text-transparent bg-clip-text">
-          Monthly Time Distribution
+        <CardTitle className="text-xl md:text-3xl text-white">
+          Monthly Time <span className="text-blue-400">Distribution</span>
         </CardTitle>
         <div className="flex gap-x-3 items-center">
           <div className="text-sm text-muted-foreground">Academic Years</div>

@@ -68,13 +68,13 @@ export function CommunityMonthlyDistributionChart({
   return (
     <Card>
       <CardHeader className="flex-col md:flex-row justify-between mb-6">
-        <CardTitle className="text-xl md:text-3xl ">
-          <p className="bg-gradient-to-r from-primary to-pink-700 text-transparent bg-clip-text">
-            Your Studied Time
+        <CardTitle className="text-xl md:text-3xl text-white">
+          <p>
+            Your Studied <span className="text-blue-400">Time</span>
           </p>
-          <p>Vs.</p>
-          <p className="bg-gradient-to-r from-primary to-yellow-500 text-transparent bg-clip-text">
-            Community Studied Time
+          <p className="text-blue-400">Vs.</p>
+          <p>
+            Community Studied <span className="text-blue-400">Time</span>
           </p>
         </CardTitle>
         <div className="flex gap-x-3 items-center">
