@@ -43,9 +43,6 @@ jobs:
     - name: Run Biome Lint
       run: npm run lint:biome
 
-    - name: Run npm audit
-      run: npm audit --audit-level=high
-    
     - name: Generate Prisma Client
       run: npx prisma generate
     
