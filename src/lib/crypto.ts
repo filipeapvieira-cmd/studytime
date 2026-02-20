@@ -181,38 +181,19 @@ const decryptJournalingText = async (
   return typeof decryptedValue === "string" ? decryptedValue : value;
 };
 
+const CONTENT_JSON_ENCRYPTED_FIELD = "__stj_encrypted_json_v1";
+
 const isPlainObject = (value: unknown): value is Record<string, unknown> => {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 };
 
-const transformContentJsonText = async (
+const isEncryptedContentJson = (
   value: unknown,
-  transform: (text: string) => Promise<string | null | undefined>,
-): Promise<unknown> => {
-  if (Array.isArray(value)) {
-    return await Promise.all(
-      value.map((item) => transformContentJsonText(item, transform)),
-    );
-  }
-
-  if (isPlainObject(value)) {
-    const transformedObject: Record<string, unknown> = {};
-
-    for (const [key, entryValue] of Object.entries(value)) {
-      if (key === "text" && typeof entryValue === "string") {
-        transformedObject[key] = (await transform(entryValue)) ?? entryValue;
-      } else {
-        transformedObject[key] = await transformContentJsonText(
-          entryValue,
-          transform,
-        );
-      }
-    }
-
-    return transformedObject;
-  }
-
-  return value;
+): value is Record<typeof CONTENT_JSON_ENCRYPTED_FIELD, string> => {
+  return (
+    isPlainObject(value) &&
+    typeof value[CONTENT_JSON_ENCRYPTED_FIELD] === "string"
+  );
 };
 
 const encryptContentJsonText = async <T>(contentJson: T): Promise<T> => {
@@ -220,10 +201,21 @@ const encryptContentJsonText = async <T>(contentJson: T): Promise<T> => {
     return contentJson;
   }
 
-  return (await transformContentJsonText(
-    contentJson,
-    encryptJournalingText,
-  )) as T;
+  if (isEncryptedContentJson(contentJson)) {
+    return contentJson;
+  }
+
+  const encryptedPayload = await encryptJournalingText(
+    JSON.stringify(contentJson),
+  );
+
+  if (typeof encryptedPayload !== "string") {
+    return contentJson;
+  }
+
+  return {
+    [CONTENT_JSON_ENCRYPTED_FIELD]: encryptedPayload,
+  } as T;
 };
 
 const decryptContentJsonText = async <T>(contentJson: T): Promise<T> => {
@@ -231,10 +223,23 @@ const decryptContentJsonText = async <T>(contentJson: T): Promise<T> => {
     return contentJson;
   }
 
-  return (await transformContentJsonText(
-    contentJson,
-    decryptJournalingText,
-  )) as T;
+  if (!isEncryptedContentJson(contentJson)) {
+    return contentJson;
+  }
+
+  const decryptedPayload = await decryptJournalingText(
+    contentJson[CONTENT_JSON_ENCRYPTED_FIELD],
+  );
+
+  if (typeof decryptedPayload !== "string") {
+    return contentJson;
+  }
+
+  try {
+    return JSON.parse(decryptedPayload) as T;
+  } catch (_error) {
+    return contentJson;
+  }
 };
 
 export {
