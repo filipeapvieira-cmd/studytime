@@ -29,6 +29,7 @@ jobs:
     env:
       POSTGRES_PRISMA_URL: postgresql://postgres:postgres@localhost:5432/studytime_test
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
 
     steps:
     - uses: actions/checkout@v4
@@ -64,6 +65,7 @@ jobs:
       run: npx playwright test
       env:
         AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+        ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
         TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
