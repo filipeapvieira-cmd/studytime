@@ -1,5 +1,8 @@
 import type { Feeling, StudySession, Topic, User } from "@prisma/client";
-import { decryptJournalingText } from "@/src/lib/crypto";
+import {
+  decryptContentJsonText,
+  decryptJournalingText,
+} from "@/src/lib/crypto";
 import type {
   ExportedStudySession,
   ExportedUser,
@@ -43,14 +46,13 @@ export async function serializeToJson(
         session.topic.map(async (t) => ({
           id: t.id,
           sessionId: t.sessionId,
-          description:
-            (await decryptJournalingText(t.description)) ?? t.description,
+          description: t.description,
           title: t.title,
           hashtags: t.hashtags,
           timeOfStudy: t.timeOfStudy,
           createdAt: t.createdAt,
           updatedAt: t.updatedAt,
-          contentJson: t.contentJson,
+          contentJson: await decryptContentJsonText(t.contentJson),
         })),
       ),
       feeling: session.feeling

@@ -181,8 +181,66 @@ const decryptJournalingText = async (
   return typeof decryptedValue === "string" ? decryptedValue : value;
 };
 
+const isPlainObject = (value: unknown): value is Record<string, unknown> => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
+
+const transformContentJsonText = async (
+  value: unknown,
+  transform: (text: string) => Promise<string | null | undefined>,
+): Promise<unknown> => {
+  if (Array.isArray(value)) {
+    return await Promise.all(
+      value.map((item) => transformContentJsonText(item, transform)),
+    );
+  }
+
+  if (isPlainObject(value)) {
+    const transformedObject: Record<string, unknown> = {};
+
+    for (const [key, entryValue] of Object.entries(value)) {
+      if (key === "text" && typeof entryValue === "string") {
+        transformedObject[key] = (await transform(entryValue)) ?? entryValue;
+      } else {
+        transformedObject[key] = await transformContentJsonText(
+          entryValue,
+          transform,
+        );
+      }
+    }
+
+    return transformedObject;
+  }
+
+  return value;
+};
+
+const encryptContentJsonText = async <T>(contentJson: T): Promise<T> => {
+  if (contentJson === null || contentJson === undefined) {
+    return contentJson;
+  }
+
+  return (await transformContentJsonText(
+    contentJson,
+    encryptJournalingText,
+  )) as T;
+};
+
+const decryptContentJsonText = async <T>(contentJson: T): Promise<T> => {
+  if (contentJson === null || contentJson === undefined) {
+    return contentJson;
+  }
+
+  return (await transformContentJsonText(
+    contentJson,
+    decryptJournalingText,
+  )) as T;
+};
+
 export {
+  decryptContentJsonText,
   decryptJournalingText,
+  encryptContentJsonText,
   encryptJournalingText,
   handleEncryption,
   handleDecryption,

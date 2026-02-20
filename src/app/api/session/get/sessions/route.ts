@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { currentUser } from "@/src/lib/authentication";
-import { decryptJournalingText } from "@/src/lib/crypto";
+import {
+  decryptContentJsonText,
+  decryptJournalingText,
+} from "@/src/lib/crypto";
 import { db } from "@/src/lib/db";
 import type { StudySessionDto } from "@/src/types";
 
@@ -83,8 +86,8 @@ const toDateOnlyISOString = (date: Date) => toDateISOString(date).slice(0, 10);
 
 const mapTopics = async (topic: any) => ({
   id: topic.id,
-  description: await decryptJournalingText(topic.description),
-  contentJson: topic.contentJson,
+  description: topic.description,
+  contentJson: await decryptContentJsonText(topic.contentJson),
   title: topic.title,
   hashtags: topic.hashtags,
   effectiveTimeOfStudy: topic.timeOfStudy,

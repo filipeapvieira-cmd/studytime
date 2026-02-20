@@ -1,5 +1,8 @@
 import type { Prisma } from "@prisma/client";
-import { encryptJournalingText } from "@/src/lib/crypto";
+import {
+  encryptContentJsonText,
+  encryptJournalingText,
+} from "@/src/lib/crypto";
 import { db } from "@/src/lib/db";
 import type { FullSessionLog, FullSessionLogUpdate } from "@/src/types";
 import type { FlattenedError } from "@/src/types/utils.types";
@@ -22,8 +25,8 @@ export const getSessionData = async (
       }) => ({
         title,
         hashtags,
-        description: (await encryptJournalingText(description || "")) || "",
-        contentJson: contentJson || {},
+        description: description || "",
+        contentJson: (await encryptContentJsonText(contentJson || {})) || {},
         timeOfStudy: effectiveTimeOfStudy,
       }),
     ),
@@ -77,25 +80,23 @@ export const getSessionUpdateData = async (
           throw new Error(`Invalid topic ID: ${id}`);
         }
 
-        const encryptedDescription = await encryptJournalingText(
-          description || "",
-        );
-
         return {
           where: { id },
           create: {
             title,
             hashtags,
-            description: encryptedDescription || "",
+            description: description || "",
             timeOfStudy: effectiveTimeOfStudy,
-            contentJson: contentJson || {},
+            contentJson:
+              (await encryptContentJsonText(contentJson || {})) || {},
           },
           update: {
             title,
             hashtags,
-            description: encryptedDescription || "",
+            description: description || "",
             timeOfStudy: effectiveTimeOfStudy,
-            contentJson: contentJson || {},
+            contentJson:
+              (await encryptContentJsonText(contentJson || {})) || {},
           },
         };
       },
