@@ -11,7 +11,7 @@ import { DeleteAccount } from "./delete-account";
 import { ExportData } from "./export-data";
 
 const CONSENT_TEXT =
-  "Optional feature. When enabled, you can record feelings and add free-text reflections. These entries are stored on our servers and may include sensitive information if you choose to write it. You can disable this at any time to stop saving new entries, and you can delete existing entries in your journal.";
+  "Optional feature. When enabled, you can record feelings and add free-text reflections. Optional journaling data is encrypted by the application before storage and is not readable in plaintext by database administrators. You can disable this at any time to stop saving new entries, and you can delete existing entries in your journal.";
 
 export function PrivacySettings() {
   const { consentEnabled, isLoading, refetch } = useJournalingConsent();

@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 
-const LAST_UPDATED = "17 February 2026";
+const LAST_UPDATED = "20 February 2026";
 
 export default function PrivacyPage() {
   return (
@@ -59,6 +59,11 @@ export default function PrivacyPage() {
             </a>
           </li>
           <li>
+            <a href="#security" className="hover:underline">
+              How we protect your information
+            </a>
+          </li>
+          <li>
             <a href="#sharing" className="hover:underline">
               Who we share information with
             </a>
@@ -104,7 +109,10 @@ export default function PrivacyPage() {
             Study session records (subjects/topics, hashtags, duration,
             start/end timestamps, and creation timestamp used for retention)
           </li>
-          <li>Journaling entries (free-text reflections, optional)</li>
+          <li>
+            Journaling entries (free-text reflections in editor content,
+            optional)
+          </li>
           <li>Feelings (optional)</li>
           <li>
             Consent audit metadata for optional journaling (consent status, when
@@ -329,6 +337,27 @@ export default function PrivacyPage() {
         </p>
       </section>
 
+      <section id="security" className="space-y-4 pt-4">
+        <h2 className="text-2xl font-bold text-white">
+          How we protect your information
+        </h2>
+        <p>
+          In addition to baseline legal requirements, we apply extra field-level
+          encryption to optional journaling content.
+        </p>
+        <ul className="list-disc pl-6 space-y-2 text-neutral-300">
+          <li>
+            We apply application-level encryption to optional journaling fields
+            before storage: feelings and free-text reflection content.
+          </li>
+          <li>
+            As a result, direct database access alone (including by database
+            administrators) does not provide readable plaintext for these
+            optional journaling fields.
+          </li>
+        </ul>
+      </section>
+
       <section id="sharing" className="space-y-4 pt-4">
         <h2 className="text-2xl font-bold text-white">
           Who we share information with
@@ -356,6 +385,16 @@ export default function PrivacyPage() {
               This data processor does the following activities for us: Stores
               and processes Study Time application data in a PostgreSQL
               database, including user account records and study session data.
+              Neon applies encryption at rest and encryption in transit. See
+              Neon&apos;s{" "}
+              <Link
+                href="https://neon.com/docs/security/security-overview"
+                target="_blank"
+                className="text-blue-400 hover:underline"
+              >
+                Security overview
+              </Link>
+              .
             </p>
           </div>
         </div>
