@@ -34,9 +34,12 @@ export async function GET(req: Request) {
     );
   }
 
-  const now = new Date();
+  const startedAt = new Date();
   let totalSessionsDeleted = 0;
-  let usersProcessed = 0;
+  let usersEvaluated = 0;
+  let usersWithPurges = 0;
+  let runStatus: "success" | "error" = "success";
+  let runErrorMessage: string | null = null;
 
   try {
     // Find all users with a time-bound retention policy
@@ -49,6 +52,7 @@ export async function GET(req: Request) {
         dataRetentionPolicy: true,
       },
     });
+    usersEvaluated = users.length;
 
     for (const user of users) {
       if (totalSessionsDeleted >= MAX_TOTAL_DELETIONS) break;
@@ -56,7 +60,7 @@ export async function GET(req: Request) {
       const months = POLICY_MONTHS[user.dataRetentionPolicy];
       if (!months) continue;
 
-      const cutoff = subtractMonths(now, months);
+      const cutoff = subtractMonths(startedAt, months);
       let deletedForUser = 0;
 
       // Delete in batches to avoid serverless timeouts
@@ -84,12 +88,17 @@ export async function GET(req: Request) {
       }
 
       if (deletedForUser > 0) {
-        usersProcessed++;
+        usersWithPurges++;
       }
     }
+  } catch (error) {
+    runStatus = "error";
+    runErrorMessage =
+      error instanceof Error ? error.message : "Unknown retention error";
+    console.error("Retention cleanup error:", error);
+  }
 
-    // --- Metrics Snapshot Logic ---
-    const end = new Date();
+  try {
     // 1. Get counts
     const [usersCount, sessionsCount, consentEnabledCount] = await Promise.all([
       db.user.count(),
@@ -107,8 +116,8 @@ export async function GET(req: Request) {
       ? BigInt(dbSizeResult[0].size)
       : BigInt(0);
 
-    // 3. Create Snapshot
-    await db.metricsSnapshot.create({
+    // 3. Create Snapshot (always, even when there are no purges)
+    const snapshot = await db.metricsSnapshot.create({
       data: {
         usersCount,
         sessionsCount,
@@ -116,21 +125,44 @@ export async function GET(req: Request) {
         retentionPurgedSessionsCount: totalSessionsDeleted,
         dbSizeBytes,
         metadata: {
-          retentionExecutionTimeMs: end.getTime() - now.getTime(),
-          usersProcessed,
+          retentionExecutionTimeMs: Date.now() - startedAt.getTime(),
+          usersEvaluated,
+          usersWithPurges,
+          changesDetected: totalSessionsDeleted > 0,
+          runStatus,
+          runErrorMessage,
         },
       },
+      select: { id: true },
     });
+
+    if (runStatus === "error") {
+      return NextResponse.json(
+        {
+          status: "error",
+          message: runErrorMessage || "Retention cleanup failed",
+          data: {
+            snapshotId: snapshot.id,
+            usersEvaluated,
+            usersWithPurges,
+            sessionsDeleted: totalSessionsDeleted,
+          },
+        },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json({
       status: "success",
       data: {
-        usersProcessed,
+        snapshotId: snapshot.id,
+        usersEvaluated,
+        usersWithPurges,
         sessionsDeleted: totalSessionsDeleted,
       },
     });
-  } catch (error) {
-    console.error("Retention cleanup error:", error);
+  } catch (snapshotError) {
+    console.error("Metrics snapshot error:", snapshotError);
     return NextResponse.json(
       { status: "error", message: "Internal server error" },
       { status: 500 },
