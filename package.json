@@ -17,7 +17,8 @@
     "fix": "biome check --write src",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "check-all": "npm run lint:biome && npm run test && npm run build"
+    "check-all": "npm run lint:biome && npm run test && npm run build",
+    "db:snapshot": "node --env-file=.env scripts/update-metrics-snapshot.mjs"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
