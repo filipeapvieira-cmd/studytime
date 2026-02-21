@@ -2,13 +2,31 @@
  * Manually create a MetricsSnapshot record.
  *
  * Usage:  npm run db:snapshot
+ *         npm run db:snapshot -- --purged=10 --label="AFTER retention purge"
  */
 
 import { PrismaClient } from "@prisma/client";
 
 const db = new PrismaClient();
 
+// ─── Parse optional CLI args ─────────────────────────────────────────────────
+function parseArgs() {
+    const args = process.argv.slice(2);
+    let purged = 0;
+    let label = "manual";
+
+    for (const arg of args) {
+        if (arg.startsWith("--purged=")) {
+            purged = Number.parseInt(arg.split("=")[1], 10) || 0;
+        } else if (arg.startsWith("--label=")) {
+            label = arg.split("=").slice(1).join("=");
+        }
+    }
+    return { purged, label };
+}
+
 async function main() {
+    const { purged, label } = parseArgs();
     console.log("⏳ Collecting metrics…");
 
     const [usersCount, sessionsCount, consentEnabledCount] = await Promise.all([
@@ -28,10 +46,10 @@ async function main() {
             usersCount,
             sessionsCount,
             consentEnabledCount,
-            retentionPurgedSessionsCount: 0,
+            retentionPurgedSessionsCount: purged,
             dbSizeBytes,
             metadata: {
-                source: "manual",
+                source: label,
                 ranAt: new Date().toISOString(),
             },
         },
@@ -45,6 +63,8 @@ async function main() {
     console.log(`   Users:             ${usersCount}`);
     console.log(`   Sessions:          ${sessionsCount}`);
     console.log(`   Consent enabled:   ${consentEnabledCount}`);
+    console.log(`   Purged sessions:   ${purged}`);
+    console.log(`   Label:             ${label}`);
 }
 
 main()
